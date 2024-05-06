@@ -1,7 +1,9 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_PDU.h"
 
-// #include "tested_module.h"
+uint8_t PDU_frame[MODBUS_PDU_FRAME_LEN];
+
+static uint16_t read_u16_from_buf(uint8_t *buf);
 
 TEST_GROUP(Modbus_Master_Requests);
 
@@ -20,13 +22,11 @@ TEST(Modbus_Master_Requests, ReadSingleHoldingRegisterRequest)
     modbus_adr_t adr=0x0030;
     modbus_reg_qty_t len=1;
 
-    uint8_t PDU_frame[5];
-
     modbus_master_read_holding_reg(PDU_frame,adr,len);
   
     TEST_ASSERT_EQUAL_UINT8(READ_HOLDING_REGISTERS,PDU_frame[0]);
-    TEST_ASSERT_EQUAL_UINT16(adr,(uint16_t)((PDU_frame[1]<<8) | PDU_frame[2]));
-    TEST_ASSERT_EQUAL_UINT16(len,(uint16_t)((PDU_frame[3]<<8) | PDU_frame[4]));
+    TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
+    TEST_ASSERT_EQUAL_UINT16(len,read_u16_from_buf(PDU_frame+3));
 }
 
 // TEST(Modbus_Master_Requests, )
@@ -49,3 +49,8 @@ TEST(Modbus_Master_Requests, ReadSingleHoldingRegisterRequest)
 
 //     TEST_FAIL_MESSAGE("Implement your test!");
 // }
+
+static uint16_t read_u16_from_buf(uint8_t *buf)
+{
+    return (uint16_t)((buf[0]<<8) | buf[1]);
+}

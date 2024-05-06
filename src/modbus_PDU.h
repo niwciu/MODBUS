@@ -27,6 +27,8 @@ extern "C"
 #define WRITE_SINGLE_REGISTER 0x06
 #define WRITE_MULTIPLE_REGISTER 0x10
 
+#define MODBUS_PDU_FRAME_LEN 5
+
 typedef uint8_t modbus_fun_code_t;
 typedef uint16_t modbus_adr_t; 
 typedef uint16_t modbus_reg_qty_t;

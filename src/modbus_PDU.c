@@ -10,13 +10,18 @@
 
 #include "modbus_PDU.h"
 
+static void write_u16_to_buf(uint8_t *buf,uint16_t data);
+
 void modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_qty_t len)
 {
     send_buf[0] = READ_HOLDING_REGISTERS;
 
-    send_buf[1] = (uint8_t)(adr >> 8);
-    send_buf[2] = (uint8_t)(adr & 0xFF);
-    
-    send_buf[3] = (uint8_t)(len >> 8);
-    send_buf[4] = (uint8_t)(len & 0xFF);
+    write_u16_to_buf(send_buf+1,adr);
+    write_u16_to_buf(send_buf+3,len);
+}
+
+static void write_u16_to_buf(uint8_t *buf,uint16_t data)
+{
+    buf[0] = (uint8_t)(data >> 8);
+    buf[1] = (uint8_t)(data & 0xFF);
 }
