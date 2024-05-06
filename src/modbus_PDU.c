@@ -36,6 +36,10 @@ void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_da
 {
     read_reg_request(send_buf,READ_INPUT_REGISTERS,adr,len);
 }
+void modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
+{
+     read_reg_request(send_buf,READ_DISCRETE_INPUTS,adr,len);
+}
 
 void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val)
 {
