@@ -14,6 +14,15 @@
 extern "C"
 {
 #endif /* __cplusplus */
+#define READ_DISCRETE_INPUT 0x02
+#define READ_COILS 0x01
+#define WRITE_SINGLE_COIL 0x05
+#define WRITE_MULTIPLE_COILS 0x0F
+
+#define READ_INPUT_REGISTER 0x04
+#define READ_HOLDING_REGISTERS 0x03
+#define WRITE_SINGLE_REGISTER 0x06
+#define WRITE_MULTIPLE_REGISTER 0x10
 
 
 
