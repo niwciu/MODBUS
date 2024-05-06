@@ -29,18 +29,18 @@ static void read_reg_request(uint8_t *send_buf, uint8_t req_code, modbus_adr_t a
 
 void modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
 {
-    read_reg_request(send_buf, READ_HOLDING_REGISTERS, adr, len);
+    read_reg_request(send_buf, READ_HOLDING_REGISTERS, adr, (modbus_data_t)len);
 }
 
 void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
 {
-    read_reg_request(send_buf, READ_INPUT_REGISTERS, adr, len);
+    read_reg_request(send_buf, READ_INPUT_REGISTERS, adr, (modbus_data_t)len);
 }
 void modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
 {
     if (len <= MODBUS_MAX_DISCRETE_INPUTS_READ_QTY)
     {
-        read_reg_request(send_buf, READ_DISCRETE_INPUTS, adr, len);
+        read_reg_request(send_buf, READ_DISCRETE_INPUTS, adr, (modbus_data_t)len);
     }
     else
     {
@@ -52,7 +52,7 @@ void modbus_master_read_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_q
 {
     if (len <= MODBUS_MAX_COILS_READ_QTY)
     {
-        read_reg_request(send_buf, READ_COILS, adr, len);
+        read_reg_request(send_buf, READ_COILS, adr, (modbus_data_t)len);
     }
     else
     {
@@ -62,12 +62,12 @@ void modbus_master_read_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_q
 
 void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val)
 {
-    read_reg_request(send_buf, WRITE_SINGLE_REGISTER, adr, val);
+    read_reg_request(send_buf, WRITE_SINGLE_REGISTER, adr, (modbus_data_t)val);
 }
 
 void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus_coil_t coil_state)
 {
-    
+    read_reg_request(send_buf, WRITE_SINGLE_REGISTER, adr, (modbus_data_t)coil_state);
 }
 
 void modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty,
