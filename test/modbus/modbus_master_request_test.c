@@ -36,6 +36,15 @@ TEST(Modbus_Master_Requests, ReadMaxQtyHoldingRegisterRequest)
     modbus_reg_t status = modbus_master_read_holding_reg(PDU_frame,adr,len);
   
     TEST_ASSERT_EQUAL(RET_OK,status);
+} 
+
+TEST(Modbus_Master_Requests, ReadHoldingRegisterMaxQtyPlus1Request)
+{
+    modbus_adr_t adr=0x0030;
+    modbus_data_qty_t len=MODBUS_MAX_REG_READ_QTY+1;
+    modbus_reg_t status = modbus_master_read_holding_reg(PDU_frame,adr,len);
+  
+    TEST_ASSERT_EQUAL(RET_ERROR,status);
 }
 
 TEST(Modbus_Master_Requests, ReadSingleInputRegisterRequest)
