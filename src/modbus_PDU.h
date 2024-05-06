@@ -40,6 +40,7 @@ typedef uint8_t modbus_exeption_code_t;
 
 void modbus_master_read_holding_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_reg_qty_t len);
 void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_qty_t len);
+void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val);
 
 #ifdef __cplusplus
 }

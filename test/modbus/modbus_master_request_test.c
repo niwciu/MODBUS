@@ -46,7 +46,7 @@ TEST(Modbus_Master_Requests, WriteSingleHoldingRegister)
     modbus_adr_t adr=0x0009;
     modbus_reg_t value=0x0012;
 
-    modbus_master_write_sinlge_reg(PDU_frame,adr,value);
+    modbus_master_write_single_reg(PDU_frame,adr,value);
   
     TEST_ASSERT_EQUAL_UINT8(WRITE_SINGLE_REGISTER,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
