@@ -36,27 +36,31 @@ void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_da
 {
     read_reg_request(send_buf, READ_INPUT_REGISTERS, adr, (modbus_data_t)len);
 }
-void modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
+modbus_ret_t modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
 {
     if (len <= MODBUS_MAX_DISCRETE_INPUTS_READ_QTY)
     {
         read_reg_request(send_buf, READ_DISCRETE_INPUTS, adr, (modbus_data_t)len);
+        return RET_OK;
     }
     else
     {
         //ToDo obsługa bledu zbyt duzej ilosci inputsów do odczytu
+        return RET_ERROR;
     }
 }
 
-void modbus_master_read_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
+modbus_ret_t modbus_master_read_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
 {
     if (len <= MODBUS_MAX_COILS_READ_QTY)
     {
         read_reg_request(send_buf, READ_COILS, adr, (modbus_data_t)len);
+        return RET_OK;
     }
     else
     {
         //ToDo obsługa bledu zbyt duzej ilosci inputsów do odczytu
+        return RET_ERROR;
     }
 }
 
@@ -70,7 +74,7 @@ void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus
     read_reg_request(send_buf, WRITE_SINGLE_REGISTER, adr, (modbus_data_t)coil_state);
 }
 
-void modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty,
+modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty,
                                       modbus_reg_t *data_buf)
 {
     send_buf[0] = WRITE_MULTIPLE_REGISTER;
@@ -84,4 +88,5 @@ void modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbu
     {
         write_u16_to_buf(send_buf + (6 + (i * 2)), data_buf[i]);
     }
+    return RET_OK;
 }
