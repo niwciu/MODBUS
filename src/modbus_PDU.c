@@ -29,7 +29,7 @@ static void read_reg_request(uint8_t *send_buf, uint8_t req_code, modbus_adr_t a
 
 modbus_ret_t modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
 {
-    if (hreg_qty <= MODBUS_MAX_REG_READ_QTY)
+    if (hreg_qty <= MODBUS_MAX_REG_RW_QTY)
     {
         read_reg_request(send_buf, READ_HOLDING_REGISTERS, adr, (modbus_data_t)hreg_qty);
         return RET_OK;
@@ -86,7 +86,7 @@ void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus
 
 modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_reg_t *data_buf)
 {
-    if (reg_qty > MODBUS_MAX_REG_READ_QTY)
+    if (reg_qty > MODBUS_MAX_REG_RW_QTY)
     {
         return RET_ERROR;
     }
