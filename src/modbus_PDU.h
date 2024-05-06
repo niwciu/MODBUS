@@ -14,6 +14,9 @@
 extern "C"
 {
 #endif /* __cplusplus */
+
+#include <stdint.h>
+
 #define READ_DISCRETE_INPUT 0x02
 #define READ_COILS 0x01
 #define WRITE_SINGLE_COIL 0x05
@@ -24,7 +27,15 @@ extern "C"
 #define WRITE_SINGLE_REGISTER 0x06
 #define WRITE_MULTIPLE_REGISTER 0x10
 
+typedef uint8_t modbus_fun_code_t;
+typedef uint16_t modbus_adr_t; 
+typedef uint16_t modbus_reg_qty_t;
+typedef uint8_t modbus_byte_count_t;
+typedef uint8_t modbus_error_code_t;
+typedef uint8_t modbus_exeption_code_t;
 
+
+void modbus_master_read_holding_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_reg_qty_t len);
 
 #ifdef __cplusplus
 }
