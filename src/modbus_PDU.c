@@ -29,8 +29,15 @@ static void read_reg_request(uint8_t *send_buf, uint8_t req_code, modbus_adr_t a
 
 modbus_ret_t modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
 {
-    read_reg_request(send_buf, READ_HOLDING_REGISTERS, adr, (modbus_data_t)hreg_qty);
-    return RET_OK;
+    if (hreg_qty <= MODBUS_MAX_REG_READ_QTY)
+    {
+        read_reg_request(send_buf, READ_HOLDING_REGISTERS, adr, (modbus_data_t)hreg_qty);
+        return RET_OK;
+    }
+    else
+    {
+        return RET_ERROR;
+    }
 }
 
 modbus_ret_t modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty)
@@ -38,6 +45,7 @@ modbus_ret_t modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, m
     read_reg_request(send_buf, READ_INPUT_REGISTERS, adr, (modbus_data_t)reg_qty);
     return RET_OK;
 }
+
 modbus_ret_t modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t discrete_input_qty)
 {
     if (discrete_input_qty <= MODBUS_MAX_DISCRETE_INPUTS_READ_QTY)
