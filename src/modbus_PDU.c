@@ -50,7 +50,14 @@ void modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t adr, mod
 
 void modbus_master_read_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
 {
-
+    if (len <= MODBUS_MAX_COILS_READ_QTY)
+    {
+        read_reg_request(send_buf, READ_COILS, adr, len);
+    }
+    else
+    {
+        //ToDo obsługa bledu zbyt duzej ilosci inputsów do odczytu
+    }
 }
 
 void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val)
