@@ -53,6 +53,18 @@ TEST(Modbus_Master_Requests, ReadDiscreteInputsRequest)
     TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
 }
 
+TEST(Modbus_Master_Requests, ReadMaxQtyDiscreteInputsRequest)
+{
+    modbus_adr_t adr=0x0003;
+    modbus_data_qty_t input_qty=0x7D0;
+
+    modbus_master_read_discrete_inputs(PDU_frame,adr,input_qty);
+  
+    TEST_ASSERT_EQUAL_UINT8(READ_DISCRETE_INPUTS,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
+    TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
+}
+
 TEST(Modbus_Master_Requests, WriteSingleRegister)
 {
     modbus_adr_t adr=0x0009;
