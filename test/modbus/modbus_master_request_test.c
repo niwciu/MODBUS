@@ -67,7 +67,14 @@ TEST(Modbus_Master_Requests, ReadMaxQtyInputRegisterRequest)
     
     TEST_ASSERT_EQUAL_INT8(RET_OK,status);
 }
-// TEST(Modbus_Master_Requests, ReadInputRegisterMaxQtyPlus1Request);
+TEST(Modbus_Master_Requests, ReadInputRegisterMaxQtyPlus1Request)
+{
+    modbus_adr_t adr=0x0005;
+    modbus_data_qty_t len=MODBUS_MAX_REG_RW_QTY+1;
+    modbus_ret_t status = modbus_master_read_input_reg(PDU_frame,adr,len);
+    
+    TEST_ASSERT_EQUAL_INT8(RET_ERROR,status);
+}
 
 TEST(Modbus_Master_Requests, ReadDiscreteInputsRequest)
 {
