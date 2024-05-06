@@ -2,19 +2,19 @@
 
 // #include "tested_module.h"
 
-TEST_GROUP(Modbus);
+TEST_GROUP(Modbus_Master_Requests);
 
-TEST_SETUP(Modbus)
+TEST_SETUP(Modbus_Master_Requests)
 {
     /* Init before every test */
 }
 
-TEST_TEAR_DOWN(Modbus)
+TEST_TEAR_DOWN(Modbus_Master_Requests)
 {
     /* Cleanup after every test */
 }
 
-TEST(Modbus, FirstTest)
+TEST(Modbus_Master_Requests, FirstTest)
 {
     TEST_FAIL_MESSAGE("Implement your test!");
 }
