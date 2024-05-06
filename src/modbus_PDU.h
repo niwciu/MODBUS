@@ -31,6 +31,7 @@ extern "C"
 
 typedef uint8_t modbus_fun_code_t;
 typedef uint16_t modbus_adr_t; 
+typedef uint16_t modbus_reg_t;
 typedef uint16_t modbus_reg_qty_t;
 typedef uint8_t modbus_byte_count_t;
 typedef uint8_t modbus_error_code_t;

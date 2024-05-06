@@ -41,12 +41,17 @@ TEST(Modbus_Master_Requests, ReadSingleInputRegisterRequest)
     TEST_ASSERT_EQUAL_UINT16(len,read_u16_from_buf(PDU_frame+3));
 }
 
-// TEST(Modbus_Master_Requests, )
-// {
+TEST(Modbus_Master_Requests, WriteSingleHoldingRegister)
+{
+    modbus_adr_t adr=0x0009;
+    modbus_reg_t value=0x0012;
 
-
-//     TEST_FAIL_MESSAGE("Implement your test!");
-// }
+    modbus_master_write_sinlge_reg(PDU_frame,adr,value);
+  
+    TEST_ASSERT_EQUAL_UINT8(WRITE_SINGLE_REGISTER,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
+    TEST_ASSERT_EQUAL_UINT16(value,read_u16_from_buf(PDU_frame+3));
+}
 
 // TEST(Modbus_Master_Requests, )
 // {
