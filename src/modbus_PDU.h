@@ -28,7 +28,7 @@ extern "C"
 #define WRITE_MULTIPLE_REGISTER 0x10
 
 #define MODBUS_PDU_FRAME_LEN 128
-#define MODBUS_MAX_DISCRETE_INPUTS_QTY  0x7D0
+#define MODBUS_MAX_DISCRETE_INPUTS_READ_QTY  0x7D0
 
 typedef uint8_t modbus_fun_code_t;
 typedef uint16_t modbus_adr_t; 
