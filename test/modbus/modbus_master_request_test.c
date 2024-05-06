@@ -4,6 +4,7 @@
 uint8_t PDU_frame[MODBUS_PDU_FRAME_LEN];
 
 static uint16_t read_u16_from_buf(uint8_t *buf);
+static void clear_PDU_buf(void);
 
 TEST_GROUP(Modbus_Master_Requests);
 
@@ -56,13 +57,25 @@ TEST(Modbus_Master_Requests, ReadDiscreteInputsRequest)
 TEST(Modbus_Master_Requests, ReadMaxQtyDiscreteInputsRequest)
 {
     modbus_adr_t adr=0x0003;
-    modbus_data_qty_t input_qty=MODBUS_MAX_DISCRETE_INPUTS_QTY;
+    modbus_data_qty_t input_qty=MODBUS_MAX_DISCRETE_INPUTS_READ_QTY;
 
     modbus_master_read_discrete_inputs(PDU_frame,adr,input_qty);
   
     TEST_ASSERT_EQUAL_UINT8(READ_DISCRETE_INPUTS,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
+}
+
+TEST(Modbus_Master_Requests, ReadMaxQtPlus1DiscreteInputsRequest)
+{
+    modbus_adr_t adr=0x0003;
+    modbus_data_qty_t input_qty=MODBUS_MAX_DISCRETE_INPUTS_READ_QTY+1;
+    clear_PDU_buf();
+    modbus_master_read_discrete_inputs(PDU_frame,adr,input_qty);
+  
+    TEST_ASSERT_EQUAL_UINT8(0,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT16(0,read_u16_from_buf(PDU_frame+1));
+    TEST_ASSERT_EQUAL_UINT16(0,read_u16_from_buf(PDU_frame+3));
 }
 
 TEST(Modbus_Master_Requests, WriteSingleRegister)
@@ -107,4 +120,11 @@ TEST(Modbus_Master_Requests, WriteMultipleRegisters)
 static uint16_t read_u16_from_buf(uint8_t *buf)
 {
     return (uint16_t)((buf[0]<<8) | buf[1]);
+}
+static void clear_PDU_buf(void)
+{
+    for(uint8_t i=0;i<MODBUS_PDU_FRAME_LEN;i++)
+    {
+        PDU_frame[i]=0;
+    }
 }
