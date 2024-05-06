@@ -11,7 +11,7 @@
 #include "modbus_PDU.h"
 
 static void write_u16_to_buf(uint8_t *buf,uint16_t data);
-static void read_reg_request(uint8_t *send_buf,uint8_t req_code, modbus_adr_t adr, modbus_reg_qty_t len);
+static void read_reg_request(uint8_t *send_buf,uint8_t req_code, modbus_adr_t adr, modbus_data_qty_t len);
 
 static void write_u16_to_buf(uint8_t *buf,uint16_t data)
 {
@@ -19,7 +19,7 @@ static void write_u16_to_buf(uint8_t *buf,uint16_t data)
     buf[1] = (uint8_t)(data & 0xFF);
 }
 
-static void read_reg_request(uint8_t *send_buf,uint8_t req_code, modbus_adr_t adr, modbus_reg_qty_t len)
+static void read_reg_request(uint8_t *send_buf,uint8_t req_code, modbus_adr_t adr, modbus_data_qty_t len)
 {
     send_buf[0] = req_code;
 
@@ -27,12 +27,12 @@ static void read_reg_request(uint8_t *send_buf,uint8_t req_code, modbus_adr_t ad
     write_u16_to_buf(send_buf+3,len);
 }
 
-void modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_qty_t len)
+void modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
 {
     read_reg_request(send_buf,READ_HOLDING_REGISTERS,adr,len);
 }
 
-void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_qty_t len)
+void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len)
 {
     read_reg_request(send_buf,READ_INPUT_REGISTERS,adr,len);
 }
@@ -42,14 +42,16 @@ void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_
     read_reg_request(send_buf,WRITE_SINGLE_REGISTER,adr,val);
 }
 
-void modbus_master_write_multiple_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_reg_qty_t reg_qty, modbus_reg_t *data_buf)
+void modbus_master_write_multiple_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_reg_t *data_buf)
 {
     send_buf[0] = WRITE_MULTIPLE_REGISTER;
 
     write_u16_to_buf(send_buf+1,adr);
     write_u16_to_buf(send_buf+3,reg_qty);
+
     send_buf[5]=reg_qty*2;
-    for (modbus_reg_qty_t i=0;i<reg_qty;i++)
+
+    for (modbus_data_qty_t i=0;i<reg_qty;i++)
     {
         write_u16_to_buf(send_buf+(6+(i*2)),data_buf[i]);
     }

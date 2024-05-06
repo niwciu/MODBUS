@@ -17,7 +17,7 @@ extern "C"
 
 #include <stdint.h>
 
-#define READ_DISCRETE_INPUT 0x02
+#define READ_DISCRETE_INPUTS 0x02
 #define READ_COILS 0x01
 #define WRITE_SINGLE_COIL 0x05
 #define WRITE_MULTIPLE_COILS 0x0F
@@ -32,16 +32,18 @@ extern "C"
 typedef uint8_t modbus_fun_code_t;
 typedef uint16_t modbus_adr_t; 
 typedef uint16_t modbus_reg_t;
-typedef uint16_t modbus_reg_qty_t;
+typedef uint16_t modbus_data_qty_t;
 typedef uint8_t modbus_byte_count_t;
 typedef uint8_t modbus_error_code_t;
 typedef uint8_t modbus_exeption_code_t;
 
 
-void modbus_master_read_holding_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_reg_qty_t len);
-void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_qty_t len);
+void modbus_master_read_holding_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_data_qty_t len);
+void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len);
+
+
 void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val);
-void modbus_master_write_multiple_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_reg_qty_t reg_qty, modbus_reg_t *data_buf);
+void modbus_master_write_multiple_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_reg_t *data_buf);
 
 #ifdef __cplusplus
 }

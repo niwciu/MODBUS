@@ -20,7 +20,7 @@ TEST_TEAR_DOWN(Modbus_Master_Requests)
 TEST(Modbus_Master_Requests, ReadSingleHoldingRegisterRequest)
 {
     modbus_adr_t adr=0x0030;
-    modbus_reg_qty_t len=1;
+    modbus_data_qty_t len=1;
 
     modbus_master_read_holding_reg(PDU_frame,adr,len);
   
@@ -32,13 +32,25 @@ TEST(Modbus_Master_Requests, ReadSingleHoldingRegisterRequest)
 TEST(Modbus_Master_Requests, ReadSingleInputRegisterRequest)
 {
     modbus_adr_t adr=0x0005;
-    modbus_reg_qty_t len=1;
+    modbus_data_qty_t len=1;
 
     modbus_master_read_input_reg(PDU_frame,adr,len);
   
     TEST_ASSERT_EQUAL_UINT8(READ_INPUT_REGISTERS,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(len,read_u16_from_buf(PDU_frame+3));
+}
+
+TEST(Modbus_Master_Requests, ReadDiscreteInputsRequest)
+{
+    modbus_adr_t adr=0x0003;
+    modbus_data_qty_t input_qty=5;
+
+    modbus_master_read_discrete_inputs(PDU_frame,adr,input_qty);
+  
+    TEST_ASSERT_EQUAL_UINT8(READ_DISCRETE_INPUTS,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
+    TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
 }
 
 TEST(Modbus_Master_Requests, WriteSingleRegister)
@@ -57,7 +69,7 @@ TEST(Modbus_Master_Requests, WriteMultipleRegisters)
 {
     modbus_adr_t adr=0x0080;
     modbus_reg_t values[5]={1,2,3,4,5};
-    modbus_reg_qty_t reg_qty=5;
+    modbus_data_qty_t reg_qty=5;
 
     modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
   
