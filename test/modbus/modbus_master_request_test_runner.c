@@ -9,11 +9,16 @@ TEST_GROUP_RUNNER(Modbus_Master_Requests)
    RUN_TEST_CASE(Modbus_Master_Requests, ReadMaxQtyDiscreteInputsRequest);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadMaxQtPlus1DiscreteInputsRequest);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadCoilsRequest);
+   RUN_TEST_CASE(Modbus_Master_Requests, ReadCoilsMaxQtyRequest);
    RUN_TEST_CASE(Modbus_Master_Requests, WriteSingleRegister);
    RUN_TEST_CASE(Modbus_Master_Requests, WriteMultipleRegisters);
    // 
-   // 
-   // 
+
+   // RUN_TEST_CASE(Modbus_Master_Requests, );
+   // RUN_TEST_CASE(Modbus_Master_Requests, );
+   // RUN_TEST_CASE(Modbus_Master_Requests, );
+   // RUN_TEST_CASE(Modbus_Master_Requests, );
+   // RUN_TEST_CASE(Modbus_Master_Requests, );
    // RUN_TEST_CASE(Modbus_Master_Requests, );
    // RUN_TEST_CASE(Modbus_Master_Requests, );
 

@@ -90,6 +90,18 @@ TEST(Modbus_Master_Requests, ReadCoilsRequest)
     TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
 }
 
+TEST(Modbus_Master_Requests, ReadCoilsMaxQtyRequest)
+{
+    modbus_adr_t adr=0x0003;
+    modbus_data_qty_t input_qty=MODBUS_MAX_COILS_READ_QTY;
+
+    modbus_master_read_coils(PDU_frame,adr,input_qty);
+  
+    TEST_ASSERT_EQUAL_UINT8(READ_COILS,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
+    TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
+}
+
 TEST(Modbus_Master_Requests, WriteSingleRegister)
 {
     modbus_adr_t adr=0x0009;
