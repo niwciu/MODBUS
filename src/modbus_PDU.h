@@ -33,9 +33,17 @@ extern "C"
         WRITE_MULTIPLE_REGISTER = 0x10,
     } modbus_fun_code_t;
 
+    typedef enum
+    {
+        COIL_OFF=0x0000,
+        COIL_ON=0xFF00,
+    }modbus_coil_t;
+
+
     typedef uint16_t modbus_adr_t;
     typedef uint16_t modbus_reg_t;
     typedef uint16_t modbus_data_qty_t;
+    typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_byte_count_t;
     typedef uint8_t modbus_error_code_t;
     typedef uint8_t modbus_exeption_code_t;
@@ -45,6 +53,7 @@ extern "C"
     void modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len);
     void modbus_master_read_coils (uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t len);
     void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val);
+    void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus_coil_t coil_state);
     void modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty,
                                           modbus_reg_t *data_buf);
 

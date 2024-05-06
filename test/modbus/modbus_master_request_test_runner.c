@@ -12,10 +12,11 @@ TEST_GROUP_RUNNER(Modbus_Master_Requests)
    RUN_TEST_CASE(Modbus_Master_Requests, ReadCoilsMaxQtyRequest);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadCoilsMaxQtyPlus1Request);
    RUN_TEST_CASE(Modbus_Master_Requests, WriteSingleRegister);
+   RUN_TEST_CASE(Modbus_Master_Requests, WriteSingleCoilOn);
    RUN_TEST_CASE(Modbus_Master_Requests, WriteMultipleRegisters);
    // 
 
-   // RUN_TEST_CASE(Modbus_Master_Requests, );
+   // 
    // RUN_TEST_CASE(Modbus_Master_Requests, );
    // RUN_TEST_CASE(Modbus_Master_Requests, );
    // RUN_TEST_CASE(Modbus_Master_Requests, );

@@ -11,7 +11,7 @@
 #include "modbus_PDU.h"
 
 static void write_u16_to_buf(uint8_t *buf, uint16_t data);
-static void read_reg_request(uint8_t *send_buf, uint8_t req_code, modbus_adr_t adr, modbus_data_qty_t len);
+static void read_reg_request(uint8_t *send_buf, uint8_t req_code, modbus_adr_t adr, modbus_data_t len);
 
 static void write_u16_to_buf(uint8_t *buf, uint16_t data)
 {
@@ -19,7 +19,7 @@ static void write_u16_to_buf(uint8_t *buf, uint16_t data)
     buf[1] = (uint8_t)(data & 0xFF);
 }
 
-static void read_reg_request(uint8_t *send_buf, uint8_t req_code, modbus_adr_t adr, modbus_data_qty_t len)
+static void read_reg_request(uint8_t *send_buf, uint8_t req_code, modbus_adr_t adr, modbus_data_t len)
 {
     send_buf[0] = req_code;
 
@@ -63,6 +63,11 @@ void modbus_master_read_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_q
 void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val)
 {
     read_reg_request(send_buf, WRITE_SINGLE_REGISTER, adr, val);
+}
+
+void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus_coil_t coil_state)
+{
+    
 }
 
 void modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty,
