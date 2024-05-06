@@ -152,8 +152,8 @@ TEST(Modbus_Master_Requests, WriteMultipleRegisters)
 TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
 {
     modbus_adr_t adr=0x0080;
-    modbus_reg_t values[123]={0x5A5A};
-    modbus_data_qty_t reg_qty=123;
+    modbus_reg_t values[MODBUS_MAX_REG_READ_QTY]={0x5A5A};
+    modbus_data_qty_t reg_qty=MODBUS_MAX_REG_READ_QTY;
     modbus_ret_t status;
 
     status=modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
@@ -163,8 +163,8 @@ TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
 TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)
 {
     modbus_adr_t adr=0x0080;
-    modbus_reg_t values[123+1]={0x5A5A};
-    modbus_data_qty_t reg_qty=123+1;
+    modbus_reg_t values[MODBUS_MAX_REG_READ_QTY+1]={0x5A5A};
+    modbus_data_qty_t reg_qty=MODBUS_MAX_REG_READ_QTY+1;
     modbus_ret_t status;
 
     status=modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
