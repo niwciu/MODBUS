@@ -32,7 +32,7 @@ TEST(Modbus_Master_Requests, ReadSingleHoldingRegisterRequest)
 TEST(Modbus_Master_Requests, ReadMaxQtyHoldingRegisterRequest)
 {
     modbus_adr_t adr=0x0030;
-    modbus_data_qty_t len=MODBUS_MAX_REG_READ_QTY;
+    modbus_data_qty_t len=MODBUS_MAX_REG_RW_QTY;
     modbus_reg_t status = modbus_master_read_holding_reg(PDU_frame,adr,len);
   
     TEST_ASSERT_EQUAL(RET_OK,status);
@@ -41,7 +41,7 @@ TEST(Modbus_Master_Requests, ReadMaxQtyHoldingRegisterRequest)
 TEST(Modbus_Master_Requests, ReadHoldingRegisterMaxQtyPlus1Request)
 {
     modbus_adr_t adr=0x0030;
-    modbus_data_qty_t len=MODBUS_MAX_REG_READ_QTY+1;
+    modbus_data_qty_t len=MODBUS_MAX_REG_RW_QTY+1;
     modbus_reg_t status = modbus_master_read_holding_reg(PDU_frame,adr,len);
   
     TEST_ASSERT_EQUAL_INT8(RET_ERROR,status);
@@ -58,6 +58,16 @@ TEST(Modbus_Master_Requests, ReadSingleInputRegisterRequest)
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(len,read_u16_from_buf(PDU_frame+3));
 }
+
+TEST(Modbus_Master_Requests, ReadMaxQtyInputRegisterRequest)
+{
+    modbus_adr_t adr=0x0005;
+    modbus_data_qty_t len=MODBUS_MAX_REG_RW_QTY;
+    modbus_ret_t status = modbus_master_read_input_reg(PDU_frame,adr,len);
+    
+    TEST_ASSERT_EQUAL_INT8(RET_OK,status);
+}
+// TEST(Modbus_Master_Requests, ReadInputRegisterMaxQtyPlus1Request);
 
 TEST(Modbus_Master_Requests, ReadDiscreteInputsRequest)
 {
@@ -170,8 +180,8 @@ TEST(Modbus_Master_Requests, WriteMultipleRegisters)
 TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
 {
     modbus_adr_t adr=0x0080;
-    modbus_reg_t values[MODBUS_MAX_REG_READ_QTY]={0x5A5A};
-    modbus_data_qty_t reg_qty=MODBUS_MAX_REG_READ_QTY;
+    modbus_reg_t values[MODBUS_MAX_REG_RW_QTY]={0x5A5A};
+    modbus_data_qty_t reg_qty=MODBUS_MAX_REG_RW_QTY;
     modbus_ret_t status;
 
     status=modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
@@ -181,8 +191,8 @@ TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
 TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)
 {
     modbus_adr_t adr=0x0080;
-    modbus_reg_t values[MODBUS_MAX_REG_READ_QTY+1]={0x5A5A};
-    modbus_data_qty_t reg_qty=MODBUS_MAX_REG_READ_QTY+1;
+    modbus_reg_t values[MODBUS_MAX_REG_RW_QTY+1]={0x5A5A};
+    modbus_data_qty_t reg_qty=MODBUS_MAX_REG_RW_QTY+1;
     modbus_ret_t status;
 
     status=modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
@@ -193,3 +203,6 @@ static uint16_t read_u16_from_buf(uint8_t *buf)
 {
     return (uint16_t)((buf[0]<<8) | buf[1]);
 }
+
+// zacznij od uzupełnienia testów dla max i ponad max ilości rejestrów dla read input register
+// testy na zerową ilość rejestrów coili do odczytu zapisu. 

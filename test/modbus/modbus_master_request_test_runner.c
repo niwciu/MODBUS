@@ -7,6 +7,8 @@ TEST_GROUP_RUNNER(Modbus_Master_Requests)
    RUN_TEST_CASE(Modbus_Master_Requests, ReadMaxQtyHoldingRegisterRequest);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadHoldingRegisterMaxQtyPlus1Request);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadSingleInputRegisterRequest);
+   RUN_TEST_CASE(Modbus_Master_Requests, ReadMaxQtyInputRegisterRequest);
+   // RUN_TEST_CASE(Modbus_Master_Requests, ReadInputRegisterMaxQtyPlus1Request);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadDiscreteInputsRequest);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadMaxQtyDiscreteInputsRequest);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadMaxQtPlus1DiscreteInputsRequest);
