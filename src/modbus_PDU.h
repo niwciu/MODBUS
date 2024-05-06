@@ -22,7 +22,7 @@ extern "C"
 #define WRITE_SINGLE_COIL 0x05
 #define WRITE_MULTIPLE_COILS 0x0F
 
-#define READ_INPUT_REGISTER 0x04
+#define READ_INPUT_REGISTERS 0x04
 #define READ_HOLDING_REGISTERS 0x03
 #define WRITE_SINGLE_REGISTER 0x06
 #define WRITE_MULTIPLE_REGISTER 0x10
@@ -38,6 +38,7 @@ typedef uint8_t modbus_exeption_code_t;
 
 
 void modbus_master_read_holding_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_reg_qty_t len);
+void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_qty_t len);
 
 #ifdef __cplusplus
 }
