@@ -42,3 +42,17 @@ void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_
     read_reg_request(send_buf,WRITE_SINGLE_REGISTER,adr,val);
 }
 
+void modbus_master_write_multiple_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_reg_qty_t reg_qty, modbus_reg_t *data_buf)
+{
+    send_buf[0] = WRITE_MULTIPLE_REGISTER;
+
+    write_u16_to_buf(send_buf+1,adr);
+    write_u16_to_buf(send_buf+3,reg_qty);
+    send_buf[5]=reg_qty*2;
+    for (modbus_reg_qty_t i=0;i<reg_qty;i++)
+    {
+        write_u16_to_buf(send_buf+(6+(i*2)),data_buf[i]);
+    }
+    
+}
+

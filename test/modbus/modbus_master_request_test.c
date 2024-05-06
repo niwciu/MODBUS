@@ -41,7 +41,7 @@ TEST(Modbus_Master_Requests, ReadSingleInputRegisterRequest)
     TEST_ASSERT_EQUAL_UINT16(len,read_u16_from_buf(PDU_frame+3));
 }
 
-TEST(Modbus_Master_Requests, WriteSingleHoldingRegister)
+TEST(Modbus_Master_Requests, WriteSingleRegister)
 {
     modbus_adr_t adr=0x0009;
     modbus_reg_t value=0x0012;
@@ -53,12 +53,25 @@ TEST(Modbus_Master_Requests, WriteSingleHoldingRegister)
     TEST_ASSERT_EQUAL_UINT16(value,read_u16_from_buf(PDU_frame+3));
 }
 
-// TEST(Modbus_Master_Requests, )
-// {
+TEST(Modbus_Master_Requests, WriteMultipleRegisters)
+{
+    modbus_adr_t adr=0x0080;
+    modbus_reg_t values[5]={1,2,3,4,5};
+    modbus_reg_qty_t reg_qty=5;
 
+    modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
+  
+    TEST_ASSERT_EQUAL_UINT8(WRITE_MULTIPLE_REGISTER,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
+    TEST_ASSERT_EQUAL_UINT16(reg_qty,read_u16_from_buf(PDU_frame+3));
+    TEST_ASSERT_EQUAL_UINT8((reg_qty*2),PDU_frame[5]);
+    TEST_ASSERT_EQUAL_UINT16(values[0],read_u16_from_buf(PDU_frame+6));
+    TEST_ASSERT_EQUAL_UINT16(values[1],read_u16_from_buf(PDU_frame+8));
+    TEST_ASSERT_EQUAL_UINT16(values[2],read_u16_from_buf(PDU_frame+10));
+    TEST_ASSERT_EQUAL_UINT16(values[3],read_u16_from_buf(PDU_frame+12));
+    TEST_ASSERT_EQUAL_UINT16(values[4],read_u16_from_buf(PDU_frame+14));
 
-//     TEST_FAIL_MESSAGE("Implement your test!");
-// }
+}
 
 // TEST(Modbus_Master_Requests, )
 // {

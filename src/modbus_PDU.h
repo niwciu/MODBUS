@@ -27,7 +27,7 @@ extern "C"
 #define WRITE_SINGLE_REGISTER 0x06
 #define WRITE_MULTIPLE_REGISTER 0x10
 
-#define MODBUS_PDU_FRAME_LEN 5
+#define MODBUS_PDU_FRAME_LEN 128
 
 typedef uint8_t modbus_fun_code_t;
 typedef uint16_t modbus_adr_t; 
@@ -41,6 +41,7 @@ typedef uint8_t modbus_exeption_code_t;
 void modbus_master_read_holding_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_reg_qty_t len);
 void modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_qty_t len);
 void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val);
+void modbus_master_write_multiple_reg(uint8_t *send_buf,modbus_adr_t adr, modbus_reg_qty_t reg_qty, modbus_reg_t *data_buf);
 
 #ifdef __cplusplus
 }
