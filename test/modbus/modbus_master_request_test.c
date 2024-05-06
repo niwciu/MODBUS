@@ -56,7 +56,7 @@ TEST(Modbus_Master_Requests, ReadDiscreteInputsRequest)
 TEST(Modbus_Master_Requests, ReadMaxQtyDiscreteInputsRequest)
 {
     modbus_adr_t adr=0x0003;
-    modbus_data_qty_t input_qty=0x7D0;
+    modbus_data_qty_t input_qty=MODBUS_MAX_DISCRETE_INPUTS_QTY;
 
     modbus_master_read_discrete_inputs(PDU_frame,adr,input_qty);
   
