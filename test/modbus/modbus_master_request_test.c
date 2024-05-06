@@ -160,7 +160,16 @@ TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
     TEST_ASSERT_EQUAL(RET_OK,status);
 }
 
+TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)
+{
+    modbus_adr_t adr=0x0080;
+    modbus_reg_t values[123+1]={0x5A5A};
+    modbus_data_qty_t reg_qty=123+1;
+    modbus_ret_t status;
 
+    status=modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
+    TEST_ASSERT_EQUAL(RET_ERROR,status);
+}
 
 static uint16_t read_u16_from_buf(uint8_t *buf)
 {
