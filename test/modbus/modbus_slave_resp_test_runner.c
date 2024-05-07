@@ -10,6 +10,10 @@ TEST_GROUP_RUNNER(Modbus_Slave_Resp)
    RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead16Coils);
    RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead17Coils);
    RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead5DiscreteInputs);
+   RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead8DiscreteInputs);
+   // RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead9DiscreteInputs);
+   // RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead16DiscreteInputs);
+   // RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead17DiscreteInputs);
    // RUN_TEST_CASE(Modbus_Slave_Resp, );
    // RUN_TEST_CASE(Modbus_Slave_Resp, );
    // RUN_TEST_CASE(Modbus_Slave_Resp, );
