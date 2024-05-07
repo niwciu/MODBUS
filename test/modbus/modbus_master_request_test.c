@@ -47,6 +47,15 @@ TEST(Modbus_Master_Requests, ReadHoldingRegisterMaxQtyPlus1Request)
     TEST_ASSERT_EQUAL_INT8(RET_ERROR,status);
 }
 
+TEST(Modbus_Master_Requests, Read0QtyHoldingRegisterRequest)
+{
+    modbus_adr_t adr=0x0030;
+    modbus_data_qty_t len=0;
+    modbus_reg_t status = modbus_master_read_holding_reg(PDU_frame,adr,len);
+  
+    TEST_ASSERT_EQUAL(RET_ERROR,status);
+} 
+
 TEST(Modbus_Master_Requests, ReadSingleInputRegisterRequest)
 {
     modbus_adr_t adr=0x0005;
@@ -211,5 +220,5 @@ static uint16_t read_u16_from_buf(uint8_t *buf)
     return (uint16_t)((buf[0]<<8) | buf[1]);
 }
 
-// zacznij od uzupełnienia testów dla max i ponad max ilości rejestrów dla read input register
+//
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
