@@ -103,17 +103,11 @@ void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus
 
 modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf)
 {
-    if (reg_qty > MODBUS_MAX_REG_RW_QTY)
-    {
-        return RET_ERROR;
-    }
-    else
+    if ((reg_qty <= MODBUS_MAX_REG_RW_QTY)&&(reg_qty>=MODBUS_MIN_REG_COIL_QTY))
     {
         send_buf[0] = WRITE_MULTIPLE_REGISTER;
-
         write_u16_to_buf(send_buf + 1, adr);
         write_u16_to_buf(send_buf + 3, reg_qty);
-
         send_buf[5] = reg_qty * 2;
 
         for (modbus_data_qty_t i = 0; i < reg_qty; i++)
@@ -121,5 +115,9 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
             write_u16_to_buf(send_buf + (6 + (i * 2)), data_buf[i]);
         }
         return RET_OK;
+    }
+    else
+    {
+        return RET_ERROR;
     }
 }
