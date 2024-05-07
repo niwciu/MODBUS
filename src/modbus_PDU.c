@@ -17,6 +17,7 @@
 static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t len);
 static void write_single_reg_coil_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data);
 static modbus_data_t modbus_get_max_len(modbus_req_t req_code);
+static modbus_byte_count_t get_coil_read_byte_count(modbus_data_qty_t coil_qty);
 
 
 
@@ -66,6 +67,18 @@ static modbus_data_t modbus_get_max_len(modbus_req_t req_code)
         break;
     }
     return max_len;
+}
+
+static modbus_byte_count_t get_coil_read_byte_count(modbus_data_qty_t coil_qty)
+{
+    modbus_byte_count_t byte_count;
+    
+    byte_count= (coil_qty/8);
+    if (coil_qty%8)
+    {
+        byte_count++;
+    }
+    return byte_count;
 }
 
 // Master API functions
@@ -126,13 +139,7 @@ void modbus_slave_read_coils (uint8_t *resp_buf, const uint8_t *req_buf)
 {
     modbus_adr_t adr=read_u16_from_buf(req_buf+1);
     modbus_data_qty_t coil_qty = read_u16_from_buf(req_buf+3);
-    modbus_byte_count_t byte_cnt;
-    
-    byte_cnt= (coil_qty/8);
-    if (coil_qty%8)
-    {
-        byte_cnt++;
-    }
+    modbus_byte_count_t byte_cnt = get_coil_read_byte_count(coil_qty);
 
     resp_buf[0]=MODBUS_READ_COILS_FUNCTTION_CODE;
     resp_buf[1]=byte_cnt;
