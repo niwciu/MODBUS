@@ -1,5 +1,6 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_PDU.h"
+#include "buf_rw.h"
 #include "mock_modbus_data_interface.h"
 
 uint8_t req_PDU[MODBUS_PDU_FRAME_LEN] = {0};
@@ -188,5 +189,20 @@ TEST(Modbus_Slave_Resp, SlaveRead17DiscreteInputs)
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], resp_PDU[MODBUS_RESP_DATA_IDX+1]);
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[2], resp_PDU[MODBUS_RESP_DATA_IDX+2]);
 }
-//
+
+TEST(Modbus_Slave_Resp, SlaveReadOneHoldingRegister)
+{
+    modbus_adr_t adr = 0x0003;
+    modbus_data_qty_t reg_qty = 1;
+    modbus_byte_count_t expected_byte_count = 2*reg_qty; // in each byte 8 coil status is reported
+    modbus_reg_t exp_readed_reg_value[1] = {0xA55A}; 
+    mock_set_expected_hreg_alternately(adr,reg_qty);
+
+    modbus_master_read_holding_reg(req_PDU, adr, reg_qty);
+    modbus_slave_read_holdin_reg(resp_PDU, req_PDU);
+
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&resp_PDU[MODBUS_RESP_DATA_IDX]));
+}
 

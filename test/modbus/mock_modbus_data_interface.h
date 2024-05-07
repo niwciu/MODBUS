@@ -25,6 +25,7 @@ extern "C"
     void mock_set_all_din_to_off(void);
     void mock_set_expected_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty);
     void mock_set_expected_disc_in_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty);
+    void mock_set_expected_hreg_alternately (modbus_adr_t start_adr, modbus_data_qty_t qty);
     // void mock_set_expected_coil_state(modbus_adr_t adr, modbus_coil_t coil_state);
 
 #ifdef __cplusplus

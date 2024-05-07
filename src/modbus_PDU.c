@@ -195,3 +195,8 @@ void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf
         }
     }
 }
+
+void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
+{
+    
+}
