@@ -42,6 +42,31 @@ TEST(Modbus_Slave_Resp, SlaveRead5Coils)
     TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value,resp_PDU[2]);
 }
 
+TEST(Modbus_Slave_Resp, SlaveRead8Coils)
+{
+    modbus_adr_t adr=0x0003;
+    modbus_data_qty_t coil_qty=8;
+    modbus_byte_count_t expected_byte_count=1; // in each byte 8 coil status is reported
+
+    mock_coil[adr]=1;
+    mock_coil[adr+1]=0;
+    mock_coil[adr+2]=1;
+    mock_coil[adr+3]=0;
+    mock_coil[adr+4]=1;
+    mock_coil[adr+5]=0;
+    mock_coil[adr+6]=1;
+    mock_coil[adr+7]=0;
+    modbus_data_t exp_readed_coil_value=0x0055; 
+
+
+    modbus_master_read_coils(req_PDU,adr,coil_qty);
+    modbus_slave_read_coils(resp_PDU,req_PDU);
+    
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNCTTION_CODE, resp_PDU[0]);
+    TEST_ASSERT_EQUAL(expected_byte_count,resp_PDU[1]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value,resp_PDU[2]);
+}
+
 
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
