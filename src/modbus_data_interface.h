@@ -16,9 +16,13 @@ extern "C"
 #endif /* __cplusplus */
 
 #include "modbus_type.h"
-#include "stdbool.h"
 
-typedef bool modbus_r_coil_t;
+typedef enum
+{
+    READ_COIL_ERROR = -1,
+    READED_COIL_LOW = 0,
+    READED_COIL_HIGH = 1,
+} modbus_r_coil_t;
 
 modbus_r_coil_t get_coil_state(modbus_adr_t adr);
 void set_coil_state(modbus_adr_t adr, modbus_r_coil_t coil_state);

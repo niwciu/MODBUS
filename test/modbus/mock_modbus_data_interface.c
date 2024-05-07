@@ -11,10 +11,14 @@
 #include "mock_modbus_data_interface.h"
 
 modbus_r_coil_t mock_coil[COILS_QTY]={0};
+uint8_t mock_error_triger=0;
 
 modbus_r_coil_t get_coil_state(modbus_adr_t adr)
-{
-    return mock_coil[adr];
+{   
+    if (mock_error_triger == 0)
+        return mock_coil[adr];
+    else
+        return READ_COIL_ERROR;
 }
 
 void set_coil_state(modbus_adr_t adr, modbus_r_coil_t coil_state)

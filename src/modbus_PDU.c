@@ -141,12 +141,26 @@ void modbus_slave_read_coils (uint8_t *resp_buf, const uint8_t *req_buf)
     modbus_data_qty_t coil_qty = read_u16_from_buf(req_buf+3);
     modbus_byte_count_t byte_cnt = get_coil_read_byte_count(coil_qty);
 
+    modbus_r_coil_t temp_coil_value;
+
+    //check coil_qty
+    //check coil_tab_adr_size
+
     resp_buf[0]=MODBUS_READ_COILS_FUNC_CODE;
     resp_buf[1]=byte_cnt;
 
     for (modbus_byte_count_t i=0;i<coil_qty; i++)
     {
-        resp_buf[2+i/8] |= (get_coil_state(adr+i) << (i % 8));
+        temp_coil_value= get_coil_state(adr+i);
+        if (temp_coil_value!= READ_COIL_ERROR)
+        {
+            resp_buf[2+i/8] |= (temp_coil_value << (i % 8));
+        }
+        else
+        {
+            // gen_error_resp(4);
+            break;
+        }
     }
 
 }
