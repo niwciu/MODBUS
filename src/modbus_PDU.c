@@ -124,7 +124,16 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
 }
 
 // Slave API functions
-void modbus_slave_read_couils (uint8_t *resp_buf, uint8_t *req_buf) 
+void modbus_slave_read_couils (uint8_t *resp_buf, const uint8_t *req_buf) 
 {
-    
+    modbus_byte_count_t byte_cnt;
+    byte_cnt= req_buf[4]/8;
+    if (req_buf[4]%8)
+    {
+        byte_cnt++;
+    }
+
+    resp_buf[0]=MODBUS_READ_COILS_FUNCTTION_CODE;
+    resp_buf[1]=byte_cnt;
+
 }
