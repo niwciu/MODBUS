@@ -35,7 +35,7 @@ TEST(Modbus_Slave_Resp, SlaveRead5Coils)
 
 
     modbus_master_read_coils(req_PDU,adr,coil_qty);
-    modbus_slave_read_couils(resp_PDU,req_PDU);
+    modbus_slave_read_coils(resp_PDU,req_PDU);
     
     TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNCTTION_CODE, resp_PDU[0]);
     TEST_ASSERT_EQUAL(expected_byte_count,resp_PDU[1]);

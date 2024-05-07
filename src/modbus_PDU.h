@@ -34,7 +34,7 @@ extern "C"
     modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf);
 
     // Slave Functionality
-    void modbus_slave_read_couils(uint8_t *resp_buf, const uint8_t *req_buf);
+    void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf);
 
 #ifdef __cplusplus
 }

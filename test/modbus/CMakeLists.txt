@@ -48,6 +48,7 @@ set(TEST_INCLUDE_DIRS
 
 set(SRCS
 	../../src/modbus_PDU.c
+	../../src/buf_rw.c
 )
 
 set(TEST_SRCS
@@ -59,6 +60,8 @@ set(TEST_SRCS
 	modbus_slave_resp_test_runner.c
 	modbus_slave_resp_test.c
 	mock_modbus_data_interface.c
+
+	
 
 	#mock_module.c
 )

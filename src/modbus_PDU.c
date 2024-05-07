@@ -9,18 +9,15 @@
  */
 
 #include "modbus_PDU.h"
+#include "buf_rw.h"
 #include <stdio.h>
 
-static void write_u16_to_buf(uint8_t *buf, uint16_t data);
+
 static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t len);
 static void write_single_reg_coil_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data);
 static modbus_data_t modbus_get_max_len(modbus_req_t req_code);
 
-static void write_u16_to_buf(uint8_t *buf, uint16_t data)
-{
-    buf[0] = (uint8_t)(data >> 8);
-    buf[1] = (uint8_t)(data & 0xFF);
-}
+
 
 static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t len)
 {
@@ -124,16 +121,21 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
 }
 
 // Slave API functions
-void modbus_slave_read_couils (uint8_t *resp_buf, const uint8_t *req_buf) 
+void modbus_slave_read_coils (uint8_t *resp_buf, const uint8_t *req_buf) 
 {
-    modbus_byte_count_t byte_cnt;
-    byte_cnt= req_buf[4]/8;
-    if (req_buf[4]%8)
-    {
-        byte_cnt++;
-    }
+    // modbus_byte_count_t byte_cnt;
+    // modbus_data_qty_t coil_qty = read_u16
+    
+    // byte_cnt= (req_buf[4]/8;
+    // if (req_buf[4]%8)
+    // {
+    //     byte_cnt++;
+    // }
 
-    resp_buf[0]=MODBUS_READ_COILS_FUNCTTION_CODE;
-    resp_buf[1]=byte_cnt;
+    // modbus_coil_reg_t coil_status[byte_cnt];
+
+    // for (modbus_byte_count_t i=0;i<reg_buf[4])
+    // resp_buf[0]=MODBUS_READ_COILS_FUNCTTION_CODE;
+    // resp_buf[1]=byte_cnt;
 
 }

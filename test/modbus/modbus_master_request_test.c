@@ -1,9 +1,10 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_PDU.h"
+#include "buf_rw.h"
 
 uint8_t PDU_frame[MODBUS_PDU_FRAME_LEN];
 
-static uint16_t read_u16_from_buf(const uint8_t *buf);
+
 
 TEST_GROUP(Modbus_Master_Requests);
 
@@ -258,10 +259,7 @@ TEST(Modbus_Master_Requests, WriteZeroMultipleRegisters)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR,status);
 }
 
-static uint16_t read_u16_from_buf(const uint8_t *buf)
-{
-    return (uint16_t)((buf[0]<<8) | buf[1]);
-}
+
 
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
