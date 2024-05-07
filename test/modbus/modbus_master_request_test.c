@@ -25,7 +25,7 @@ TEST(Modbus_Master_Requests, ReadSingleHoldingRegisterRequest)
 
     modbus_reg_t status = modbus_master_read_holding_reg(PDU_frame,adr,len);
   
-    TEST_ASSERT_EQUAL_UINT8(READ_HOLDING_REGISTERS,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(len,read_u16_from_buf(PDU_frame+3));
     TEST_ASSERT_EQUAL_INT16(RET_OK,status);
@@ -65,7 +65,7 @@ TEST(Modbus_Master_Requests, ReadSingleInputRegisterRequest)
 
     modbus_reg_t status = modbus_master_read_input_reg(PDU_frame,adr,len);
   
-    TEST_ASSERT_EQUAL_UINT8(READ_INPUT_REGISTERS,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(len,read_u16_from_buf(PDU_frame+3));
     TEST_ASSERT_EQUAL_INT16(RET_OK,status);
@@ -105,7 +105,7 @@ TEST(Modbus_Master_Requests, ReadDiscreteInputsRequest)
 
     modbus_ret_t status = modbus_master_read_discrete_inputs(PDU_frame,adr,input_qty);
   
-    TEST_ASSERT_EQUAL_UINT8(READ_DISCRETE_INPUTS,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
     TEST_ASSERT_EQUAL_INT16(RET_OK,status);
@@ -118,7 +118,7 @@ TEST(Modbus_Master_Requests, ReadMaxQtyDiscreteInputsRequest)
 
     modbus_ret_t status = modbus_master_read_discrete_inputs(PDU_frame,adr,input_qty);
   
-    TEST_ASSERT_EQUAL_UINT8(READ_DISCRETE_INPUTS,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
     TEST_ASSERT_EQUAL_INT16(RET_OK,status);
@@ -149,7 +149,7 @@ TEST(Modbus_Master_Requests, ReadCoilsRequest)
 
     modbus_ret_t status = modbus_master_read_coils(PDU_frame,adr,input_qty);
   
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNCTTION_CODE,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
     TEST_ASSERT_EQUAL_INT16(RET_OK,status);
@@ -189,7 +189,7 @@ TEST(Modbus_Master_Requests, WriteSingleRegister)
 
     modbus_master_write_single_reg(PDU_frame,adr,value);
   
-    TEST_ASSERT_EQUAL_UINT8(WRITE_SINGLE_REGISTER,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(value,read_u16_from_buf(PDU_frame+3));
 }
@@ -201,7 +201,7 @@ TEST(Modbus_Master_Requests, WriteSingleCoilOn)
 
     modbus_master_write_single_coil(PDU_frame,adr,coil_state);
   
-    TEST_ASSERT_EQUAL_UINT8(WRITE_SINGLE_COIL,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(coil_state,read_u16_from_buf(PDU_frame+3));
 }
@@ -214,7 +214,7 @@ TEST(Modbus_Master_Requests, WriteMultipleRegisters)
 
     modbus_ret_t status=modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
   
-    TEST_ASSERT_EQUAL_UINT8(WRITE_MULTIPLE_REGISTER,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(reg_qty,read_u16_from_buf(PDU_frame+3));
     TEST_ASSERT_EQUAL_UINT8((reg_qty*2),PDU_frame[5]);
