@@ -1,11 +1,11 @@
 /**
  * @file modbus_type.h
  * @author niwciu (niwciu@gmail.com)
- * @brief 
+ * @brief
  * @date 2024-05-07
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #ifndef _MODBUS_TYPE_H_
 #define _MODBUS_TYPE_H_
@@ -15,6 +15,19 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include <stdint.h>
+    // clang-format off
+#define MODBUS_SLAVE_ADR_IDX            0
+#define MODBUS_SLAVE_ADR_BYTE_LEN       1     
+#define MODBUS_PDU_BUF_OFFSET           MODBUS_SLAVE_ADR_BYTE_LEN
+#define MODBUS_FUNCTION_CODE_IDX        MODBUS_PDU_BUF_OFFSET
+#define MODBUS_REQUEST_ADR_IDX          (MODBUS_PDU_BUF_OFFSET + 1)
+#define MODBUS_REQUEST_LEN_IDX          (MODBUS_PDU_BUF_OFFSET + 3)
+#define MODBUS_REQUEST_BYTE_CNT_IDX     (MODBUS_PDU_BUF_OFFSET + 5)
+
+#define MODBUS_RESP_BYTE_CNT_IDX        (MODBUS_PDU_BUF_OFFSET + 1)
+#define MODBUS_RESP_DATA_IDX            (MODBUS_PDU_BUF_OFFSET + 2)
+#define MODBUS_WRITE_MULTI_DATA_IDX     (MODBUS_PDU_BUF_OFFSET + 6)
+    // clang-format on
     typedef enum
     {
         MODBUS_READ_COILS_FUNC_CODE = 0x01U,
@@ -47,9 +60,6 @@ extern "C"
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
-    // typedef uint8_t modbus_byte_count_t;
-    // typedef uint8_t modbus_error_code_t;
-    // typedef uint8_t modbus_exeption_code_t;
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

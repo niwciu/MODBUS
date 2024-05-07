@@ -30,9 +30,9 @@ TEST(Modbus_Slave_Resp, SlaveRead5Coils)
     modbus_master_read_coils(req_PDU, adr, coil_qty);
     modbus_slave_read_coils(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], resp_PDU[2]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead8Coils)
@@ -48,9 +48,9 @@ TEST(Modbus_Slave_Resp, SlaveRead8Coils)
     modbus_master_read_coils(req_PDU, adr, coil_qty);
     modbus_slave_read_coils(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], resp_PDU[2]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead9Coils)
@@ -64,10 +64,10 @@ TEST(Modbus_Slave_Resp, SlaveRead9Coils)
     modbus_master_read_coils(req_PDU, adr, coil_qty);
     modbus_slave_read_coils(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], resp_PDU[2]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], resp_PDU[3]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], resp_PDU[MODBUS_RESP_DATA_IDX+1]);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead16Coils)
@@ -81,10 +81,10 @@ TEST(Modbus_Slave_Resp, SlaveRead16Coils)
     modbus_master_read_coils(req_PDU, adr, coil_qty);
     modbus_slave_read_coils(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], resp_PDU[2]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], resp_PDU[3]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], resp_PDU[MODBUS_RESP_DATA_IDX+1]);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead17Coils)
@@ -98,11 +98,11 @@ TEST(Modbus_Slave_Resp, SlaveRead17Coils)
     modbus_master_read_coils(req_PDU, adr, coil_qty);
     modbus_slave_read_coils(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], resp_PDU[2]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], resp_PDU[3]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[2], resp_PDU[4]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], resp_PDU[MODBUS_RESP_DATA_IDX+1]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[2], resp_PDU[MODBUS_RESP_DATA_IDX+2]);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead5DiscreteInputs)
@@ -116,9 +116,9 @@ TEST(Modbus_Slave_Resp, SlaveRead5DiscreteInputs)
     modbus_master_read_discrete_inputs(req_PDU, adr, din_qty);
     modbus_slave_read_discrete_inputs(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[2]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead8DiscreteInputs)
@@ -132,9 +132,9 @@ TEST(Modbus_Slave_Resp, SlaveRead8DiscreteInputs)
     modbus_master_read_discrete_inputs(req_PDU, adr, din_qty);
     modbus_slave_read_discrete_inputs(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[2]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead9DiscreteInputs)
@@ -148,10 +148,10 @@ TEST(Modbus_Slave_Resp, SlaveRead9DiscreteInputs)
     modbus_master_read_discrete_inputs(req_PDU, adr, din_qty);
     modbus_slave_read_discrete_inputs(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[2]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], resp_PDU[3]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], resp_PDU[MODBUS_RESP_DATA_IDX+1]);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead16DiscreteInputs)
@@ -165,10 +165,10 @@ TEST(Modbus_Slave_Resp, SlaveRead16DiscreteInputs)
     modbus_master_read_discrete_inputs(req_PDU, adr, din_qty);
     modbus_slave_read_discrete_inputs(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[2]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], resp_PDU[3]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], resp_PDU[MODBUS_RESP_DATA_IDX+1]);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead17DiscreteInputs)
@@ -182,11 +182,11 @@ TEST(Modbus_Slave_Resp, SlaveRead17DiscreteInputs)
     modbus_master_read_discrete_inputs(req_PDU, adr, din_qty);
     modbus_slave_read_discrete_inputs(resp_PDU, req_PDU);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[0]);
-    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[2]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], resp_PDU[3]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[2], resp_PDU[4]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, resp_PDU[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], resp_PDU[MODBUS_RESP_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], resp_PDU[MODBUS_RESP_DATA_IDX+1]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[2], resp_PDU[MODBUS_RESP_DATA_IDX+2]);
 }
 //
 
