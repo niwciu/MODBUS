@@ -21,7 +21,7 @@ TEST_GROUP_RUNNER(Modbus_Master_Requests)
    RUN_TEST_CASE(Modbus_Master_Requests, ReadCoilsRequest);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadCoilsMaxQtyRequest);
    RUN_TEST_CASE(Modbus_Master_Requests, ReadCoilsMaxQtyPlus1Request);
-   // RUN_TEST_CASE(Modbus_Master_Requests, ReadZeroCoilsRequest);
+   RUN_TEST_CASE(Modbus_Master_Requests, ReadZeroCoilsRequest);
 
    RUN_TEST_CASE(Modbus_Master_Requests, WriteSingleRegister);
 
@@ -30,7 +30,7 @@ TEST_GROUP_RUNNER(Modbus_Master_Requests)
    RUN_TEST_CASE(Modbus_Master_Requests, WriteMultipleRegisters);
    RUN_TEST_CASE(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters);
    RUN_TEST_CASE(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1); 
-   // RUN_TEST_CASE(Modbus_Master_Requests, WriteZeroMultipleRegisters);
+   RUN_TEST_CASE(Modbus_Master_Requests, WriteZeroMultipleRegisters);
 
    // 
    // RUN_TEST_CASE(Modbus_Master_Requests, );
