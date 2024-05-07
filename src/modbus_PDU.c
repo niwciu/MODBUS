@@ -18,7 +18,7 @@ static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, m
 static void write_single_reg_coil_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data);
 static modbus_data_t modbus_get_max_len(modbus_req_t req_code);
 static modbus_byte_count_t get_coil_read_byte_count(modbus_data_qty_t coil_qty);
-// static void clear_buf(uint8_t *buf);
+static void clear_coil_din_status_byte(uint8_t *buf,modbus_data_qty_t qty);
 
 
 
@@ -82,13 +82,13 @@ static modbus_byte_count_t get_coil_read_byte_count(modbus_data_qty_t coil_qty)
     return byte_count;
 }
 
-// static void clear_buf(uint8_t *buf)
-// {
-//     for(uint16_t i=0; i<MODBUS_PDU_FRAME_LEN;i++)
-//     {
-//         buf[i]=0;
-//     }
-// }
+static void clear_coil_din_status_byte(uint8_t *buf,modbus_data_qty_t qty)
+{
+    for (uint8_t i=0;i<qty;i++)
+    {
+        *(buf+i)=0;
+    }
+}
 
 // Master API functions
 modbus_ret_t modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
@@ -159,11 +159,8 @@ void modbus_slave_read_coils (uint8_t *resp_buf, const uint8_t *req_buf)
     resp_buf[1]=byte_cnt;
 
     // clear bytes for coil status
-    for (uint8_t i=0;i<byte_cnt;i++)
-    {
-        resp_buf[2+i]=0;
-    }
-    
+    clear_coil_din_status_byte(&resp_buf[2],byte_cnt);
+
     for (modbus_byte_count_t i=0;i<coil_qty; i++)
     {
         temp_coil_value= get_coil_state(adr+i);
@@ -191,11 +188,7 @@ void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf
     resp_buf[0]=MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
     resp_buf[1]=byte_cnt;
 
-    // clear bytes for coil status
-    for (uint8_t i=0;i<byte_cnt;i++)
-    {
-        resp_buf[2+i]=0;
-    }
+    clear_coil_din_status_byte(&resp_buf[2],byte_cnt);
 
     for (modbus_byte_count_t i=0;i<din_qty; i++)
     {
