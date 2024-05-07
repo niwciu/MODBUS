@@ -56,6 +56,23 @@ TEST(Modbus_Slave_Resp, SlaveRead8Coils)
     TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value, resp_PDU[2]);
 }
 
+TEST(Modbus_Slave_Resp, SlaveRead9Coils)
+{
+    modbus_adr_t adr = 0x0003;
+    modbus_data_qty_t coil_qty = 9;
+    modbus_byte_count_t expected_byte_count = 2; // in each byte 8 coil status is reported
+    uint8_t exp_readed_coil_value[2] = {0x55,0x01};
+    set_expected_coils_alternately(adr,coil_qty);
+
+    modbus_master_read_coils(req_PDU, adr, coil_qty);
+    modbus_slave_read_coils(resp_PDU, req_PDU);
+
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, resp_PDU[0]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_PDU[1]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], resp_PDU[2]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], resp_PDU[3]);
+}
+
 //
 
 static void set_expected_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty)
