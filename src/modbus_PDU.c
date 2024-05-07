@@ -18,6 +18,7 @@ static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, m
 static void write_single_reg_coil_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data);
 static modbus_data_t modbus_get_max_len(modbus_req_t req_code);
 static modbus_byte_count_t get_coil_read_byte_count(modbus_data_qty_t coil_qty);
+// static void clear_buf(uint8_t *buf);
 
 
 
@@ -80,6 +81,14 @@ static modbus_byte_count_t get_coil_read_byte_count(modbus_data_qty_t coil_qty)
     }
     return byte_count;
 }
+
+// static void clear_buf(uint8_t *buf)
+// {
+//     for(uint16_t i=0; i<MODBUS_PDU_FRAME_LEN;i++)
+//     {
+//         buf[i]=0;
+//     }
+// }
 
 // Master API functions
 modbus_ret_t modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
@@ -149,6 +158,12 @@ void modbus_slave_read_coils (uint8_t *resp_buf, const uint8_t *req_buf)
     resp_buf[0]=MODBUS_READ_COILS_FUNC_CODE;
     resp_buf[1]=byte_cnt;
 
+    // clear bytes for coil status
+    for (uint8_t i=0;i<byte_cnt;i++)
+    {
+        resp_buf[2+i]=0;
+    }
+    
     for (modbus_byte_count_t i=0;i<coil_qty; i++)
     {
         temp_coil_value= get_coil_state(adr+i);
@@ -162,5 +177,39 @@ void modbus_slave_read_coils (uint8_t *resp_buf, const uint8_t *req_buf)
             break;
         }
     }
+
+}
+
+void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf) 
+{
+    modbus_adr_t adr=read_u16_from_buf(&req_buf[1]);
+    modbus_data_qty_t din_qty = read_u16_from_buf(&req_buf[3]);
+    modbus_byte_count_t byte_cnt = get_coil_read_byte_count(din_qty);
+
+    modbus_r_DisIn_t temp_din_value;
+
+    resp_buf[0]=MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
+    resp_buf[1]=byte_cnt;
+
+    // clear bytes for coil status
+    for (uint8_t i=0;i<byte_cnt;i++)
+    {
+        resp_buf[2+i]=0;
+    }
+
+    for (modbus_byte_count_t i=0;i<din_qty; i++)
+    {
+        temp_din_value= get_din_state(adr+i);
+        if (temp_din_value!= READ_DIS_IN_ERROR)
+        {
+            resp_buf[2+(i/8)] |= (temp_din_value << (i % 8));
+        }
+        else
+        {
+            // gen_error_resp(4);
+            break;
+        }
+    }
+    
 
 }

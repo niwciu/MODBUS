@@ -34,6 +34,8 @@ typedef enum
 modbus_r_coil_t get_coil_state(modbus_adr_t adr);
 void set_coil_state(modbus_adr_t adr, modbus_r_coil_t coil_state);
 
+modbus_r_DisIn_t get_din_state(modbus_adr_t adr);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
