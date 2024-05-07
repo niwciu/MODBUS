@@ -32,10 +32,6 @@ TEST_GROUP_RUNNER(Modbus_Master_Requests)
    RUN_TEST_CASE(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1); 
    RUN_TEST_CASE(Modbus_Master_Requests, WriteZeroMultipleRegisters);
 
-   // 
-   // RUN_TEST_CASE(Modbus_Master_Requests, );
-   // RUN_TEST_CASE(Modbus_Master_Requests, );
-   // RUN_TEST_CASE(Modbus_Master_Requests, );
    // RUN_TEST_CASE(Modbus_Master_Requests, );
 
    
