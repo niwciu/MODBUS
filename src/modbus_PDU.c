@@ -29,7 +29,7 @@ static void read_reg_request(uint8_t *send_buf, uint8_t req_code, modbus_adr_t a
 
 modbus_ret_t modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
 {
-    if (hreg_qty <= MODBUS_MAX_REG_RW_QTY)
+    if ((hreg_qty <= MODBUS_MAX_REG_RW_QTY) && (hreg_qty>0))
     {
         read_reg_request(send_buf, READ_HOLDING_REGISTERS, adr, (modbus_data_t)hreg_qty);
         return RET_OK;
