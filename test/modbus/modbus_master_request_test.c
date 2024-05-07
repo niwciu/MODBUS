@@ -148,7 +148,7 @@ TEST(Modbus_Master_Requests, ReadCoilsRequest)
 
     modbus_ret_t status = modbus_master_read_coils(PDU_frame,adr,input_qty);
   
-    TEST_ASSERT_EQUAL_UINT8(READ_COILS,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNCTTION_CODE,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(input_qty,read_u16_from_buf(PDU_frame+3));
     TEST_ASSERT_EQUAL_INT16(RET_OK,status);

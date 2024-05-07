@@ -25,7 +25,7 @@ extern "C"
 
     typedef enum
     {
-        READ_COILS = 0x01,
+        MODBUS_READ_COILS_FUNCTTION_CODE = 0x01,
         READ_DISCRETE_INPUTS = 0x02,
         READ_HOLDING_REGISTERS = 0x03,
         READ_INPUT_REGISTERS = 0x04,
@@ -52,10 +52,13 @@ extern "C"
     typedef uint16_t modbus_data_qty_t;
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
+    typedef uint8_t modbus_byte_count_t;
     // typedef uint8_t modbus_byte_count_t;
     // typedef uint8_t modbus_error_code_t;
     // typedef uint8_t modbus_exeption_code_t;
 
+
+    // Master Functionality
     modbus_ret_t modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty);
     modbus_ret_t modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty);
     modbus_ret_t modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t discrete_input_qty);
@@ -64,6 +67,9 @@ extern "C"
     void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val);
     void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus_coil_t coil_state);
     modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf);
+
+    //Slave Functionality
+    void modbus_slave_read_couils (uint8_t *resp_buf, uint8_t *req_buf);
 
 #ifdef __cplusplus
 }

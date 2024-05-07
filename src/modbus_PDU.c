@@ -49,7 +49,7 @@ static modbus_data_t modbus_get_max_len(modbus_req_t req_code)
     modbus_data_t max_len = 0;
     switch (req_code)
     {
-    case READ_COILS:
+    case MODBUS_READ_COILS_FUNCTTION_CODE:
     case WRITE_MULTIPLE_COILS:
         max_len = MODBUS_MAX_COILS_READ_QTY;
         break;
@@ -70,6 +70,7 @@ static modbus_data_t modbus_get_max_len(modbus_req_t req_code)
     return max_len;
 }
 
+// Master API functions
 modbus_ret_t modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
 {
     return read_reg_request(send_buf, READ_HOLDING_REGISTERS, adr, hreg_qty);
@@ -87,7 +88,7 @@ modbus_ret_t modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t 
 
 modbus_ret_t modbus_master_read_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty)
 {
-    return read_reg_request(send_buf, READ_COILS, adr, coils_qty);
+    return read_reg_request(send_buf, MODBUS_READ_COILS_FUNCTTION_CODE, adr, coils_qty);
 }
 
 
@@ -120,4 +121,10 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
     {
         return RET_ERROR;
     }
+}
+
+// Slave API functions
+void modbus_slave_read_couils (uint8_t *resp_buf, uint8_t *req_buf) 
+{
+    
 }
