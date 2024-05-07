@@ -35,7 +35,7 @@ TEST(Modbus_Master_Requests, ReadMaxQtyHoldingRegisterRequest)
     modbus_data_qty_t len=MODBUS_MAX_REG_RW_QTY;
     modbus_reg_t status = modbus_master_read_holding_reg(PDU_frame,adr,len);
   
-    TEST_ASSERT_EQUAL(RET_OK,status);
+    TEST_ASSERT_EQUAL_INT16(RET_OK,status);
 } 
 
 TEST(Modbus_Master_Requests, ReadHoldingRegisterMaxQtyPlus1Request)
@@ -44,7 +44,7 @@ TEST(Modbus_Master_Requests, ReadHoldingRegisterMaxQtyPlus1Request)
     modbus_data_qty_t len=MODBUS_MAX_REG_RW_QTY+1;
     modbus_reg_t status = modbus_master_read_holding_reg(PDU_frame,adr,len);
   
-    TEST_ASSERT_EQUAL_INT8(RET_ERROR,status);
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR,status);
 }
 
 TEST(Modbus_Master_Requests, Read0QtyHoldingRegisterRequest)
@@ -74,7 +74,7 @@ TEST(Modbus_Master_Requests, ReadMaxQtyInputRegisterRequest)
     modbus_data_qty_t len=MODBUS_MAX_REG_RW_QTY;
     modbus_ret_t status = modbus_master_read_input_reg(PDU_frame,adr,len);
     
-    TEST_ASSERT_EQUAL_INT8(RET_OK,status);
+    TEST_ASSERT_EQUAL_INT16(RET_OK,status);
 }
 TEST(Modbus_Master_Requests, ReadInputRegisterMaxQtyPlus1Request)
 {
@@ -82,7 +82,7 @@ TEST(Modbus_Master_Requests, ReadInputRegisterMaxQtyPlus1Request)
     modbus_data_qty_t len=MODBUS_MAX_REG_RW_QTY+1;
     modbus_ret_t status = modbus_master_read_input_reg(PDU_frame,adr,len);
     
-    TEST_ASSERT_EQUAL_INT8(RET_ERROR,status);
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR,status);
 }
 
 TEST(Modbus_Master_Requests, ReadDiscreteInputsRequest)
@@ -115,7 +115,7 @@ TEST(Modbus_Master_Requests, ReadMaxQtPlus1DiscreteInputsRequest)
     modbus_data_qty_t input_qty=MODBUS_MAX_DISCRETE_INPUTS_READ_QTY+1;
     modbus_ret_t status = modbus_master_read_discrete_inputs(PDU_frame,adr,input_qty);
   
-    TEST_ASSERT_EQUAL(RET_ERROR,status);
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR,status);
 }
 
 TEST(Modbus_Master_Requests, ReadCoilsRequest)
@@ -135,7 +135,7 @@ TEST(Modbus_Master_Requests, ReadCoilsMaxQtyRequest)
     modbus_adr_t adr=0x0003;
     modbus_data_qty_t input_qty=MODBUS_MAX_COILS_READ_QTY;
     modbus_ret_t status= modbus_master_read_coils(PDU_frame,adr,input_qty);
-    TEST_ASSERT_EQUAL(RET_OK,status);
+    TEST_ASSERT_EQUAL_INT16(RET_OK,status);
 }
 
 
@@ -145,7 +145,7 @@ TEST(Modbus_Master_Requests, ReadCoilsMaxQtyPlus1Request)
     modbus_data_qty_t input_qty=MODBUS_MAX_COILS_READ_QTY+1;
     modbus_ret_t status=modbus_master_read_coils(PDU_frame,adr,input_qty);
 
-    TEST_ASSERT_EQUAL(RET_ERROR,status);
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR,status);
 }
 
 TEST(Modbus_Master_Requests, WriteSingleRegister)
@@ -201,7 +201,7 @@ TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
     modbus_ret_t status;
 
     status=modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
-    TEST_ASSERT_EQUAL(RET_OK,status);
+    TEST_ASSERT_EQUAL_INT16(RET_OK,status);
 }
 
 TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)
@@ -212,7 +212,7 @@ TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)
     modbus_ret_t status;
 
     status=modbus_master_write_multiple_reg(PDU_frame,adr,reg_qty,values);
-    TEST_ASSERT_EQUAL(RET_ERROR,status);
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR,status);
 }
 
 static uint16_t read_u16_from_buf(uint8_t *buf)
