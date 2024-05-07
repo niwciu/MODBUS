@@ -132,6 +132,15 @@ TEST(Modbus_Master_Requests, ReadMaxQtPlus1DiscreteInputsRequest)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR,status);
 }
 
+TEST(Modbus_Master_Requests, ReadZeroDiscreteInputsRequest)
+{
+    modbus_adr_t adr=0x0003;
+    modbus_data_qty_t input_qty=0;
+    modbus_ret_t status = modbus_master_read_discrete_inputs(PDU_frame,adr,input_qty);
+  
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR,status);
+}
+
 TEST(Modbus_Master_Requests, ReadCoilsRequest)
 {
     modbus_adr_t adr=0x0003;
