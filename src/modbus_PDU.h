@@ -21,6 +21,7 @@ extern "C"
 #define MODBUS_MAX_DISCRETE_INPUTS_READ_QTY 0x7D0
 #define MODBUS_MAX_COILS_READ_QTY MODBUS_MAX_DISCRETE_INPUTS_READ_QTY
 #define MODBUS_MAX_REG_RW_QTY 0x7B
+#define MODBUS_MIN_REG_COIL_QTY 1
 
     typedef enum
     {
@@ -50,6 +51,7 @@ extern "C"
     typedef uint16_t modbus_reg_t;
     typedef uint16_t modbus_data_qty_t;
     typedef uint16_t modbus_data_t;
+    typedef uint8_t modbus_req_t;
     // typedef uint8_t modbus_byte_count_t;
     // typedef uint8_t modbus_error_code_t;
     // typedef uint8_t modbus_exeption_code_t;

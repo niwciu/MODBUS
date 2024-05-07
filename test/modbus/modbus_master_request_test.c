@@ -172,10 +172,9 @@ TEST(Modbus_Master_Requests, WriteSingleCoilOn)
 
     modbus_master_write_single_coil(PDU_frame,adr,coil_state);
   
-    TEST_ASSERT_EQUAL_UINT8(WRITE_SINGLE_REGISTER,PDU_frame[0]);
+    TEST_ASSERT_EQUAL_UINT8(WRITE_SINGLE_COIL,PDU_frame[0]);
     TEST_ASSERT_EQUAL_UINT16(adr,read_u16_from_buf(PDU_frame+1));
     TEST_ASSERT_EQUAL_UINT16(coil_state,read_u16_from_buf(PDU_frame+3));
-
 }
 
 TEST(Modbus_Master_Requests, WriteMultipleRegisters)
