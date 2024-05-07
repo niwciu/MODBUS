@@ -3,7 +3,7 @@
 
 uint8_t PDU_frame[MODBUS_PDU_FRAME_LEN];
 
-static uint16_t read_u16_from_buf(uint8_t *buf);
+static uint16_t read_u16_from_buf(const uint8_t *buf);
 
 TEST_GROUP(Modbus_Master_Requests);
 
@@ -219,7 +219,7 @@ TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR,status);
 }
 
-static uint16_t read_u16_from_buf(uint8_t *buf)
+static uint16_t read_u16_from_buf(const uint8_t *buf)
 {
     return (uint16_t)((buf[0]<<8) | buf[1]);
 }

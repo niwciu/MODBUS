@@ -101,7 +101,7 @@ void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus
     write_single_reg_coil_request(send_buf,WRITE_SINGLE_COIL,adr, coil_state);
 }
 
-modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_reg_t *data_buf)
+modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf)
 {
     if (reg_qty > MODBUS_MAX_REG_RW_QTY)
     {
