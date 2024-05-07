@@ -10,6 +10,7 @@
 
 #include "modbus_PDU.h"
 #include "buf_rw.h"
+#include "modbus_data_interface.h"
 #include <stdio.h>
 
 
@@ -94,7 +95,7 @@ void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_
     write_single_reg_coil_request(send_buf,WRITE_SINGLE_REGISTER,adr, val);
 }
 
-void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus_coil_t coil_state)
+void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus_w_coil_t coil_state)
 {
     write_single_reg_coil_request(send_buf,WRITE_SINGLE_COIL,adr, coil_state);
 }
@@ -123,19 +124,22 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
 // Slave API functions
 void modbus_slave_read_coils (uint8_t *resp_buf, const uint8_t *req_buf) 
 {
-    // modbus_byte_count_t byte_cnt;
-    // modbus_data_qty_t coil_qty = read_u16
+    modbus_adr_t adr=read_u16_from_buf(req_buf+1);
+    modbus_data_qty_t coil_qty = read_u16_from_buf(req_buf+3);
+    modbus_byte_count_t byte_cnt;
     
-    // byte_cnt= (req_buf[4]/8;
-    // if (req_buf[4]%8)
-    // {
-    //     byte_cnt++;
-    // }
+    byte_cnt= (coil_qty/8);
+    if (coil_qty%8)
+    {
+        byte_cnt++;
+    }
 
-    // modbus_coil_reg_t coil_status[byte_cnt];
+    resp_buf[0]=MODBUS_READ_COILS_FUNCTTION_CODE;
+    resp_buf[1]=byte_cnt;
 
-    // for (modbus_byte_count_t i=0;i<reg_buf[4])
-    // resp_buf[0]=MODBUS_READ_COILS_FUNCTTION_CODE;
-    // resp_buf[1]=byte_cnt;
+    for (modbus_byte_count_t i=0;i<coil_qty; i++)
+    {
+        resp_buf[2+i/8] |= (get_coil_state(adr+i) << (i % 8));
+    }
 
 }

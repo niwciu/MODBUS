@@ -197,7 +197,7 @@ TEST(Modbus_Master_Requests, WriteSingleRegister)
 TEST(Modbus_Master_Requests, WriteSingleCoilOn)
 {
     modbus_adr_t adr=0x0009;
-    modbus_coil_t coil_state=COIL_ON;
+    modbus_w_coil_t coil_state=COIL_ON;
 
     modbus_master_write_single_coil(PDU_frame,adr,coil_state);
   

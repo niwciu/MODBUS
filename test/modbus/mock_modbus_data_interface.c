@@ -10,15 +10,14 @@
 
 #include "mock_modbus_data_interface.h"
 
+modbus_r_coil_t mock_coil[COILS_QTY]={0};
 
-
-modbus_coil_t mock_coil[COILS_QTY]={COIL_OFF};
-
-modbus_coil_t get_coil_state(modbus_adr_t adr)
+modbus_r_coil_t get_coil_state(modbus_adr_t adr)
 {
     return mock_coil[adr];
 }
-void set_coil_state(modbus_adr_t adr, modbus_coil_t coil_state)
+
+void set_coil_state(modbus_adr_t adr, modbus_r_coil_t coil_state)
 {
     mock_coil[adr]=coil_state;
 }
@@ -32,6 +31,6 @@ void mock_set_all_cails_to_off(void)
 {
     for (int i=0; i<COILS_QTY; i++)
     {
-        mock_coil[i]=COIL_OFF;
+        mock_coil[i]=0;
     }
 }

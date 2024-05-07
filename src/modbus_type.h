@@ -31,7 +31,7 @@ extern "C"
     {
         COIL_OFF = 0x0000,
         COIL_ON = 0xFF00,
-    } modbus_coil_t;
+    } modbus_w_coil_t;
 
     typedef enum
     {
@@ -45,7 +45,6 @@ extern "C"
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
-    typedef uint8_t modbus_coil_reg_t;
     // typedef uint8_t modbus_byte_count_t;
     // typedef uint8_t modbus_error_code_t;
     // typedef uint8_t modbus_exeption_code_t;

@@ -16,9 +16,12 @@ extern "C"
 #endif /* __cplusplus */
 
 #include "modbus_type.h"
+#include "stdbool.h"
 
-modbus_coil_t get_coil_state(modbus_adr_t adr);
-void set_coil_state(modbus_adr_t adr, modbus_coil_t coil_state);
+typedef bool modbus_r_coil_t;
+
+modbus_r_coil_t get_coil_state(modbus_adr_t adr);
+void set_coil_state(modbus_adr_t adr, modbus_r_coil_t coil_state);
 
 #ifdef __cplusplus
 }
