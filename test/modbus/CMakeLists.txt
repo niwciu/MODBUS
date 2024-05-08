@@ -49,6 +49,7 @@ set(TEST_INCLUDE_DIRS
 set(SRCS
 	../../src/modbus_PDU.c
 	../../src/buf_rw.c
+	../../src/modbus_data.c
 )
 
 set(TEST_SRCS

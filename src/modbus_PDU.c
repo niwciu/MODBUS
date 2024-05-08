@@ -48,15 +48,15 @@ static modbus_data_t modbus_get_max_len(modbus_req_t req_code)
     {
     case MODBUS_READ_COILS_FUNC_CODE:
     case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
-        max_len = MODBUS_MAX_COILS_READ_QTY;
+        max_len = MODBUS_MAX_COILS_QTY;
         break;
     case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
-        max_len = MODBUS_MAX_DISCRETE_INPUTS_READ_QTY;
+        max_len = MODBUS_MAX_DISCRETE_INPUTS_QTY;
         break;
     case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
     case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
     case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
-        max_len = MODBUS_MAX_REG_RW_QTY;
+        max_len = MODBUS_MAX_REG_QTY;
         break;
     case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
     case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
@@ -120,7 +120,7 @@ void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus
 
 modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf)
 {
-    if ((reg_qty <= MODBUS_MAX_REG_RW_QTY) && (reg_qty >= MODBUS_MIN_REG_COIL_QTY))
+    if ((reg_qty <= MODBUS_MAX_REG_QTY) && (reg_qty >= MODBUS_MIN_REG_COIL_QTY))
     {
         send_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
         write_u16_to_buf(send_buf + MODBUS_REQUEST_ADR_IDX, adr);
@@ -146,8 +146,6 @@ void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf)
     modbus_data_qty_t coil_qty = read_u16_from_buf(req_buf + MODBUS_REQUEST_LEN_IDX);
     modbus_byte_count_t byte_cnt = get_coil_read_byte_count(coil_qty);
 
-    modbus_r_coil_t temp_coil_value;
-
     resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
     resp_buf[MODBUS_RESP_BYTE_CNT_IDX] = byte_cnt;
 
@@ -155,16 +153,7 @@ void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf)
 
     for (modbus_byte_count_t i = 0; i < coil_qty; i++)
     {
-        temp_coil_value = get_coil_state(adr + i);
-        if (temp_coil_value != READ_COIL_ERROR)
-        {
-            resp_buf[MODBUS_RESP_DATA_IDX + i / 8] |= (temp_coil_value << (i % 8));
-        }
-        else
-        {
-            // gen_error_resp(4);
-            break;
-        }
+        resp_buf[MODBUS_RESP_DATA_IDX + i / 8] |= (get_coil_state(adr + i) << (i % 8));
     }
 }
 
@@ -174,8 +163,6 @@ void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf
     modbus_data_qty_t din_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
     modbus_byte_count_t byte_cnt = get_coil_read_byte_count(din_qty);
 
-    modbus_r_DisIn_t temp_din_value;
-
     resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
     resp_buf[MODBUS_RESP_BYTE_CNT_IDX] = byte_cnt;
 
@@ -183,20 +170,30 @@ void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf
 
     for (modbus_byte_count_t i = 0; i < din_qty; i++)
     {
-        temp_din_value = get_din_state(adr + i);
-        if (temp_din_value != READ_DIS_IN_ERROR) // np nullpointer pod adresem
-        {
-            resp_buf[MODBUS_RESP_DATA_IDX + (i / 8)] |= (temp_din_value << (i % 8));
-        }
-        else
-        {
-            // gen_error_resp(4);
-            break;
-        }
+        resp_buf[MODBUS_RESP_DATA_IDX + (i / 8)] |= (get_din_state(adr + i) << (i % 8));
     }
 }
 
-void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
-{
-    
-}
+// void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
+// {
+//     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
+//     modbus_data_qty_t reg_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
+//     modbus_byte_count_t byte_cnt = 2*reg_qty;
+
+//     resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
+//     resp_buf[MODBUS_RESP_BYTE_CNT_IDX] = byte_cnt;
+
+//     // for (modbus_byte_count_t i = 0; i < reg_qty; i++)
+//     // {
+//     //     temp_reg_value = get_reg_state(adr + i);
+//     //     if (temp_din_value != READ_DIS_IN_ERROR) // np nullpointer pod adresem
+//     //     {
+//     //         resp_buf[MODBUS_RESP_DATA_IDX + (i / 8)] |= (temp_din_value << (i % 8));
+//     //     }
+//     //     else
+//     //     {
+//     //         // gen_error_resp(4);
+//     //         break;
+//     //     }
+//     // }
+// }

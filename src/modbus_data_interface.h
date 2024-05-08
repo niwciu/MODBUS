@@ -17,24 +17,11 @@ extern "C"
 
 #include "modbus_type.h"
 
-typedef enum
-{
-    READ_COIL_ERROR = -1,
-    READED_COIL_LOW = 0,
-    READED_COIL_HIGH = 1,
-} modbus_r_coil_t;
+// void register_coil_data_ptr(modbus_adr_t coil_adr, modbus_coil_t *coil_data_ptr);
+modbus_coil_t get_coil_state(modbus_adr_t adr);
+void set_coil_state(modbus_adr_t adr, modbus_coil_t coil_state);
 
-typedef enum
-{
-    READ_DIS_IN_ERROR = -1,
-    READED_DIS_IN_LOW = 0,
-    READED_DIS_IN_HIGH = 1,
-} modbus_r_DisIn_t;
-
-modbus_r_coil_t get_coil_state(modbus_adr_t adr);
-void set_coil_state(modbus_adr_t adr, modbus_r_coil_t coil_state);
-
-modbus_r_DisIn_t get_din_state(modbus_adr_t adr);
+modbus_disin_t get_din_state(modbus_adr_t adr);
 
 #ifdef __cplusplus
 }

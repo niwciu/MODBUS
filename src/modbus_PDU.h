@@ -15,13 +15,13 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include "modbus_type.h"
-    // #include <stdint.h>
 
-#define MODBUS_PDU_FRAME_LEN 256
-#define MODBUS_MAX_DISCRETE_INPUTS_READ_QTY 0x7D0
-#define MODBUS_MAX_COILS_READ_QTY MODBUS_MAX_DISCRETE_INPUTS_READ_QTY
-#define MODBUS_MAX_REG_RW_QTY 0x7B
-#define MODBUS_MIN_REG_COIL_QTY 1
+#define MODBUS_PDU_FRAME_LEN 256U
+
+#define MODBUS_MAX_DISCRETE_INPUTS_QTY 0x7D0U
+#define MODBUS_MAX_COILS_QTY MODBUS_MAX_DISCRETE_INPUTS_QTY
+#define MODBUS_MAX_REG_QTY 0x7BU
+#define MODBUS_MIN_REG_COIL_QTY 1U
 
     // Master Functionality
     modbus_ret_t modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty);
@@ -36,7 +36,7 @@ extern "C"
     // Slave Functionality
     void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf);
     void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf);
-    void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf);
+    // void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf);
 
 #ifdef __cplusplus
 }

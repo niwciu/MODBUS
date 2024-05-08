@@ -15,6 +15,7 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include <stdint.h>
+#include <stdbool.h>
     // clang-format off
 #define MODBUS_SLAVE_ADR_IDX            0
 #define MODBUS_SLAVE_ADR_BYTE_LEN       1     
@@ -60,6 +61,8 @@ extern "C"
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
+    typedef bool modbus_coil_t;
+    typedef bool modbus_disin_t;
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
