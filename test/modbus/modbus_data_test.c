@@ -18,6 +18,7 @@ TEST_TEAR_DOWN(Modbus_Data)
     /* Cleanup after every test */
 }
 
+// Coils Data tests
 TEST(Modbus_Data, RegisterCoilData)
 {
     modbus_coil_t app_coil_data=1;
@@ -42,6 +43,7 @@ TEST(Modbus_Data, ReadUnregisteredCoil)
     TEST_ASSERT_EQUAL(0,get_coil_state(coil_adr));
 }
 
+// Discrete Inputs Data tests
 TEST(Modbus_Data, RegisterDiscreteInputData)
 {
     modbus_coil_t app_din_data=1;
@@ -66,6 +68,57 @@ TEST(Modbus_Data, ReadUnegisteredDiscreteInput)
     
     TEST_ASSERT_EQUAL(0,get_discrete_input_state(din_adr));
 }
+
+// Coils Data tests
+TEST(Modbus_Data, RegisterInputRegisterData)
+{
+    modbus_reg_t app_inreg_data=1;
+    modbus_adr_t din_adr=0x0001;
+    register_app_data_to_input_register_table(din_adr,&app_inreg_data);
+    
+    TEST_ASSERT_EQUAL(&app_inreg_data,Discrete_Inputs[din_adr]);
+}
+
+// TEST(Modbus_Data, ReadRegisteredDiscreteInput)
+// {
+//     modbus_reg_t app_inreg_data=1;
+//     modbus_adr_t din_adr=0x0001;
+//     register_app_data_to_discrete_input_table(din_adr,&app_inreg_data);
+    
+//     TEST_ASSERT_EQUAL(app_inreg_data,get_discrete_input_state(din_adr));
+// }
+
+// TEST(Modbus_Data, ReadUnegisteredDiscreteInput)
+// {
+//     modbus_adr_t din_adr=0x0001;
+    
+//     TEST_ASSERT_EQUAL(0,get_discrete_input_state(din_adr));
+// }
+
+// TEST(Modbus_Data, RegisterDiscreteInputData)
+// {
+//     modbus_reg_t app_din_data=1;
+//     modbus_adr_t din_adr=0x0001;
+//     register_app_data_to_discrete_input_table(din_adr,&app_din_data);
+    
+//     TEST_ASSERT_EQUAL(&app_din_data,Discrete_Inputs[din_adr]);
+// }
+
+// TEST(Modbus_Data, ReadRegisteredDiscreteInput)
+// {
+//     modbus_reg_t app_din_data=1;
+//     modbus_adr_t din_adr=0x0001;
+//     register_app_data_to_discrete_input_table(din_adr,&app_din_data);
+    
+//     TEST_ASSERT_EQUAL(app_din_data,get_discrete_input_state(din_adr));
+// }
+
+// TEST(Modbus_Data, ReadUnegisteredDiscreteInput)
+// {
+//     modbus_adr_t din_adr=0x0001;
+    
+//     TEST_ASSERT_EQUAL(0,get_discrete_input_state(din_adr));
+// }
 
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
