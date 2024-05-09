@@ -206,3 +206,19 @@ void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
         write_u16_to_buf(&resp_buf[MODBUS_RESP_DATA_IDX+(i*2)], get_holding_register_state(adr+i));
     }
 }
+
+void modbus_slave_read_input_reg(uint8_t *resp_buf, const uint8_t *req_buf)
+{
+    modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
+    modbus_data_qty_t reg_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
+    modbus_byte_count_t byte_cnt = 2*reg_qty;
+
+    resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_INPUT_REGISTERS_FUNC_CODE;
+    resp_buf[MODBUS_RESP_BYTE_CNT_IDX] = byte_cnt;
+
+    for (modbus_byte_count_t i = 0; i < reg_qty; i++)
+    {
+        write_u16_to_buf(&resp_buf[MODBUS_RESP_DATA_IDX+(i*2)], get_input_register_state(adr+i));
+    }
+}
+
