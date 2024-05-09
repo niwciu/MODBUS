@@ -55,6 +55,7 @@ TEST_GROUP_RUNNER(Modbus_Slave_Resp)
 #endif
 #if 8 <= COILS_QTY
     RUN_TEST_CASE(Modbus_Slave_Resp, SlaveWriteMultipleCoils8Coils);
+    RUN_TEST_CASE(Modbus_Slave_Resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus);
 #endif
     // #if 9 <= COILS_QTY
     // RUN_TEST_CASE(Modbus_Slave_Resp, SlaveWriteMultipleCoils9Coils);
