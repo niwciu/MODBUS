@@ -16,11 +16,11 @@ modbus_coil_t *Coils[COILS_QTY] = {NULL};
 modbus_disin_t *Discrete_Inputs[DISCRET_INPUT_QTY] = {NULL};
 
 
-modbus_coil_t get_coil_state(modbus_adr_t adr)
+modbus_coil_t get_coil_state(modbus_adr_t coil_adr)
 {
-    if(NULL != (Coils[adr]))
+    if(NULL != (Coils[coil_adr]))
     {
-        return *Coils[adr];
+        return *Coils[coil_adr];
     }
     else return 0;
 }
