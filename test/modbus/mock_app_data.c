@@ -138,3 +138,11 @@ void mock_clear_modbus_input_register_data_teble(void)
         Input_Registers[i] = NULL;
     }
 }
+
+void mock_clear_modbus_holding_resgister_data_table(void)
+{
+    for (modbus_adr_t i = 0; i < HOLDING_REG_QTY; i++)
+    {
+        Holding_Registers[i] = NULL;
+    } 
+}

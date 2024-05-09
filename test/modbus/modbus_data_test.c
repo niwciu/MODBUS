@@ -12,6 +12,7 @@ TEST_SETUP(Modbus_Data)
     mock_clear_modbus_coils_data_teble();
     mock_clear_modbus_discrete_inputs_data_teble();
     mock_clear_modbus_input_register_data_teble();
+    mock_clear_modbus_holding_resgister_data_table();
 }
 
 TEST_TEAR_DOWN(Modbus_Data)
@@ -120,6 +121,14 @@ TEST(Modbus_Data, ReadUnregisteredHoldingRegister)
     modbus_adr_t hreg_adr=0x0001;
     
     TEST_ASSERT_EQUAL(0,get_discrete_input_state(hreg_adr));
+}
+
+TEST(Modbus_Data, WriteUnregisteredHoldingRegister)
+{
+    modbus_adr_t hreg_adr=0x0001;
+    modbus_reg_t hreg_val =0x5a5a;
+    
+    TEST_ASSERT_EQUAL(RET_ERROR,set_holding_register_value(hreg_adr,hreg_val));
 }
 
 //
