@@ -16,7 +16,7 @@
 static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t len);
 static void write_single_reg_coil_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data);
 static modbus_data_t modbus_get_max_len(modbus_req_t req_code);
-static modbus_byte_count_t get_coil_read_byte_count(modbus_data_qty_t coil_qty);
+static modbus_byte_count_t get_coil_rw_byte_count(modbus_data_qty_t coil_qty);
 static void clear_coil_din_status_byte(uint8_t *buf, modbus_data_qty_t qty);
 
 static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t len)
@@ -67,7 +67,7 @@ static modbus_data_t modbus_get_max_len(modbus_req_t req_code)
     return max_len;
 }
 
-static modbus_byte_count_t get_coil_read_byte_count(modbus_data_qty_t coil_qty)
+static modbus_byte_count_t get_coil_rw_byte_count(modbus_data_qty_t coil_qty)
 {
     modbus_byte_count_t byte_count;
 
@@ -139,6 +139,28 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
     }
 }
 
+modbus_ret_t modbus_master_write_multiple_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty ,const modbus_coil_reg_t *data_buf)
+{
+    modbus_byte_count_t byte_count=get_coil_rw_byte_count(coils_qty);
+    if ((coils_qty <= MODBUS_MAX_COILS_QTY) && (coils_qty >= MODBUS_MIN_REG_COIL_QTY))
+    {
+        send_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
+        write_u16_to_buf(send_buf + MODBUS_REQUEST_ADR_IDX, adr);
+        write_u16_to_buf(send_buf + MODBUS_REQUEST_LEN_IDX, coils_qty);
+        send_buf[MODBUS_REQUEST_BYTE_CNT_IDX] = byte_count;
+
+        for (modbus_byte_count_t i = 0; i < byte_count; i++)
+        {
+            send_buf[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + i]= data_buf[i];
+        }
+        return RET_OK;
+    }
+    else
+    {
+        return RET_ERROR;
+    }
+}
+
 // Slave API functions
 
 void register_app_data_to_coils_table(modbus_adr_t coil_adr, modbus_coil_t *app_data_ptr)
@@ -162,7 +184,7 @@ void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf)
 {
     modbus_adr_t adr = read_u16_from_buf(req_buf + MODBUS_REQUEST_ADR_IDX);
     modbus_data_qty_t coil_qty = read_u16_from_buf(req_buf + MODBUS_REQUEST_LEN_IDX);
-    modbus_byte_count_t byte_cnt = get_coil_read_byte_count(coil_qty);
+    modbus_byte_count_t byte_cnt = get_coil_rw_byte_count(coil_qty);
 
     resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
     resp_buf[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
@@ -179,7 +201,7 @@ void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf
 {
     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
     modbus_data_qty_t din_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
-    modbus_byte_count_t byte_cnt = get_coil_read_byte_count(din_qty);
+    modbus_byte_count_t byte_cnt = get_coil_rw_byte_count(din_qty);
 
     resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
     resp_buf[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
