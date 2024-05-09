@@ -70,7 +70,7 @@ TEST(Modbus_Data, ReadUnegisteredDiscreteInput)
     TEST_ASSERT_EQUAL(0,get_discrete_input_state(din_adr));
 }
 
-// Coils Data tests
+// Input Registers Data tests
 TEST(Modbus_Data, RegisterInputRegisterData)
 {
     modbus_reg_t app_inreg_data=0x5A5A;
@@ -96,29 +96,30 @@ TEST(Modbus_Data, ReadUnregisteredInputRegister)
     TEST_ASSERT_EQUAL(0,get_input_register_state(inreg_adr));
 }
 
-// TEST(Modbus_Data, RegisterDiscreteInputData)
-// {
-//     modbus_reg_t app_din_data=1;
-//     modbus_adr_t din_adr=0x0001;
-//     register_app_data_to_discrete_input_table(din_adr,&app_din_data);
+// Holding Registers Data tests
+TEST(Modbus_Data, RegisterHoldingRegisterData)
+{
+    modbus_reg_t app_hreg_data=1;
+    modbus_adr_t hreg_adr=0x0001;
+    register_app_data_to_holding_registers_table(hreg_adr,&app_hreg_data);
     
-//     TEST_ASSERT_EQUAL(&app_din_data,Discrete_Inputs[din_adr]);
+    TEST_ASSERT_EQUAL(&app_hreg_data,Holding_Registers[hreg_adr]);
+}
+
+// TEST(Modbus_Data, ReadRegisteredHoldingRegister)
+// {
+//     modbus_reg_t app_hreg_data=1;
+//     modbus_adr_t hreg_adr=0x0001;
+//     register_app_data_to_discrete_input_table(hreg_adr,&app_hreg_data);
+    
+//     TEST_ASSERT_EQUAL(app_hreg_data,get_discrete_input_state(hreg_adr));
 // }
 
-// TEST(Modbus_Data, ReadRegisteredDiscreteInput)
+// TEST(Modbus_Data, ReadUnegisteredHoldingRegister)
 // {
-//     modbus_reg_t app_din_data=1;
-//     modbus_adr_t din_adr=0x0001;
-//     register_app_data_to_discrete_input_table(din_adr,&app_din_data);
+//     modbus_adr_t hreg_adr=0x0001;
     
-//     TEST_ASSERT_EQUAL(app_din_data,get_discrete_input_state(din_adr));
-// }
-
-// TEST(Modbus_Data, ReadUnegisteredDiscreteInput)
-// {
-//     modbus_adr_t din_adr=0x0001;
-    
-//     TEST_ASSERT_EQUAL(0,get_discrete_input_state(din_adr));
+//     TEST_ASSERT_EQUAL(0,get_discrete_input_state(hreg_adr));
 // }
 
 //
