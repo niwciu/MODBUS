@@ -54,12 +54,22 @@ modbus_reg_t get_input_register_state (modbus_adr_t input_reg_adr)
 
 }
 
-modbus_reg_t get_holding_register_state (modbus_adr_t holding_reg_adr)
+modbus_reg_t get_holding_register_value (modbus_adr_t holding_reg_adr)
 {
     if(NULL != (Holding_Registers[holding_reg_adr]))
     {
         return *Holding_Registers[holding_reg_adr];
     }
     else return 0;
+}
+
+modbus_ret_t set_holding_register_value(modbus_adr_t holding_reg_adr, modbus_ret_t hreg_val)
+{
+    if(NULL != (Holding_Registers[holding_reg_adr]))
+    {
+        *Holding_Registers[holding_reg_adr]=hreg_val;
+        return RET_OK;
+    }
+    else return RET_ERROR;
 }
 

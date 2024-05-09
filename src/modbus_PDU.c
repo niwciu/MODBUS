@@ -225,7 +225,7 @@ void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
 
     for (modbus_byte_count_t i = 0; i < reg_qty; i++)
     {
-        write_u16_to_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX+(i*2)], get_holding_register_state(adr+i));
+        write_u16_to_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX+(i*2)], get_holding_register_value(adr+i));
     }
 }
 
@@ -286,6 +286,7 @@ void modbus_slave_write_single_reg(uint8_t *resp_buf, const uint8_t *req_buf)
     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
     modbus_reg_t reg_val_to_save = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
 
+    set_holding_register_value(adr,reg_val_to_save);
     
     resp_buf[MODBUS_FUNCTION_CODE_IDX]=MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE;
     write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_ADR_IDX],adr);

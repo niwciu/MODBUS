@@ -51,9 +51,10 @@ modbus_ret_t set_coil_state(modbus_adr_t coil_adr, modbus_coil_t coil_state);
 
 modbus_disin_t get_discrete_input_state(modbus_adr_t din_adr);
 
-modbus_reg_t get_input_register_state (modbus_adr_t input_reg_adr);
+modbus_reg_t get_input_register_state(modbus_adr_t input_reg_adr);
 
-modbus_reg_t get_holding_register_state (modbus_adr_t holding_reg_adr);
+modbus_reg_t get_holding_register_value(modbus_adr_t holding_reg_adr);
+modbus_ret_t set_holding_register_value(modbus_adr_t holding_reg_adr, modbus_ret_t hreg_val);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

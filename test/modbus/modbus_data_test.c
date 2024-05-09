@@ -112,7 +112,7 @@ TEST(Modbus_Data, ReadRegisteredHoldingRegister)
     modbus_adr_t hreg_adr=0x0001;
     register_app_data_to_holding_registers_table(hreg_adr,&app_hreg_data);
     
-    TEST_ASSERT_EQUAL_HEX16(app_hreg_data,get_holding_register_state(hreg_adr));
+    TEST_ASSERT_EQUAL_HEX16(app_hreg_data,get_holding_register_value(hreg_adr));
 }
 
 // TEST(Modbus_Data, ReadUnegisteredHoldingRegister)
