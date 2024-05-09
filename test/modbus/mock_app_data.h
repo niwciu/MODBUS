@@ -28,6 +28,7 @@ extern "C"
     void mock_set_expected_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty);
     void mock_set_expected_disc_in_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty);
     void mock_set_expected_hreg_alternately (modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_reg_t init_val);
+    void mock_set_expected_input_reg_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_reg_t init_val);
     
     void mock_register_coils_data(void);
     void mock_register_discrete_inputs_data(void);

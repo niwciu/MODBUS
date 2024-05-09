@@ -65,6 +65,16 @@ void mock_set_expected_hreg_alternately(modbus_adr_t start_adr, modbus_data_qty_
     }
 }
 
+void mock_set_expected_input_reg_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_reg_t init_val)
+{
+    modbus_reg_t reg_current_state = init_val;
+    for (modbus_data_qty_t i = 0; i < qty; i++)
+    {
+        mock_inreg[start_adr + i] = reg_current_state;
+        reg_current_state = ~reg_current_state;
+    }
+}
+
 void mock_register_coils_data(void)
 {
     for (modbus_adr_t i = 0; i < COILS_QTY; i++)
