@@ -99,21 +99,21 @@ TEST(Modbus_Data, ReadUnregisteredInputRegister)
 // Holding Registers Data tests
 TEST(Modbus_Data, RegisterHoldingRegisterData)
 {
-    modbus_reg_t app_hreg_data=1;
+    modbus_reg_t app_hreg_data=0xA5A5;
     modbus_adr_t hreg_adr=0x0001;
     register_app_data_to_holding_registers_table(hreg_adr,&app_hreg_data);
     
     TEST_ASSERT_EQUAL(&app_hreg_data,Holding_Registers[hreg_adr]);
 }
 
-// TEST(Modbus_Data, ReadRegisteredHoldingRegister)
-// {
-//     modbus_reg_t app_hreg_data=1;
-//     modbus_adr_t hreg_adr=0x0001;
-//     register_app_data_to_discrete_input_table(hreg_adr,&app_hreg_data);
+TEST(Modbus_Data, ReadRegisteredHoldingRegister)
+{
+    modbus_reg_t app_hreg_data=0xA5A5;
+    modbus_adr_t hreg_adr=0x0001;
+    register_app_data_to_holding_registers_table(hreg_adr,&app_hreg_data);
     
-//     TEST_ASSERT_EQUAL(app_hreg_data,get_discrete_input_state(hreg_adr));
-// }
+    TEST_ASSERT_EQUAL_HEX16(app_hreg_data,get_holding_register_state(hreg_adr));
+}
 
 // TEST(Modbus_Data, ReadUnegisteredHoldingRegister)
 // {
