@@ -17,17 +17,24 @@ extern "C"
 #include <stdint.h>
 #include <stdbool.h>
     // clang-format off
-#define MODBUS_SLAVE_ADR_IDX            0
-#define MODBUS_SLAVE_ADR_BYTE_LEN       1     
-#define MODBUS_PDU_BUF_OFFSET           MODBUS_SLAVE_ADR_BYTE_LEN
-#define MODBUS_FUNCTION_CODE_IDX        MODBUS_PDU_BUF_OFFSET
-#define MODBUS_REQUEST_ADR_IDX          (MODBUS_PDU_BUF_OFFSET + 1)
-#define MODBUS_REQUEST_LEN_IDX          (MODBUS_PDU_BUF_OFFSET + 3)
-#define MODBUS_REQUEST_BYTE_CNT_IDX     (MODBUS_PDU_BUF_OFFSET + 5)
+    // max and min allowed values taken from Modbus standard documentation
+    #define MODBUS_MAX_DISCRETE_INPUTS_QTY  0x7D0U
+    #define MODBUS_MAX_COILS_QTY            MODBUS_MAX_DISCRETE_INPUTS_QTY
+    #define MODBUS_MAX_REG_QTY              0x7BU
+    #define MODBUS_MIN_REG_COIL_QTY         1U
+    #define MODBUS_SLAVE_ADR_BYTE_LEN       1
 
-#define MODBUS_RESP_BYTE_CNT_IDX        (MODBUS_PDU_BUF_OFFSET + 1)
-#define MODBUS_RESP_DATA_IDX            (MODBUS_PDU_BUF_OFFSET + 2)
-#define MODBUS_WRITE_MULTI_DATA_IDX     (MODBUS_PDU_BUF_OFFSET + 6)
+    // modbus_frame osffsets parameters
+    #define MODBUS_SLAVE_ADR_IDX            0    
+    #define MODBUS_PDU_BUF_OFFSET           MODBUS_SLAVE_ADR_BYTE_LEN
+    #define MODBUS_FUNCTION_CODE_IDX        MODBUS_PDU_BUF_OFFSET
+    #define MODBUS_REQUEST_ADR_IDX          (MODBUS_PDU_BUF_OFFSET + 1)
+    #define MODBUS_REQUEST_LEN_IDX          (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_REQUEST_BYTE_CNT_IDX     (MODBUS_PDU_BUF_OFFSET + 5)
+
+    #define MODBUS_RESP_BYTE_CNT_IDX        (MODBUS_PDU_BUF_OFFSET + 1)
+    #define MODBUS_RESP_DATA_IDX            (MODBUS_PDU_BUF_OFFSET + 2)
+    #define MODBUS_WRITE_MULTI_DATA_IDX     (MODBUS_PDU_BUF_OFFSET + 6)
     // clang-format on
     typedef enum
     {
@@ -49,12 +56,18 @@ extern "C"
         COIL_ON = 0xFF00,
     } modbus_w_coil_t;
 
+    // enum modbus_error
+    // {
+    //     RET_ERROR = -1,
+    //     RET_OK = 0,
+    // };
     typedef enum
     {
         RET_ERROR = -1,
         RET_OK = 0,
     } modbus_ret_t;
 
+    // typedef enum modbus_error modbus_ret_t;
     typedef uint16_t modbus_adr_t;
     typedef uint16_t modbus_reg_t;
     typedef uint16_t modbus_data_qty_t;

@@ -10,7 +10,8 @@
 
 #include "modbus_PDU.h"
 #include "buf_rw.h"
-#include "modbus_data_interface.h"
+#include "modbus_data_interface.h" // Todo do usunięcia po przeróbce
+// #include "modbus_data.h"  // dodane w hederze modsbus_PDU.h
 #include <stdio.h>
 
 static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t len);
@@ -140,6 +141,13 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
 }
 
 // Slave API functions
+
+void register_app_data_to_coil_table(modbus_adr_t coil_adr, modbus_coil_t *app_data_ptr)
+{
+    Coils[coil_adr]=app_data_ptr;
+}
+
+
 void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf)
 {
     modbus_adr_t adr = read_u16_from_buf(req_buf + MODBUS_REQUEST_ADR_IDX);

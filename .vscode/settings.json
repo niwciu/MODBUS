@@ -61,7 +61,7 @@
     "crtdefs.h": "c",
     "time.h": "c",
     "signal.h": "c",
-    "mock_modbus_data_interface.h": "c"
+    "modbus_config.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

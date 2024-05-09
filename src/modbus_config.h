@@ -14,12 +14,13 @@
 extern "C"
 {
 #endif /* __cplusplus */
+// clang-format off
+#define MAIN_APP_COILS_QTY              MODBUS_MAX_COILS_QTY
+#define MAIN_APP_DISCRET_INPUTS_QTY     MODBUS_MAX_DISCRETE_INPUTS_QTY
+#define MAIN_APP_INPUT_REG_QTY          MODBUS_MAX_REG_QTY
+#define MAIN_APP_HOLDING_REG_QTY        MODBUS_MAX_REG_QTY
 
-#define MAIN_APP_HOLDING_REG_QTY 10
-#define MAIN_APP_INPUT_REG_QTY   10
-#define MAIN_APP_COILS_QTY   10
-#define MAIN_APP_DISCRET_INPUTS_QTY 10
-
+// clang-format on
 
 #ifdef __cplusplus
 }

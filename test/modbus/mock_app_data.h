@@ -15,8 +15,6 @@
 extern "C"
 {
 #endif /* __cplusplus */
-#define COILS_QTY 2000
-#define DIS_IN_QTY 2000
 
 #include "modbus_type.h"
 #include "modbus_data_interface.h"
@@ -27,7 +25,11 @@ extern "C"
     void mock_set_expected_disc_in_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty);
     void mock_set_expected_hreg_alternately (modbus_adr_t start_adr, modbus_data_qty_t qty);
     // void mock_set_expected_coil_state(modbus_adr_t adr, modbus_coil_t coil_state);
-
+    void mock_register_coils_data(void);
+    void mock_register_discrete_inputs_data(void);
+    void mock_register_coils_data(void);
+    void mock_register_input_registers_data(void);
+    void mock_register_holding_registers_data(void);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
