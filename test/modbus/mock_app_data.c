@@ -97,10 +97,18 @@ void mock_register_holding_registers_data(void)
     }
 }
 
-void mock_clear_modbus_coil_data_teble()
+void mock_clear_modbus_coils_data_teble(void)
 {
     for (modbus_adr_t i = 0; i < COILS_QTY; i++)
     {
         Coils[i] = NULL;
+    }
+}
+
+void mock_clear_modbus_discrete_inputs_data_teble(void)
+{
+    for (modbus_adr_t i = 0; i < DISCRET_INPUT_QTY; i++)
+    {
+        Discrete_Inputs[i] = NULL;
     }
 }

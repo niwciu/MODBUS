@@ -9,7 +9,8 @@ TEST_GROUP(Modbus_Data);
 TEST_SETUP(Modbus_Data)
 {
     /* Init before every test */
-    mock_clear_modbus_coil_data_teble();
+    mock_clear_modbus_coils_data_teble();
+    mock_clear_modbus_discrete_inputs_data_teble();
 }
 
 TEST_TEAR_DOWN(Modbus_Data)
@@ -57,6 +58,13 @@ TEST(Modbus_Data, ReadRegisteredDiscreteInput)
     register_app_data_to_discrete_input_table(din_adr,&app_din_data);
     
     TEST_ASSERT_EQUAL(app_din_data,get_discrete_input_state(din_adr));
+}
+
+TEST(Modbus_Data, ReadUnegisteredDiscreteInput)
+{
+    modbus_adr_t din_adr=0x0001;
+    
+    TEST_ASSERT_EQUAL(0,get_discrete_input_state(din_adr));
 }
 
 //
