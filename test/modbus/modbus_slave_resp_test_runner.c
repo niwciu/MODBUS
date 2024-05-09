@@ -34,8 +34,10 @@ TEST_GROUP_RUNNER(Modbus_Slave_Resp)
    #if DISCRET_INPUT_QTY> 17
    RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead17DiscreteInputs);
    #endif
+   #if HOLDING_REG_QTY> 3
    RUN_TEST_CASE(Modbus_Slave_Resp, SlaveReadOneHoldingRegister);
-   // RUN_TEST_CASE(Modbus_Slave_Resp, );
+   RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead3HoldingRegister);
+   #endif
    // RUN_TEST_CASE(Modbus_Slave_Resp, );
    // RUN_TEST_CASE(Modbus_Slave_Resp, );
    // RUN_TEST_CASE(Modbus_Slave_Resp, );

@@ -61,7 +61,7 @@ void mock_set_expected_hreg_alternately(modbus_adr_t start_adr, modbus_data_qty_
     for (modbus_data_qty_t i = 0; i < qty; i++)
     {
         mock_hreg[start_adr + i] = reg_current_state;
-        reg_current_state = !reg_current_state;
+        reg_current_state = ~reg_current_state;
     }
 }
 
