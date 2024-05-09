@@ -32,8 +32,9 @@ extern "C"
 
     // Slave Functionality
 
-    void register_app_data_to_coil_table(modbus_adr_t coil_adr, modbus_coil_t *app_data_ptr);
-    void register_app_data_to_discrete_input_table (modbus_adr_t din_adr, modbus_coil_t *app_data_ptr);
+    void register_app_data_to_coils_table(modbus_adr_t coil_adr, modbus_coil_t *app_data_ptr);
+    void register_app_data_to_discrete_inputs_table (modbus_adr_t din_adr, modbus_coil_t *app_data_ptr);
+    void register_app_data_to_input_registers_table (modbus_adr_t input_reg_adr, modbus_reg_t *app_data_ptr);
     void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf);
     void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf);
     // void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf);
