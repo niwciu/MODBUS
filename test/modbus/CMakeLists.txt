@@ -61,6 +61,8 @@ set(TEST_SRCS
 	modbus_master_read_test.c
 	modbus_slave_resp_test_runner.c
 	modbus_slave_resp_test.c
+	modbus_data_test.c
+	modbus_data_test_runner.c
 	mock_app_data.c
 	
 

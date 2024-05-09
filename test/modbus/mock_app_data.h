@@ -17,7 +17,6 @@ extern "C"
 #endif /* __cplusplus */
 
 #include "modbus_type.h"
-#include "modbus_data_interface.h"
 
     void mock_set_all_cails_to_off(void);
     void mock_set_all_din_to_off(void);

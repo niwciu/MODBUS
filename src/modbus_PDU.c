@@ -10,7 +10,6 @@
 
 #include "modbus_PDU.h"
 #include "buf_rw.h"
-#include "modbus_data_interface.h" // Todo do usunięcia po przeróbce
 // #include "modbus_data.h"  // dodane w hederze modsbus_PDU.h
 #include <stdio.h>
 
