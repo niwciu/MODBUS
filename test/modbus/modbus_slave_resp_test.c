@@ -413,21 +413,21 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0,mock_coil[adr+15]);
 }
 
-// TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8Coils)
-// {
-//     modbus_adr_t adr = 0x0000;
-//     modbus_data_qty_t coil_qty=8;
-//     modbus_coil_reg_t data_coil_states[1] = {0x55};
+TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils16Coils)
+{
+    modbus_adr_t adr = 0x0000;
+    modbus_data_qty_t coil_qty=16;
+    modbus_coil_reg_t data_coil_states[2] = {0x55,0x55};
 
-//     mock_set_all_cails_to_off();
+    mock_set_all_cails_to_off();
 
-//     modbus_master_write_multiple_coils(req_buf,adr,coil_qty,data_coil_states);
-//     modbus_slave_write_multiple_coils(resp_buf,req_buf);
+    modbus_master_write_multiple_coils(req_buf,adr,coil_qty,data_coil_states);
+    modbus_slave_write_multiple_coils(resp_buf,req_buf);
 
-//     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
-//     TEST_ASSERT_EQUAL_HEX16(adr, resp_buf[MODBUS_RESP_WRITE_ADR_IDX]);
-//     TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
-// }
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, resp_buf[MODBUS_RESP_WRITE_ADR_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
+}
 
 // TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
 // {
