@@ -510,32 +510,35 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0,mock_coil[adr+24]);
     TEST_ASSERT_EQUAL(0,mock_coil[adr+25]);
 }
-// 
-// TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
-// {
-//     modbus_adr_t adr = 0x0000;
-//     modbus_data_qty_t coil_qty=8;
-//     modbus_coil_reg_t data_coil_states[1] = {0x55};
 
-//     mock_set_all_cails_to_off();
 
-//     modbus_master_write_multiple_coils(req_buf,adr,coil_qty,data_coil_states);
-//     modbus_slave_write_multiple_coils(resp_buf,req_buf);
-//     TEST_ASSERT_EQUAL(1,mock_coil[adr]);
-//     TEST_ASSERT_EQUAL(0,mock_coil[adr+1]);
-//     TEST_ASSERT_EQUAL(1,mock_coil[adr+2]);
-//     TEST_ASSERT_EQUAL(0,mock_coil[adr+3]);
-//     TEST_ASSERT_EQUAL(1,mock_coil[adr+4]);
-//     TEST_ASSERT_EQUAL(0,mock_coil[adr+5]);
-//     TEST_ASSERT_EQUAL(1,mock_coil[adr+6]);
-//     TEST_ASSERT_EQUAL(0,mock_coil[adr+7]);
+TEST(Modbus_Slave_Resp, SlaveWriteSingleRegister)
+{
+    modbus_adr_t adr = 0x0000;
+    modbus_reg_t reg_val = 0x5A5A;
 
-// }
-// 
-// TEST(Modbus_Slave_Resp, )
-// {
-//     TEST_FAIL_MESSAGE("Added New Test!!!")
-// }
+    modbus_master_write_single_reg(req_buf,adr,reg_val);
+    modbus_slave_write_single_reg(resp_buf,req_buf);
+
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(resp_buf + MODBUS_RESP_WRITE_ADR_IDX));
+    TEST_ASSERT_EQUAL_HEX16(reg_val, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
+
+    TEST_FAIL_MESSAGE("Added New Test!!!")
+}
+//  write multiple coils
+    // modbus_adr_t adr = 0x0000;
+    // modbus_data_qty_t reg_qty=5;
+    // modbus_coil_reg_t data_coil_states[1] = {0x15};
+
+    // mock_set_all_cails_to_off();
+
+    // modbus_master_write_multiple_coils(req_buf,adr,coil_qty,data_coil_states);
+    // modbus_slave_write_multiple_coils(resp_buf,req_buf);
+
+    // TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
+    // TEST_ASSERT_EQUAL_HEX16(adr, resp_buf[MODBUS_RESP_WRITE_ADR_IDX]);
+    // TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
 
 // TEST(Modbus_Slave_Resp, )
 // {
