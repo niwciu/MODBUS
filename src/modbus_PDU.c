@@ -252,7 +252,7 @@ void modbus_slave_write_single_coil(uint8_t *resp_buf, const uint8_t *req_buf)
     resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_COIL_FUNC_CODE;
 
     set_coil_state(adr,!!coils_state); // double logic negation make 1 from var that is different then 0 and 0 from var equal 0
-    // ToDo processing error frame respond
+    
 
     write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_ADR_IDX] , adr);
     write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX],coils_state);
@@ -262,9 +262,20 @@ void modbus_slave_write_multiple_coils(uint8_t *resp_buf, const uint8_t *req_buf
 {
     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
     modbus_data_qty_t coils_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
-    modbus_byte_count_t byte_count = req_buf[MODBUS_REQUEST_BYTE_CNT_IDX];
 
-    // processing write coil operation
+    for(modbus_data_qty_t i=0; i<coils_qty; i++)
+    {
+        if(0 != (req_buf[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX+(i/8)]& (1<<(i%8))))
+        {
+            set_coil_state((adr+i),1);
+        }
+        else
+        {
+            set_coil_state((adr+i),0);
+        }
+        
+    }
+    
     resp_buf[MODBUS_FUNCTION_CODE_IDX]=MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
     write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_ADR_IDX],adr);
     write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX],coils_qty);
