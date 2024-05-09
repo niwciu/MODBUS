@@ -271,11 +271,7 @@ TEST(Modbus_Slave_Resp, SlaveRead3InputRegisters)
 TEST(Modbus_Slave_Resp, SlaveWriteSingleCoil)
 {
     modbus_adr_t adr = 0x0000;
-    modbus_data_qty_t coil_qty=1;
-    modbus_coil_t expected_data_coil_states[1] = {1};
     modbus_w_coil_t resp_buf_coil_expected_value = COIL_ON;
-
-    mock_set_expected_coils_alternately(adr,coil_qty,expected_data_coil_states[0]); //ToDo do wyrzucenia w tym teście
 
     modbus_master_write_single_coil(req_buf,adr,resp_buf_coil_expected_value);
     modbus_slave_write_single_coil(resp_buf,req_buf);
