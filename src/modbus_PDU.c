@@ -203,6 +203,6 @@ void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
 
     for (modbus_byte_count_t i = 0; i < reg_qty; i++)
     {
-        resp_buf[MODBUS_RESP_DATA_IDX+i]=get_holding_register_state(adr+i);
+        write_u16_to_buf(&resp_buf[MODBUS_RESP_DATA_IDX+(i*2)], get_holding_register_state(adr+i));
     }
 }

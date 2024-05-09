@@ -54,7 +54,6 @@ modbus_disin_t get_discrete_input_state(modbus_adr_t din_adr);
 modbus_reg_t get_input_register_state (modbus_adr_t input_reg_adr);
 
 modbus_reg_t get_holding_register_state (modbus_adr_t holding_reg_adr);
-
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

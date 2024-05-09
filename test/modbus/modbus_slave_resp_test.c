@@ -203,7 +203,7 @@ TEST(Modbus_Slave_Resp, SlaveReadOneHoldingRegister)
     modbus_byte_count_t expected_byte_count = 2*reg_qty; // in each byte 8 coil status is reported
     modbus_reg_t exp_readed_reg_value[1] = {0xA55A}; 
 
-    mock_set_expected_hreg_alternately(adr,reg_qty);
+    mock_set_expected_hreg_alternately(adr,reg_qty,exp_readed_reg_value[0]);
 
     modbus_master_read_holding_reg(req_buf, adr, reg_qty);
     modbus_slave_read_holdin_reg(resp_buf, req_buf);

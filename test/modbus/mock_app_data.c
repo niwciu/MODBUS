@@ -55,9 +55,9 @@ void mock_set_expected_disc_in_alternately(modbus_adr_t start_adr, modbus_data_q
     }
 }
 
-void mock_set_expected_hreg_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty)
+void mock_set_expected_hreg_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_reg_t init_val)
 {
-    modbus_reg_t reg_current_state = 0xA55A;
+    modbus_reg_t reg_current_state = init_val;
     for (modbus_data_qty_t i = 0; i < qty; i++)
     {
         mock_hreg[start_adr + i] = reg_current_state;
