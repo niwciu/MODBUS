@@ -38,3 +38,13 @@ modbus_disin_t get_discrete_input_state(modbus_adr_t din_adr)
     }
     else return 0;
 }
+
+modbus_reg_t get_input_register_state (modbus_adr_t input_reg_adr)
+{
+    if(NULL != (Input_Registers[input_reg_adr]))
+    {
+        return *Input_Registers[input_reg_adr];
+    }
+    else return 0;
+
+}
