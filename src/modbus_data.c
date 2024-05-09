@@ -48,3 +48,13 @@ modbus_reg_t get_input_register_state (modbus_adr_t input_reg_adr)
     else return 0;
 
 }
+
+modbus_reg_t get_holding_register_state (modbus_adr_t holding_reg_adr)
+{
+    if(NULL != (Holding_Registers[holding_reg_adr]))
+    {
+        return *Holding_Registers[holding_reg_adr];
+    }
+    else return 0;
+}
+
