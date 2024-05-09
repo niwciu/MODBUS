@@ -524,6 +524,18 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleRegister)
     TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(resp_buf + MODBUS_RESP_WRITE_ADR_IDX));
     TEST_ASSERT_EQUAL_HEX16(reg_val, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
 }
+TEST(Modbus_Slave_Resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
+{
+    modbus_adr_t adr = 0x0001;
+    modbus_reg_t reg_val = 0x5A5A;
+    mock_reset_all_hreg_value();
+
+    modbus_master_write_single_reg(req_buf,adr,reg_val);
+    modbus_slave_write_single_reg(resp_buf,req_buf);
+
+    TEST_ASSERT_EQUAL_HEX16(reg_val,mock_hreg[adr]);
+}
+// 
 //  write multiple coils
     // modbus_adr_t adr = 0x0000;
     // modbus_data_qty_t reg_qty=5;

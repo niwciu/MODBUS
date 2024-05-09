@@ -35,6 +35,14 @@ void mock_set_all_din_to_off(void)
     }
 }
 
+void mock_reset_all_hreg_value(void)
+{
+    for (modbus_adr_t i = 0; i < HOLDING_REG_QTY; i++)
+    {
+        mock_hreg[i] = 0;
+    }
+}
+
 void mock_set_expected_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_coil_t start_val)
 {
     modbus_coil_t current_state = start_val;
