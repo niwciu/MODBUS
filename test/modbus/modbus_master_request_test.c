@@ -257,5 +257,21 @@ TEST(Modbus_Master_Requests, WriteZeroMultipleRegisters)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR, status);
 }
 
+TEST(Modbus_Master_Requests, Write5MultipleCoils)
+{
+    modbus_adr_t adr = 0x0009;
+    modbus_data_qty_t coils_qty=5;
+    uint8_t expected_coil_states[1] = {0x15};
+    modbus_byte_count_t expected_byte_cnt = 1;
+
+    modbus_master_write_multiple_coils(PDU_frame, adr,coils_qty coil_states);
+
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, PDU_frame[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_ADR_IDX));
+    TEST_ASSERT_EQUAL_UINT16(coils_qty, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_LEN_IDX));
+    TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt,PDU_frame[MODBUS_REQUEST_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_UINT8 (expected_coil_states[0],PDU_frame[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX]);
+    // TEST_FAIL_MESSAGE ("Added New Test!!!");
+}
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu.
