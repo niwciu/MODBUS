@@ -297,6 +297,11 @@ void modbus_slave_write_multiple_reg(uint8_t *resp_buf, const uint8_t *req_buf)
 {
     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
     modbus_data_qty_t hreg_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
+
+    for (modbus_data_qty_t i=0; i<hreg_qty; i++) 
+    {
+        set_holding_register_value(adr+i,read_u16_from_buf(&req_buf[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX+(i*2)]));
+    }
     
     resp_buf[MODBUS_FUNCTION_CODE_IDX]=MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
     write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_ADR_IDX],adr);
