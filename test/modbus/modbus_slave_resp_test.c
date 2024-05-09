@@ -535,25 +535,24 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
 
     TEST_ASSERT_EQUAL_HEX16(reg_val,mock_hreg[adr]);
 }
-// 
-//  write multiple coils
-    // modbus_adr_t adr = 0x0000;
-    // modbus_data_qty_t reg_qty=5;
-    // modbus_coil_reg_t data_coil_states[1] = {0x15};
 
-    // mock_set_all_cails_to_off();
 
-    // modbus_master_write_multiple_coils(req_buf,adr,coil_qty,data_coil_states);
-    // modbus_slave_write_multiple_coils(resp_buf,req_buf);
+TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3Reg)
+{
+    modbus_adr_t adr = 0x0001;
+    modbus_reg_t reg_val[3] = {0x5A5A,0xA5A5,0x5A5A};
+    modbus_data_qty_t reg_qty = 3;
 
-    // TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
-    // TEST_ASSERT_EQUAL_HEX16(adr, resp_buf[MODBUS_RESP_WRITE_ADR_IDX]);
-    // TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
+    mock_reset_all_hreg_value();
 
-// TEST(Modbus_Slave_Resp, )
-// {
-//     TEST_FAIL_MESSAGE("Added New Test!!!")
-// }
+    modbus_master_write_multiple_reg(req_buf,adr,reg_qty,reg_val);
+    modbus_slave_write_multiple_reg(resp_buf,req_buf);
+
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(resp_buf + MODBUS_RESP_WRITE_ADR_IDX));
+    TEST_ASSERT_EQUAL_HEX16(reg_qty, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
+    TEST_FAIL_MESSAGE("Added New Test!!!")
+}
 
 //ToDo odczyt zbyt duzej ilosci coili, disin i rej po strnie slave ilosc obiektow okresla config
 
