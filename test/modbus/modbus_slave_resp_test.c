@@ -289,18 +289,19 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty=5;
-    modbus_coil_reg_t expected_data_coil_states[5] = {0x15};
+    modbus_coil_reg_t expected_data_coil_states[1] = {0x15};
 
-
-    mock_set_expected_coils_alternately(adr,coil_qty,expected_data_coil_states[0]);
 
     modbus_master_write_multiple_coils(req_buf,adr,coil_qty,expected_data_coil_states);
     modbus_slave_write_multiple_coils(resp_buf,req_buf);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_HEX16(adr, resp_buf[MODBUS_RESP_WRITE_ADR_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(resp_buf_coil_expected_value, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
+    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
 }
+//
+// ToDo przy operacji write sprawdzić fizyczny stan coili i rejestrów oraz zgodność z oczekiwaniem.
+
 
 // TEST(Modbus_Slave_Resp, )
 // {

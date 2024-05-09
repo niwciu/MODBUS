@@ -36,8 +36,9 @@ extern "C"
     #define MODBUS_RESP_READ_BYTE_CNT_IDX       (MODBUS_PDU_BUF_OFFSET + 1)
     #define MODBUS_RESP_READ_DATA_IDX           (MODBUS_PDU_BUF_OFFSET + 2)
     
-    #define MODBUS_RESP_WRITE_ADR_IDX           (MODBUS_PDU_BUF_OFFSET + 1)
-    #define MODBUS_RESP_WRITE_SINGLE_DATA_IDX   (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_RESP_WRITE_ADR_IDX                   (MODBUS_PDU_BUF_OFFSET + 1)
+    #define MODBUS_RESP_WRITE_SINGLE_DATA_IDX           (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX     (MODBUS_PDU_BUF_OFFSET + 3)
     // #define MODBUS_WRITE_MULTI_DATA_IDX    
     // clang-format on
     typedef enum
