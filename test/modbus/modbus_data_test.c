@@ -50,14 +50,14 @@ TEST(Modbus_Data, RegisterDiscreteInputData)
     TEST_ASSERT_EQUAL(&app_din_data,Discrete_Inputs[din_adr]);
 }
 
-// TEST(Modbus_Data, ReadRegisteredDiscreteInput)
-// {
-//     modbus_coil_t app_din_data=1;
-//     modbus_adr_t din_adr=0x0001;
-//     register_app_data_to__table(din_adr,&app_din_data);
+TEST(Modbus_Data, ReadRegisteredDiscreteInput)
+{
+    modbus_coil_t app_din_data=1;
+    modbus_adr_t din_adr=0x0001;
+    register_app_data_to_discrete_input_table(din_adr,&app_din_data);
     
-//     TEST_ASSERT_EQUAL(app_din_data,get_discrete_input_state(coil_adr));
-// }
+    TEST_ASSERT_EQUAL(app_din_data,get_discrete_input_state(din_adr));
+}
 
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
