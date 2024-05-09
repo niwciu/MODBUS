@@ -35,7 +35,7 @@ TEST_GROUP_RUNNER(Modbus_Master_Requests)
    RUN_TEST_CASE(Modbus_Master_Requests, Write5MultipleCoils);
    RUN_TEST_CASE(Modbus_Master_Requests, WriteMaxQtyMultipleCoils);
    RUN_TEST_CASE(Modbus_Master_Requests, WriteMultipleCoilsMaxQtyPlus1); 
-   // RUN_TEST_CASE(Modbus_Master_Requests, WriteZeroMultipleCoils);
+   RUN_TEST_CASE(Modbus_Master_Requests, WriteZeroMultipleCoils);
 
    // RUN_TEST_CASE(Modbus_Master_Requests, );
 
