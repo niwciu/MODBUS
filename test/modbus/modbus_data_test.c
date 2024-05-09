@@ -79,20 +79,20 @@ TEST(Modbus_Data, RegisterInputRegisterData)
     TEST_ASSERT_EQUAL(&app_inreg_data,Input_Registers[inreg_adr]);
 }
 
-// TEST(Modbus_Data, ReadRegisteredDiscreteInput)
-// {
-//     modbus_reg_t app_inreg_data=1;
-//     modbus_adr_t inreg_adr=0x0001;
-//     register_app_data_to_discrete_input_table(inreg_adr,&app_inreg_data);
+TEST(Modbus_Data, ReadRegisteredInputRegister)
+{
+    modbus_reg_t app_inreg_data=0x5A5A;
+    modbus_adr_t inreg_adr=0x0001;
+    register_app_data_to_input_registers_table(inreg_adr,&app_inreg_data);
     
-//     TEST_ASSERT_EQUAL(app_inreg_data,get_discrete_input_state(inreg_adr));
-// }
+    TEST_ASSERT_EQUAL_HEX16(app_inreg_data,get_input_register_state(inreg_adr));
+}
 
-// TEST(Modbus_Data, ReadUnegisteredDiscreteInput)
+// TEST(Modbus_Data, ReadUnegisteredInputRegister)
 // {
 //     modbus_adr_t inreg_adr=0x0001;
     
-//     TEST_ASSERT_EQUAL(0,get_discrete_input_state(inreg_adr));
+//     TEST_ASSERT_EQUAL(0,get_input_register_state(inreg_adr));
 // }
 
 // TEST(Modbus_Data, RegisterDiscreteInputData)
