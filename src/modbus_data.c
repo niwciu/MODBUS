@@ -25,9 +25,14 @@ modbus_coil_t get_coil_state(modbus_adr_t adr)
     else return 0;
 }
 
-void set_coil_state(modbus_adr_t coil_adr, modbus_coil_t coil_state)
+modbus_ret_t set_coil_state(modbus_adr_t coil_adr, modbus_coil_t coil_state)
 {
-
+    if(NULL != (Coils[coil_adr]))
+    {
+        *Coils[coil_adr]=coil_state;
+        return RET_OK;
+    }
+    else return RET_ERROR;
 }
 
 modbus_disin_t get_discrete_input_state(modbus_adr_t din_adr)

@@ -273,17 +273,16 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleCoil)
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty=1;
     modbus_coil_t expected_coil_state = 1;
-    modbus_w_coil_t write_coil_expected_value = COIL_ON;
+    modbus_w_coil_t resp_buf_coil_expected_value = COIL_ON;
 
     mock_set_expected_coils_alternately(adr,coil_qty,expected_coil_state);
 
-    modbus_master_write_single_coil(req_buf,adr,write_coil_expected_value);
+    modbus_master_write_single_coil(req_buf,adr,resp_buf_coil_expected_value);
     modbus_slave_write_single_coil(resp_buf,req_buf);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(adr, resp_buf[MODBUS_WRITE_RESP_ADR_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(expected_coil_state, read_u16_from_buf(&resp_buf[MODBUS_WRITE_SINGLE_DATA_IDX]));
-    TEST_FAIL_MESSAGE("Added New Test!!!")
+    TEST_ASSERT_EQUAL_HEX16(adr, resp_buf[MODBUS_RESP_WRITE_ADR_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(resp_buf_coil_expected_value, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
 }
 
 // TEST(Modbus_Slave_Resp, )

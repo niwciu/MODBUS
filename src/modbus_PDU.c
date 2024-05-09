@@ -129,7 +129,7 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
 
         for (modbus_data_qty_t i = 0; i < reg_qty; i++)
         {
-            write_u16_to_buf(send_buf + (MODBUS_WRITE_MULTI_DATA_IDX + (i * 2)), data_buf[i]);
+            write_u16_to_buf(send_buf + (MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)), data_buf[i]);
         }
         return RET_OK;
     }
@@ -220,5 +220,20 @@ void modbus_slave_read_input_reg(uint8_t *resp_buf, const uint8_t *req_buf)
     {
         write_u16_to_buf(&resp_buf[MODBUS_RESP_DATA_IDX+(i*2)], get_input_register_state(adr+i));
     }
+}
+
+void modbus_slave_write_single_coil(uint8_t *resp_buf, const uint8_t *req_buf)
+{
+    modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
+    modbus_w_coil_t coils_state = read_u16_from_buf(&req_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]);
+    modbus_ret_t procesing_status;
+
+    resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_COIL_FUNC_CODE;
+
+    procesing_status=set_coil_state(adr,!!coils_state); // double logic negation make 1 from var that is different then 0 and 0 from var equal 0
+    // ToDo processing error frame respond
+
+    write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_ADR_IDX] , adr);
+    write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX],coils_state);
 }
 

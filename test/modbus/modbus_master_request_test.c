@@ -216,11 +216,11 @@ TEST(Modbus_Master_Requests, WriteMultipleRegisters)
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(reg_qty, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_LEN_IDX));
     TEST_ASSERT_EQUAL_UINT8((reg_qty * 2), PDU_frame[MODBUS_REQUEST_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_UINT16(values[0], read_u16_from_buf(PDU_frame + MODBUS_WRITE_MULTI_DATA_IDX));
-    TEST_ASSERT_EQUAL_UINT16(values[1], read_u16_from_buf(PDU_frame + MODBUS_WRITE_MULTI_DATA_IDX + 2));
-    TEST_ASSERT_EQUAL_UINT16(values[2], read_u16_from_buf(PDU_frame + MODBUS_WRITE_MULTI_DATA_IDX + 4));
-    TEST_ASSERT_EQUAL_UINT16(values[3], read_u16_from_buf(PDU_frame + MODBUS_WRITE_MULTI_DATA_IDX + 6));
-    TEST_ASSERT_EQUAL_UINT16(values[4], read_u16_from_buf(PDU_frame + MODBUS_WRITE_MULTI_DATA_IDX + 8));
+    TEST_ASSERT_EQUAL_UINT16(values[0], read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX));
+    TEST_ASSERT_EQUAL_UINT16(values[1], read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 2));
+    TEST_ASSERT_EQUAL_UINT16(values[2], read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 4));
+    TEST_ASSERT_EQUAL_UINT16(values[3], read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 6));
+    TEST_ASSERT_EQUAL_UINT16(values[4], read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 8));
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
