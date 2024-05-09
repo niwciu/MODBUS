@@ -112,3 +112,11 @@ void mock_clear_modbus_discrete_inputs_data_teble(void)
         Discrete_Inputs[i] = NULL;
     }
 }
+
+void mock_clear_modbus_input_register_data_teble(void)
+{
+    for (modbus_adr_t i = 0; i < INPUT_REG_QTY; i++)
+    {
+        Input_Registers[i] = NULL;
+    }
+}

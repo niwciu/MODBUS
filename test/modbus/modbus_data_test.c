@@ -11,6 +11,7 @@ TEST_SETUP(Modbus_Data)
     /* Init before every test */
     mock_clear_modbus_coils_data_teble();
     mock_clear_modbus_discrete_inputs_data_teble();
+    mock_clear_modbus_input_register_data_teble();
 }
 
 TEST_TEAR_DOWN(Modbus_Data)
@@ -88,12 +89,12 @@ TEST(Modbus_Data, ReadRegisteredInputRegister)
     TEST_ASSERT_EQUAL_HEX16(app_inreg_data,get_input_register_state(inreg_adr));
 }
 
-// TEST(Modbus_Data, ReadUnegisteredInputRegister)
-// {
-//     modbus_adr_t inreg_adr=0x0001;
+TEST(Modbus_Data, ReadUnregisteredInputRegister)
+{
+    modbus_adr_t inreg_adr=0x0001;
     
-//     TEST_ASSERT_EQUAL(0,get_input_register_state(inreg_adr));
-// }
+    TEST_ASSERT_EQUAL(0,get_input_register_state(inreg_adr));
+}
 
 // TEST(Modbus_Data, RegisterDiscreteInputData)
 // {
