@@ -291,5 +291,16 @@ TEST(Modbus_Master_Requests, WriteMaxQtyMultipleCoils)
     TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt,PDU_frame[MODBUS_REQUEST_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL (RET_OK,status);
 }
+
+TEST(Modbus_Master_Requests, WriteMultipleCoilsMaxQtyPlus1)
+{
+    modbus_adr_t adr = 0x0000;
+    modbus_data_qty_t coils_qty=MODBUS_MAX_COILS_QTY+1;
+    modbus_coil_reg_t coil_states[251] = {0x55};
+    modbus_ret_t status;
+
+    status=modbus_master_write_multiple_coils(PDU_frame, adr,coils_qty, coil_states);
+    TEST_ASSERT_EQUAL (RET_ERROR,status);
+}
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu.
