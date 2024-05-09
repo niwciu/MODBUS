@@ -49,7 +49,7 @@ extern modbus_disin_t *Discrete_Inputs[DISCRET_INPUT_QTY];
 modbus_coil_t get_coil_state(modbus_adr_t coil_adr);
 void set_coil_state(modbus_adr_t coil_adr, modbus_coil_t coil_state);
 
-modbus_disin_t get_din_state(modbus_adr_t din_adr);
+modbus_disin_t get_discrete_input_state(modbus_adr_t din_adr);
 
 #ifdef __cplusplus
 }
