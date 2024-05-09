@@ -249,24 +249,24 @@ TEST(Modbus_Slave_Resp, SlaveReadOneInputRegister)
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&resp_buf[MODBUS_RESP_DATA_IDX]));
 }
 
-// TEST(Modbus_Slave_Resp, )
-// {
-//     modbus_adr_t adr = 0x0000;
-//     modbus_data_qty_t reg_qty = 3;
-//     modbus_byte_count_t expected_byte_count = 2*reg_qty; // in each byte 8 coil status is reported
-//     modbus_reg_t exp_readed_reg_value[3] = {0xA55A,0x5AA5,0xA55A}; 
+TEST(Modbus_Slave_Resp, SlaveRead3InputRegisters)
+{
+    modbus_adr_t adr = 0x0000;
+    modbus_data_qty_t reg_qty = 3;
+    modbus_byte_count_t expected_byte_count = 2*reg_qty; // in each byte 8 coil status is reported
+    modbus_reg_t exp_readed_reg_value[3] = {0xA55A,0x5AA5,0xA55A}; 
 
-//     mock_set_expected_input_reg_alternately(adr,reg_qty,exp_readed_reg_value[0]);
+    mock_set_expected_input_reg_alternately(adr,reg_qty,exp_readed_reg_value[0]);
 
-//     modbus_master_read_holding_reg(req_buf, adr, reg_qty);
-//     modbus_slave_read_holdin_reg(resp_buf, req_buf);
+    modbus_master_read_input_reg(req_buf, adr, reg_qty);
+    modbus_slave_read_input_reg(resp_buf, req_buf);
 
-//     TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
-//     TEST_ASSERT_EQUAL(expected_byte_count, resp_buf[MODBUS_RESP_BYTE_CNT_IDX]);
-//     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&resp_buf[MODBUS_RESP_DATA_IDX]));
-//     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&resp_buf[MODBUS_RESP_DATA_IDX+2]));
-//     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&resp_buf[MODBUS_RESP_DATA_IDX+4]));
-// }
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, resp_buf[MODBUS_RESP_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&resp_buf[MODBUS_RESP_DATA_IDX]));
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&resp_buf[MODBUS_RESP_DATA_IDX+2]));
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&resp_buf[MODBUS_RESP_DATA_IDX+4]));
+}
 
 //ToDo odczyt zbyt duzej ilosci coili, disin i rej po strnie slave ilosc obiektow okresla config
 
