@@ -372,7 +372,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty=9;
-    modbus_coil_reg_t data_coil_states[2] = {0x15,0x01};
+    modbus_coil_reg_t data_coil_states[2] = {0x55,0x01};
 
     mock_set_all_cails_to_off();
 
@@ -384,27 +384,34 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9Coils)
     TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
 }
 
-// TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus)
-// {
-//     modbus_adr_t adr = 0x0000;
-//     modbus_data_qty_t coil_qty=5;
-//     modbus_coil_reg_t data_coil_states[1] = {0x15};
+TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
+{
+    modbus_adr_t adr = 0x0000;
+    modbus_data_qty_t coil_qty=9;
+    modbus_coil_reg_t data_coil_states[2] = {0x55,0x01};
 
-//     mock_set_all_cails_to_off();
+    mock_set_all_cails_to_off();
 
-//     modbus_master_write_multiple_coils(req_buf,adr,coil_qty,data_coil_states);
-//     modbus_slave_write_multiple_coils(resp_buf,req_buf);
-//     TEST_ASSERT_EQUAL(1,mock_coil[adr]);
-//     TEST_ASSERT_EQUAL(0,mock_coil[adr+1]);
-//     TEST_ASSERT_EQUAL(1,mock_coil[adr+2]);
-//     TEST_ASSERT_EQUAL(0,mock_coil[adr+3]);
-//     TEST_ASSERT_EQUAL(1,mock_coil[adr+4]);
-//     // below should be zeros due the mock_set_all_calis_to_off
-//     TEST_ASSERT_EQUAL(0,mock_coil[adr+5]);
-//     TEST_ASSERT_EQUAL(0,mock_coil[adr+6]);
-//     TEST_ASSERT_EQUAL(0,mock_coil[adr+7]);
-
-// }
+    modbus_master_write_multiple_coils(req_buf,adr,coil_qty,data_coil_states);
+    modbus_slave_write_multiple_coils(resp_buf,req_buf);
+    TEST_ASSERT_EQUAL(1,mock_coil[adr]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+1]);
+    TEST_ASSERT_EQUAL(1,mock_coil[adr+2]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+3]);
+    TEST_ASSERT_EQUAL(1,mock_coil[adr+4]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+5]);
+    TEST_ASSERT_EQUAL(1,mock_coil[adr+6]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+7]);
+    TEST_ASSERT_EQUAL(1,mock_coil[adr+8]);
+    // below should be zeros due the mock_set_all_calis_to_off
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+9]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+10]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+11]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+12]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+13]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+14]);
+    TEST_ASSERT_EQUAL(0,mock_coil[adr+15]);
+}
 
 // TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8Coils)
 // {
