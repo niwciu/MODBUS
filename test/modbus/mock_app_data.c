@@ -96,3 +96,11 @@ void mock_register_holding_registers_data(void)
         Holding_Registers[i] = &mock_hreg[i];
     }
 }
+
+void mock_clear_modbus_coil_data_teble()
+{
+    for (modbus_adr_t i = 0; i < COILS_QTY; i++)
+    {
+        Coils[i] = NULL;
+    }
+}

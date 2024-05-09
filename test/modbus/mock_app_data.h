@@ -29,6 +29,8 @@ extern "C"
     void mock_register_coils_data(void);
     void mock_register_input_registers_data(void);
     void mock_register_holding_registers_data(void);
+
+    void mock_clear_modbus_coil_data_teble();
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
