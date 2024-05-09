@@ -18,7 +18,7 @@ TEST_GROUP_RUNNER(Modbus_Data)
 
    RUN_TEST_CASE(Modbus_Data, RegisterHoldingRegisterData);
    RUN_TEST_CASE(Modbus_Data, ReadRegisteredHoldingRegister);
-   // RUN_TEST_CASE(Modbus_Data, ReadUnregisteredHoldingRegister);
+   RUN_TEST_CASE(Modbus_Data, ReadUnregisteredHoldingRegister);
 
 
    // RUN_TEST_CASE(Modbus_Data, );

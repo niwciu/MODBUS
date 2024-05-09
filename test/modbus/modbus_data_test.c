@@ -115,12 +115,12 @@ TEST(Modbus_Data, ReadRegisteredHoldingRegister)
     TEST_ASSERT_EQUAL_HEX16(app_hreg_data,get_holding_register_value(hreg_adr));
 }
 
-// TEST(Modbus_Data, ReadUnegisteredHoldingRegister)
-// {
-//     modbus_adr_t hreg_adr=0x0001;
+TEST(Modbus_Data, ReadUnregisteredHoldingRegister)
+{
+    modbus_adr_t hreg_adr=0x0001;
     
-//     TEST_ASSERT_EQUAL(0,get_discrete_input_state(hreg_adr));
-// }
+    TEST_ASSERT_EQUAL(0,get_discrete_input_state(hreg_adr));
+}
 
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
