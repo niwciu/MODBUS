@@ -554,6 +554,23 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3Reg)
     // TEST_FAIL_MESSAGE("Added New Test!!!")
 }
 
+TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
+{
+    modbus_adr_t adr = 0x0001;
+    modbus_reg_t reg_val[3] = {0x5A5A,0xA5A5,0x5A5A};
+    modbus_data_qty_t reg_qty = 3;
+
+    mock_reset_all_hreg_value();
+
+    modbus_master_write_multiple_reg(req_buf,adr,reg_qty,reg_val);
+    modbus_slave_write_multiple_reg(resp_buf,req_buf);
+
+    TEST_ASSERT_EQUAL_HEX16(reg_val[0],mock_hreg[adr]);
+    TEST_ASSERT_EQUAL_HEX16(reg_val[1],mock_hreg[adr+1]);
+    TEST_ASSERT_EQUAL_HEX16(reg_val[2],mock_hreg[adr+2]);
+}
+
+// 
 //ToDo odczyt zbyt duzej ilosci coili, disin i rej po strnie slave ilosc obiektow okresla config
 
 //     for (int i=0; i<reg_qty;i++)
