@@ -31,7 +31,7 @@ TEST(Modbus_Slave_Resp, SlaveRead5Coils)
     modbus_data_qty_t coil_qty = 5;
     modbus_byte_count_t expected_byte_count = 1; // in each byte 8 coil status is reported
     uint8_t exp_readed_coil_value[1] = {0x15}; //0b0001 0101
-    mock_set_expected_coils_alternately(adr,coil_qty);
+    mock_set_expected_coils_alternately(adr,coil_qty,1);
 
     modbus_master_read_coils(req_buf, adr, coil_qty);
     modbus_slave_read_coils(resp_buf, req_buf);
@@ -47,7 +47,7 @@ TEST(Modbus_Slave_Resp, SlaveRead8Coils)
     modbus_data_qty_t coil_qty = 8;
     modbus_byte_count_t expected_byte_count = 1; // in each byte 8 coil status is reported
     uint8_t exp_readed_coil_value[1] = {0x55};
-    mock_set_expected_coils_alternately(adr,coil_qty);
+    mock_set_expected_coils_alternately(adr,coil_qty,1);
 
     
 
@@ -65,7 +65,7 @@ TEST(Modbus_Slave_Resp, SlaveRead9Coils)
     modbus_data_qty_t coil_qty = 9;
     modbus_byte_count_t expected_byte_count = 2; // in each byte 8 coil status is reported
     uint8_t exp_readed_coil_value[2] = {0x55,0x01};
-    mock_set_expected_coils_alternately(adr,coil_qty);
+    mock_set_expected_coils_alternately(adr,coil_qty,1);
 
     modbus_master_read_coils(req_buf, adr, coil_qty);
     modbus_slave_read_coils(resp_buf, req_buf);
@@ -82,7 +82,7 @@ TEST(Modbus_Slave_Resp, SlaveRead16Coils)
     modbus_data_qty_t coil_qty = 16;
     modbus_byte_count_t expected_byte_count = 2; // in each byte 8 coil status is reported
     uint8_t exp_readed_coil_value[2] = {0x55,0x55};
-    mock_set_expected_coils_alternately(adr,coil_qty);
+    mock_set_expected_coils_alternately(adr,coil_qty,1);
 
     modbus_master_read_coils(req_buf, adr, coil_qty);
     modbus_slave_read_coils(resp_buf, req_buf);
@@ -99,7 +99,7 @@ TEST(Modbus_Slave_Resp, SlaveRead17Coils)
     modbus_data_qty_t coil_qty = 17;
     modbus_byte_count_t expected_byte_count = 3; // in each byte 8 coil status is reported
     uint8_t exp_readed_coil_value[3] = {0x55,0x55,0x01};
-    mock_set_expected_coils_alternately(adr,coil_qty);
+    mock_set_expected_coils_alternately(adr,coil_qty,1);
 
     modbus_master_read_coils(req_buf, adr, coil_qty);
     modbus_slave_read_coils(resp_buf, req_buf);
@@ -267,6 +267,34 @@ TEST(Modbus_Slave_Resp, SlaveRead3InputRegisters)
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&resp_buf[MODBUS_RESP_DATA_IDX+2]));
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&resp_buf[MODBUS_RESP_DATA_IDX+4]));
 }
+
+TEST(Modbus_Slave_Resp, SlaveWriteSingleCoil)
+{
+    modbus_adr_t adr = 0x0000;
+    modbus_data_qty_t coil_qty=1;
+    modbus_coil_t expected_coil_state = 1;
+    modbus_w_coil_t write_coil_expected_value = COIL_ON;
+
+    mock_set_expected_coils_alternately(adr,coil_qty,expected_coil_state);
+
+    modbus_master_write_single_coil(req_buf,adr,write_coil_expected_value);
+    modbus_slave_write_single_coil(resp_buf,req_buf);
+
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(adr, resp_buf[MODBUS_WRITE_RESP_ADR_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(expected_coil_state, read_u16_from_buf(&resp_buf[MODBUS_WRITE_SINGLE_DATA_IDX]));
+    TEST_FAIL_MESSAGE("Added New Test!!!")
+}
+
+// TEST(Modbus_Slave_Resp, )
+// {
+//     TEST_FAIL_MESSAGE("Added New Test!!!")
+// }
+
+// TEST(Modbus_Slave_Resp, )
+// {
+//     TEST_FAIL_MESSAGE("Added New Test!!!")
+// }
 
 //ToDo odczyt zbyt duzej ilosci coili, disin i rej po strnie slave ilosc obiektow okresla config
 

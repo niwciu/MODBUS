@@ -35,9 +35,9 @@ void mock_set_all_din_to_off(void)
     }
 }
 
-void mock_set_expected_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty)
+void mock_set_expected_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_coil_t start_val)
 {
-    modbus_coil_t current_state = 1;
+    modbus_coil_t current_state = start_val;
     for (modbus_data_qty_t i = 0; i < qty; i++)
     {
         mock_coil[start_adr + i] = current_state;
