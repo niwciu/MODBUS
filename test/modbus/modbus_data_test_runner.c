@@ -7,6 +7,8 @@ TEST_GROUP_RUNNER(Modbus_Data)
    RUN_TEST_CASE(Modbus_Data, RegisterCoilData);
    RUN_TEST_CASE(Modbus_Data, ReadRegisteredCoil);
    RUN_TEST_CASE(Modbus_Data, ReadUnregisteredCoil);
+   RUN_TEST_CASE(Modbus_Data, WriteRegisteredCoil);
+   // RUN_TEST_CASE(Modbus_Data, WriteUnregisteredCoil);
 
    RUN_TEST_CASE(Modbus_Data, RegisterDiscreteInputData);
    RUN_TEST_CASE(Modbus_Data, ReadRegisteredDiscreteInput);
@@ -15,8 +17,6 @@ TEST_GROUP_RUNNER(Modbus_Data)
    RUN_TEST_CASE(Modbus_Data, RegisterInputRegisterData);
    RUN_TEST_CASE(Modbus_Data, ReadRegisteredInputRegister);
    RUN_TEST_CASE(Modbus_Data, ReadUnregisteredInputRegister);
-   // RUN_TEST_CASE(Modbus_Data, WriteRegisteredInputRegister);
-   // RUN_TEST_CASE(Modbus_Data, WriteUnregisteredInputRegister);
 
    RUN_TEST_CASE(Modbus_Data, RegisterHoldingRegisterData);
    RUN_TEST_CASE(Modbus_Data, ReadRegisteredHoldingRegister);

@@ -43,6 +43,28 @@ TEST(Modbus_Data, ReadUnregisteredCoil)
     TEST_ASSERT_EQUAL(0, get_coil_state(coil_adr));
 }
 
+TEST(Modbus_Data, WriteRegisteredCoil)
+{
+    modbus_coil_t app_coil_data = 1;
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_ret_t status;
+    
+    mock_register_coils_data();
+
+    status=set_coil_state(coil_adr,app_coil_data);
+
+    TEST_ASSERT_EQUAL(app_coil_data, mock_coil[coil_adr]);
+    TEST_ASSERT_EQUAL(RET_OK,status);
+}
+
+// TEST(Modbus_Data, WriteUnregisteredCoil)
+// {
+//     modbus_adr_t coil_adr = 0x0001;
+//     TEST_ASSERT_EQUAL(0, get_coil_state(coil_adr));
+// }
+
+// WriteRegisteredCoil
+
 // Discrete Inputs Data tests
 TEST(Modbus_Data, RegisterDiscreteInputData)
 {
