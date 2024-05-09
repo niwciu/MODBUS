@@ -523,8 +523,6 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleRegister)
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(resp_buf + MODBUS_RESP_WRITE_ADR_IDX));
     TEST_ASSERT_EQUAL_HEX16(reg_val, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
-
-    TEST_FAIL_MESSAGE("Added New Test!!!")
 }
 //  write multiple coils
     // modbus_adr_t adr = 0x0000;
