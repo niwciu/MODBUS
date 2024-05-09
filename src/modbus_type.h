@@ -56,11 +56,6 @@ extern "C"
         COIL_ON = 0xFF00,
     } modbus_w_coil_t;
 
-    // enum modbus_error
-    // {
-    //     RET_ERROR = -1,
-    //     RET_OK = 0,
-    // };
     typedef enum
     {
         RET_ERROR = -1,

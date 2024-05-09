@@ -192,28 +192,17 @@ void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf
     }
 }
 
+void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
+{
+    modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
+    modbus_data_qty_t reg_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
+    modbus_byte_count_t byte_cnt = 2*reg_qty;
 
+    resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
+    resp_buf[MODBUS_RESP_BYTE_CNT_IDX] = byte_cnt;
 
-// void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
-// {
-//     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
-//     modbus_data_qty_t reg_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
-//     modbus_byte_count_t byte_cnt = 2*reg_qty;
-
-//     resp_buf[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
-//     resp_buf[MODBUS_RESP_BYTE_CNT_IDX] = byte_cnt;
-
-//     // for (modbus_byte_count_t i = 0; i < reg_qty; i++)
-//     // {
-//     //     temp_reg_value = get_reg_state(adr + i);
-//     //     if (temp_din_value != READ_DIS_IN_ERROR) // np nullpointer pod adresem
-//     //     {
-//     //         resp_buf[MODBUS_RESP_DATA_IDX + (i / 8)] |= (temp_din_value << (i % 8));
-//     //     }
-//     //     else
-//     //     {
-//     //         // gen_error_resp(4);
-//     //         break;
-//     //     }
-//     // }
-// }
+    for (modbus_byte_count_t i = 0; i < reg_qty; i++)
+    {
+        resp_buf[MODBUS_RESP_DATA_IDX+i]=get_holding_register_state(adr+i);
+    }
+}
