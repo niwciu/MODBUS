@@ -51,6 +51,7 @@ set(SRCS
 	../../src/modbus_PDU.c
 	../../src/buf_rw.c
 	../../src/modbus_data.c
+	../../src/modbus_crc.c
 )
 
 set(TEST_SRCS
@@ -63,6 +64,8 @@ set(TEST_SRCS
 	modbus_slave_resp_test.c
 	modbus_data_test.c
 	modbus_data_test_runner.c
+	modbus_crc_test.c
+	modbus_crc_test_runner.c
 	mock_app_data.c
 	
 
