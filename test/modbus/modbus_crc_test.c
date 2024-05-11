@@ -17,10 +17,13 @@ TEST_TEAR_DOWN(Modbus_CRC)
 
 TEST(Modbus_CRC, CalculateCRCFrom5Bytes)
 {
-    static uint8_t data_buf[] ={0x01,0x03,0x5A,0xA5,0x00,0x05}; //read 5 holding registers from slave 0x01 adr
+    static uint8_t data_buf[] ={0x01,0x03,0x5A,0x5A,0x00,0x05}; //read 5 holding registers from slave 0x01 adr
 
-    uint16_t expected_CRC = 0x3287;
-    uint8_t data_len=5;
+    uint16_t expected_CRC = 0x2B7;
+    uint8_t data_len=sizeof(data_buf);
 
     TEST_ASSERT_EQUAL_HEX16(expected_CRC,calculate_CRC(data_buf,data_len));
 }
+
+//0x05 0x03 0x55 0xAA 0x10 0x00
+// 0x01 0x03 0x5A 0x5A 0x00 0x05
