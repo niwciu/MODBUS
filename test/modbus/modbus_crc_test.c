@@ -25,5 +25,13 @@ TEST(Modbus_CRC, CalculateCRCFrom5Bytes)
     TEST_ASSERT_EQUAL_HEX16(expected_CRC,calculate_CRC(data_buf,data_len));
 }
 
-//0x05 0x03 0x55 0xAA 0x10 0x00
-// 0x01 0x03 0x5A 0x5A 0x00 0x05
+TEST(Modbus_CRC, CalculateCRCFrom7Bytes)
+{
+    static uint8_t data_buf[] ={0x01,0x03,0x5A,0x5A,0x00,0x05,0x23,0x54}; //read 5 holding registers from slave 0x01 adr
+
+    uint16_t expected_CRC = 0xFEEE;
+    uint8_t data_len=sizeof(data_buf);
+
+    TEST_ASSERT_EQUAL_HEX16(expected_CRC,calculate_CRC(data_buf,data_len));
+}
+
