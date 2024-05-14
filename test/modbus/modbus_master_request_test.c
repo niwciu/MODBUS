@@ -185,11 +185,12 @@ TEST(Modbus_Master_Requests, WriteSingleRegister)
     modbus_adr_t adr = 0x0009;
     modbus_reg_t value = 0x0012;
 
-    modbus_master_write_single_reg(PDU_frame, adr, value);
+    modbus_ret_t status= modbus_master_write_single_reg(PDU_frame, adr, value);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, PDU_frame[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(value, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_LEN_IDX));
+    TEST_ASSERT_EQUAL_INT16(MODBUS_WRITE_SINGLE_REQUEST_LEN, status);
 }
 
 TEST(Modbus_Master_Requests, WriteSingleCoilOn)
@@ -197,11 +198,12 @@ TEST(Modbus_Master_Requests, WriteSingleCoilOn)
     modbus_adr_t adr = 0x0009;
     modbus_w_coil_t coil_state = COIL_ON;
 
-    modbus_master_write_single_coil(PDU_frame, adr, coil_state);
+    modbus_ret_t status= modbus_master_write_single_coil(PDU_frame, adr, coil_state);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, PDU_frame[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(coil_state, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_LEN_IDX));
+    TEST_ASSERT_EQUAL_INT16(MODBUS_WRITE_SINGLE_REQUEST_LEN, status);
 }
 
 TEST(Modbus_Master_Requests, WriteMultipleRegisters)

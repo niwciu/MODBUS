@@ -14,7 +14,7 @@
 #include <stdio.h>
 
 static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t len);
-static void write_single_reg_coil_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data);
+static modbus_ret_t write_single_reg_coil_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data);
 static modbus_data_t modbus_get_max_len(modbus_req_t req_code);
 static modbus_byte_count_t get_coil_rw_byte_count(modbus_data_qty_t coil_qty);
 static void clear_coil_din_status_byte(uint8_t *buf, modbus_data_qty_t qty);
@@ -34,11 +34,12 @@ static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, m
     }
 }
 
-static void write_single_reg_coil_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_reg_t data)
+static modbus_ret_t write_single_reg_coil_request(uint8_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_reg_t data)
 {
     send_buf[MODBUS_FUNCTION_CODE_IDX] = req_code;
     write_u16_to_buf(send_buf + MODBUS_REQUEST_ADR_IDX, adr);
     write_u16_to_buf(send_buf + MODBUS_REQUEST_LEN_IDX, data);
+    return MODBUS_WRITE_SINGLE_REQUEST_LEN;
 }
 
 static modbus_data_t modbus_get_max_len(modbus_req_t req_code)
@@ -108,14 +109,14 @@ modbus_ret_t modbus_master_read_coils(uint8_t *send_buf, modbus_adr_t adr, modbu
     return read_reg_request(send_buf, MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty);
 }
 
-void modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val)
+modbus_ret_t modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val)
 {
-    write_single_reg_coil_request(send_buf, MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr, val);
+    return write_single_reg_coil_request(send_buf, MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr, val);
 }
 
-void modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus_w_coil_t coil_state)
+modbus_ret_t modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus_w_coil_t coil_state)
 {
-    write_single_reg_coil_request(send_buf, MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr, coil_state);
+    return write_single_reg_coil_request(send_buf, MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr, coil_state);
 }
 
 modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf)
