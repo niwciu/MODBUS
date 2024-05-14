@@ -9,5 +9,11 @@ TEST_GROUP_RUNNER(Modbus_RTU)
    RUN_TEST_CASE(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLen);
    RUN_TEST_CASE(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLenPlus1);
    RUN_TEST_CASE(Modbus_RTU, SlaveIdIsCorrectInRecvBuffer);
+   RUN_TEST_CASE(Modbus_RTU, SlaveIdIsNotCorrectInRecvBuffer);
+
+   // RUN_TEST_CASE(Modbus_RTU, );
+   // RUN_TEST_CASE(Modbus_RTU, );
+   // RUN_TEST_CASE(Modbus_RTU, );
+   // RUN_TEST_CASE(Modbus_RTU, );
    // RUN_TEST_CASE(Modbus_RTU, );
 }

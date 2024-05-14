@@ -92,6 +92,19 @@ TEST(Modbus_RTU, SlaveIdIsCorrectInRecvBuffer)
     TEST_ASSERT_EQUAL_HEX8(RET_OK,recv_status);
 }
 
+TEST(Modbus_RTU, SlaveIdIsNotCorrectInRecvBuffer)
+{
+    modbus_device_ID_t expected_slave_ID=0x03;
+    modbus_device_ID_t sended_slave_ID=0x02;
+    modbus_buf_size_t buf_data_len = 2;
+    modbus_ret_t recv_status;
+
+    modbus_RTU_send(buf,buf_data_len,sended_slave_ID);
+    recv_status= modbus_RTU_recv(buf,buf_data_len,expected_slave_ID);
+
+    TEST_ASSERT_EQUAL_HEX8(RET_ERROR_SLAVE_ID,recv_status);
+}
+
 // TEST(Modbus_RTU, )
 // {
 
