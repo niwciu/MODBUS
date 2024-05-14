@@ -10,6 +10,7 @@ TEST_GROUP(Modbus_RTU);
 modbus_buf_t buf[MODBUS_RTU_BUFFER_SIZE] = {0};
 
 #define SLAVE_ID_1 0x02U
+#define CRC_LEN 2U
 
 TEST_SETUP(Modbus_RTU)
 {
@@ -82,7 +83,7 @@ TEST(Modbus_RTU, SlaveIdIsCorrectInRecvBuffer)
     modbus_ret_t recv_status;
 
     modbus_RTU_send(buf,buf_data_len,SLAVE_ID_1);
-    recv_status= modbus_RTU_recv(buf,buf_data_len,SLAVE_ID_1);
+    recv_status= modbus_RTU_recv(buf,buf_data_len+CRC_LEN,SLAVE_ID_1);
 
     TEST_ASSERT_EQUAL_HEX8(RET_OK,recv_status);
 }
