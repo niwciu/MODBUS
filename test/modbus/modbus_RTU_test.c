@@ -46,12 +46,17 @@ TEST(Modbus_RTU, AddCRCToSendBuf )
     TEST_ASSERT_EQUAL_HEX16(expected_CRC, read_u16_from_buf(buf+buf_data_len));
 }
 
-// TEST(Modbus_RTU, )
-// {
+TEST(Modbus_RTU, ModbusRtuSendWitnNullPtrAsBuffer)
+{
+    modbus_device_ID_t slave_ID=0x02;
+    modbus_buf_size_t buf_data_len = 15;
+    modbus_ret_t send_status;
 
+    send_status= modbus_RTU_send(NULL,buf_data_len,slave_ID);
 
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST")
-// }
+    TEST_ASSERT_EQUAL_HEX8(RET_ERROR,send_status);
+
+}
 
 // TEST(Modbus_RTU, )
 // {
