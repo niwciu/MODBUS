@@ -67,6 +67,7 @@ extern "C"
 
     typedef enum
     {
+        RET_ERROR_CRC =-3,
         RET_ERROR_SLAVE_ID = -2,
         RET_ERROR = -1,
         RET_OK = 0,

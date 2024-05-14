@@ -12,7 +12,7 @@ TEST_GROUP_RUNNER(Modbus_RTU)
    RUN_TEST_CASE(Modbus_RTU, SlaveIdIsNotCorrectInRecvBuffer);
 
    RUN_TEST_CASE(Modbus_RTU, CrcIsCorrectInRecivedBuffer);
-   // RUN_TEST_CASE(Modbus_RTU, CrcIsIncorrectInRecivedBuffer);
+   RUN_TEST_CASE(Modbus_RTU, CrcIsIncorrectInRecivedBuffer);
    // RUN_TEST_CASE(Modbus_RTU, );
    // RUN_TEST_CASE(Modbus_RTU, );
    // RUN_TEST_CASE(Modbus_RTU, );
