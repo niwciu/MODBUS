@@ -81,6 +81,7 @@ extern "C"
     typedef uint8_t modbus_buf_t;
     typedef uint8_t modbus_buf_size_t;
     typedef uint8_t modbus_device_ID_t;
+    typedef uint16_t modbus_CRC_t;
     typedef bool modbus_coil_t;
     typedef bool modbus_disin_t;
 #ifdef __cplusplus

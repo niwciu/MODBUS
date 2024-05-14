@@ -1,9 +1,13 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_RTU.h"
+#include "memory.h"
+#include "buf_rw.h"
 
 // #include "tested_module.h"
 
 TEST_GROUP(Modbus_RTU);
+
+modbus_buf_t buf[MODBUS_FRAME_BUFFER_SIZE] = {0};
 
 TEST_SETUP(Modbus_RTU)
 {
@@ -20,7 +24,6 @@ TEST(Modbus_RTU, AddSlaveIdToSendBuf)
 
     modbus_device_ID_t slave_ID=0x02;
     modbus_buf_size_t buf_data_len = 15;
-    modbus_buf_t buf[MODBUS_FRAME_BUFFER_SIZE];
 
     modbus_RTU_send(buf,buf_data_len,slave_ID);
 
@@ -28,12 +31,20 @@ TEST(Modbus_RTU, AddSlaveIdToSendBuf)
 }
 
 
-// TEST(Modbus_RTU, )
-// {
+TEST(Modbus_RTU, AddCRCToSendBuf )
+{
+    
+    modbus_buf_t PDU_frame[] ={0x00,0x03,0x00,0x01,0x00,0x05}; // read 5 holding resiters from adr 0x0001 
+    modbus_device_ID_t slave_ID=0x02;
+    modbus_CRC_t expected_CRC = 0xD5D8;
+    modbus_buf_size_t buf_data_len = sizeof(PDU_frame)/sizeof(modbus_buf_t);
 
+    memcpy(buf,PDU_frame,sizeof(PDU_frame)/sizeof(modbus_buf_t));
 
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST")
-// }
+    modbus_RTU_send(buf,buf_data_len,slave_ID);
+
+    TEST_ASSERT_EQUAL_HEX16(expected_CRC, read_u16_from_buf(buf+buf_data_len));
+}
 
 // TEST(Modbus_RTU, )
 // {
