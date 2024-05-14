@@ -181,7 +181,7 @@ void register_app_data_to_holding_registers_table (modbus_adr_t hreg_reg_adr, mo
     Holding_Registers[hreg_reg_adr]=app_data_ptr;
 }
 
-void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf)
+modbus_ret_t modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf)
 {
     modbus_adr_t adr = read_u16_from_buf(req_buf + MODBUS_REQUEST_ADR_IDX);
     modbus_data_qty_t coil_qty = read_u16_from_buf(req_buf + MODBUS_REQUEST_LEN_IDX);
@@ -196,6 +196,7 @@ void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf)
     {
         resp_buf[MODBUS_RESP_READ_DATA_IDX + i / 8] |= (get_coil_state(adr + i) << (i % 8));
     }
+    return MODBUS_READ_RESP_LEN+byte_cnt;
 }
 
 void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf)

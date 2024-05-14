@@ -37,7 +37,7 @@ extern "C"
     void register_app_data_to_input_registers_table (modbus_adr_t input_reg_adr, modbus_reg_t *app_data_ptr);
     void register_app_data_to_holding_registers_table (modbus_adr_t hreg_reg_adr, modbus_reg_t *app_data_ptr);
 
-    void modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf);
+    modbus_ret_t modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf);
     void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf);
     void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf);
     void modbus_slave_read_input_reg(uint8_t *resp_buf, const uint8_t *req_buf);
