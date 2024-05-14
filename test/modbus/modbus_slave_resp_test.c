@@ -221,11 +221,12 @@ TEST(Modbus_Slave_Resp, SlaveReadOneHoldingRegister)
     mock_set_expected_hreg_alternately(adr, reg_qty, exp_readed_reg_value[0]);
 
     modbus_master_read_holding_reg(req_buf, adr, reg_qty);
-    modbus_slave_read_holdin_reg(resp_buf, req_buf);
+    status =modbus_slave_read_holdin_reg(resp_buf, req_buf);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(expected_byte_count, resp_buf[MODBUS_RESP_READ_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count , status);
 }
 
 TEST(Modbus_Slave_Resp, SlaveRead3HoldingRegisters)
@@ -238,13 +239,14 @@ TEST(Modbus_Slave_Resp, SlaveRead3HoldingRegisters)
     mock_set_expected_hreg_alternately(adr, reg_qty, exp_readed_reg_value[0]);
 
     modbus_master_read_holding_reg(req_buf, adr, reg_qty);
-    modbus_slave_read_holdin_reg(resp_buf, req_buf);
+    status =modbus_slave_read_holdin_reg(resp_buf, req_buf);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(expected_byte_count, resp_buf[MODBUS_RESP_READ_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX]));
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX + 2]));
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX + 4]));
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, status);
 }
 
 TEST(Modbus_Slave_Resp, SlaveReadOneInputRegister)

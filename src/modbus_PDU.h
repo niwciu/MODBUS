@@ -39,7 +39,7 @@ extern "C"
 
     modbus_ret_t modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf);
     modbus_ret_t modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf);
-    void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf);
+    modbus_ret_t modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf);
     void modbus_slave_read_input_reg(uint8_t *resp_buf, const uint8_t *req_buf);
 
     void modbus_slave_write_single_coil(uint8_t *resp_buf, const uint8_t *req_buf);

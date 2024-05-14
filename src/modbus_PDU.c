@@ -217,7 +217,7 @@ modbus_ret_t modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t 
     return MODBUS_READ_RESP_LEN+byte_cnt;
 }
 
-void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
+modbus_ret_t modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
 {
     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
     modbus_data_qty_t reg_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
@@ -230,6 +230,7 @@ void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
     {
         write_u16_to_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX+(i*2)], get_holding_register_value(adr+i));
     }
+    return MODBUS_READ_RESP_LEN+byte_cnt;
 }
 
 void modbus_slave_read_input_reg(uint8_t *resp_buf, const uint8_t *req_buf)
