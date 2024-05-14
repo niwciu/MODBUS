@@ -44,6 +44,15 @@ extern "C"
     #define MODBUS_RESP_WRITE_SINGLE_DATA_IDX           (MODBUS_PDU_BUF_OFFSET + 3)
     #define MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX     (MODBUS_PDU_BUF_OFFSET + 3)
     // #define MODBUS_WRITE_MULTI_DATA_IDX    
+
+    #define MODBUS_READ_REQUEST_LEN            6
+    #define MODBUS_WRITE_SINGLE_REQUEST_LEN    6
+    #define MODBUS_WRITE_MULTI_REQUEST_LEN     7 
+
+    #define MODBUS_READ_RESP_LEN    3
+    #define MODBUS_WRITE_SINGLE_RESP_LEN  6
+    #define MODBUS_WRITE_MULTI_RESP_LEN   6
+    #define MODBUS_ERROR_CODE_RESP_LEN    3
     // clang-format on
     typedef enum
     {

@@ -26,7 +26,7 @@ static modbus_ret_t read_reg_request(uint8_t *send_buf, modbus_req_t req_code, m
         send_buf[MODBUS_FUNCTION_CODE_IDX] = req_code;
         write_u16_to_buf(send_buf + MODBUS_REQUEST_ADR_IDX, adr);
         write_u16_to_buf(send_buf + MODBUS_REQUEST_LEN_IDX, len);
-        return RET_OK;
+        return MODBUS_READ_REQUEST_LEN;
     }
     else
     {
