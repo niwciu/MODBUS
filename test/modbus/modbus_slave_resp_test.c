@@ -3,8 +3,8 @@
 #include "buf_rw.h"
 #include "mock_app_data.h"
 
-uint8_t req_buf[MODBUS_PDU_FRAME_LEN] = {0};
-uint8_t resp_buf[MODBUS_PDU_FRAME_LEN] = {0};
+uint8_t req_buf[MODBUS_FRAME_BUFFER_SIZE] = {0};
+uint8_t resp_buf[MODBUS_FRAME_BUFFER_SIZE] = {0};
 
 TEST_GROUP(Modbus_Slave_Resp);
 

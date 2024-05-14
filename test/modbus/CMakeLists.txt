@@ -67,6 +67,8 @@ set(TEST_SRCS
 	modbus_data_test_runner.c
 	modbus_crc_test.c
 	modbus_crc_test_runner.c
+	modbus_RTU_test.c
+	modbus_RTU_test_runner.c
 	mock_app_data.c
 	
 

@@ -3,7 +3,7 @@
 #include "modbus_type.h"
 #include "buf_rw.h"
 
-uint8_t PDU_frame[MODBUS_PDU_FRAME_LEN];
+uint8_t PDU_frame[MODBUS_FRAME_BUFFER_SIZE];
 
 TEST_GROUP(Modbus_Master_Requests);
 

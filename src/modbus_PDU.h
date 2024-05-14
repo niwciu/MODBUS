@@ -17,7 +17,7 @@ extern "C"
 #include "modbus_data.h"
 // #include "modbus_type.h" // zaciągnięte z data.h
 
-#define MODBUS_PDU_FRAME_LEN 256U
+
 
     
     // Master Functionality
