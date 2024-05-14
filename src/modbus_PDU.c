@@ -199,7 +199,7 @@ modbus_ret_t modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf)
     return MODBUS_READ_RESP_LEN+byte_cnt;
 }
 
-void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf)
+modbus_ret_t modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf)
 {
     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
     modbus_data_qty_t din_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
@@ -214,6 +214,7 @@ void modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf
     {
         resp_buf[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_discrete_input_state(adr + i) << (i % 8));
     }
+    return MODBUS_READ_RESP_LEN+byte_cnt;
 }
 
 void modbus_slave_read_holdin_reg(uint8_t *resp_buf, const uint8_t *req_buf)
