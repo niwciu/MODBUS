@@ -15,7 +15,7 @@
 modbus_ret_t modbus_RTU_send(modbus_buf_t *buf, modbus_buf_size_t data_len, modbus_device_ID_t slave_ID)
 {
 
-    if (buf != NULL)
+    if ((NULL != buf)&&(MODBUS_PDU_MAX_LEN >= data_len))
     {
         modbus_CRC_t CRC;
         buf[MODBUS_SLAVE_ADR_IDX] = slave_ID;
