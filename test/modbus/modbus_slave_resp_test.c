@@ -546,11 +546,12 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleRegister)
     modbus_reg_t reg_val = 0x5A5A;
 
     modbus_master_write_single_reg(req_buf, adr, reg_val);
-    modbus_slave_write_single_reg(resp_buf, req_buf);
+    status =modbus_slave_write_single_reg(resp_buf, req_buf);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(resp_buf + MODBUS_RESP_WRITE_ADR_IDX));
     TEST_ASSERT_EQUAL_HEX16(reg_val, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN , status);
 }
 TEST(Modbus_Slave_Resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
 {
@@ -559,9 +560,10 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
     mock_reset_all_hreg_value();
 
     modbus_master_write_single_reg(req_buf, adr, reg_val);
-    modbus_slave_write_single_reg(resp_buf, req_buf);
+    status =modbus_slave_write_single_reg(resp_buf, req_buf);
 
     TEST_ASSERT_EQUAL_HEX16(reg_val, mock_hreg[adr]);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN , status);
 }
 
 TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3Reg)
@@ -573,12 +575,13 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3Reg)
     mock_reset_all_hreg_value();
 
     modbus_master_write_multiple_reg(req_buf, adr, reg_qty, reg_val);
-    modbus_slave_write_multiple_reg(resp_buf, req_buf);
+    status =modbus_slave_write_multiple_reg(resp_buf, req_buf);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(resp_buf + MODBUS_RESP_WRITE_ADR_IDX));
     TEST_ASSERT_EQUAL_HEX16(reg_qty, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
-    // TEST_FAIL_MESSAGE("Added New Test!!!")
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN , status);
+
 }
 
 TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
@@ -590,11 +593,12 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
     mock_reset_all_hreg_value();
 
     modbus_master_write_multiple_reg(req_buf, adr, reg_qty, reg_val);
-    modbus_slave_write_multiple_reg(resp_buf, req_buf);
+    status =modbus_slave_write_multiple_reg(resp_buf, req_buf);
 
     TEST_ASSERT_EQUAL_HEX16(reg_val[0], mock_hreg[adr]);
     TEST_ASSERT_EQUAL_HEX16(reg_val[1], mock_hreg[adr + 1]);
     TEST_ASSERT_EQUAL_HEX16(reg_val[2], mock_hreg[adr + 2]);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN , status);
 }
 
 //
