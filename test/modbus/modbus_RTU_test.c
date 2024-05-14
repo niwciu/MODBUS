@@ -58,12 +58,16 @@ TEST(Modbus_RTU, ModbusRtuSendWitnNullPtrAsBuffer)
 
 }
 
-// TEST(Modbus_RTU, )
-// {
+TEST(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLen)
+{
+    modbus_device_ID_t slave_ID=0x02;
+    modbus_buf_size_t buf_data_len = MODBUS_PDU_MAX_LEN;
+    modbus_ret_t send_status;
 
+    send_status= modbus_RTU_send(buf,buf_data_len,slave_ID);
 
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST")
-// }
+    TEST_ASSERT_EQUAL_HEX8(RET_OK,send_status);
+}
 
 // TEST(Modbus_RTU, )
 // {
