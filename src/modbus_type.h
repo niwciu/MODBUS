@@ -19,7 +19,7 @@ extern "C"
     // clang-format off
     // taken from modsbus frame buffer size specification
     #define MODBUS_FRAME_BUFFER_SIZE 256U
-    
+
     // max and min allowed values taken from Modbus standard documentation
     #define MODBUS_MAX_DISCRETE_INPUTS_QTY  0x7D0U
     #define MODBUS_MAX_COILS_QTY            MODBUS_MAX_DISCRETE_INPUTS_QTY
@@ -78,6 +78,9 @@ extern "C"
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
     typedef uint8_t modbus_coil_reg_t;
+    typedef uint8_t modbus_buf_t;
+    typedef uint8_t modbus_buf_size_t;
+    typedef uint8_t modbus_device_ID_t;
     typedef bool modbus_coil_t;
     typedef bool modbus_disin_t;
 #ifdef __cplusplus

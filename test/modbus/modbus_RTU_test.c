@@ -1,5 +1,5 @@
 #include "unity/fixture/unity_fixture.h"
-#include "modbus_crc.h"
+#include "modbus_RTU.h"
 
 // #include "tested_module.h"
 
@@ -17,11 +17,14 @@ TEST_TEAR_DOWN(Modbus_RTU)
 
 TEST(Modbus_RTU, AddSlaveIdToSendBuf)
 {
-    uint8_t slave_ID=0x02;
-    uint8_t buf_data_len = 15;
-    modbus_RTU_send(buf,buf_len,slave_ID);
 
-    TEST_FAIL_MESSAGE("ADDED FIRST TEST")
+    modbus_device_ID_t slave_ID=0x02;
+    modbus_buf_size_t buf_data_len = 15;
+    modbus_buf_t buf[MODBUS_FRAME_BUFFER_SIZE];
+
+    modbus_RTU_send(buf,buf_data_len,slave_ID);
+
+    TEST_FAIL_MESSAGE("ADDED FIRST TEST");
 }
 
 
