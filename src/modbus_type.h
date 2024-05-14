@@ -70,7 +70,6 @@ extern "C"
         RET_OK = 0,
     } modbus_ret_t;
 
-    // typedef enum modbus_error modbus_ret_t;
     typedef uint16_t modbus_adr_t;
     typedef uint16_t modbus_reg_t;
     typedef uint16_t modbus_data_qty_t;
