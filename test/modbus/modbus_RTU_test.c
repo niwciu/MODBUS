@@ -7,7 +7,7 @@
 
 TEST_GROUP(Modbus_RTU);
 
-modbus_buf_t buf[MODBUS_FRAME_BUFFER_SIZE] = {0};
+modbus_buf_t buf[MODBUS_RTU_BUFFER_SIZE] = {0};
 
 TEST_SETUP(Modbus_RTU)
 {

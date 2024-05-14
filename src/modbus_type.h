@@ -18,7 +18,8 @@ extern "C"
 #include <stdbool.h>
     // clang-format off
     // taken from modsbus frame buffer size specification
-    #define MODBUS_FRAME_BUFFER_SIZE 256U
+    #define MODBUS_RTU_BUFFER_SIZE 256U
+    #define MODBUS_PDU_MAX_LEN 253U
 
     // max and min allowed values taken from Modbus standard documentation
     #define MODBUS_MAX_DISCRETE_INPUTS_QTY  0x7D0U
