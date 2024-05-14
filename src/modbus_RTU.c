@@ -31,3 +31,8 @@ modbus_ret_t modbus_RTU_send(modbus_buf_t *buf, modbus_buf_size_t data_len, modb
     }
 
 }
+
+modbus_ret_t modbus_RTU_recv(modbus_buf_t * buf, modbus_buf_size_t data_len, modbus_device_ID_t slave_ID)
+{
+    return RET_OK;
+}

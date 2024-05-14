@@ -87,7 +87,7 @@ TEST(Modbus_RTU, SlaveIdIsCorrectInRecvBuffer)
     modbus_ret_t recv_status;
 
     modbus_RTU_send(buf,buf_data_len,slave_ID);
-    recv_status= modbus_RTU_RECV (buf,buf_data_len,slave_ID);
+    recv_status= modbus_RTU_recv(buf,buf_data_len,slave_ID);
 
     TEST_ASSERT_EQUAL_HEX8(RET_OK,recv_status);
 }
