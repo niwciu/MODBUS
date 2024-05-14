@@ -223,7 +223,7 @@ TEST(Modbus_Master_Requests, WriteMultipleRegisters)
     TEST_ASSERT_EQUAL_UINT16(values[2], read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 4));
     TEST_ASSERT_EQUAL_UINT16(values[3], read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 6));
     TEST_ASSERT_EQUAL_UINT16(values[4], read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 8));
-    TEST_ASSERT_EQUAL_INT16(RET_OK, status);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_WRITE_MULTI_REQUEST_LEN+(reg_qty*2), status);
 }
 
 TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
@@ -234,7 +234,7 @@ TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
     modbus_ret_t status;
 
     status = modbus_master_write_multiple_reg(PDU_frame, adr, reg_qty, values);
-    TEST_ASSERT_EQUAL_INT16(RET_OK, status);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_WRITE_MULTI_REQUEST_LEN+(reg_qty*2), status);
 }
 
 TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)

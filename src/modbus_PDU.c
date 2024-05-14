@@ -132,7 +132,7 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
         {
             write_u16_to_buf(send_buf + (MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)), data_buf[i]);
         }
-        return RET_OK;
+        return MODBUS_WRITE_MULTI_REQUEST_LEN+ send_buf[MODBUS_REQUEST_BYTE_CNT_IDX];
     }
     else
     {
