@@ -293,11 +293,12 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleCoil)
     modbus_w_coil_t resp_buf_coil_expected_value = COIL_ON;
 
     modbus_master_write_single_coil(req_buf, adr, resp_buf_coil_expected_value);
-    modbus_slave_write_single_coil(resp_buf, req_buf);
+    status =modbus_slave_write_single_coil(resp_buf, req_buf);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, resp_buf[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_HEX16(adr, resp_buf[MODBUS_RESP_WRITE_ADR_IDX]);
     TEST_ASSERT_EQUAL_HEX16(resp_buf_coil_expected_value, read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN , status);
 }
 
 TEST(Modbus_Slave_Resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
@@ -308,8 +309,9 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
     mock_set_all_cails_to_off();
     TEST_ASSERT_EQUAL(0, mock_coil[adr]);
     modbus_master_write_single_coil(req_buf, adr, resp_buf_coil_expected_value);
-    modbus_slave_write_single_coil(resp_buf, req_buf);
+    status =modbus_slave_write_single_coil(resp_buf, req_buf);
     TEST_ASSERT_EQUAL(1, mock_coil[adr]);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN , status);
 }
 
 TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5Coils)

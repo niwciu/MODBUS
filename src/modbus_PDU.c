@@ -249,7 +249,7 @@ modbus_ret_t modbus_slave_read_input_reg(uint8_t *resp_buf, const uint8_t *req_b
     return MODBUS_READ_RESP_LEN+byte_cnt;
 }
 
-void modbus_slave_write_single_coil(uint8_t *resp_buf, const uint8_t *req_buf)
+modbus_ret_t modbus_slave_write_single_coil(uint8_t *resp_buf, const uint8_t *req_buf)
 {
     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
     modbus_w_coil_t coils_state = read_u16_from_buf(&req_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]);
@@ -261,6 +261,7 @@ void modbus_slave_write_single_coil(uint8_t *resp_buf, const uint8_t *req_buf)
 
     write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_ADR_IDX] , adr);
     write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX],coils_state);
+    return MODBUS_WRITE_SINGLE_RESP_LEN;
 }
 
 void modbus_slave_write_multiple_coils(uint8_t *resp_buf, const uint8_t *req_buf)
