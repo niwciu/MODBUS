@@ -24,7 +24,7 @@ TEST(Modbus_RTU, AddSlaveIdToSendBuf)
 
     modbus_RTU_send(buf,buf_data_len,slave_ID);
 
-    TEST_FAIL_MESSAGE("ADDED FIRST TEST");
+    TEST_ASSERT_EQUAL_HEX8(slave_ID,buf[MODBUS_SLAVE_ADR_IDX]);
 }
 
 
