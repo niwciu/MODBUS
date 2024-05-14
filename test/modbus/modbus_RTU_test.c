@@ -9,6 +9,8 @@ TEST_GROUP(Modbus_RTU);
 
 modbus_buf_t buf[MODBUS_RTU_BUFFER_SIZE] = {0};
 
+// #define SLAVE_ID_1 0x02U
+
 TEST_SETUP(Modbus_RTU)
 {
     /* Init before every test */
@@ -105,12 +107,15 @@ TEST(Modbus_RTU, SlaveIdIsNotCorrectInRecvBuffer)
     TEST_ASSERT_EQUAL_HEX8(RET_ERROR_SLAVE_ID,recv_status);
 }
 
-// TEST(Modbus_RTU, )
-// {
+TEST(Modbus_RTU, CrcIsCorrectInRecivedBuffer)
+{
+    modbus_buf_t RTU_msg[] = {0x02,0x03,0x00,0x01,0x00,0x05,0xD4,0x3A};
+    modbus_ret_t recv_status;
 
+    recv_status= modbus_RTU_recv(RTU_msg,sizeof(RTU_msg)/sizeof(modbus_buf_t),0x02);
 
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST")
-// }
+    TEST_ASSERT_EQUAL_HEX8(RET_OK,recv_status);
+}
 
 // TEST(Modbus_RTU, )
 // {
