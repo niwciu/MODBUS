@@ -80,12 +80,17 @@ TEST(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLenPlus1)
     TEST_ASSERT_EQUAL_HEX8(RET_ERROR,send_status);
 }
 
-// TEST(Modbus_RTU, )
-// {
+TEST(Modbus_RTU, SlaveIdIsCorrectInRecvBuffer)
+{
+    modbus_device_ID_t slave_ID=0x02;
+    modbus_buf_size_t buf_data_len = 2;
+    modbus_ret_t recv_status;
 
+    modbus_RTU_send(buf,buf_data_len,slave_ID);
+    recv_status= modbus_RTU_RECV (buf,buf_data_len,slave_ID);
 
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST")
-// }
+    TEST_ASSERT_EQUAL_HEX8(RET_OK,recv_status);
+}
 
 // TEST(Modbus_RTU, )
 // {
