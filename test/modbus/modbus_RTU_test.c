@@ -9,7 +9,7 @@ TEST_GROUP(Modbus_RTU);
 
 modbus_buf_t buf[MODBUS_RTU_BUFFER_SIZE] = {0};
 
-// #define SLAVE_ID_1 0x02U
+#define SLAVE_ID_1 0x02U
 
 TEST_SETUP(Modbus_RTU)
 {
@@ -24,7 +24,7 @@ TEST_TEAR_DOWN(Modbus_RTU)
 TEST(Modbus_RTU, AddSlaveIdToSendBuf)
 {
 
-    modbus_device_ID_t slave_ID=0x02;
+    modbus_device_ID_t slave_ID=SLAVE_ID_1;
     modbus_buf_size_t buf_data_len = 15;
 
     modbus_RTU_send(buf,buf_data_len,slave_ID);
@@ -37,7 +37,7 @@ TEST(Modbus_RTU, AddCRCToSendBuf )
 {
     
     modbus_buf_t PDU_frame[] ={0x00,0x03,0x00,0x01,0x00,0x05}; // read 5 holding resiters from adr 0x0001 
-    modbus_device_ID_t slave_ID=0x02;
+    modbus_device_ID_t slave_ID=SLAVE_ID_1;
     modbus_CRC_t expected_CRC = 0xD43A;
     modbus_buf_size_t buf_data_len = sizeof(PDU_frame)/sizeof(modbus_buf_t);
 
@@ -50,7 +50,7 @@ TEST(Modbus_RTU, AddCRCToSendBuf )
 
 TEST(Modbus_RTU, ModbusRtuSendWitnNullPtrAsBuffer)
 {
-    modbus_device_ID_t slave_ID=0x02;
+    modbus_device_ID_t slave_ID=SLAVE_ID_1;
     modbus_buf_size_t buf_data_len = 15;
     modbus_ret_t send_status;
 
@@ -62,7 +62,7 @@ TEST(Modbus_RTU, ModbusRtuSendWitnNullPtrAsBuffer)
 
 TEST(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLen)
 {
-    modbus_device_ID_t slave_ID=0x02;
+    modbus_device_ID_t slave_ID=SLAVE_ID_1;
     modbus_buf_size_t buf_data_len = MODBUS_PDU_MAX_LEN;
     modbus_ret_t send_status;
 
@@ -73,7 +73,7 @@ TEST(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLen)
 
 TEST(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLenPlus1)
 {
-    modbus_device_ID_t slave_ID=0x02;
+    modbus_device_ID_t slave_ID=SLAVE_ID_1;
     modbus_buf_size_t buf_data_len = MODBUS_PDU_MAX_LEN+1;
     modbus_ret_t send_status;
 
@@ -84,7 +84,7 @@ TEST(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLenPlus1)
 
 TEST(Modbus_RTU, SlaveIdIsCorrectInRecvBuffer)
 {
-    modbus_device_ID_t slave_ID=0x02;
+    modbus_device_ID_t slave_ID=SLAVE_ID_1;
     modbus_buf_size_t buf_data_len = 2;
     modbus_ret_t recv_status;
 
@@ -97,7 +97,7 @@ TEST(Modbus_RTU, SlaveIdIsCorrectInRecvBuffer)
 TEST(Modbus_RTU, SlaveIdIsNotCorrectInRecvBuffer)
 {
     modbus_device_ID_t expected_slave_ID=0x03;
-    modbus_device_ID_t sended_slave_ID=0x02;
+    modbus_device_ID_t sended_slave_ID=SLAVE_ID_1;
     modbus_buf_size_t buf_data_len = 2;
     modbus_ret_t recv_status;
 
@@ -109,10 +109,10 @@ TEST(Modbus_RTU, SlaveIdIsNotCorrectInRecvBuffer)
 
 TEST(Modbus_RTU, CrcIsCorrectInRecivedBuffer)
 {
-    modbus_buf_t RTU_msg[] = {0x02,0x03,0x00,0x01,0x00,0x05,0xD4,0x3A};
+    modbus_buf_t RTU_msg[] = {SLAVE_ID_1,0x03,0x00,0x01,0x00,0x05,0xD4,0x3A};
     modbus_ret_t recv_status;
 
-    recv_status= modbus_RTU_recv(RTU_msg,sizeof(RTU_msg)/sizeof(modbus_buf_t),0x02);
+    recv_status= modbus_RTU_recv(RTU_msg,sizeof(RTU_msg)/sizeof(modbus_buf_t),SLAVE_ID_1);
 
     TEST_ASSERT_EQUAL_HEX8(RET_OK,recv_status);
 }
