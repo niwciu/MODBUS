@@ -15,7 +15,7 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include "modbus_type.h"
-modbus_ret_t modbus_RTU_send(modbus_buf_t * buf, modbus_buf_size_t data_len, modbus_device_ID_t slave_ID);
+modbus_ret_t modbus_RTU_send(modbus_buf_t * buf, modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID);
 /**
  * @brief 
  * 
@@ -24,7 +24,7 @@ modbus_ret_t modbus_RTU_send(modbus_buf_t * buf, modbus_buf_size_t data_len, mod
  * @param slave_ID 
  * @return modbus_ret_t 
  */
-modbus_ret_t modbus_RTU_recv(modbus_buf_t * buf, modbus_buf_size_t data_len, modbus_device_ID_t slave_ID);
+modbus_ret_t modbus_RTU_recv(modbus_buf_t * buf, modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID);
 
 #ifdef __cplusplus
 }

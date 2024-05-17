@@ -12,17 +12,17 @@
 #include "buf_rw.h"
 #include <stdio.h>
 
-modbus_ret_t modbus_RTU_send(modbus_buf_t *buf, modbus_buf_size_t data_len, modbus_device_ID_t slave_ID)
+modbus_ret_t modbus_RTU_send(modbus_buf_t *buf, modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID)
 {
 
-    if ((NULL != buf)&&(MODBUS_PDU_MAX_LEN >= data_len))
+    if ((NULL != buf)&&(MODBUS_PDU_MAX_LEN >= msg_len))
     {
         modbus_CRC_t CRC;
         buf[MODBUS_SLAVE_ADR_IDX] = slave_ID;
 
-        CRC = calculate_CRC(buf, data_len);
-        buf[data_len] = CRC & 0x00FF;
-        buf[data_len + 1] = CRC >> 8;
+        CRC = calculate_CRC(buf, msg_len);
+        buf[msg_len] = CRC & 0x00FF;
+        buf[msg_len + 1] = CRC >> 8;
         return RET_OK;
     }
     else

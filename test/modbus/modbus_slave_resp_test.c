@@ -1,7 +1,7 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_PDU.h"
 #include "buf_rw.h"
-#include "mock_app_data.h"
+#include "mock_slave_app_data.h"
 
 uint8_t req_buf[MODBUS_RTU_BUFFER_SIZE] = {0};
 uint8_t resp_buf[MODBUS_RTU_BUFFER_SIZE] = {0};
