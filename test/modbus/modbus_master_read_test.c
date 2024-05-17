@@ -60,7 +60,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_coils_req(req_msg,coil_adr,coils_qty);
     modbus_slave_read_coils(resp_msg,req_msg);
-    resp_msg[MODBUS_SLAVE_ADR_IDX]=0x95;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
 
     modbus_master_read_coils_resp(resp_msg,req_msg);
 

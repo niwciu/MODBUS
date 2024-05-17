@@ -182,20 +182,21 @@ void modbus_master_read_coils_resp(uint8_t *resp_buf, uint8_t *req_buf)
 {
     modbus_data_qty_t coil_qty= read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
     modbus_adr_t coil_start_adr= read_u16_from_buf(req_buf+MODBUS_REQUEST_ADR_IDX);
-
-    for(modbus_data_qty_t i=0; i<coil_qty; i++)
+    if(resp_buf[MODBUS_FUNCTION_CODE_IDX]==MODBUS_READ_COILS_FUNC_CODE)
     {
-        if(0 != (resp_buf[MODBUS_RESP_READ_DATA_IDX+(i/8)]& (1<<(i%8))))
+        for(modbus_data_qty_t i=0; i<coil_qty; i++)
         {
-            set_coil_state(Master_Coils,(coil_start_adr+i),1);
+            if(0 != (resp_buf[MODBUS_RESP_READ_DATA_IDX+(i/8)]& (1<<(i%8))))
+            {
+                set_coil_state(Master_Coils,(coil_start_adr+i),1);
+            }
+            else
+            {
+                set_coil_state(Master_Coils,(coil_start_adr+i),0);
+            }
+            
         }
-        else
-        {
-            set_coil_state(Master_Coils,(coil_start_adr+i),0);
-        }
-        
     }
-
 }
 
 
