@@ -50,6 +50,21 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadC
     TEST_ASSERT_EQUAL_UINT8_ARRAY(mock_slave_coil,mock_master_coil,coil_adr+coils_qty);
 }
 
+TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadCoilRespThenMasterCoilsStayUnchanged)
+{
+    modbus_adr_t coil_adr=0x0001;
+    modbus_data_qty_t coils_qty=4;
+    modbus_coil_t expected_master_coil_value[MODBUS_MAX_COILS_QTY]={0};
 
+    mock_set_expected_slave_coils_alternately(coil_adr,coils_qty,!!COIL_ON);
+
+    modbus_master_read_coils_req(req_msg,coil_adr,coils_qty);
+    modbus_slave_read_coils(resp_msg,req_msg);
+    resp_msg[MODBUS_SLAVE_ADR_IDX]=0x95;
+
+    modbus_master_read_coils_resp(resp_msg,req_msg);
+
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(expected_master_coil_value,mock_master_coil,coil_adr+coils_qty);
+}
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
