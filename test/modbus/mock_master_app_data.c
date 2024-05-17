@@ -87,7 +87,7 @@ void mock_register_master_coils_data(void)
 {
     for (modbus_adr_t i = 0; i < COILS_QTY; i++)
     {
-        Coils[i] = &mock_master_coil[i];
+        Master_Coils[i] = &mock_master_coil[i];
     }
 }
 
@@ -95,7 +95,7 @@ void mock_register_master_discrete_inputs_data(void)
 {
     for (modbus_adr_t i = 0; i < DISCRET_INPUT_QTY; i++)
     {
-        Discrete_Inputs[i] = &mock_master_dis_in[i];
+        Master_Discrete_Inputs[i] = &mock_master_dis_in[i];
     }
 }
 
@@ -103,7 +103,7 @@ void mock_register_master_input_registers_data(void)
 {
     for (modbus_adr_t i = 0; i < INPUT_REG_QTY; i++)
     {
-        Input_Registers[i] = &mock_master_inreg[i];
+        Master_Input_Registers[i] = &mock_master_inreg[i];
     }
 }
 
@@ -111,7 +111,7 @@ void mock_register_master_holding_registers_data(void)
 {
     for (modbus_adr_t i = 0; i < HOLDING_REG_QTY; i++)
     {
-        Holding_Registers[i] = &mock_master_hreg[i];
+        Master_Holding_Registers[i] = &mock_master_hreg[i];
     }
 }
 
@@ -119,7 +119,7 @@ void mock_clear_master_modbus_coils_data_teble(void)
 {
     for (modbus_adr_t i = 0; i < COILS_QTY; i++)
     {
-        Coils[i] = NULL;
+        Master_Coils[i] = NULL;
     }
 }
 
@@ -127,7 +127,7 @@ void mock_clear_master_modbus_discrete_inputs_data_teble(void)
 {
     for (modbus_adr_t i = 0; i < DISCRET_INPUT_QTY; i++)
     {
-        Discrete_Inputs[i] = NULL;
+        Master_Discrete_Inputs[i] = NULL;
     }
 }
 
@@ -135,7 +135,7 @@ void mock_clear_master_modbus_input_register_data_teble(void)
 {
     for (modbus_adr_t i = 0; i < INPUT_REG_QTY; i++)
     {
-        Input_Registers[i] = NULL;
+        Master_Input_Registers[i] = NULL;
     }
 }
 
@@ -143,6 +143,6 @@ void mock_clear_master_modbus_holding_resgister_data_table(void)
 {
     for (modbus_adr_t i = 0; i < HOLDING_REG_QTY; i++)
     {
-        Holding_Registers[i] = NULL;
+        Master_Holding_Registers[i] = NULL;
     } 
 }

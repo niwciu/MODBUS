@@ -21,6 +21,11 @@ extern "C"
 
     
     // Master Functionality
+    void register_app_data_to_master_coils_table(modbus_adr_t coil_adr, modbus_coil_t *app_data_ptr);
+    void register_app_data_to_master_discrete_inputs_table (modbus_adr_t din_adr, modbus_coil_t *app_data_ptr);
+    void register_app_data_to_master_input_registers_table (modbus_adr_t input_reg_adr, modbus_reg_t *app_data_ptr);
+    void register_app_data_to_master_holding_registers_table (modbus_adr_t hreg_reg_adr, modbus_reg_t *app_data_ptr);
+
     modbus_ret_t modbus_master_read_holding_reg_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty);
     modbus_ret_t modbus_master_read_input_reg_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty);
     modbus_ret_t modbus_master_read_discrete_inputs_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t discrete_input_qty);
@@ -31,11 +36,13 @@ extern "C"
     modbus_ret_t modbus_master_write_multiple_reg_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf);
     modbus_ret_t modbus_master_write_multiple_coils_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty ,const modbus_coil_reg_t *data_buf);
 
+    void modbus_master_read_coils_resp(uint8_t *resp_buf, uint8_t *req_buf);
+    
     // Slave Functionality
-    void register_app_data_to_coils_table(modbus_adr_t coil_adr, modbus_coil_t *app_data_ptr);
-    void register_app_data_to_discrete_inputs_table (modbus_adr_t din_adr, modbus_coil_t *app_data_ptr);
-    void register_app_data_to_input_registers_table (modbus_adr_t input_reg_adr, modbus_reg_t *app_data_ptr);
-    void register_app_data_to_holding_registers_table (modbus_adr_t hreg_reg_adr, modbus_reg_t *app_data_ptr);
+    void register_app_data_to_slave_coils_table(modbus_adr_t coil_adr, modbus_coil_t *app_data_ptr);
+    void register_app_data_to_slave_discrete_inputs_table (modbus_adr_t din_adr, modbus_coil_t *app_data_ptr);
+    void register_app_data_to_slave_input_registers_table (modbus_adr_t input_reg_adr, modbus_reg_t *app_data_ptr);
+    void register_app_data_to_slave_holding_registers_table (modbus_adr_t hreg_reg_adr, modbus_reg_t *app_data_ptr);
 
     modbus_ret_t modbus_slave_read_coils(uint8_t *resp_buf, const uint8_t *req_buf);
     modbus_ret_t modbus_slave_read_discrete_inputs(uint8_t *resp_buf, const uint8_t *req_buf);

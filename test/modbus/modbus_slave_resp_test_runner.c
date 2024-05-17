@@ -4,7 +4,7 @@
 TEST_GROUP_RUNNER(Modbus_Slave_Resp)
 {
 /* Test cases to run */
-// Slave Read Coils request tests
+// Slave Read Slave_Coils request tests
 #if 5 <= COILS_QTY
     RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead5Coils);
 #endif
@@ -46,7 +46,7 @@ TEST_GROUP_RUNNER(Modbus_Slave_Resp)
     RUN_TEST_CASE(Modbus_Slave_Resp, SlaveReadOneInputRegister);
     RUN_TEST_CASE(Modbus_Slave_Resp, SlaveRead3InputRegisters);
 #endif
-    // Slave Write Coils tests
+    // Slave Write Slave_Coils tests
     RUN_TEST_CASE(Modbus_Slave_Resp, SlaveWriteSingleCoil);
     RUN_TEST_CASE(Modbus_Slave_Resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus);
 #if 5 <= COILS_QTY
