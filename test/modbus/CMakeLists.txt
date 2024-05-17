@@ -70,6 +70,7 @@ set(TEST_SRCS
 	modbus_RTU_test.c
 	modbus_RTU_test_runner.c
 	mock_slave_app_data.c
+	mock_master_app_data.c
 	
 
 	#mock_module.c

@@ -89,37 +89,37 @@ static void clear_coil_din_status_byte(uint8_t *buf, modbus_data_qty_t qty)
 }
 
 // Master API functions
-modbus_ret_t modbus_master_read_holding_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
+modbus_ret_t modbus_master_read_holding_reg_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
 {
     return read_reg_request(send_buf, MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty);
 }
 
-modbus_ret_t modbus_master_read_input_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty)
+modbus_ret_t modbus_master_read_input_reg_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty)
 {
     return read_reg_request(send_buf, MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty);
 }
 
-modbus_ret_t modbus_master_read_discrete_inputs(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t discrete_input_qty)
+modbus_ret_t modbus_master_read_discrete_inputs_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t discrete_input_qty)
 {
     return read_reg_request(send_buf, MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty);
 }
 
-modbus_ret_t modbus_master_read_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty)
+modbus_ret_t modbus_master_read_coils_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty)
 {
     return read_reg_request(send_buf, MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty);
 }
 
-modbus_ret_t modbus_master_write_single_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val)
+modbus_ret_t modbus_master_write_single_reg_req(uint8_t *send_buf, modbus_adr_t adr, modbus_reg_t val)
 {
     return write_single_reg_coil_request(send_buf, MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr, val);
 }
 
-modbus_ret_t modbus_master_write_single_coil(uint8_t *send_buf, modbus_adr_t adr, modbus_w_coil_t coil_state)
+modbus_ret_t modbus_master_write_single_coil_req(uint8_t *send_buf, modbus_adr_t adr, modbus_w_coil_t coil_state)
 {
     return write_single_reg_coil_request(send_buf, MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr, coil_state);
 }
 
-modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf)
+modbus_ret_t modbus_master_write_multiple_reg_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf)
 {
     if ((reg_qty <= MODBUS_MAX_REG_QTY) && (reg_qty >= MODBUS_MIN_REG_COIL_QTY))
     {
@@ -140,7 +140,7 @@ modbus_ret_t modbus_master_write_multiple_reg(uint8_t *send_buf, modbus_adr_t ad
     }
 }
 
-modbus_ret_t modbus_master_write_multiple_coils(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty ,const modbus_coil_reg_t *data_buf)
+modbus_ret_t modbus_master_write_multiple_coils_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty ,const modbus_coil_reg_t *data_buf)
 {
     modbus_byte_count_t byte_count=get_coil_rw_byte_count(coils_qty);
     if ((coils_qty <= MODBUS_MAX_COILS_QTY) && (coils_qty >= MODBUS_MIN_REG_COIL_QTY))

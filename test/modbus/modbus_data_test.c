@@ -7,10 +7,10 @@ TEST_GROUP(Modbus_Data);
 TEST_SETUP(Modbus_Data)
 {
     /* Init before every test */
-    mock_clear_modbus_coils_data_teble();
-    mock_clear_modbus_discrete_inputs_data_teble();
-    mock_clear_modbus_input_register_data_teble();
-    mock_clear_modbus_holding_resgister_data_table();
+    mock_clear_modbus_slave_coils_data_table();
+    mock_clear_modbus_slave_discrete_inputs_data_table();
+    mock_clear_modbus_slave_input_register_data_table();
+    mock_clear_modbus_slave_holding_resgister_data_table();
 }
 
 TEST_TEAR_DOWN(Modbus_Data)
@@ -49,11 +49,11 @@ TEST(Modbus_Data, WriteRegisteredCoil)
     modbus_adr_t coil_adr = 0x0001;
     modbus_ret_t status;
     
-    mock_register_coils_data();
+    mock_register_slave_coils_data();
 
     status=set_coil_state(coil_adr,app_coil_data);
 
-    TEST_ASSERT_EQUAL(app_coil_data, mock_coil[coil_adr]);
+    TEST_ASSERT_EQUAL(app_coil_data, mock_slave_coil[coil_adr]);
     TEST_ASSERT_EQUAL(RET_OK,status);
 }
 
@@ -61,8 +61,8 @@ TEST(Modbus_Data, WriteUnregisteredCoil)
 {
     modbus_adr_t coil_adr = 0x0001;
     modbus_coil_t app_coil_data = 1;
-    mock_set_all_cails_to_off();
-    TEST_ASSERT_EQUAL(0, mock_coil[coil_adr]);
+    mock_set_all_slave_cails_to_off();
+    TEST_ASSERT_EQUAL(0, mock_slave_coil[coil_adr]);
     TEST_ASSERT_EQUAL(RET_ERROR,set_coil_state(coil_adr,app_coil_data));
 }
 
@@ -149,11 +149,11 @@ TEST(Modbus_Data, WriteRegisteredHoldingRegister)
     modbus_adr_t hreg_adr = 0x0001;
     modbus_reg_t hreg_val = 0x5a5a;
     modbus_ret_t status;
-    mock_reset_all_hreg_value();
-    mock_register_holding_registers_data();
+    mock_reset_all_slave_hreg_value();
+    mock_register_slave_holding_registers_data();
     status = set_holding_register_value(hreg_adr, hreg_val);
 
-    TEST_ASSERT_EQUAL_HEX16(hreg_val,mock_hreg[hreg_adr]);
+    TEST_ASSERT_EQUAL_HEX16(hreg_val,mock_slave_hreg[hreg_adr]);
     TEST_ASSERT_EQUAL(RET_OK, status);
    
 }
