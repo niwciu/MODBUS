@@ -30,11 +30,11 @@ static const uint16_t CRC_loock_up_table[] =
 
 uint16_t calculate_CRC(uint8_t *data_buf, uint32_t data_buf_len)
 {
-    uint8_t idx = 0;
     uint16_t CRC = 0xFFFF;
-    while (data_buf_len--)
+        // uint8_t idx;
+    while(data_buf_len--)
     {
-        idx = (*data_buf++) ^ CRC;
+        uint8_t idx = (*data_buf++) ^ CRC;
         CRC >>= 8;
         CRC ^= CRC_loock_up_table[idx];
     }

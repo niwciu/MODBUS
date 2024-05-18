@@ -37,8 +37,9 @@ TEST(Modbus_RTU, AddCRCToSendBuf )
     modbus_buf_t PDU_frame[] ={0x00,0x03,0x00,0x01,0x00,0x05}; // read 5 holding resiters from adr 0x0001 
     modbus_CRC_t expected_CRC = 0xD43A;
     modbus_buf_size_t buf_data_len = sizeof(PDU_frame)/sizeof(modbus_buf_t);
+    size_t PDU_frame_size=(sizeof(PDU_frame)/sizeof(modbus_buf_t));
 
-    memcpy(buf,PDU_frame,sizeof(PDU_frame)/sizeof(modbus_buf_t));
+    memcpy(buf,PDU_frame,PDU_frame_size);
 
     modbus_RTU_send(buf,buf_data_len,SLAVE_ID_1);
 

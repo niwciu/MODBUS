@@ -36,7 +36,7 @@ extern "C"
     modbus_ret_t modbus_master_write_multiple_reg_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf);
     modbus_ret_t modbus_master_write_multiple_coils_req(uint8_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty ,const modbus_coil_reg_t *data_buf);
 
-    void modbus_master_read_coils_resp(uint8_t *resp_buf, uint8_t *req_buf);
+    void modbus_master_read_coils_resp(uint8_t *resp_buf, const uint8_t *req_buf);
     
     // Slave Functionality
     void register_app_data_to_slave_coils_table(modbus_adr_t coil_adr, modbus_coil_t *app_data_ptr);

@@ -178,7 +178,7 @@ modbus_ret_t modbus_master_write_multiple_coils_req(uint8_t *send_buf, modbus_ad
     }
 }
 
-void modbus_master_read_coils_resp(uint8_t *resp_buf, uint8_t *req_buf)
+void modbus_master_read_coils_resp(uint8_t *resp_buf, const uint8_t *req_buf)
 {
     modbus_data_qty_t coil_qty= read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
     modbus_adr_t coil_start_adr= read_u16_from_buf(req_buf+MODBUS_REQUEST_ADR_IDX);
