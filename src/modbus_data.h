@@ -43,18 +43,18 @@ extern "C"
 
 extern modbus_reg_t *Slave_Holding_Registers[HOLDING_REG_QTY];
 extern modbus_reg_t *Slave_Input_Registers[INPUT_REG_QTY];
-extern modbus_coil_t *Slave_Coils[COILS_QTY];
-extern modbus_disin_t *Slave_Discrete_Inputs[DISCRET_INPUT_QTY];
+extern modbus_coil_disin_t *Slave_Coils[COILS_QTY];
+extern modbus_coil_disin_t *Slave_Discrete_Inputs[DISCRET_INPUT_QTY];
 
 extern modbus_reg_t *Master_Holding_Registers[HOLDING_REG_QTY];
 extern modbus_reg_t *Master_Input_Registers[INPUT_REG_QTY];
-extern modbus_coil_t *Master_Coils[COILS_QTY];
-extern modbus_disin_t *Master_Discrete_Inputs[DISCRET_INPUT_QTY];
+extern modbus_coil_disin_t *Master_Coils[COILS_QTY];
+extern modbus_coil_disin_t *Master_Discrete_Inputs[DISCRET_INPUT_QTY];
 
-modbus_coil_t get_coil_state(modbus_coil_t **coils_tab_ptr,modbus_adr_t coil_adr);
-modbus_ret_t set_coil_state(modbus_coil_t **coils_tab_ptr,modbus_adr_t coil_adr, modbus_coil_t coil_state);
+modbus_coil_disin_t get_coil_state(modbus_coil_disin_t **coils_tab_ptr,modbus_adr_t coil_adr);
+modbus_ret_t set_coil_state(modbus_coil_disin_t **coils_tab_ptr,modbus_adr_t coil_adr, modbus_coil_disin_t coil_state);
 
-modbus_disin_t get_discrete_input_state(modbus_disin_t **disin_tab_ptr,modbus_adr_t din_adr);
+modbus_coil_disin_t get_discrete_input_state(modbus_coil_disin_t **disin_tab_ptr,modbus_adr_t din_adr);
 
 modbus_reg_t get_input_register_state(modbus_reg_t **inreg_tab_ptr,modbus_adr_t input_reg_adr);
 

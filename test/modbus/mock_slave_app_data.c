@@ -13,8 +13,8 @@
 #include "modbus_data.h"
 #include <stdio.h>
 
-modbus_coil_t mock_slave_coil[COILS_QTY] = {0};
-modbus_disin_t mock_slave_dis_in[DISCRET_INPUT_QTY] = {0};
+modbus_coil_disin_t mock_slave_coil[COILS_QTY] = {0};
+modbus_coil_disin_t mock_slave_dis_in[DISCRET_INPUT_QTY] = {0};
 modbus_reg_t mock_slave_inreg[INPUT_REG_QTY] = {0};
 modbus_reg_t mock_slave_hreg[HOLDING_REG_QTY] = {0};
 uint8_t mock_error_triger = 0;
@@ -43,9 +43,9 @@ void mock_reset_all_slave_hreg_value(void)
     }
 }
 
-void mock_set_expected_slave_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_coil_t start_val)
+void mock_set_expected_slave_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_coil_disin_t start_val)
 {
-    modbus_coil_t current_state = start_val;
+    modbus_coil_disin_t current_state = start_val;
     for (modbus_data_qty_t i = 0; i < qty; i++)
     {
         mock_slave_coil[start_adr + i] = current_state;
@@ -55,7 +55,7 @@ void mock_set_expected_slave_coils_alternately(modbus_adr_t start_adr, modbus_da
 
 void mock_set_expected_slave_disc_in_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty)
 {
-    modbus_disin_t current_state = 1;
+    modbus_coil_disin_t current_state = 1;
     for (modbus_data_qty_t i = 0; i < qty; i++)
     {
         mock_slave_dis_in[start_adr + i] = current_state;

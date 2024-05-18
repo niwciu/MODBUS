@@ -12,15 +12,15 @@
 
 modbus_reg_t *Slave_Holding_Registers[HOLDING_REG_QTY] = {NULL};
 modbus_reg_t *Slave_Input_Registers[INPUT_REG_QTY] = {NULL};
-modbus_coil_t *Slave_Coils[COILS_QTY] = {NULL};
-modbus_disin_t *Slave_Discrete_Inputs[DISCRET_INPUT_QTY] = {NULL};
+modbus_coil_disin_t *Slave_Coils[COILS_QTY] = {NULL};
+modbus_coil_disin_t *Slave_Discrete_Inputs[DISCRET_INPUT_QTY] = {NULL};
 
 modbus_reg_t *Master_Holding_Registers[HOLDING_REG_QTY] = {NULL};
 modbus_reg_t *Master_Input_Registers[INPUT_REG_QTY] = {NULL};
-modbus_coil_t *Master_Coils[COILS_QTY] = {NULL};
-modbus_disin_t *Master_Discrete_Inputs[DISCRET_INPUT_QTY] = {NULL};
+modbus_coil_disin_t *Master_Coils[COILS_QTY] = {NULL};
+modbus_coil_disin_t *Master_Discrete_Inputs[DISCRET_INPUT_QTY] = {NULL};
 
-modbus_coil_t get_coil_state(modbus_coil_t **coils_tab_ptr,modbus_adr_t coil_adr)
+modbus_coil_disin_t get_coil_state(modbus_coil_disin_t **coils_tab_ptr,modbus_adr_t coil_adr)
 {
     if(NULL != (coils_tab_ptr[coil_adr]))
     {
@@ -29,7 +29,7 @@ modbus_coil_t get_coil_state(modbus_coil_t **coils_tab_ptr,modbus_adr_t coil_adr
     else return 0;
 }
 
-modbus_ret_t set_coil_state(modbus_coil_t **coils_tab_ptr,modbus_adr_t coil_adr, modbus_coil_t coil_state)
+modbus_ret_t set_coil_state(modbus_coil_disin_t **coils_tab_ptr,modbus_adr_t coil_adr, modbus_coil_disin_t coil_state)
 {
     if(NULL != (coils_tab_ptr[coil_adr]))
     {
@@ -39,7 +39,7 @@ modbus_ret_t set_coil_state(modbus_coil_t **coils_tab_ptr,modbus_adr_t coil_adr,
     else return RET_ERROR;
 }
 
-modbus_disin_t get_discrete_input_state(modbus_disin_t **disin_tab_ptr,modbus_adr_t din_adr)
+modbus_coil_disin_t get_discrete_input_state(modbus_coil_disin_t **disin_tab_ptr,modbus_adr_t din_adr)
 {
     if(NULL != (disin_tab_ptr[din_adr]))
     {

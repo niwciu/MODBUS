@@ -21,7 +21,7 @@ TEST_TEAR_DOWN(Modbus_Data)
 // Slave_Coils Data tests
 TEST(Modbus_Data, RegisterCoilData)
 {
-    modbus_coil_t app_coil_data = 1;
+    modbus_coil_disin_t app_coil_data = 1;
     modbus_adr_t coil_adr = 0x0001;
     register_app_data_to_slave_coils_table(coil_adr, &app_coil_data);
 
@@ -30,7 +30,7 @@ TEST(Modbus_Data, RegisterCoilData)
 
 TEST(Modbus_Data, ReadRegisteredCoil)
 {
-    modbus_coil_t app_coil_data = 1;
+    modbus_coil_disin_t app_coil_data = 1;
     modbus_adr_t coil_adr = 0x0001;
     register_app_data_to_slave_coils_table(coil_adr, &app_coil_data);
 
@@ -45,7 +45,7 @@ TEST(Modbus_Data, ReadUnregisteredCoil)
 
 TEST(Modbus_Data, WriteRegisteredCoil)
 {
-    modbus_coil_t app_coil_data = 1;
+    modbus_coil_disin_t app_coil_data = 1;
     modbus_adr_t coil_adr = 0x0001;
     modbus_ret_t status;
     
@@ -60,7 +60,7 @@ TEST(Modbus_Data, WriteRegisteredCoil)
 TEST(Modbus_Data, WriteUnregisteredCoil)
 {
     modbus_adr_t coil_adr = 0x0001;
-    modbus_coil_t app_coil_data = 1;
+    modbus_coil_disin_t app_coil_data = 1;
     mock_set_all_slave_cails_to_off();
     TEST_ASSERT_EQUAL(0, mock_slave_coil[coil_adr]);
     TEST_ASSERT_EQUAL(RET_ERROR,set_coil_state(Slave_Coils ,coil_adr,app_coil_data));
@@ -70,7 +70,7 @@ TEST(Modbus_Data, WriteUnregisteredCoil)
 // Discrete Inputs Data tests
 TEST(Modbus_Data, RegisterDiscreteInputData)
 {
-    modbus_coil_t app_din_data = 1;
+    modbus_coil_disin_t app_din_data = 1;
     modbus_adr_t din_adr = 0x0001;
     register_app_data_to_slave_discrete_inputs_table(din_adr, &app_din_data);
 
@@ -79,7 +79,7 @@ TEST(Modbus_Data, RegisterDiscreteInputData)
 
 TEST(Modbus_Data, ReadRegisteredDiscreteInput)
 {
-    modbus_coil_t app_din_data = 1;
+    modbus_coil_disin_t app_din_data = 1;
     modbus_adr_t din_adr = 0x0001;
     register_app_data_to_slave_discrete_inputs_table(din_adr, &app_din_data);
 

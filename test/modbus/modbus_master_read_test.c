@@ -54,7 +54,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 {
     modbus_adr_t coil_adr=0x0001;
     modbus_data_qty_t coils_qty=4;
-    modbus_coil_t expected_master_coil_value[MODBUS_MAX_COILS_QTY]={0};
+    modbus_coil_disin_t expected_master_coil_value[MODBUS_MAX_COILS_QTY]={0};
 
     mock_set_expected_slave_coils_alternately(coil_adr,coils_qty,!!COIL_ON);
 
@@ -81,5 +81,22 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadD
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(mock_slave_dis_in,mock_master_dis_in,disin_adr+disin_qty);
 }
+
+// TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadDiscreteInputsRespThenMasterDiscreteInputstayUnchanged)
+// {
+//     modbus_adr_t disin_adr=0x0001;
+//     modbus_data_qty_t disin_qty=4;
+//     modbus_coil_disin_t expected_master_din_value[MODBUS_MAX_COILS_QTY]={0};
+
+//     mock_set_expected_slave_disc_in_alternately(disin_adr,disin_qty);
+
+//     modbus_master_read_discrete_inputs_req(req_msg,disin_adr,disin_qty);
+//     modbus_slave_read_discrete_inputs(resp_msg,req_msg);
+
+//     resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+//     modbus_master_read_discrete_inputs_resp(resp_msg,req_msg);
+
+//     TEST_ASSERT_EQUAL_UINT8_ARRAY(expected_master_din_value,mock_master_dis_in,disin_adr+disin_qty);
+// }
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
