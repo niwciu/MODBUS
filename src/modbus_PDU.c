@@ -199,7 +199,26 @@ void modbus_master_read_coils_resp(uint8_t *resp_buf, const uint8_t *req_buf)
     }
 }
 
-
+void modbus_master_read_discrete_inputs_resp(uint8_t *resp_buf, const uint8_t *req_buf)
+{
+    modbus_data_qty_t disin_qty= read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
+    modbus_adr_t disin_start_adr= read_u16_from_buf(req_buf+MODBUS_REQUEST_ADR_IDX);
+    if(resp_buf[MODBUS_FUNCTION_CODE_IDX]==MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE)
+    {
+        for(modbus_data_qty_t i=0; i<disin_qty; i++)
+        {
+            if(0 != (resp_buf[MODBUS_RESP_READ_DATA_IDX+(i/8)]& (1<<(i%8))))
+            {
+                set_coil_state(Master_Discrete_Inputs,(disin_start_adr+i),1);
+            }
+            else
+            {
+                set_coil_state(Master_Discrete_Inputs,(disin_start_adr+i),0);
+            }
+            
+        }
+    }
+}
 
 // Slave API functions
 
