@@ -151,7 +151,7 @@ TEST(Modbus_Data, WriteRegisteredHoldingRegister)
     modbus_ret_t status;
     mock_reset_all_slave_hreg_value();
     mock_register_slave_holding_registers_data();
-    status = set_holding_register_value(Slave_Holding_Registers,hreg_adr, hreg_val);
+    status = set_register_value(Slave_Holding_Registers,hreg_adr, hreg_val);
 
     TEST_ASSERT_EQUAL_HEX16(hreg_val,mock_slave_hreg[hreg_adr]);
     TEST_ASSERT_EQUAL(RET_OK, status);
@@ -163,7 +163,7 @@ TEST(Modbus_Data, WriteUnregisteredHoldingRegister)
     modbus_adr_t hreg_adr = 0x0001;
     modbus_reg_t hreg_val = 0x5a5a;
 
-    TEST_ASSERT_EQUAL(RET_ERROR, set_holding_register_value(Slave_Holding_Registers,hreg_adr, hreg_val));
+    TEST_ASSERT_EQUAL(RET_ERROR, set_register_value(Slave_Holding_Registers,hreg_adr, hreg_val));
 }
 
 //

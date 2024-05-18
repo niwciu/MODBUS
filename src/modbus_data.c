@@ -67,7 +67,7 @@ modbus_reg_t get_holding_register_value (modbus_reg_t **hreg_tab_ptr,modbus_adr_
     else return 0;
 }
 
-modbus_ret_t set_holding_register_value(modbus_reg_t **hreg_tab_ptr,modbus_adr_t holding_reg_adr, modbus_ret_t hreg_val)
+modbus_ret_t set_register_value(modbus_reg_t **hreg_tab_ptr,modbus_adr_t holding_reg_adr, modbus_reg_t hreg_val)
 {
     if(NULL != (hreg_tab_ptr[holding_reg_adr]))
     {

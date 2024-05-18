@@ -26,6 +26,7 @@ extern "C"
     void mock_set_all_slave_cails_to_off(void);
     void mock_set_all_slave_din_to_off(void);
     void mock_reset_all_slave_hreg_value(void);
+    void mock_reset_all_slave_inreg_value(void);
     void mock_set_expected_slave_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_coil_disin_t start_val);
     void mock_set_expected_slave_disc_in_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty);
     void mock_set_expected_slave_hreg_alternately (modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_reg_t init_val);

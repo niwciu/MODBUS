@@ -43,6 +43,14 @@ void mock_reset_all_slave_hreg_value(void)
     }
 }
 
+void mock_reset_all_slave_inreg_value(void)
+{
+    for (modbus_adr_t i = 0; i < INPUT_REG_QTY; i++)
+    {
+        mock_slave_inreg[i] = 0;
+    }   
+}
+
 void mock_set_expected_slave_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_coil_disin_t start_val)
 {
     modbus_coil_disin_t current_state = start_val;

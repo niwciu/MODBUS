@@ -26,8 +26,12 @@ TEST_SETUP(Modbus_Master_Read)
 
     mock_set_all_master_cails_to_off();
     mock_set_all_master_din_to_off();
+    mock_reset_all_master_hreg_value();
+
     mock_set_all_slave_cails_to_off();
     mock_set_all_slave_din_to_off();
+    mock_reset_all_slave_inreg_value();
+    mock_reset_all_slave_hreg_value();
 }
 
 TEST_TEAR_DOWN(Modbus_Master_Read)
@@ -109,9 +113,9 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadI
     modbus_master_read_input_reg_req(req_msg,in_reg_adr,in_reg_qty);
     modbus_slave_read_input_reg(resp_msg,req_msg);
 
-    // modbus_master_read_input_reg_resp(resp_msg,req_msg);
+    modbus_master_read_input_reg_resp(resp_msg,req_msg);
 
-    TEST_ASSERT_EQUAL_UINT8_ARRAY(mock_slave_inreg,mock_master_inreg,in_reg_adr+in_reg_qty);
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_inreg,mock_master_inreg,in_reg_adr+in_reg_qty);
 }
 // 
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 

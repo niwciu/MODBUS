@@ -215,6 +215,23 @@ void modbus_master_read_discrete_inputs_resp(modbus_buf_t *resp_buf, const modbu
     }
 }
 
+void modbus_master_read_input_reg_resp (modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+{
+    modbus_data_qty_t inreg_qty= read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
+    // modbus_byte_count_t slave_resp_byte_cnt=resp_buf[MODBUS_RESP_READ_BYTE_CNT_IDX];
+    modbus_adr_t inreg_start_adr= read_u16_from_buf(req_buf+MODBUS_REQUEST_ADR_IDX);
+    //ToDo check resp byte cnt is equal to requested hreg
+    if(resp_buf[MODBUS_FUNCTION_CODE_IDX]==MODBUS_READ_INPUT_REGISTERS_FUNC_CODE)
+    {
+        for (modbus_data_qty_t i=0; i<inreg_qty; i++) 
+        {
+            modbus_data_t inreg_data=read_u16_from_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX+(i*2)]);
+            set_register_value(Master_Input_Registers, inreg_start_adr+i,inreg_data);
+        } 
+    }
+
+}
+
 // Slave API functions
 
 void register_app_data_to_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
@@ -334,7 +351,7 @@ modbus_ret_t modbus_slave_write_single_reg(modbus_buf_t *resp_buf, const modbus_
     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
     modbus_reg_t reg_val_to_save = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
 
-    set_holding_register_value(Slave_Holding_Registers, adr,reg_val_to_save);
+    set_register_value(Slave_Holding_Registers, adr,reg_val_to_save);
 
     resp_buf[MODBUS_FUNCTION_CODE_IDX]=MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE;
     write_u16_to_buf(&resp_buf[MODBUS_RESP_WRITE_ADR_IDX],adr);
@@ -349,7 +366,7 @@ modbus_ret_t modbus_slave_write_multiple_reg(modbus_buf_t *resp_buf, const modbu
 
     for (modbus_data_qty_t i=0; i<hreg_qty; i++) 
     {
-        set_holding_register_value(Slave_Holding_Registers, adr+i,read_u16_from_buf(&req_buf[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX+(i*2)]));
+        set_register_value(Slave_Holding_Registers, adr+i,read_u16_from_buf(&req_buf[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX+(i*2)]));
     }
     
     resp_buf[MODBUS_FUNCTION_CODE_IDX]=MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
