@@ -164,6 +164,20 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
     TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_inreg_val,mock_master_inreg,in_reg_adr+in_reg_qty);
 }
 
+TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadInputRegistersThenMasterReadInputRegistersReturnErroFuncCode)
+{
+    modbus_adr_t in_reg_adr=0x0001;
+    modbus_data_qty_t in_reg_qty=4;
+
+    mock_set_expected_slave_input_reg_alternately(in_reg_adr,in_reg_qty,0x5A5A);
+
+    modbus_master_read_input_reg_req(req_msg,in_reg_adr,in_reg_qty);
+    modbus_slave_read_input_reg(resp_msg,req_msg);
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    modbus_master_read_input_reg_resp(resp_msg,req_msg);
+
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_coils_resp(resp_msg,req_msg));
+}
 // 
 TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInputRegistersAndByteCountIsTwoTimesBiggerThanRequestedInputRegistersTorReadThenMasterInputRegistersStayUnchanged)
 {
