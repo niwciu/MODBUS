@@ -130,7 +130,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
 
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_coils_resp(resp_msg,req_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_discrete_inputs_resp(resp_msg,req_msg));
 }
 
 TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInputRegistersThenMasterInputRegistersUpdateToInputRegistersValue)
@@ -174,9 +174,8 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
     modbus_master_read_input_reg_req(req_msg,in_reg_adr,in_reg_qty);
     modbus_slave_read_input_reg(resp_msg,req_msg);
     resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
-    modbus_master_read_input_reg_resp(resp_msg,req_msg);
-
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_coils_resp(resp_msg,req_msg));
+    
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_input_reg_resp(resp_msg,req_msg));
 }
  
 TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInputRegistersAndByteCountIsIncorrectThenMasterInputRegistersStayUnchanged)
@@ -205,9 +204,8 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadI
     modbus_master_read_input_reg_req(req_msg,in_reg_adr,in_reg_qty);
     modbus_slave_read_input_reg(resp_msg,req_msg);
     resp_msg[MODBUS_RESP_READ_BYTE_CNT_IDX]=7;
-    modbus_master_read_input_reg_resp(resp_msg,req_msg);
 
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT,modbus_master_read_coils_resp(resp_msg,req_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT,modbus_master_read_input_reg_resp(resp_msg,req_msg));
 }
 // 
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
