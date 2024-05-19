@@ -26,6 +26,7 @@ TEST_SETUP(Modbus_Master_Read)
 
     mock_set_all_master_cails_to_off();
     mock_set_all_master_din_to_off();
+    mock_reset_all_master_inreg_value();
     mock_reset_all_master_hreg_value();
 
     mock_set_all_slave_cails_to_off();
@@ -116,6 +117,22 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadI
     modbus_master_read_input_reg_resp(resp_msg,req_msg);
 
     TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_inreg,mock_master_inreg,in_reg_adr+in_reg_qty);
+}
+
+TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadInputRegistersThenMasterInputRegistersStayUnchanged)
+{
+    modbus_adr_t in_reg_adr=0x0001;
+    modbus_data_qty_t in_reg_qty=4;
+    modbus_buf_t expected_inreg_val[INPUT_REG_QTY]={0};
+
+    mock_set_expected_slave_input_reg_alternately(in_reg_adr,in_reg_qty,0x5A5A);
+
+    modbus_master_read_input_reg_req(req_msg,in_reg_adr,in_reg_qty);
+    modbus_slave_read_input_reg(resp_msg,req_msg);
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    modbus_master_read_input_reg_resp(resp_msg,req_msg);
+
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_inreg_val,mock_master_inreg,in_reg_adr+in_reg_qty);
 }
 // 
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
