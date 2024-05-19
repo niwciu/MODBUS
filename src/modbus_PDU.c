@@ -218,15 +218,19 @@ void modbus_master_read_discrete_inputs_resp(modbus_buf_t *resp_buf, const modbu
 void modbus_master_read_input_reg_resp (modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
     modbus_data_qty_t inreg_qty= read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
-    // modbus_byte_count_t slave_resp_byte_cnt=resp_buf[MODBUS_RESP_READ_BYTE_CNT_IDX];
+    modbus_byte_count_t slave_resp_byte_cnt=resp_buf[MODBUS_RESP_READ_BYTE_CNT_IDX];
     modbus_adr_t inreg_start_adr= read_u16_from_buf(req_buf+MODBUS_REQUEST_ADR_IDX);
-    //ToDo check resp byte cnt is equal to requested hreg
+    modbus_data_qty_t requested_inreg_qty=read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
+
     if(resp_buf[MODBUS_FUNCTION_CODE_IDX]==MODBUS_READ_INPUT_REGISTERS_FUNC_CODE)
     {
-        for (modbus_data_qty_t i=0; i<inreg_qty; i++) 
+        if(slave_resp_byte_cnt==(requested_inreg_qty*2))
         {
-            modbus_data_t inreg_data=read_u16_from_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX+(i*2)]);
-            set_register_value(Master_Input_Registers, inreg_start_adr+i,inreg_data);
+            for (modbus_data_qty_t i=0; i<inreg_qty; i++) 
+            {
+                modbus_data_t inreg_data=read_u16_from_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX+(i*2)]);
+                set_register_value(Master_Input_Registers, inreg_start_adr+i,inreg_data);
+            }
         } 
     }
 
