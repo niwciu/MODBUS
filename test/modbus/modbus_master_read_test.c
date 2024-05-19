@@ -85,7 +85,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_coils_resp(resp_msg,req_msg));
 }
-// 
+
 TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadDiscreteInputsRespThenMasterDisInUpdateToDisInValue)
 {
     modbus_adr_t disin_adr=0x0001;
@@ -116,6 +116,21 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
     modbus_master_read_discrete_inputs_resp(resp_msg,req_msg);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(expected_master_din_value,mock_master_dis_in,disin_adr+disin_qty);
+}
+
+TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadDiscreteInputsRespThenMasterReadDiscreteInputsReturnErroFuncCode)
+{
+    modbus_adr_t disin_adr=0x0001;
+    modbus_data_qty_t disin_qty=4;
+
+    mock_set_expected_slave_disc_in_alternately(disin_adr,disin_qty);
+
+    modbus_master_read_discrete_inputs_req(req_msg,disin_adr,disin_qty);
+    modbus_slave_read_discrete_inputs(resp_msg,req_msg);
+
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_coils_resp(resp_msg,req_msg));
 }
 
 TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInputRegistersThenMasterInputRegistersUpdateToInputRegistersValue)
@@ -149,6 +164,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
     TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_inreg_val,mock_master_inreg,in_reg_adr+in_reg_qty);
 }
 
+// 
 TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInputRegistersAndByteCountIsTwoTimesBiggerThanRequestedInputRegistersTorReadThenMasterInputRegistersStayUnchanged)
 {
     modbus_adr_t in_reg_adr=0x0001;
