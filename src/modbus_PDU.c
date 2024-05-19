@@ -195,32 +195,47 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_buf_t *send_buf, modb
     }
 }
 
-void modbus_master_read_coils_resp(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+modbus_ret_t modbus_master_read_coils_resp(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
     modbus_data_qty_t coil_qty= read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
     modbus_adr_t coil_start_adr= read_u16_from_buf(req_buf+MODBUS_REQUEST_ADR_IDX);
+    modbus_reg_t status;
     if(resp_buf[MODBUS_FUNCTION_CODE_IDX]==MODBUS_READ_COILS_FUNC_CODE)
     {
         set_coil_din_value_from_modbus_msg(&resp_buf[MODBUS_RESP_READ_DATA_IDX],coil_start_adr, coil_qty,Master_Coils);
+        status = RET_OK;
     }
+    else
+    {
+        status = RET_ERROR_FUN_CODE;
+    }
+    return status;
 }
 
-void modbus_master_read_discrete_inputs_resp(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+modbus_ret_t modbus_master_read_discrete_inputs_resp(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
     modbus_data_qty_t disin_qty= read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
     modbus_adr_t disin_start_adr= read_u16_from_buf(req_buf+MODBUS_REQUEST_ADR_IDX);
+    modbus_reg_t status;
     if(resp_buf[MODBUS_FUNCTION_CODE_IDX]==MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE)
     {
         set_coil_din_value_from_modbus_msg(&resp_buf[MODBUS_RESP_READ_DATA_IDX],disin_start_adr, disin_qty,Master_Discrete_Inputs);
+        status = RET_OK;
     }
+    else
+    {
+        status = RET_ERROR_FUN_CODE;
+    }
+    return status;
 }
 
-void modbus_master_read_input_reg_resp (modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+modbus_ret_t modbus_master_read_input_reg_resp (modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
     modbus_data_qty_t inreg_qty= read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
     modbus_byte_count_t slave_resp_byte_cnt=resp_buf[MODBUS_RESP_READ_BYTE_CNT_IDX];
     modbus_adr_t inreg_start_adr= read_u16_from_buf(req_buf+MODBUS_REQUEST_ADR_IDX);
     modbus_data_qty_t requested_inreg_qty=read_u16_from_buf(req_buf+MODBUS_REQUEST_LEN_IDX);
+    modbus_reg_t status;
 
     if(resp_buf[MODBUS_FUNCTION_CODE_IDX]==MODBUS_READ_INPUT_REGISTERS_FUNC_CODE)
     {
@@ -231,9 +246,18 @@ void modbus_master_read_input_reg_resp (modbus_buf_t *resp_buf, const modbus_buf
                 modbus_data_t inreg_data=read_u16_from_buf(&resp_buf[MODBUS_RESP_READ_DATA_IDX+(i*2)]);
                 set_register_value(Master_Input_Registers, inreg_start_adr+i,inreg_data);
             }
+            status= RET_OK;
         } 
+        else
+        {
+            status= RET_ERROR_BYTE_CNT;
+        }
     }
-
+    else
+    {
+        status= RET_ERROR_FUN_CODE;
+    }
+    return status;
 }
 
 // Slave API functions
