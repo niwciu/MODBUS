@@ -283,4 +283,4 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadH
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT,modbus_master_read_holding_reg_resp(resp_msg,req_msg));
 }
 // 
-// testy na zerową ilość rejestrów coili do odczytu zapisu. 
+// 
