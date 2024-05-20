@@ -260,6 +260,10 @@ modbus_ret_t modbus_master_read_input_reg_resp (modbus_buf_t *resp_buf, const mo
     return status;
 }
 
+modbus_ret_t modbus_master_read_holding_reg_resp (modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+{
+    
+}
 // Slave API functions
 
 void register_app_data_to_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
@@ -315,7 +319,7 @@ modbus_ret_t modbus_slave_read_discrete_inputs(modbus_buf_t *resp_buf, const mod
     return MODBUS_READ_RESP_LEN+byte_cnt;
 }
 
-modbus_ret_t modbus_slave_read_holdin_reg(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+modbus_ret_t modbus_slave_read_holding_reg(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
     modbus_adr_t adr = read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]);
     modbus_data_qty_t reg_qty = read_u16_from_buf(&req_buf[MODBUS_REQUEST_LEN_IDX]);
