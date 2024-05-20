@@ -339,11 +339,17 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_ADR,modbus_master_write_single_reg_resp(resp_msg,req_msg));
 }
 
-// TEST(Modbus_Master_Read, )
-// {
+TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWriteSingleRegisterThenMasterWriteSingleRegisterReturnErrorFuncCode)
+{
+    modbus_adr_t reg_adr =0x0005;
+    modbus_reg_t reg_val= 0x1234;
+    modbus_master_write_single_reg_req(req_msg,reg_adr,reg_val);
+    modbus_slave_write_single_reg(resp_msg,req_msg);
     
-// TEST_FAIL_MESSAGE("ADDED NEW TEST!!!");
-// }
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
+
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_single_reg_resp(resp_msg,req_msg));
+}
 
 // TEST(Modbus_Master_Read, )
 // {
