@@ -2,6 +2,7 @@
 #include "modbus_PDU.h"
 #include "mock_master_app_data.h"
 #include "mock_slave_app_data.h"
+#include "buf_rw.h"
 
 
 uint8_t req_msg[MODBUS_RTU_BUFFER_SIZE] = {0};
@@ -65,7 +66,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_coils_req(req_msg,coil_adr,coils_qty);
     modbus_slave_read_coils(resp_msg,req_msg);
-    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
 
     modbus_master_read_coils_resp(resp_msg,req_msg);
 
@@ -81,7 +82,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_coils_req(req_msg,coil_adr,coils_qty);
     modbus_slave_read_coils(resp_msg,req_msg);
-    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_coils_resp(resp_msg,req_msg));
 }
@@ -112,7 +113,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
     modbus_master_read_discrete_inputs_req(req_msg,disin_adr,disin_qty);
     modbus_slave_read_discrete_inputs(resp_msg,req_msg);
 
-    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
     modbus_master_read_discrete_inputs_resp(resp_msg,req_msg);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(expected_master_din_value,mock_master_dis_in,disin_adr+disin_qty);
@@ -128,7 +129,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
     modbus_master_read_discrete_inputs_req(req_msg,disin_adr,disin_qty);
     modbus_slave_read_discrete_inputs(resp_msg,req_msg);
 
-    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_discrete_inputs_resp(resp_msg,req_msg));
 }
@@ -158,7 +159,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_input_reg_req(req_msg,in_reg_adr,in_reg_qty);
     modbus_slave_read_input_reg(resp_msg,req_msg);
-    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
     modbus_master_read_input_reg_resp(resp_msg,req_msg);
 
     TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_inreg_val,mock_master_inreg,in_reg_adr+in_reg_qty);
@@ -173,7 +174,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_input_reg_req(req_msg,in_reg_adr,in_reg_qty);
     modbus_slave_read_input_reg(resp_msg,req_msg);
-    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
     
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_input_reg_resp(resp_msg,req_msg));
 }
@@ -233,7 +234,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_holding_reg_req(req_msg,hreg_adr,hreg_qty);
     modbus_slave_read_holding_reg(resp_msg,req_msg);
-    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
     modbus_master_read_holding_reg_resp(resp_msg,req_msg);
 
     TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_hreg_val,mock_master_hreg,hreg_adr+hreg_qty);
@@ -248,7 +249,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_holding_reg_req(req_msg,hreg_adr,hreg_qty);
     modbus_slave_read_holding_reg(resp_msg,req_msg);
-    resp_msg[MODBUS_FUNCTION_CODE_IDX]=0x95;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
     
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_read_holding_reg_resp(resp_msg,req_msg));
 }
@@ -301,7 +302,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeAndWrongOutputA
     modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
     modbus_slave_write_single_coil(resp_msg,req_msg);
 
-    resp_msg[MODBUS_RESP_WRITE_ADR_IDX] = coil_adr+1;
+    write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX],coil_adr+1);
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_ADR,modbus_master_write_single_coil_resp(resp_msg,req_msg));
 }
 
@@ -312,7 +313,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWrit
     modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
     modbus_slave_write_single_coil(resp_msg,req_msg);
 
-    resp_msg[MODBUS_FUNCTION_CODE_IDX] = resp_msg[MODBUS_FUNCTION_CODE_IDX]+1;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_single_coil_resp(resp_msg,req_msg));
 
 }
@@ -335,7 +336,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
     modbus_master_write_single_reg_req(req_msg,reg_adr,reg_val);
     modbus_slave_write_single_reg(resp_msg,req_msg);
 
-    resp_msg[MODBUS_RESP_WRITE_ADR_IDX] = reg_adr+1;
+    write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX],reg_adr+1);
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_ADR,modbus_master_write_single_reg_resp(resp_msg,req_msg));
 }
 
@@ -346,15 +347,21 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWrit
     modbus_master_write_single_reg_req(req_msg,reg_adr,reg_val);
     modbus_slave_write_single_reg(resp_msg,req_msg);
     
-    resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++; // its 2 byte data so im incrementing LSB
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_single_reg_resp(resp_msg,req_msg));
 }
 
-// TEST(Modbus_Master_Read, )
-// {
+TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeAndCorrectOutputAdrAndIncorrectRegValueWhenMasterWriteSignleRegThenMasterWriteSingleRegRetValueError)
+{
+    modbus_adr_t reg_adr =0x0005;
+    modbus_reg_t reg_val= 0x1234;
+    modbus_master_write_single_reg_req(req_msg,reg_adr,reg_val);
+    modbus_slave_write_single_reg(resp_msg,req_msg);
+
+    write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_SINGLE_DATA_IDX],reg_val+1);
     
-// TEST_FAIL_MESSAGE("ADDED NEW TEST!!!");
-// }
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_VAL,modbus_master_write_single_reg_resp(resp_msg,req_msg));
+}
 // 
 // 
