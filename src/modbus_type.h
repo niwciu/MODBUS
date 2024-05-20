@@ -76,6 +76,7 @@ extern "C"
 
     typedef enum
     {
+        RET_ERROR_WRITE_SINGLE_OUT_ADR = -7,
         RET_ERROR_DATA_TAB_NULL_PTR = -6,
         RET_ERROR_FUN_CODE= -5,
         RET_ERROR_BYTE_CNT= -4,

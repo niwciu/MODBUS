@@ -290,9 +290,8 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
     modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
     modbus_slave_write_single_coil(resp_msg,req_msg);
 
-    modbus_master_write_single_coil_resp(resp_msg,req_msg);
+    TEST_ASSERT_EQUAL_INT16(RET_OK,modbus_master_write_single_coil_resp(resp_msg,req_msg));
 
-    TEST_FAIL_MESSAGE("TEST MESSAGE");
 }
 // TEST(Modbus_Master_Read, )
 // {

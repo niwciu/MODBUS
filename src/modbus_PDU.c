@@ -289,7 +289,10 @@ modbus_ret_t modbus_master_read_holding_reg_resp(const modbus_buf_t *resp_buf, c
 
 modbus_ret_t modbus_master_write_single_coil_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
-    
+    if(resp_buf[MODBUS_RESP_WRITE_ADR_IDX] == req_buf[MODBUS_REQUEST_ADR_IDX])
+        return RET_OK;
+    else
+        return RET_ERROR_WRITE_SINGLE_OUT_ADR;
 }
 
 
