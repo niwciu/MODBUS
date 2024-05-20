@@ -295,6 +295,17 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
 
 }
 
+TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeAndCorrectOutputAdrAndIncorrectcoilValueWhenMasterWriteSignleCoilThenMasterWriteSingleCoilRetValueError)
+{
+    modbus_adr_t coil_adr =0x0003;
+
+    modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
+    modbus_slave_write_single_coil(resp_msg,req_msg);
+
+    write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_SINGLE_DATA_IDX],!!COIL_OFF);
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_VAL,modbus_master_write_single_coil_resp(resp_msg,req_msg));
+}
+
 TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeAndWrongOutputAdressWhenMasterWriteSingleCoilRespThenMasterWriteSingleCoilReturnErrorOutputAddress)
 {
     modbus_adr_t coil_adr =0x0003;
@@ -317,7 +328,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWrit
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_single_coil_resp(resp_msg,req_msg));
 
 }
-// ToDo dorobić testy na zodność wartości zapisanej z wartością podaną w requeście
+// 
 
 TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWriteSingleRegisterRespAndAddresIsCorrectThenMasterWriteSingleRegisterRespRetOk)
 {
