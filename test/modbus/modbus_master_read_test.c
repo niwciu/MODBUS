@@ -283,7 +283,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadH
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT,modbus_master_read_holding_reg_resp(resp_msg,req_msg));
 }
 
-TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWriteSingleCoilRespThenOutputAddressInSlaveRespIsCorrect)
+TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWriteSingleCoilRespAndOutputAddressIsCorrectThenMasterWriteSingleCoilRespRetOk)
 {
     modbus_adr_t coil_adr =0x0003;
 
@@ -316,12 +316,17 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWrit
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_single_coil_resp(resp_msg,req_msg));
 
 }
+// ToDo dorobić testy na zodność wartości zapisanej z wartością podaną w requeście
 
-// TEST(Modbus_Master_Read, )
-// {
-    
-// TEST_FAIL_MESSAGE("ADDED NEW TEST!!!");
-// }
+TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWriteSingleRegisterRespAndAddresIsCorrectThenMasterWriteSingleRegisterRespRetOk)
+{
+    modbus_adr_t reg_adr =0x0005;
+    modbus_reg_t reg_val= 0x1234;
+    modbus_master_write_single_reg_req(req_msg,reg_adr,reg_val);
+    modbus_slave_write_single_reg(resp_msg,req_msg);
+
+    TEST_ASSERT_EQUAL_INT16(RET_OK,modbus_master_write_single_reg_resp(resp_msg,req_msg));
+}
 
 // TEST(Modbus_Master_Read, )
 // {

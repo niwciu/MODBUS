@@ -302,6 +302,11 @@ modbus_ret_t modbus_master_write_single_coil_resp(const modbus_buf_t *resp_buf, 
     return status;
 }
 
+modbus_ret_t modbus_master_write_single_reg_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+{
+    return RET_OK;
+}
+
 // Slave API functions
 
 void register_app_data_to_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
