@@ -30,15 +30,16 @@ extern "C"
 
     // modbus_frame osffsets parameters
     #define MODBUS_SLAVE_ADR_IDX                0    
-    #define MODBUS_PDU_BUF_OFFSET               MODBUS_SLAVE_ADR_BYTE_LEN
-    #define MODBUS_FUNCTION_CODE_IDX            MODBUS_PDU_BUF_OFFSET
-    #define MODBUS_REQUEST_ADR_IDX              (MODBUS_PDU_BUF_OFFSET + 1)
-    #define MODBUS_REQUEST_LEN_IDX              (MODBUS_PDU_BUF_OFFSET + 3)
-    #define MODBUS_REQUEST_BYTE_CNT_IDX         (MODBUS_PDU_BUF_OFFSET + 5)
-    #define MODBUS_REQUEST_WRITE_MULTI_DATA_IDX (MODBUS_PDU_BUF_OFFSET + 6)
+    #define MODBUS_PDU_BUF_OFFSET                   MODBUS_SLAVE_ADR_BYTE_LEN
+    #define MODBUS_FUNCTION_CODE_IDX                MODBUS_PDU_BUF_OFFSET
+    #define MODBUS_REQUEST_ADR_IDX                  (MODBUS_PDU_BUF_OFFSET + 1)
+    #define MODBUS_REQUEST_LEN_IDX                  (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX    (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_REQUEST_BYTE_CNT_IDX             (MODBUS_PDU_BUF_OFFSET + 5)
+    #define MODBUS_REQUEST_WRITE_MULTI_DATA_IDX     (MODBUS_PDU_BUF_OFFSET + 6)
 
-    #define MODBUS_RESP_READ_BYTE_CNT_IDX       (MODBUS_PDU_BUF_OFFSET + 1)
-    #define MODBUS_RESP_READ_DATA_IDX           (MODBUS_PDU_BUF_OFFSET + 2)
+    #define MODBUS_RESP_READ_BYTE_CNT_IDX           (MODBUS_PDU_BUF_OFFSET + 1)
+    #define MODBUS_RESP_READ_DATA_IDX               (MODBUS_PDU_BUF_OFFSET + 2)
     
     #define MODBUS_RESP_WRITE_ADR_IDX                   (MODBUS_PDU_BUF_OFFSET + 1)
     #define MODBUS_RESP_WRITE_SINGLE_DATA_IDX           (MODBUS_PDU_BUF_OFFSET + 3)
@@ -76,6 +77,7 @@ extern "C"
 
     typedef enum
     {
+        RET_ERROR_WRITE_SINGLE_OUT_VAL = -8,
         RET_ERROR_WRITE_SINGLE_OUT_ADR = -7,
         RET_ERROR_DATA_TAB_NULL_PTR = -6,
         RET_ERROR_FUN_CODE= -5,

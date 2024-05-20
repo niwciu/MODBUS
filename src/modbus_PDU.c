@@ -291,7 +291,8 @@ modbus_ret_t modbus_master_write_single_coil_resp(const modbus_buf_t *resp_buf, 
     modbus_ret_t status = RET_OK;
     if (resp_buf[MODBUS_FUNCTION_CODE_IDX] == req_buf[MODBUS_FUNCTION_CODE_IDX])
     {
-        if (resp_buf[MODBUS_RESP_WRITE_ADR_IDX] == req_buf[MODBUS_REQUEST_ADR_IDX])
+        
+        if (read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_ADR_IDX]) == read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]))
             status = RET_OK;
         else
             status = RET_ERROR_WRITE_SINGLE_OUT_ADR;
@@ -307,14 +308,23 @@ modbus_ret_t modbus_master_write_single_reg_resp(const  modbus_buf_t *resp_buf, 
     modbus_ret_t status = RET_OK;
     if (resp_buf[MODBUS_FUNCTION_CODE_IDX] == req_buf[MODBUS_FUNCTION_CODE_IDX])
     {
-        if (resp_buf[MODBUS_RESP_WRITE_ADR_IDX] == req_buf[MODBUS_REQUEST_ADR_IDX])
-            status = RET_OK;
+        if (read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_ADR_IDX]) == read_u16_from_buf(&req_buf[MODBUS_REQUEST_ADR_IDX]))
+        {
+            if (read_u16_from_buf(&resp_buf[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]) == read_u16_from_buf(&req_buf[MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX]))
+                status = RET_OK;
+            else
+                status = RET_ERROR_WRITE_SINGLE_OUT_VAL;
+        } 
         else
+        {
             status = RET_ERROR_WRITE_SINGLE_OUT_ADR;
+        }
+            
     }
     else
+    {
         status = RET_ERROR_FUN_CODE;
-
+    }
     return status;
 }
 
