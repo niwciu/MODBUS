@@ -22,11 +22,15 @@ extern "C"
     #define MODBUS_PDU_MAX_LEN 253U
 
     // max and min allowed values taken from Modbus standard documentation
-    #define MODBUS_MAX_DISCRETE_INPUTS_QTY  0x7D0U
-    #define MODBUS_MAX_COILS_QTY            MODBUS_MAX_DISCRETE_INPUTS_QTY
-    #define MODBUS_MAX_REG_QTY              0x7BU
-    #define MODBUS_MIN_REG_COIL_QTY         1U
-    #define MODBUS_SLAVE_ADR_BYTE_LEN       1
+    #define MODBUS_MAX_SPECIFIC_DATA_ITEMS_QTY  65535U 
+
+    #define MODBUS_MAX_READ_DISCRETE_INPUTS_QTY 0x7D0U
+    #define MODBUS_MAX_READ_COILS_QTY           0x7D0U
+    #define MODBUS_MAX_WRITE_COILS_QTY          0x7B0U
+    #define MODBUS_MAX_READ_REG_QTY             0x7DU
+    #define MODBUS_MAX_WRITE_REG_QTY            0x7BU
+    #define MODBUS_MIN_REG_COIL_QTY             1U
+    #define MODBUS_SLAVE_ADR_BYTE_LEN           1
 
     // modbus_frame osffsets parameters
     #define MODBUS_SLAVE_ADR_IDX                0    
@@ -94,7 +98,7 @@ extern "C"
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
-    typedef uint8_t modbus_coil_reg_t;
+    typedef bool modbus_coil_reg_t;
     typedef uint8_t modbus_buf_t;
     typedef uint8_t modbus_buf_size_t;
     typedef uint8_t modbus_device_ID_t;

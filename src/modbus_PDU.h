@@ -31,10 +31,10 @@ extern "C"
     modbus_ret_t modbus_master_read_discrete_inputs_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t discrete_input_qty);
     modbus_ret_t modbus_master_read_coils_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 
-    modbus_ret_t modbus_master_write_single_reg_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_reg_t val);
-    modbus_ret_t modbus_master_write_single_coil_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_w_coil_t coil_state);
-    modbus_ret_t modbus_master_write_multiple_reg_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty, const modbus_reg_t *data_buf);
-    modbus_ret_t modbus_master_write_multiple_coils_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty ,const modbus_coil_reg_t *data_buf);
+    modbus_ret_t modbus_master_write_single_reg_req(modbus_buf_t *send_buf, modbus_adr_t adr);
+    modbus_ret_t modbus_master_write_single_coil_req(modbus_buf_t *send_buf, modbus_adr_t adr);
+    modbus_ret_t modbus_master_write_multiple_reg_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty);
+    modbus_ret_t modbus_master_write_multiple_coils_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 
     modbus_ret_t modbus_master_read_coils_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);
     modbus_ret_t modbus_master_read_discrete_inputs_resp(const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);

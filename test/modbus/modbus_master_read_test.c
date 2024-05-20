@@ -60,7 +60,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 {
     modbus_adr_t coil_adr=0x0001;
     modbus_data_qty_t coils_qty=4;
-    modbus_coil_disin_t expected_master_coil_value[MODBUS_MAX_COILS_QTY]={0};
+    modbus_coil_disin_t expected_master_coil_value[MODBUS_MAX_READ_COILS_QTY]={0};
 
     mock_set_expected_slave_coils_alternately(coil_adr,coils_qty,!!COIL_ON);
 
@@ -106,7 +106,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 {
     modbus_adr_t disin_adr=0x0001;
     modbus_data_qty_t disin_qty=4;
-    modbus_coil_disin_t expected_master_din_value[MODBUS_MAX_COILS_QTY]={0};
+    modbus_coil_disin_t expected_master_din_value[MODBUS_MAX_READ_COILS_QTY]={0};
 
     mock_set_expected_slave_disc_in_alternately(disin_adr,disin_qty);
 
@@ -288,7 +288,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
 {
     modbus_adr_t coil_adr =0x0003;
 
-    modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
+    modbus_master_write_single_coil_req(req_msg,coil_adr);
     modbus_slave_write_single_coil(resp_msg,req_msg);
 
     TEST_ASSERT_EQUAL_INT16(RET_OK,modbus_master_write_single_coil_resp(resp_msg,req_msg));
@@ -299,7 +299,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeAndWrongOutputA
 {
     modbus_adr_t coil_adr =0x0003;
 
-    modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
+    modbus_master_write_single_coil_req(req_msg,coil_adr);
     modbus_slave_write_single_coil(resp_msg,req_msg);
 
     write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX],coil_adr+1);
@@ -310,7 +310,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWrit
 {
     modbus_adr_t coil_adr =0x0003;
 
-    modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
+    modbus_master_write_single_coil_req(req_msg,coil_adr);
     modbus_slave_write_single_coil(resp_msg,req_msg);
 
     resp_msg[MODBUS_FUNCTION_CODE_IDX]++;
@@ -322,7 +322,8 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeAndCorrectOutp
 {
     modbus_adr_t coil_adr =0x0003;
 
-    modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
+    mock_master_coil[coil_adr]= !!COIL_ON;
+    modbus_master_write_single_coil_req(req_msg,coil_adr);;
     modbus_slave_write_single_coil(resp_msg,req_msg);
 
     write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_SINGLE_DATA_IDX],!!COIL_OFF);
@@ -333,7 +334,9 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
 {
     modbus_adr_t reg_adr =0x0005;
     modbus_reg_t reg_val= 0x1234;
-    modbus_master_write_single_reg_req(req_msg,reg_adr,reg_val);
+    mock_master_hreg[reg_adr]= reg_val;
+
+    modbus_master_write_single_reg_req(req_msg,reg_adr);
     modbus_slave_write_single_reg(resp_msg,req_msg);
 
     TEST_ASSERT_EQUAL_INT16(RET_OK,modbus_master_write_single_reg_resp(resp_msg,req_msg));
@@ -343,7 +346,9 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
 {
     modbus_adr_t reg_adr =0x0005;
     modbus_reg_t reg_val= 0x1234;
-    modbus_master_write_single_reg_req(req_msg,reg_adr,reg_val);
+    mock_master_hreg[reg_adr]= reg_val;
+
+    modbus_master_write_single_reg_req(req_msg,reg_adr);
     modbus_slave_write_single_reg(resp_msg,req_msg);
 
     write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX],reg_adr+1);
@@ -354,7 +359,9 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWrit
 {
     modbus_adr_t reg_adr =0x0005;
     modbus_reg_t reg_val= 0x1234;
-    modbus_master_write_single_reg_req(req_msg,reg_adr,reg_val);
+    mock_master_hreg[reg_adr]= reg_val;
+
+    modbus_master_write_single_reg_req(req_msg,reg_adr);
     modbus_slave_write_single_reg(resp_msg,req_msg);
     
     resp_msg[MODBUS_FUNCTION_CODE_IDX]++; // its 2 byte data so im incrementing LSB
@@ -366,12 +373,65 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeAndCorrectOutp
 {
     modbus_adr_t reg_adr =0x0005;
     modbus_reg_t reg_val= 0x1234;
-    modbus_master_write_single_reg_req(req_msg,reg_adr,reg_val);
+    mock_master_hreg[reg_adr]= reg_val;
+    
+    modbus_master_write_single_reg_req(req_msg,reg_adr);
     modbus_slave_write_single_reg(resp_msg,req_msg);
 
     write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_SINGLE_DATA_IDX],reg_val+1);
     
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_VAL,modbus_master_write_single_reg_resp(resp_msg,req_msg));
 }
+TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiCoilsRespThenRetOk)
+{
+    // modbus_adr_t coil_start_adr = 0x0005;
+    // modbus_data_qty_t coil_qty =9;
+    // mock_set_expected_master_coils_alternately(coil_start_adr,coil_qty,!!COIL_ON);
+
+    // modbus_master_write_multiple_coils_req(req_msg,coil_start_adr,coil_qty,Master_Coils);
+    // modbus_slave_write_multiple_coils(resp_msg,req_msg);
+
+    // TEST_ASSERT_EQUAL_INT16(RET_OK,modbus_master_write_multi_coils_resp(resp_msg,req_msg));
+}
+
+// TEST(Modbus_Master_Read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+
+// TEST(Modbus_Master_Read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+
+// TEST(Modbus_Master_Read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+
+// TEST(Modbus_Master_Read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+
+// TEST(Modbus_Master_Read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+
+// TEST(Modbus_Master_Read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+
+// TEST(Modbus_Master_Read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+
+// TEST(Modbus_Master_Read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
 // 
 // 
