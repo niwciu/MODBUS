@@ -282,5 +282,41 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadH
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT,modbus_master_read_holding_reg_resp(resp_msg,req_msg));
 }
+
+TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWriteSingleCoilRespThenOutputAddressInSlaveRespIsCorrect)
+{
+    modbus_adr_t coil_adr =0x0003;
+
+    modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
+    modbus_slave_write_single_coil(resp_msg,req_msg);
+
+    modbus_master_write_single_coil_resp(resp_msg,req_msg);
+
+    TEST_FAIL_MESSAGE("TEST MESSAGE");
+}
+// TEST(Modbus_Master_Read, )
+// {
+    
+// }
+// TEST(Modbus_Master_Read, )
+// {
+    
+// }
+// TEST(Modbus_Master_Read, )
+// {
+    
+// }
+// TEST(Modbus_Master_Read, )
+// {
+    
+// }
+// TEST(Modbus_Master_Read, )
+// {
+    
+// }
+// TEST(Modbus_Master_Read, )
+// {
+    
+// }
 // 
 // 

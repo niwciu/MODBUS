@@ -40,6 +40,8 @@ extern "C"
     modbus_ret_t modbus_master_read_discrete_inputs_resp(const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);
     modbus_ret_t modbus_master_read_input_reg_resp (const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);
     modbus_ret_t modbus_master_read_holding_reg_resp (const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);
+
+    modbus_ret_t modbus_master_write_single_coil_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);
     
     // Slave Functionality
     void register_app_data_to_slave_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr);
