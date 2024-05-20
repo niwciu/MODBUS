@@ -293,29 +293,47 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
     TEST_ASSERT_EQUAL_INT16(RET_OK,modbus_master_write_single_coil_resp(resp_msg,req_msg));
 
 }
+
+TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeAndWrongOutputAdressWhenMasterWriteSingleCoilRespThenMasterWriteSingleCoilReturnErrorOutputAddress)
+{
+    modbus_adr_t coil_adr =0x0003;
+
+    modbus_master_write_single_coil_req(req_msg,coil_adr,COIL_ON);
+    modbus_slave_write_single_coil(resp_msg,req_msg);
+
+    resp_msg[MODBUS_RESP_WRITE_ADR_IDX] = coil_adr+1;
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_ADR,modbus_master_write_single_coil_resp(resp_msg,req_msg));
+
+}
+
 // TEST(Modbus_Master_Read, )
 // {
-    
+
+// TEST_FAIL_MESSAGE("ADDED NEW TEST!!!");
 // }
+
 // TEST(Modbus_Master_Read, )
 // {
     
+// TEST_FAIL_MESSAGE("ADDED NEW TEST!!!");
 // }
+
 // TEST(Modbus_Master_Read, )
 // {
     
+// TEST_FAIL_MESSAGE("ADDED NEW TEST!!!");
 // }
+
 // TEST(Modbus_Master_Read, )
 // {
     
+// TEST_FAIL_MESSAGE("ADDED NEW TEST!!!");
 // }
+
 // TEST(Modbus_Master_Read, )
 // {
     
-// }
-// TEST(Modbus_Master_Read, )
-// {
-    
+// TEST_FAIL_MESSAGE("ADDED NEW TEST!!!");
 // }
 // 
 // 
