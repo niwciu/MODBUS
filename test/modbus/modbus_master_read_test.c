@@ -269,18 +269,18 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadH
     TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_hreg_val,mock_master_hreg,hreg_adr+hreg_qty);
 }
 
-// TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInputRegistersAndByteCountIsIncorrectThenMasterReadInputRegistersReturnErrorByteCntCode)
-// {
-//     modbus_adr_t hreg_adr=0x0003;
-//     modbus_data_qty_t hreg_qty=7;
+TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadHoldingRegistersAndByteCountIsIncorrectThenMasterReadHoldingRegistersReturnErrorByteCntCode)
+{
+    modbus_adr_t hreg_adr=0x0003;
+    modbus_data_qty_t hreg_qty=7;
 
-//     mock_set_expected_slave_hreg_alternately(hreg_adr,hreg_qty,0x5A5A);
+    mock_set_expected_slave_hreg_alternately(hreg_adr,hreg_qty,0x5A5A);
 
-//     modbus_master_read_holding_reg_req(req_msg,hreg_adr,hreg_qty);
-//     modbus_slave_read_holding_reg(resp_msg,req_msg);
-//     resp_msg[MODBUS_RESP_READ_BYTE_CNT_IDX]=7;
+    modbus_master_read_holding_reg_req(req_msg,hreg_adr,hreg_qty);
+    modbus_slave_read_holding_reg(resp_msg,req_msg);
+    resp_msg[MODBUS_RESP_READ_BYTE_CNT_IDX]=9;
 
-//     TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT,modbus_master_read_holding_reg_resp(resp_msg,req_msg));
-// }
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT,modbus_master_read_holding_reg_resp(resp_msg,req_msg));
+}
 // 
 // testy na zerową ilość rejestrów coili do odczytu zapisu. 
