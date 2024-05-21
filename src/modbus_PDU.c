@@ -337,6 +337,16 @@ modbus_ret_t modbus_master_write_single_reg_resp(const  modbus_buf_t *resp_buf, 
     return check_slave_resp_vs_req(resp_buf,req_buf);
 }
 
+modbus_ret_t modbus_master_write_multiple_coils_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+{
+
+    return RET_OK;
+}
+// modbus_ret_t modbus_master_write_multiple_reg_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+// {
+
+// }
+
 // Slave API functions
 
 void register_app_data_to_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
