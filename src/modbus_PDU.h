@@ -15,14 +15,12 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include "modbus_data.h"
-    // #include "modbus_type.h" // zaciągnięte z data.h
+
+    // Master and Slave Functionality
+    void register_app_data_to_modbus_coils_din_table(modbus_coil_disin_t **modbus_data_type, modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr);
+    void register_app_data_to_modbus_reg_table(modbus_reg_t **reg_table, modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr);
 
     // Master Functionality
-    void register_app_data_to_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr);
-    void register_app_data_to_master_discrete_inputs_table(modbus_adr_t din_adr, modbus_coil_disin_t *app_data_ptr);
-    void register_app_data_to_master_input_registers_table(modbus_adr_t input_reg_adr, modbus_reg_t *app_data_ptr);
-    void register_app_data_to_master_holding_registers_table(modbus_adr_t hreg_reg_adr, modbus_reg_t *app_data_ptr);
-
     modbus_ret_t modbus_master_read_holding_reg_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty);
     modbus_ret_t modbus_master_read_input_reg_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t reg_qty);
     modbus_ret_t modbus_master_read_discrete_inputs_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t discrete_input_qty);
@@ -44,11 +42,6 @@ extern "C"
     modbus_ret_t modbus_master_write_multiple_reg_resp(const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);
 
     // Slave Functionality
-    void register_app_data_to_slave_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr);
-    void register_app_data_to_slave_discrete_inputs_table(modbus_adr_t din_adr, modbus_coil_disin_t *app_data_ptr);
-    void register_app_data_to_slave_input_registers_table(modbus_adr_t input_reg_adr, modbus_reg_t *app_data_ptr);
-    void register_app_data_to_slave_holding_registers_table(modbus_adr_t hreg_reg_adr, modbus_reg_t *app_data_ptr);
-
     modbus_ret_t modbus_slave_read_coils(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);
     modbus_ret_t modbus_slave_read_discrete_inputs(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);
     modbus_ret_t modbus_slave_read_holding_reg(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf);

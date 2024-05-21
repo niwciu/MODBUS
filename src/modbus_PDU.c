@@ -239,22 +239,7 @@ static modbus_ret_t check_out_val_or_out_qty_correctnes(const modbus_buf_t *resp
 }
 
 // Master API functions
-void register_app_data_to_slave_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
-{
-    Slave_Coils[coil_adr] = app_data_ptr;
-}
-void register_app_data_to_slave_discrete_inputs_table(modbus_adr_t din_adr, modbus_coil_disin_t *app_data_ptr)
-{
-    Slave_Discrete_Inputs[din_adr] = app_data_ptr;
-}
-void register_app_data_to_slave_input_registers_table(modbus_adr_t input_reg_adr, modbus_reg_t *app_data_ptr)
-{
-    Slave_Input_Registers[input_reg_adr] = app_data_ptr;
-}
-void register_app_data_to_slave_holding_registers_table(modbus_adr_t hreg_reg_adr, modbus_reg_t *app_data_ptr)
-{
-    Slave_Holding_Registers[hreg_reg_adr] = app_data_ptr;
-}
+
 modbus_ret_t modbus_master_read_holding_reg_req(modbus_buf_t *send_buf, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
 {
     return read_reg_request(send_buf, MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty);
@@ -370,22 +355,13 @@ modbus_ret_t modbus_master_write_multiple_reg_resp(const modbus_buf_t *resp_buf,
 }
 
 // Slave API functions
-
-void register_app_data_to_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
+void register_app_data_to_modbus_coils_din_table(modbus_coil_disin_t **coil_din_table, modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
 {
-    Master_Coils[coil_adr] = app_data_ptr;
+    coil_din_table[coil_adr] = app_data_ptr;
 }
-void register_app_data_to_master_discrete_inputs_table(modbus_adr_t din_adr, modbus_coil_disin_t *app_data_ptr)
+void register_app_data_to_modbus_reg_table(modbus_reg_t **reg_table, modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
 {
-    Master_Discrete_Inputs[din_adr] = app_data_ptr;
-}
-void register_app_data_to_master_input_registers_table(modbus_adr_t input_reg_adr, modbus_reg_t *app_data_ptr)
-{
-    Master_Input_Registers[input_reg_adr] = app_data_ptr;
-}
-void register_app_data_to_master_holding_registers_table(modbus_adr_t hreg_reg_adr, modbus_reg_t *app_data_ptr)
-{
-    Master_Holding_Registers[hreg_reg_adr] = app_data_ptr;
+    reg_table[reg_adr] = app_data_ptr;
 }
 
 modbus_ret_t modbus_slave_read_coils(modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
