@@ -23,7 +23,7 @@ static void set_inreg_hreg_value_from_modbus_msg(const modbus_buf_t *msg_data_pt
 static modbus_ret_t update_master_data_from_modbus_msg(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg, modbus_fun_code_t fun_code, void **data_tab);
 static void update_master_specific_data_type_from_modbus_msg(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg, modbus_fun_code_t fun_code, void **data_tab);
 static modbus_byte_count_t get_expected_byte_cnt(modbus_fun_code_t func_code, modbus_data_qty_t req_data_qty);
-static modbus_ret_t check_slave_resp_vs_req(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg);
+static modbus_ret_t check_slave_resp_vs_req_for_sigle_write(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg);
 
 static modbus_ret_t read_reg_request(modbus_buf_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t len)
 {
@@ -189,7 +189,7 @@ static modbus_byte_count_t get_expected_byte_cnt(modbus_fun_code_t func_code, mo
     return byte_cnt;
 }
 
-static modbus_ret_t check_slave_resp_vs_req(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg)
+static modbus_ret_t check_slave_resp_vs_req_for_sigle_write(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg)
 {
         modbus_ret_t status = RET_OK;
     if (resp_msg[MODBUS_FUNCTION_CODE_IDX] == req_msg[MODBUS_FUNCTION_CODE_IDX])
@@ -329,18 +329,26 @@ modbus_ret_t modbus_master_read_holding_reg_resp(const modbus_buf_t *resp_buf, c
 
 modbus_ret_t modbus_master_write_single_coil_resp(const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
-    return check_slave_resp_vs_req(resp_buf,req_buf);
+    return check_slave_resp_vs_req_for_sigle_write(resp_buf,req_buf);
 }
 
 modbus_ret_t modbus_master_write_single_reg_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
-    return check_slave_resp_vs_req(resp_buf,req_buf);
+    return check_slave_resp_vs_req_for_sigle_write(resp_buf,req_buf);
 }
 
 modbus_ret_t modbus_master_write_multiple_coils_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
-
-    return RET_OK;
+    modbus_ret_t status;
+    if(resp_buf[MODBUS_FUNCTION_CODE_IDX] == req_buf[MODBUS_FUNCTION_CODE_IDX])
+    {
+        status = RET_OK;
+    }
+    else
+    {
+        status = RET_ERROR_FUN_CODE;
+    }
+    return status;
 }
 // modbus_ret_t modbus_master_write_multiple_reg_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 // {
