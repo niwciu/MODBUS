@@ -24,6 +24,7 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_buf_t *resp_
 static void update_master_specific_data_type_from_modbus_msg(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg, modbus_fun_code_t fun_code, void **data_tab);
 static modbus_byte_count_t get_expected_byte_cnt(modbus_fun_code_t func_code, modbus_data_qty_t req_data_qty);
 static modbus_ret_t check_write_slave_resp_vs_req(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg);
+static modbus_ret_t check_out_val_or_out_qty_correctnes(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg);
 
 static modbus_ret_t read_reg_request(modbus_buf_t *send_buf, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t len)
 {
@@ -197,26 +198,7 @@ static modbus_ret_t check_write_slave_resp_vs_req(const modbus_buf_t *resp_msg, 
     {
         if (read_u16_from_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX]) == read_u16_from_buf(&req_msg[MODBUS_REQUEST_ADR_IDX]))
         {
-            switch (resp_msg[MODBUS_FUNCTION_CODE_IDX])
-            {
-            case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
-            case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
-                if (read_u16_from_buf(&resp_msg[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]) == read_u16_from_buf(&req_msg[MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX]))
-                    status = RET_OK;
-                else
-                    status = RET_ERROR_WRITE_SINGLE_OUT_VAL;
-                break;
-            case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
-            case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
-                if (read_u16_from_buf(&resp_msg[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]) == read_u16_from_buf(&req_msg[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]))
-                    status = RET_OK;
-                else
-                    status = RET_ERROR_WRITE_MULTI_OUT_QTY;
-                break;
-            default:
-                status = RET_ERROR;
-                break;
-            }
+            status = check_out_val_or_out_qty_correctnes(resp_msg, req_msg);
         }
         else
         {
@@ -226,6 +208,32 @@ static modbus_ret_t check_write_slave_resp_vs_req(const modbus_buf_t *resp_msg, 
     else
     {
         status = RET_ERROR_FUN_CODE;
+    }
+    return status;
+}
+
+static modbus_ret_t check_out_val_or_out_qty_correctnes(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg)
+{
+    modbus_ret_t status = RET_ERROR;
+    switch (resp_msg[MODBUS_FUNCTION_CODE_IDX])
+    {
+    case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
+    case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
+        if (read_u16_from_buf(&resp_msg[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]) == read_u16_from_buf(&req_msg[MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX]))
+            status = RET_OK;
+        else
+            status = RET_ERROR_WRITE_SINGLE_OUT_VAL;
+        break;
+    case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
+    case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
+        if (read_u16_from_buf(&resp_msg[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]) == read_u16_from_buf(&req_msg[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]))
+            status = RET_OK;
+        else
+            status = RET_ERROR_WRITE_MULTI_OUT_QTY;
+        break;
+    default:
+        status = RET_ERROR;
+        break;
     }
     return status;
 }
