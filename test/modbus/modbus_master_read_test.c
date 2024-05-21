@@ -395,11 +395,19 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartA
 }
 
 
+TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiCoilsRespThenRetErrorFuncCode)
+{
+    modbus_adr_t coil_adr =0x0005;
+    modbus_data_qty_t coil_qty=30;
 
-// TEST(Modbus_Master_Read, )
-// {
-//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
-// }
+    mock_set_expected_master_hreg_alternately(coil_adr,coil_qty,0x5A5A);
+    modbus_master_write_multiple_coils_req(req_msg,coil_adr,coil_qty);
+    modbus_slave_write_multiple_coils(resp_msg,req_msg);
+
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++; //change Function Code in resp
+
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_multiple_coils_resp(resp_msg,req_msg));
+}
 
 // TEST(Modbus_Master_Read, )
 // {
