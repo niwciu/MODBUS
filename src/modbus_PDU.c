@@ -366,10 +366,10 @@ modbus_ret_t modbus_master_write_multiple_coils_resp(const  modbus_buf_t *resp_b
     }
     return status;
 }
-// modbus_ret_t modbus_master_write_multiple_reg_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
-// {
+modbus_ret_t modbus_master_write_multiple_reg_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+{
 
-// }
+}
 
 // Slave API functions
 

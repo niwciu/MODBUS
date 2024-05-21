@@ -387,7 +387,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartA
     modbus_adr_t coil_adr =0x0005;
     modbus_data_qty_t coil_qty=30;
 
-    mock_set_expected_master_hreg_alternately(coil_adr,coil_qty,0x5A5A);
+    mock_set_expected_master_coils_alternately(coil_adr,coil_qty,!!COIL_ON);
     modbus_master_write_multiple_coils_req(req_msg,coil_adr,coil_qty);
     modbus_slave_write_multiple_coils(resp_msg,req_msg);
 
@@ -400,7 +400,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectSta
     modbus_adr_t coil_adr =0x0005;
     modbus_data_qty_t coil_qty=30;
 
-    mock_set_expected_master_hreg_alternately(coil_adr,coil_qty,0x5A5A);
+    mock_set_expected_master_coils_alternately(coil_adr,coil_qty,!!COIL_ON);
     modbus_master_write_multiple_coils_req(req_msg,coil_adr,coil_qty);
     modbus_slave_write_multiple_coils(resp_msg,req_msg);
 
@@ -414,7 +414,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStar
     modbus_adr_t coil_adr =0x0005;
     modbus_data_qty_t coil_qty=30;
 
-    mock_set_expected_master_hreg_alternately(coil_adr,coil_qty,0x5A5A);
+    mock_set_expected_master_coils_alternately(coil_adr,coil_qty,!!COIL_ON);
     modbus_master_write_multiple_coils_req(req_msg,coil_adr,coil_qty);
     modbus_slave_write_multiple_coils(resp_msg,req_msg);
 
@@ -428,7 +428,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartA
     modbus_adr_t coil_adr =0x0005;
     modbus_data_qty_t coil_qty=30;
 
-    mock_set_expected_master_hreg_alternately(coil_adr,coil_qty,0x5A5A);
+    mock_set_expected_master_coils_alternately(coil_adr,coil_qty,!!COIL_ON);
     modbus_master_write_multiple_coils_req(req_msg,coil_adr,coil_qty);
     modbus_slave_write_multiple_coils(resp_msg,req_msg);
 
@@ -437,6 +437,66 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartA
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_MULTI_OUT_QTY,modbus_master_write_multiple_coils_resp(resp_msg,req_msg));
 }
 
+
+
+
+
+
+
+TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOk)
+{
+    modbus_adr_t reg_adr =0x0005;
+    modbus_data_qty_t reg_qty=30;
+
+    mock_set_expected_master_hreg_alternately(reg_adr,reg_qty,0x5A5A);
+    modbus_master_write_multiple_reg_req(req_msg,reg_adr,reg_qty);
+    modbus_slave_write_multiple_reg(resp_msg,req_msg);
+
+    TEST_ASSERT_EQUAL_INT16(RET_OK,modbus_master_write_multiple_reg_resp(resp_msg,req_msg));
+}
+
+
+// TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetErrorFuncCode)
+// {
+//     modbus_adr_t reg_adr =0x0005;
+//     modbus_data_qty_t reg_qty=30;
+
+//     mock_set_expected_master_hreg_alternately(reg_adr,reg_qty,0x5A5A);
+//     modbus_master_write_multiple_reg_req(req_msg,reg_adr,reg_qty);
+//     modbus_slave_write_multiple_reg(resp_msg,req_msg);
+
+//     resp_msg[MODBUS_FUNCTION_CODE_IDX]++; //change Function Code in resp
+
+//     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_multiple_reg_resp(resp_msg,req_msg));
+// }
+
+// TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutAdrError)
+// {
+//     modbus_adr_t reg_adr =0x0005;
+//     modbus_data_qty_t reg_qty=30;
+
+//     mock_set_expected_master_hreg_alternately(reg_adr,reg_qty,0x5A5A);
+//     modbus_master_write_multiple_reg_req(req_msg,reg_adr,reg_qty);
+//     modbus_slave_write_multiple_reg(resp_msg,req_msg);
+
+//     write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX],reg_adr+1);
+
+//     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_OUT_ADR,modbus_master_write_multiple_reg_resp(resp_msg,req_msg));
+// }
+
+// TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartAdrAndIncorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutQtyError)
+// {
+//     modbus_adr_t reg_adr =0x0005;
+//     modbus_data_qty_t reg_qty=30;
+
+//     mock_set_expected_master_hreg_alternately(reg_adr,reg_qty,0x5A5A);
+//     modbus_master_write_multiple_reg_req(req_msg,reg_adr,reg_qty);
+//     modbus_slave_write_multiple_reg(resp_msg,req_msg);
+
+//     write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX],reg_qty+1);
+
+//     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_MULTI_OUT_QTY,modbus_master_write_multiple_reg_resp(resp_msg,req_msg));
+// }
 // TEST(Modbus_Master_Read, )
 // {
 //     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
