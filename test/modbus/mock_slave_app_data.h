@@ -29,9 +29,9 @@ extern "C"
     void mock_reset_all_slave_inreg_value(void);
     void mock_set_expected_slave_coils_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_coil_disin_t start_val);
     void mock_set_expected_slave_disc_in_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty);
-    void mock_set_expected_slave_hreg_alternately (modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_reg_t init_val);
+    void mock_set_expected_slave_hreg_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_reg_t init_val);
     void mock_set_expected_slave_input_reg_alternately(modbus_adr_t start_adr, modbus_data_qty_t qty, modbus_reg_t init_val);
-    
+
     void mock_register_slave_coils_data(void);
     void mock_register_slave_discrete_inputs_data(void);
     void mock_register_slave_input_registers_data(void);

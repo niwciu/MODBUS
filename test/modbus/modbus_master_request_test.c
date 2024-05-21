@@ -20,7 +20,6 @@ TEST_TEAR_DOWN(Modbus_Master_Requests)
     mock_register_master_input_registers_data();
     mock_register_master_holding_registers_data();
 
-    
     /* Cleanup after every test */
 }
 
@@ -192,8 +191,8 @@ TEST(Modbus_Master_Requests, WriteSingleRegister)
     modbus_adr_t adr = 0x0009;
     modbus_reg_t value = 0x0012;
     modbus_ret_t status;
-    set_register_value(Master_Holding_Registers,adr,value);
-    status= modbus_master_write_single_reg_req(PDU_frame, adr);
+    set_register_value(Master_Holding_Registers, adr, value);
+    status = modbus_master_write_single_reg_req(PDU_frame, adr);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, PDU_frame[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_ADR_IDX));
@@ -205,9 +204,9 @@ TEST(Modbus_Master_Requests, WriteSingleCoilOn)
 {
     modbus_adr_t adr = 0x0009;
     modbus_ret_t status;
-    set_coil_state(Master_Coils,adr,!!COIL_ON);
+    set_coil_state(Master_Coils, adr, !!COIL_ON);
 
-    status= modbus_master_write_single_coil_req(PDU_frame, adr);
+    status = modbus_master_write_single_coil_req(PDU_frame, adr);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, PDU_frame[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_ADR_IDX));
@@ -221,7 +220,7 @@ TEST(Modbus_Master_Requests, WriteMultipleRegisters)
     // modbus_reg_t values[5] = {1, 2, 3, 4, 5};
     modbus_data_qty_t reg_qty = 5;
 
-    mock_set_expected_master_hreg_alternately(adr,reg_qty,0x5A5A);
+    mock_set_expected_master_hreg_alternately(adr, reg_qty, 0x5A5A);
     modbus_ret_t status = modbus_master_write_multiple_reg_req(PDU_frame, adr, reg_qty);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, PDU_frame[MODBUS_FUNCTION_CODE_IDX]);
@@ -233,7 +232,7 @@ TEST(Modbus_Master_Requests, WriteMultipleRegisters)
     TEST_ASSERT_EQUAL_HEX16(0x5A5A, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 4));
     TEST_ASSERT_EQUAL_HEX16(0xA5A5, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 6));
     TEST_ASSERT_EQUAL_HEX16(0x5A5A, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 8));
-    TEST_ASSERT_EQUAL_INT16(MODBUS_WRITE_MULTI_REQUEST_LEN+(reg_qty*2), status);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_WRITE_MULTI_REQUEST_LEN + (reg_qty * 2), status);
 }
 
 TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
@@ -243,7 +242,7 @@ TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
     modbus_ret_t status;
 
     status = modbus_master_write_multiple_reg_req(PDU_frame, adr, reg_qty);
-    TEST_ASSERT_EQUAL_INT16(MODBUS_WRITE_MULTI_REQUEST_LEN+(reg_qty*2), status);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_WRITE_MULTI_REQUEST_LEN + (reg_qty * 2), status);
 }
 
 TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)
@@ -271,58 +270,58 @@ TEST(Modbus_Master_Requests, WriteZeroMultipleRegisters)
 TEST(Modbus_Master_Requests, Write5MultipleCoils)
 {
     modbus_adr_t adr = 0x0009;
-    modbus_data_qty_t coils_qty=5;
+    modbus_data_qty_t coils_qty = 5;
     modbus_buf_t expected_coil_states_in_PDU[1] = {0x15};
     modbus_byte_count_t expected_byte_cnt = 1;
     modbus_ret_t status;
 
-    mock_set_expected_master_coils_alternately(adr,coils_qty,!!COIL_ON);
-    status=modbus_master_write_multiple_coils_req(PDU_frame, adr,coils_qty);
+    mock_set_expected_master_coils_alternately(adr, coils_qty, !!COIL_ON);
+    status = modbus_master_write_multiple_coils_req(PDU_frame, adr, coils_qty);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, PDU_frame[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(coils_qty, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_LEN_IDX));
-    TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt,PDU_frame[MODBUS_REQUEST_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_coil_states_in_PDU,PDU_frame+MODBUS_REQUEST_WRITE_MULTI_DATA_IDX,expected_byte_cnt);
-    TEST_ASSERT_EQUAL (RET_OK,status);
+    TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt, PDU_frame[MODBUS_REQUEST_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_coil_states_in_PDU, PDU_frame + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX, expected_byte_cnt);
+    TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
 TEST(Modbus_Master_Requests, WriteMaxQtyMultipleCoils)
 {
     modbus_adr_t adr = 0x0000;
-    modbus_data_qty_t coils_qty=MODBUS_MAX_WRITE_COILS_QTY;
+    modbus_data_qty_t coils_qty = MODBUS_MAX_WRITE_COILS_QTY;
     modbus_byte_count_t expected_byte_cnt = 246;
     modbus_ret_t status;
 
-    mock_set_expected_master_coils_alternately(adr,coils_qty,!!COIL_ON);
-    status=modbus_master_write_multiple_coils_req(PDU_frame, adr,coils_qty);
+    mock_set_expected_master_coils_alternately(adr, coils_qty, !!COIL_ON);
+    status = modbus_master_write_multiple_coils_req(PDU_frame, adr, coils_qty);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, PDU_frame[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(coils_qty, read_u16_from_buf(PDU_frame + MODBUS_REQUEST_LEN_IDX));
-    TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt,PDU_frame[MODBUS_REQUEST_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL (RET_OK,status);
+    TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt, PDU_frame[MODBUS_REQUEST_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
 TEST(Modbus_Master_Requests, WriteMultipleCoilsMaxQtyPlus1)
 {
     modbus_adr_t adr = 0x0000;
-    modbus_data_qty_t coils_qty=MODBUS_MAX_READ_COILS_QTY+1;
+    modbus_data_qty_t coils_qty = MODBUS_MAX_READ_COILS_QTY + 1;
     modbus_ret_t status;
 
-    status=modbus_master_write_multiple_coils_req(PDU_frame, adr,coils_qty);
-    TEST_ASSERT_EQUAL (RET_ERROR,status);
+    status = modbus_master_write_multiple_coils_req(PDU_frame, adr, coils_qty);
+    TEST_ASSERT_EQUAL(RET_ERROR, status);
 }
 
 TEST(Modbus_Master_Requests, WriteZeroMultipleCoils)
 {
     modbus_adr_t adr = 0x0000;
-    modbus_data_qty_t coils_qty=0;
+    modbus_data_qty_t coils_qty = 0;
     // modbus_coil_disin_t coil_states[1] = {0};
     modbus_ret_t status;
 
-    status=modbus_master_write_multiple_coils_req(PDU_frame, adr,coils_qty);
-    TEST_ASSERT_EQUAL (RET_ERROR,status);
+    status = modbus_master_write_multiple_coils_req(PDU_frame, adr, coils_qty);
+    TEST_ASSERT_EQUAL(RET_ERROR, status);
 }
 //
 // testy na zerową ilość rejestrów coili do odczytu zapisu.
