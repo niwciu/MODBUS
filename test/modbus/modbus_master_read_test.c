@@ -437,12 +437,6 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartA
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_MULTI_OUT_QTY,modbus_master_write_multiple_coils_resp(resp_msg,req_msg));
 }
 
-
-
-
-
-
-
 TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOk)
 {
     modbus_adr_t reg_adr =0x0005;
@@ -456,19 +450,19 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartA
 }
 
 
-// TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetErrorFuncCode)
-// {
-//     modbus_adr_t reg_adr =0x0005;
-//     modbus_data_qty_t reg_qty=30;
+TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetErrorFuncCode)
+{
+    modbus_adr_t reg_adr =0x0005;
+    modbus_data_qty_t reg_qty=30;
 
-//     mock_set_expected_master_hreg_alternately(reg_adr,reg_qty,0x5A5A);
-//     modbus_master_write_multiple_reg_req(req_msg,reg_adr,reg_qty);
-//     modbus_slave_write_multiple_reg(resp_msg,req_msg);
+    mock_set_expected_master_hreg_alternately(reg_adr,reg_qty,0x5A5A);
+    modbus_master_write_multiple_reg_req(req_msg,reg_adr,reg_qty);
+    modbus_slave_write_multiple_reg(resp_msg,req_msg);
 
-//     resp_msg[MODBUS_FUNCTION_CODE_IDX]++; //change Function Code in resp
+    resp_msg[MODBUS_FUNCTION_CODE_IDX]++; //change Function Code in resp
 
-//     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_multiple_reg_resp(resp_msg,req_msg));
-// }
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_multiple_reg_resp(resp_msg,req_msg));
+}
 
 // TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutAdrError)
 // {

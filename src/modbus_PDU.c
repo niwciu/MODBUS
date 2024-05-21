@@ -356,32 +356,6 @@ modbus_ret_t modbus_master_write_single_reg_resp(const  modbus_buf_t *resp_buf, 
 
 modbus_ret_t modbus_master_write_multiple_coils_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
-    // modbus_ret_t status;
-    // if(resp_buf[MODBUS_FUNCTION_CODE_IDX] == req_buf[MODBUS_FUNCTION_CODE_IDX])
-    // {
-    //     if((read_u16_from_buf(resp_buf+MODBUS_RESP_WRITE_ADR_IDX))==(read_u16_from_buf(req_buf+MODBUS_RESP_WRITE_ADR_IDX)))
-    //     {
-    //         if((read_u16_from_buf(resp_buf+MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX))==(read_u16_from_buf(req_buf+MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX)))
-    //         {
-    //             status = RET_OK;
-    //         }
-    //         else
-    //         {
-    //             status = RET_ERROR_WRITE_MULTI_OUT_QTY;
-    //         }
-            
-    //     }
-    //     else
-    //     {
-    //         status = RET_ERROR_WRITE_OUT_ADR;
-    //     }
-        
-    // }
-    // else
-    // {
-    //     status = RET_ERROR_FUN_CODE;
-    // }
-    // return status;
     return check_write_slave_resp_vs_req(resp_buf,req_buf);
 }
 modbus_ret_t modbus_master_write_multiple_reg_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
