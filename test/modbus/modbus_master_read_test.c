@@ -491,25 +491,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartA
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_MULTI_OUT_QTY,modbus_master_write_multiple_reg_resp(resp_msg,req_msg));
 }
-// TEST(Modbus_Master_Read, )
-// {
-//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
-// }
 
-// TEST(Modbus_Master_Read, )
-// {
-//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
-// }
-
-// TEST(Modbus_Master_Read, )
-// {
-//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
-// }
-
-// TEST(Modbus_Master_Read, )
-// {
-//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
-// }
 
 // TEST(Modbus_Master_Read, )
 // {

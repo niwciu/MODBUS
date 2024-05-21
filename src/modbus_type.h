@@ -33,7 +33,7 @@ extern "C"
     #define MODBUS_SLAVE_ADR_BYTE_LEN           1
 
     // modbus_frame osffsets parameters
-    #define MODBUS_SLAVE_ADR_IDX                0    
+    #define MODBUS_SLAVE_ADR_IDX                    0    
     #define MODBUS_PDU_BUF_OFFSET                   MODBUS_SLAVE_ADR_BYTE_LEN
     #define MODBUS_FUNCTION_CODE_IDX                MODBUS_PDU_BUF_OFFSET
     #define MODBUS_REQUEST_ADR_IDX                  (MODBUS_PDU_BUF_OFFSET + 1)
@@ -81,12 +81,12 @@ extern "C"
 
     typedef enum
     {
-        RET_ERROR_WRITE_MULTI_OUT_QTY= - 9,
+        RET_ERROR_WRITE_MULTI_OUT_QTY = -9,
         RET_ERROR_WRITE_SINGLE_OUT_VAL = -8,
         RET_ERROR_WRITE_OUT_ADR = -7,
         RET_ERROR_DATA_TAB_NULL_PTR = -6,
-        RET_ERROR_FUN_CODE= -5,
-        RET_ERROR_BYTE_CNT= -4,
+        RET_ERROR_FUN_CODE = -5,
+        RET_ERROR_BYTE_CNT = -4,
         RET_ERROR_CRC = -3,
         RET_ERROR_SLAVE_ID = -2,
         RET_ERROR = -1,

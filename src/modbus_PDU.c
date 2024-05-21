@@ -44,13 +44,13 @@ static modbus_ret_t write_single_reg_coil_request(modbus_buf_t *send_buf, modbus
 {
     send_buf[MODBUS_FUNCTION_CODE_IDX] = req_code;
     write_u16_to_buf(send_buf + MODBUS_REQUEST_ADR_IDX, adr);
-    if( MODBUS_WRITE_SINGLE_COIL_FUNC_CODE == req_code)
+    if (MODBUS_WRITE_SINGLE_COIL_FUNC_CODE == req_code)
     {
-        write_u16_to_buf(send_buf + MODBUS_REQUEST_LEN_IDX, (get_coil_state(Master_Coils,adr) * COIL_ON));
+        write_u16_to_buf(send_buf + MODBUS_REQUEST_LEN_IDX, (get_coil_state(Master_Coils, adr) * COIL_ON));
     }
     else
     {
-        write_u16_to_buf(send_buf + MODBUS_REQUEST_LEN_IDX, get_holding_register_value(Master_Holding_Registers,adr));
+        write_u16_to_buf(send_buf + MODBUS_REQUEST_LEN_IDX, get_holding_register_value(Master_Holding_Registers, adr));
     }
     return MODBUS_WRITE_SINGLE_REQUEST_LEN;
 }
@@ -192,7 +192,7 @@ static modbus_byte_count_t get_expected_byte_cnt(modbus_fun_code_t func_code, mo
 static modbus_ret_t check_write_slave_resp_vs_req(const modbus_buf_t *resp_msg, const modbus_buf_t *req_msg)
 {
     modbus_ret_t status = RET_OK;
-        
+
     if (resp_msg[MODBUS_FUNCTION_CODE_IDX] == req_msg[MODBUS_FUNCTION_CODE_IDX])
     {
         if (read_u16_from_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX]) == read_u16_from_buf(&req_msg[MODBUS_REQUEST_ADR_IDX]))
@@ -217,20 +217,18 @@ static modbus_ret_t check_write_slave_resp_vs_req(const modbus_buf_t *resp_msg, 
                 status = RET_ERROR;
                 break;
             }
-        } 
+        }
         else
         {
             status = RET_ERROR_WRITE_OUT_ADR;
         }
-            
     }
     else
     {
         status = RET_ERROR_FUN_CODE;
     }
-    return status; 
+    return status;
 }
-
 
 // Master API functions
 void register_app_data_to_slave_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
@@ -290,7 +288,7 @@ modbus_ret_t modbus_master_write_multiple_reg_req(modbus_buf_t *send_buf, modbus
 
         for (modbus_data_qty_t i = 0; i < reg_qty; i++)
         {
-            write_u16_to_buf(send_buf + (MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)), get_holding_register_value(Master_Holding_Registers,adr+i));
+            write_u16_to_buf(send_buf + (MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)), get_holding_register_value(Master_Holding_Registers, adr + i));
         }
         return MODBUS_WRITE_MULTI_REQUEST_LEN + send_buf[MODBUS_REQUEST_BYTE_CNT_IDX];
     }
@@ -309,12 +307,12 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_buf_t *send_buf, modb
         write_u16_to_buf(send_buf + MODBUS_REQUEST_ADR_IDX, adr);
         write_u16_to_buf(send_buf + MODBUS_REQUEST_LEN_IDX, coils_qty);
         send_buf[MODBUS_REQUEST_BYTE_CNT_IDX] = byte_count;
-        
+
         clear_coil_din_status_byte(&send_buf[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], byte_count);
         for (modbus_data_qty_t i = 0; i < coils_qty; i++)
         {
 
-            send_buf[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i/8)] |= (get_coil_state(Master_Coils, adr + i) << (i % 8));
+            send_buf[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i / 8)] |= (get_coil_state(Master_Coils, adr + i) << (i % 8));
         }
         return RET_OK;
     }
@@ -346,21 +344,21 @@ modbus_ret_t modbus_master_read_holding_reg_resp(const modbus_buf_t *resp_buf, c
 
 modbus_ret_t modbus_master_write_single_coil_resp(const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
-    return check_write_slave_resp_vs_req(resp_buf,req_buf);
+    return check_write_slave_resp_vs_req(resp_buf, req_buf);
 }
 
-modbus_ret_t modbus_master_write_single_reg_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+modbus_ret_t modbus_master_write_single_reg_resp(const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
-    return check_write_slave_resp_vs_req(resp_buf,req_buf);
+    return check_write_slave_resp_vs_req(resp_buf, req_buf);
 }
 
-modbus_ret_t modbus_master_write_multiple_coils_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+modbus_ret_t modbus_master_write_multiple_coils_resp(const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
-    return check_write_slave_resp_vs_req(resp_buf,req_buf);
+    return check_write_slave_resp_vs_req(resp_buf, req_buf);
 }
-modbus_ret_t modbus_master_write_multiple_reg_resp(const  modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
+modbus_ret_t modbus_master_write_multiple_reg_resp(const modbus_buf_t *resp_buf, const modbus_buf_t *req_buf)
 {
-    return check_write_slave_resp_vs_req(resp_buf,req_buf);
+    return check_write_slave_resp_vs_req(resp_buf, req_buf);
 }
 
 // Slave API functions
