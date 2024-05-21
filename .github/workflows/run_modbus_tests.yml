@@ -1,4 +1,4 @@
-name: Run Template Unit Tests
+name: Run ModBus Unit Tests
 on:
   workflow_dispatch:
   # push:
