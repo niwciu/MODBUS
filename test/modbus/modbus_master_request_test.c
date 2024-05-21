@@ -318,7 +318,7 @@ TEST(Modbus_Master_Requests, WriteZeroMultipleCoils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coils_qty=0;
-    // modbus_coil_reg_t coil_states[1] = {0};
+    // modbus_coil_disin_t coil_states[1] = {0};
     modbus_ret_t status;
 
     status=modbus_master_write_multiple_coils_req(PDU_frame, adr,coils_qty);

@@ -321,7 +321,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 5;
-    // modbus_coil_reg_t data_coil_states[1] = {0x15};
+    // modbus_coil_disin_t data_coil_states[1] = {0x15};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -338,7 +338,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 5;
-    // modbus_coil_reg_t data_coil_states[1] = {0x15};
+    // modbus_coil_disin_t data_coil_states[1] = {0x15};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -361,7 +361,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 8;
-    // modbus_coil_reg_t data_coil_states[1] = {0x55};
+    // modbus_coil_disin_t data_coil_states[1] = {0x55};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -378,7 +378,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 8;
-    // modbus_coil_reg_t data_coil_states[] = {1,0,1,0,1,0,1,0};
+    // modbus_coil_disin_t data_coil_states[] = {1,0,1,0,1,0,1,0};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -399,7 +399,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 9;
-    // modbus_coil_reg_t data_coil_states[2] = {0x55, 0x01};
+    // modbus_coil_disin_t data_coil_states[2] = {0x55, 0x01};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -416,7 +416,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 9;
-    // modbus_coil_reg_t data_coil_states[2] = {0x55, 0x01};
+    // modbus_coil_disin_t data_coil_states[2] = {0x55, 0x01};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -446,7 +446,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils16Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 16;
-    // modbus_coil_reg_t data_coil_states[2] = {0x55, 0x55};
+    // modbus_coil_disin_t data_coil_states[2] = {0x55, 0x55};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -463,7 +463,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils16CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 16;
-    // modbus_coil_reg_t data_coil_states[2] = {0x55, 0x55};
+    // modbus_coil_disin_t data_coil_states[2] = {0x55, 0x55};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -492,7 +492,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils17Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 16;
-    // modbus_coil_reg_t data_coil_states[3] = {0x55, 0x55, 0x01};
+    // modbus_coil_disin_t data_coil_states[3] = {0x55, 0x55, 0x01};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -509,7 +509,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 17;
-    // modbus_coil_reg_t data_coil_states[3] = {0x55, 0x55, 0x01};
+    // modbus_coil_disin_t data_coil_states[3] = {0x55, 0x55, 0x01};
 
     mock_set_all_slave_cails_to_off();
     mock_set_expected_master_coils_alternately(adr,coil_qty,!!COIL_ON);
@@ -608,8 +608,3 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
 
 //
 // ToDo odczyt zbyt duzej ilosci coili, disin i rej po strnie slave ilosc obiektow okresla config
-
-//     for (int i=0; i<reg_qty;i++)
-// {
-//     printf("\r\n mock_slave_hreg[%i]= 0x%x",i,mock_slave_hreg[i]);
-// }

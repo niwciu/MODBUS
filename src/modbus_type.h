@@ -98,7 +98,6 @@ extern "C"
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
-    typedef bool modbus_coil_reg_t;
     typedef uint8_t modbus_buf_t;
     typedef uint8_t modbus_buf_size_t;
     typedef uint8_t modbus_device_ID_t;
