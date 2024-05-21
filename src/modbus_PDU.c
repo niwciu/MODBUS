@@ -203,7 +203,7 @@ static modbus_ret_t check_slave_resp_vs_req_for_sigle_write(const modbus_buf_t *
         } 
         else
         {
-            status = RET_ERROR_WRITE_SINGLE_OUT_ADR;
+            status = RET_ERROR_WRITE_OUT_ADR;
         }
             
     }
@@ -342,7 +342,15 @@ modbus_ret_t modbus_master_write_multiple_coils_resp(const  modbus_buf_t *resp_b
     modbus_ret_t status;
     if(resp_buf[MODBUS_FUNCTION_CODE_IDX] == req_buf[MODBUS_FUNCTION_CODE_IDX])
     {
-        status = RET_OK;
+        if((read_u16_from_buf(resp_buf+MODBUS_RESP_WRITE_ADR_IDX))==(read_u16_from_buf(req_buf+MODBUS_RESP_WRITE_ADR_IDX)))
+        {
+            status = RET_OK;
+        }
+        else
+        {
+            status = RET_ERROR_WRITE_OUT_ADR;
+        }
+        
     }
     else
     {

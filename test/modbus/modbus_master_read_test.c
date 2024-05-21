@@ -303,7 +303,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeAndWrongOutputA
     modbus_slave_write_single_coil(resp_msg,req_msg);
 
     write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX],coil_adr+1);
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_ADR,modbus_master_write_single_coil_resp(resp_msg,req_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_OUT_ADR,modbus_master_write_single_coil_resp(resp_msg,req_msg));
 }
 
 TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWriteSingleCoilThenMasterWriteSingleCoilReturnErrorFuncCode)
@@ -352,7 +352,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
     modbus_slave_write_single_reg(resp_msg,req_msg);
 
     write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX],reg_adr+1);
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_ADR,modbus_master_write_single_reg_resp(resp_msg,req_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_OUT_ADR,modbus_master_write_single_reg_resp(resp_msg,req_msg));
 }
 
 TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWriteSingleRegisterThenMasterWriteSingleRegisterReturnErrorFuncCode)
@@ -409,10 +409,19 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectSta
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE,modbus_master_write_multiple_coils_resp(resp_msg,req_msg));
 }
 
-// TEST(Modbus_Master_Read, )
-// {
-//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
-// }
+TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndInCorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiCoilsRespThenRetOutAdrError)
+{
+    modbus_adr_t coil_adr =0x0005;
+    modbus_data_qty_t coil_qty=30;
+
+    mock_set_expected_master_hreg_alternately(coil_adr,coil_qty,0x5A5A);
+    modbus_master_write_multiple_coils_req(req_msg,coil_adr,coil_qty);
+    modbus_slave_write_multiple_coils(resp_msg,req_msg);
+
+    write_u16_to_buf(&resp_msg[MODBUS_RESP_WRITE_ADR_IDX],coil_adr+1);
+
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_OUT_ADR,modbus_master_write_multiple_coils_resp(resp_msg,req_msg));
+}
 
 // TEST(Modbus_Master_Read, )
 // {
