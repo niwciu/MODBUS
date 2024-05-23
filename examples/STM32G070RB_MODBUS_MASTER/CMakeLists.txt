@@ -22,14 +22,15 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_TOOLCHAIN_FILE ../config/STM32/Toolchain-arm-gcc.cmake)
 
 set(CUSTOM_TARGETS_FILE_DIR ./custom_targets.cmake)
+
 # Allow assembler
 enable_language(ASM)
 
-project(STM32G070RB_MODBUS_SLAVE)
+project(STM32G070RB_MODBUS_MASTER)
 
 set(INCLUDE_DIRS
 Core
-Core/Inc
+Core/Inc/
 Core/Startup
 
 Drivers
@@ -37,6 +38,7 @@ Drivers/CMSIS
 Drivers/CMSIS/Device
 Drivers/CMSIS/Include
 Drivers/CMSIS/STM32G0_Drivers
+Drivers/STM32G0_Drivers
 
 
 ../src
@@ -50,7 +52,7 @@ set(C_SRCS
     Core/Src/main.c
     Core/Src/syscalls.c
     Core/Src/sysmem.c
-    Core/Src/core_init.c
+    Drivers/STM32G0_Drivers/core_init.c
 
 	
 )
@@ -70,6 +72,7 @@ set(LINKED_LIBS
 link_directories(
 
 )
+
 include(${CUSTOM_TARGETS_FILE_DIR})
 
 include_directories(${INCLUDE_DIRS})
