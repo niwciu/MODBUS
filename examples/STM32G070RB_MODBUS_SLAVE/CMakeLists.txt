@@ -37,7 +37,8 @@ Drivers/CMSIS
 Drivers/CMSIS/Device
 Drivers/CMSIS/Include
 Drivers/CMSIS/STM32G0_Drivers
-Drivers/STM32G0_Drivers
+Drivers/STM32G0_Drivers/core_init
+Drivers/STM32G0_Drivers/core_usart
 
 
 ../src
@@ -51,7 +52,8 @@ set(C_SRCS
     Core/Src/main.c
     Core/Src/syscalls.c
     Core/Src/sysmem.c
-    Drivers/STM32G0_Drivers/core_init.c
+    Drivers/STM32G0_Drivers/core_init/core_init.c
+    Drivers/STM32G0_Drivers/usart/usart.c
 
 	
 )
