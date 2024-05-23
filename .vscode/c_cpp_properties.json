@@ -4,32 +4,20 @@
             "name": "windows-gcc-x64",
             "includePath": [
                 "${workspaceFolder}/**",
-                "D:\\19_EMBEDED_TOOLS\\1_AVR_toolchain\\avr\\include",
-                "D:\\19_EMBEDED_TOOLS\\1_AVR_toolchain\\avr\\include\\sys",
-                "D:\\19_EMBEDED_TOOLS\\1_AVR_toolchain\\avr\\include\\util",
-                "D:\\19_EMBEDED_TOOLS\\1_AVR_toolchain\\avr\\include\\avr",
-                "D:\\19_EMBEDED_TOOLS\\1_AVR_toolchain\\avr\\include\\compat",
-                "${workspaceFolder}/hw/STM32G070RB/Core/",
-                "${workspaceFolder}/hw/STM32G070RB/Core/Inc/",
-                "${workspaceFolder}/hw/STM32G070RB/Core/Startup/",
-                "${workspaceFolder}/hw/STM32G070RB/Drivers/",
-                "${workspaceFolder}/hw/STM32G070RB/Drivers/CMSIS/",
-                "${workspaceFolder}/hw/STM32G070RB/Drivers/CMSIS/Device/",
-                "${workspaceFolder}/hw/STM32G070RB/Drivers/CMSIS/Include/",
-                "${workspaceFolder}/hw/STM32F030R8/Core/",
-                "${workspaceFolder}/hw/STM32F030R8/Core/Inc/",
-                "${workspaceFolder}/hw/STM32F030R8/Core/Startup/",
-                "${workspaceFolder}/hw/STM32F030R8/Drivers/",
-                "${workspaceFolder}/hw/STM32F030R8/Drivers/CMSIS/",
-                "${workspaceFolder}/hw/STM32F030R8/Drivers/CMSIS/Device/",
-                "${workspaceFolder}/hw/STM32F030R8/Drivers/CMSIS/Include/",
-                "${workspaceFolder}/hw/STM32F091RB/Core/",
-                "${workspaceFolder}/hw/STM32F091RB/Core/Inc/",
-                "${workspaceFolder}/hw/STM32F091RB/Core/Startup/",
-                "${workspaceFolder}/hw/STM32F091RB/Drivers/",
-                "${workspaceFolder}/hw/STM32F091RB/Drivers/CMSIS/",
-                "${workspaceFolder}/hw/STM32F091RB/Drivers/CMSIS/Device/",
-                "${workspaceFolder}/hw/STM32F091RB/Drivers/CMSIS/Include/"
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Core/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Core/Inc/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Core/Startup/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Device/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Include/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Core/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Core/Inc/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Core/Startup/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Drivers/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Device/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Include/"
             ],
             "defines": [
                 "_DEBUG",
@@ -58,9 +46,37 @@
             "cStandard": "c99"
         },
         {
-            "name": "ARM-GCC",
+            "name": "ARM-GCC Modbus Master",
             "includePath": [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Core/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Core/Inc/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Core/Startup/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Device/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Include/"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "cppStandard": "gnu++17",
+            "compilerPath": "C:\\ST\\STM32CubeCLT\\GNU-tools-for-STM32\\bin\\arm-none-eabi-gcc.exe",
+            "cStandard": "c99"
+        },
+        {
+            "name": "ARM-GCC Modbus Slave",
+            "includePath": [
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Core/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Core/Inc/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Core/Startup/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Drivers/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Device/",
+                "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Include/"
             ],
             "defines": [
                 "_DEBUG",

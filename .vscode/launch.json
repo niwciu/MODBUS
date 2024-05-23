@@ -2,23 +2,72 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "C/C++ Runner: Debug Session",
-      "type": "cppdbg",
+      "cwd": "${workspaceFolder}",
+      "executable": "./examples/STM32G070RB_MODBUS_MASTER/Debug/STM32G070RB_MODBUS_MASTER.elf",
+      "name": "Debug with OpenOCD ModBus Master",
       "request": "launch",
-      "args": [],
-      "stopAtEntry": false,
-      "externalConsole": true,
-      "cwd": "d:/0_Projekty/Project_Template/test/template",
-      "program": "d:/0_Projekty/Project_Template/test/template/build/Debug/outDebug",
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb",
-      "setupCommands": [
-        {
-          "description": "Enable pretty-printing for gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
-    }
+      "type": "cortex-debug",
+      "servertype": "openocd",
+      "svdFile": "C:/ST/STM32CubeCLT/STMicroelectronics_CMSIS_SVD/STM32G070.svd",
+      "configFiles": [
+        "D:/EMBEDDED/TOOLS/OpenOCD-20231002-0.12.0/share/openocd/scripts/interface/stlink.cfg" ,
+        "D:/EMBEDDED/TOOLS/OpenOCD-20231002-0.12.0/share/openocd/scripts/target/stm32g0x.cfg"            
+      ],
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 2
+      }
+    },
+    {
+      "cwd": "${workspaceFolder}",
+      "executable": "./examples/STM32G070RB_MODBUS_SLAVE/Debug/STM32G070RB_MODBUS_SLAVE.elf", 
+      "name": "Debug with OpenOCD ModBus Slave",
+      "request": "launch",
+      "type": "cortex-debug",
+      "servertype": "openocd",
+      "svdFile": "C:/ST/STM32CubeCLT/STMicroelectronics_CMSIS_SVD/STM32G070.svd",
+      "configFiles": [
+        "D:/EMBEDDED/TOOLS/OpenOCD-20231002-0.12.0/share/openocd/scripts/interface/stlink.cfg" ,
+        "D:/EMBEDDED/TOOLS/OpenOCD-20231002-0.12.0/share/openocd/scripts/target/stm32g0x.cfg"            
+      ],
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 2
+      }
+    },
+    {
+      "cwd": "${workspaceFolder}/examples/STM32G070RB_MODBUS_SLAVE",
+      "executable": "./Debug/STM32G070RB_MODBUS_SLAVE.elf",
+      "name": "Debug with ST-Link Modbus Slave",
+      "request": "launch",
+      "type": "cortex-debug",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none",
+      "servertype": "stlink",
+      "svdFile": "C:/ST/STM32CubeCLT/STMicroelectronics_CMSIS_SVD/STM32G070.svd",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 4
+      }
+    },
+    {
+      "cwd": "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER",
+      "executable": "./Debug/STM32G070RB_MODBUS_MASTER.elf",
+      "name": "Debug with ST-Link Modbus Master",
+      "request": "launch",
+      "type": "cortex-debug",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none",
+      "servertype": "stlink",
+      "svdFile": "C:/ST/STM32CubeCLT/STMicroelectronics_CMSIS_SVD/STM32G070.svd",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 4
+      }
+    },
   ]
 }

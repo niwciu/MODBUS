@@ -62,7 +62,9 @@
     "time.h": "c",
     "signal.h": "c",
     "modbus_config.h": "c",
-    "modbus_rtu.h": "c"
+    "modbus_rtu.h": "c",
+    "core_init.h": "c",
+    "stm32g070xx.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }
