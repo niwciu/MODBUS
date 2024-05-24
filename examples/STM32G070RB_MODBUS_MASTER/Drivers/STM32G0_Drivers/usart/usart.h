@@ -15,8 +15,9 @@ extern "C"
 {
 #endif /* __cplusplus */
 
+#include <stdint.h>
     void usart_init(void);
-    void usart_send(void);
+    void usart_send(uint8_t *send_buf, uint16_t len);
     void usart_recv(void);
 #ifdef __cplusplus
 }

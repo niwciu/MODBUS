@@ -11,9 +11,7 @@
  extern "C" {
 #endif /* __cplusplus */
 
-/// @brief STM32G070R8 Core initialization.
-//// 
-//// Function Configure cklocks
+
 void core_init(void);
 
 #ifdef __cplusplus
