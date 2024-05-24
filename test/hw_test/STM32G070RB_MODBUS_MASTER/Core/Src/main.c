@@ -18,8 +18,9 @@
 
 #include <stdint.h>
 #include "main.h"
-#include "usart.h"
 #include "core_init.h"
+#include "modbus_driver_interface.h"
+#include <stdio.h>
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
@@ -27,20 +28,22 @@
 
 uint8_t test_buf[]={"hello world !!!\r\n"};
 uint8_t test_buf_2[]={"test !!!\r\n"};
-uint8_t test;
+
+const struct modbus_RTU_driver_struct *driver=NULL;
+
 int main(void)
 {
   core_init();
+  driver=get_RTU_driver_interface();
+  driver->init(9600,EVEN,STOP_BIT_1_0);
 
-  usart_init();
   __enable_irq();
-  usart_send(test_buf,sizeof(test_buf));
-  while((USART3 -> CR1)&USART_CR1_TXEIE_TXFNFIE);
-  usart_send(test_buf_2,sizeof(test_buf_2));
-  enable_usart_rx_interrupt();
+  driver->send(test_buf,sizeof(test_buf));
+  driver->enable_rcev();
+
     /* Loop forever */
 	while(1)
   {
-    test++;
+
   }
 }

@@ -3,8 +3,8 @@
   "configurations": [
     {
       "cwd": "${workspaceFolder}",
-      "executable": "./examples/STM32G070RB_MODBUS_MASTER/Debug/STM32G070RB_MODBUS_MASTER.elf",
-      "name": "Debug with OpenOCD ModBus Master",
+      "executable": "./test/hw_test/STM32G070RB_MODBUS_MASTER/Debug/STM32G070RB_MODBUS_MASTER_HW_TEST.elf",
+      "name": "Debug with OpenOCD ModBus Master hw test",
       "request": "launch",
       "type": "cortex-debug",
       "servertype": "openocd",

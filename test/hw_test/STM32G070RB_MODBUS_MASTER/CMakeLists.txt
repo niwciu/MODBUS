@@ -39,10 +39,10 @@ Drivers/CMSIS/Device
 Drivers/CMSIS/Include
 Drivers/CMSIS/STM32G0_Drivers
 Drivers/STM32G0_Drivers/core_init
-Drivers/STM32G0_Drivers/usart
 
 
-../src
+
+../../../src
 
 ../lib
 

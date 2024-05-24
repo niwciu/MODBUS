@@ -7,8 +7,9 @@
  * @copyright Copyright (c) 2024
  *
  */
-#include "usart.h"
+
 #include "stm32g070xx.h"
+#include "modbus_driver_interface.h"
 #include <stddef.h>
 
 #define USART3_BAUD_RATE 9600U
@@ -31,8 +32,27 @@ typedef struct
 rx_buf_t rx_buf;
 tx_buf_t tx_buf;
 
+static void usart_init(uint32_t Baud, parity_t parity, stop_bits_t stop_bits);
+static void usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
+static void enable_usart_rx_interrupt(void);
+static void disable_usart_rx_interrupt(void);
+static void uasrt_subscribe_rx_callback(rx_cb_t callback);
+const struct modbus_RTU_driver_struct* get_RTU_driver_interface(void);
 
-void usart_init(void) //parameters for init -> baud, pariti, stop bits
+static const struct modbus_RTU_driver_struct RTU_driver = {
+    usart_init,
+    usart_send,
+    enable_usart_rx_interrupt,
+    disable_usart_rx_interrupt,
+    uasrt_subscribe_rx_callback,
+};
+
+const struct modbus_RTU_driver_struct* get_RTU_driver_interface(void)
+{
+    return &RTU_driver;
+}
+
+static void usart_init(uint32_t Baud, parity_t parity, stop_bits_t stop_bits) //parameters for init -> baud, pariti, stop bits
 {
     
     /* GPIOD for USART3 RX/TX CONFIGURATION */
@@ -67,23 +87,30 @@ void usart_init(void) //parameters for init -> baud, pariti, stop bits
     
 }
 
-void usart_send(uint8_t *send_buf, uint16_t len)
+static void usart_send(modbus_buf_t *tx_msg, uint8_t msg_len)
 {
-    if((send_buf != NULL)&&(len>0))
+    if((tx_msg != NULL)&&(msg_len>0))
     {
-        tx_buf.cur_byte_ptr=send_buf;
-        tx_buf.last_byte_ptr=send_buf+(len-1);
-        USART3 -> TDR= *send_buf;
+        tx_buf.cur_byte_ptr=tx_msg;
+        tx_buf.last_byte_ptr=tx_msg+(msg_len-1);
+        USART3 -> TDR= *tx_msg;
         USART3 -> CR1 |=(USART_CR1_TXEIE_TXFNFIE); 
     }
     
 }
-void enable_usart_rx_interrupt(void)
+static void enable_usart_rx_interrupt(void)
 {
-    //enable Rx interrupt
     USART3 -> CR1 |=  USART_CR1_RXNEIE_RXFNEIE;
 }
+static void disable_usart_rx_interrupt(void)
+{
+    USART3 -> CR1 &=  ~USART_CR1_RXNEIE_RXFNEIE;
+}
 
+static void uasrt_subscribe_rx_callback(rx_cb_t callback)
+{
+
+}
 void USART3_USART4_LPUART1_IRQHandler(void)
 {
     //ToDo check in documentation which interrupt need to be also take cared -> errors overrun etc
