@@ -54,7 +54,7 @@ set(C_SRCS
     Core/Src/syscalls.c
     Core/Src/sysmem.c
     Drivers/STM32G0_Drivers/core_init/core_init.c
-    Drivers/STM32G0_Drivers/usart/usart.c
+    Drivers/STM32G0_Drivers/modbus_driver_interface.c
 
 	
 )

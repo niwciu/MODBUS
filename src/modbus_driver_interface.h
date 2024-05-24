@@ -22,15 +22,9 @@ extern "C"
         ODD,
         EVEN
     } parity_t;
-    typedef enum
-    {
-        STOP_BIT_1_0,
-        STOP_BIT_1_5,
-        STOP_BIT_2_0,
 
-    } stop_bits_t;
 
-    typedef void (*driver_init_t)(uint32_t Baud, parity_t parity, stop_bits_t stop_bits);
+    typedef void (*driver_init_t)(uint32_t Baud, parity_t parity);
     typedef void (*driver_send_t)(modbus_buf_t *tx_msg, uint8_t msg_len);
     typedef void (*driver_enable_disable_rx_t)(void);
 

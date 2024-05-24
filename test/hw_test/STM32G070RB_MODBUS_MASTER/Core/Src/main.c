@@ -35,7 +35,7 @@ int main(void)
 {
   core_init();
   driver=get_RTU_driver_interface();
-  driver->init(9600,EVEN,STOP_BIT_1_0);
+  driver->init(921600,ODD);
 
   __enable_irq();
   driver->send(test_buf,sizeof(test_buf));
