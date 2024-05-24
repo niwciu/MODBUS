@@ -46,16 +46,16 @@
             "cStandard": "c99"
         },
         {
-            "name": "ARM-GCC Modbus Master",
+            "name": "ARM-GCC Modbus Master HW test",
             "includePath": [
                 "${workspaceFolder}/src/**",
-                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Core/",
-                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Core/Inc/",
-                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Core/Startup/",
-                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/",
-                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/",
-                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Device/",
-                "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Include/"
+                "${workspaceFolder}/test/hw_test/STM32G070RB_MODBUS_MASTER/Core/",
+                "${workspaceFolder}/test/hw_test/STM32G070RB_MODBUS_MASTER/Core/Inc/",
+                "${workspaceFolder}/test/hw_test/STM32G070RB_MODBUS_MASTER/Core/Startup/",
+                "${workspaceFolder}/test/hw_test/STM32G070RB_MODBUS_MASTER/Drivers/",
+                "${workspaceFolder}/test/hw_test/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/",
+                "${workspaceFolder}/test/hw_test/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Device/",
+                "${workspaceFolder}/test/hw_test/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Include/"
             ],
             "defines": [
                 "_DEBUG",
