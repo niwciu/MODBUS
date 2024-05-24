@@ -37,7 +37,7 @@ int main(void)
   usart_send(test_buf,sizeof(test_buf));
   while((USART3 -> CR1)&USART_CR1_TXEIE_TXFNFIE);
   usart_send(test_buf_2,sizeof(test_buf_2));
-  usart_recv();
+  enable_usart_rx_interrupt();
     /* Loop forever */
 	while(1)
   {

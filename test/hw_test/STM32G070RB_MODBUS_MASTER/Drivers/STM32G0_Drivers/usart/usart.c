@@ -46,7 +46,7 @@ void usart_init(void) //parameters for init -> baud, pariti, stop bits
 
     /* USART 3 CONFIGURATION 9600 Bps , 8 bit data, 1 bit parity, 1 stop bit , pariti even*/
     RCC-> APBENR1 |=RCC_APBENR1_USART3EN; //clk enable
-    USART3 -> CR1 |= (USART_CR1_M0 | USART_CR1_UE | USART_CR1_RE | USART_CR1_TE | USART_CR1_PCE ) ; // | USART_CR1_TCIE
+    USART3 -> CR1 |= (USART_CR1_M0 | USART_CR1_UE | USART_CR1_RE | USART_CR1_TE | USART_CR1_PCE ) ; //
     USART3 -> BRR = APB1_CLK_FREQ/USART3_BAUD_RATE;
 
     NVIC_SetPriority(USART3_4_IRQn,DEFAULT_IRQ_PRIOTITY);
@@ -78,7 +78,7 @@ void usart_send(uint8_t *send_buf, uint16_t len)
     }
     
 }
-void usart_recv(void)
+void enable_usart_rx_interrupt(void)
 {
     //enable Rx interrupt
     USART3 -> CR1 |=  USART_CR1_RXNEIE_RXFNEIE;

@@ -78,7 +78,7 @@ void usart_send(uint8_t *send_buf, uint16_t len)
     }
     
 }
-void usart_recv(void)
+void enable_usart_rx_interrupt(void)
 {
     //enable Rx interrupt
     USART3 -> CR1 |=  USART_CR1_RXNEIE_RXFNEIE;
