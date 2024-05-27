@@ -31,19 +31,33 @@ uint8_t test_buf_2[]={"test !!!\r\n"};
 
 const struct modbus_RTU_driver_struct *driver=NULL;
 
+static void test_fun(modbus_buf_t *buf, uint8_t len);
+static void modbus_master_init(void);
+
 int main(void)
 {
   core_init();
-  driver=get_RTU_driver_interface();
-  driver->init(921600,ODD);
+  modbus_master_init();
 
   __enable_irq();
   driver->send(test_buf,sizeof(test_buf));
-  driver->enable_rcev();
+  
 
     /* Loop forever */
 	while(1)
   {
 
   }
+}
+static void modbus_master_init(void)
+{
+  driver=get_RTU_driver_interface();
+  driver->init(921600,ODD);
+  driver->subscribe_rx_cb(test_fun);
+
+  driver->enable_rcev();
+}
+static void test_fun(modbus_buf_t *buf, uint8_t len)
+{
+  driver->send(buf,len);
 }
