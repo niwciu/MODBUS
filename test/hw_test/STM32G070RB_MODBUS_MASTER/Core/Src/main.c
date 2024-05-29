@@ -19,15 +19,17 @@
 #include <stdint.h>
 #include "main.h"
 #include "core_init.h"
+#include "modbus_queue.h"
 #include "modbus_driver_interface.h"
+#include "modbus_PDU.h"
+#include "modbus_RTU.h"
 #include <stdio.h>
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
-uint8_t test_buf[]={"hello world !!!\r\n"};
-uint8_t test_buf_2[]={"test !!!\r\n"};
+modbus_data_t h_reg[20];
 
 const struct modbus_RTU_driver_struct *driver=NULL;
 
@@ -40,9 +42,24 @@ int main(void)
   modbus_master_init();
 
   __enable_irq();
-  driver->send(test_buf,sizeof(test_buf));
   
+  buf_t buf=modbus_queue_pop(&modbus_msg_queue);
 
+
+  modbus_adr_t adr=0x0001;
+  modbus_data_qty_t qty=2;
+  uint8_t len = modbus_master_read_holding_reg_req(buf->req.buf,adr,qty);
+  modbus_device_ID_t Slave_ID=0x45;
+  modbus_RTU_send(buf->req.buf,len,Slave_ID);
+  buf->req.len = len+2;
+  // driver->subscribe_rx_cb(modbus_master_read_holding_reg_resp(buf->resp.buf,buf->req.buf));
+  driver->send(buf->req.buf,buf->req.len);
+  
+  
+  driver->enable_rcev(&(buf->resp));
+  // Tutaj powienie zostać uruchomiony timer do timoutu 100ms w czasie którego czekam na poprawną ramkę nawet jeśli przyjdzie kilka niepoprawnych
+
+  // REFACTOR funkcja modbus master read moze dostał cały wskaźnik na strukturę bufora i długość zapisać w buforze
     /* Loop forever */
 	while(1)
   {
@@ -51,11 +68,17 @@ int main(void)
 }
 static void modbus_master_init(void)
 {
+  modbus_queue_init(&modbus_msg_queue);
+  
   driver=get_RTU_driver_interface();
-  driver->init(921600,ODD);
-  driver->subscribe_rx_cb(test_fun);
+  driver->init(115200,NONE);
 
-  driver->enable_rcev();
+  register_app_data_to_modbus_reg_table(Master_Holding_Registers,0,&h_reg[0]);
+  register_app_data_to_modbus_reg_table(Master_Holding_Registers,1,&h_reg[1]);
+  register_app_data_to_modbus_reg_table(Master_Holding_Registers,2,&h_reg[2]);
+  register_app_data_to_modbus_reg_table(Master_Holding_Registers,3,&h_reg[3]);
+  register_app_data_to_modbus_reg_table(Master_Holding_Registers,4,&h_reg[4]);
+  register_app_data_to_modbus_reg_table(Master_Holding_Registers,5,&h_reg[5]);
 }
 static void test_fun(modbus_buf_t *buf, uint8_t len)
 {

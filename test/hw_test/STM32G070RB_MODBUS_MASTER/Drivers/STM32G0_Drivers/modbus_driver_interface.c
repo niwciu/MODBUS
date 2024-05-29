@@ -18,20 +18,16 @@ typedef struct
     modbus_buf_t *cur_byte_ptr;
     modbus_buf_t *last_byte_ptr;
 } tx_buf_t;
-typedef struct
-{
-    modbus_buf_t data[RX_DATA_BUF_SIZE];
-    uint8_t data_idx;
-} rx_buf_t;
-
-rx_buf_t rx_buf;
 tx_buf_t tx_buf;
-
+RTU_buf_t *rx_data = NULL;
 rx_cb_t rx_callback = NULL;
+
+
+
 
 static void usart_init(uint32_t Baud, parity_t parity);
 static void usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
-static void enable_usart_rx_interrupt(void);
+static void enable_usart_rx_interrupt(RTU_buf_t *recv_buf);
 static void disable_usart_rx_interrupt(void);
 static void uasrt_subscribe_rx_callback(rx_cb_t callback);
 const struct modbus_RTU_driver_struct *get_RTU_driver_interface(void);
@@ -73,12 +69,14 @@ static void usart_send(modbus_buf_t *tx_msg, uint8_t msg_len)
         MODBUS_USART->CR1 |= (USART_CR1_TXEIE_TXFNFIE);
     }
 }
-static void enable_usart_rx_interrupt(void)
+static void enable_usart_rx_interrupt(RTU_buf_t *recv_buf)
 {
+    rx_data=recv_buf;
     MODBUS_USART->CR1 |= USART_CR1_RXNEIE_RXFNEIE;
 }
 static void disable_usart_rx_interrupt(void)
 {
+    rx_data= NULL;
     MODBUS_USART->CR1 &= ~USART_CR1_RXNEIE_RXFNEIE;
 }
 static void uasrt_subscribe_rx_callback(rx_cb_t callback)
@@ -91,8 +89,8 @@ void MODBUS_USART_IRQHandler(void)
     // ToDo check in documentation which interrupt need to be also take cared -> errors overrun etc
     if ((MODBUS_USART->ISR) & USART_ISR_RXNE_RXFNE)
     {
-        rx_buf.data[rx_buf.data_idx] = MODBUS_USART->RDR;
-        rx_buf.data_idx++;
+        rx_data->buf[rx_data->len] = MODBUS_USART->RDR;
+        rx_data->len++;
     }
     if ((MODBUS_USART->ISR) & USART_ISR_TXE_TXFNF)
     {
@@ -103,6 +101,8 @@ void MODBUS_USART_IRQHandler(void)
         }
         else
         {
+            // tutaj mozna zlapac koniec nadawania
+            // mowze jakis callback ktory informuje managera !!!
             MODBUS_USART->CR1 &= ~(USART_CR1_TXEIE_TXFNFIE);
         }
     }
@@ -110,9 +110,11 @@ void MODBUS_USART_IRQHandler(void)
     {
         if( NULL != rx_callback)
         {
-            rx_callback(rx_buf.data,rx_buf.data_idx);
+            // mogę tutaj wykonać callback na funkcjach z libki przekazując wskaźnik na cały bufor
+            // mogę tutaj przekazać info o tym ze przyszła ramka 
+            rx_callback(rx_data->buf,rx_data->len);
         }
-        rx_buf.data_idx = 0;
+        rx_data->len = 0;
         MODBUS_USART ->ICR |= USART_ICR_RTOCF;
     }
 }
@@ -174,7 +176,7 @@ static uint32_t get_RTOR_value(uint32_t baud)
 }
 static void USART_data_init(void)
 {
-   rx_buf.data_idx = 0;
+   
 }
 
 static void USART_set_and_enable_interrupts(void)

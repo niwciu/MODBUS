@@ -56,6 +56,14 @@ set(C_SRCS
     Drivers/STM32G0_Drivers/core_init/core_init.c
     Drivers/STM32G0_Drivers/modbus_driver_interface.c
 
+    ../../../src/modbus_PDU.c
+    ../../../src/modbus_RTU.c
+    ../../../src/modbus_data.c
+    ../../../src/modbus_crc.c
+    ../../../src/buf_rw.c
+    ../../../src/modbus_queue.c
+
+
 	
 )
 
