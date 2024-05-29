@@ -15,10 +15,17 @@ extern "C"
 {
 #endif /* __cplusplus */
     // clang-format off
+#ifdef  UNIT_TESTS
 #define MAIN_APP_COILS_QTY              MODBUS_MAX_SPECIFIC_DATA_ITEMS_QTY
 #define MAIN_APP_DISCRET_INPUTS_QTY     MODBUS_MAX_SPECIFIC_DATA_ITEMS_QTY
 #define MAIN_APP_INPUT_REG_QTY          MODBUS_MAX_SPECIFIC_DATA_ITEMS_QTY
 #define MAIN_APP_HOLDING_REG_QTY        MODBUS_MAX_SPECIFIC_DATA_ITEMS_QTY
+#else
+#define MAIN_APP_COILS_QTY              100 
+#define MAIN_APP_DISCRET_INPUTS_QTY     100 
+#define MAIN_APP_INPUT_REG_QTY          100 
+#define MAIN_APP_HOLDING_REG_QTY        100 
+#endif
 
     // clang-format on
 

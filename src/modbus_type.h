@@ -21,6 +21,8 @@ extern "C"
     #define MODBUS_RTU_BUFFER_SIZE 256U
     #define MODBUS_PDU_MAX_LEN 253U
 
+    #define MAX_MODBUS_MSG_ITEMS  10
+
     // max and min allowed values taken from Modbus standard documentation
     #define MODBUS_MAX_SPECIFIC_DATA_ITEMS_QTY  65535U 
 
@@ -81,6 +83,7 @@ extern "C"
 
     typedef enum
     {
+        RET_NULL_PTR_ERROR = -10,
         RET_ERROR_WRITE_MULTI_OUT_QTY = -9,
         RET_ERROR_WRITE_SINGLE_OUT_VAL = -8,
         RET_ERROR_WRITE_OUT_ADR = -7,
@@ -104,7 +107,20 @@ extern "C"
     typedef uint8_t modbus_device_ID_t;
     typedef uint16_t modbus_CRC_t;
     typedef bool modbus_coil_disin_t;
-    // typedef bool modbus_coil_disin_t;
+    
+    typedef struct
+    {
+        modbus_buf_t *data;
+        uint8_t len;
+    } modbus_req_resp_t;
+
+    typedef struct
+    {
+        modbus_req_resp_t *req;
+        modbus_req_resp_t *resp;
+        modbus_device_ID_t slave_id;
+    } modbus_msg_t;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
