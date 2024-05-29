@@ -21,7 +21,7 @@ static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty)
 static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab);
 static void set_inreg_hreg_value_from_modbus_msg(const modbus_buf_t *msg_data_ptr, modbus_adr_t start_adr, modbus_data_qty_t reg_qty, modbus_reg_t **data_tab);
 static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *resp, const modbus_req_resp_t *req, modbus_fun_code_t fun_code, void **data_tab);
-static void update_master_specific_data_type_from_modbus_msg(const modbus_req_resp_t *resp, const modbus_req_resp_t *req, modbus_fun_code_t fun_code, void **data_tab);
+static void update_master_specific_data_type_from_modbus_msg(const modbus_buf_t *resp, const modbus_buf_t *req, modbus_fun_code_t fun_code, void **data_tab);
 static modbus_byte_count_t get_expected_byte_cnt(modbus_fun_code_t func_code, modbus_data_qty_t req_data_qty);
 static modbus_ret_t check_write_slave_resp_vs_req(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
 static modbus_ret_t check_out_val_or_out_qty_correctnes(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
@@ -151,7 +151,7 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
         {
             if (NULL != data_tab)
             {
-                update_master_specific_data_type_from_modbus_msg(resp, req, fun_code, data_tab);
+                update_master_specific_data_type_from_modbus_msg(resp->data, req->data, fun_code, data_tab);
                 status = RET_OK;
             }
             else
@@ -168,18 +168,19 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
     }
     return status;
 }
-static void update_master_specific_data_type_from_modbus_msg(const modbus_req_resp_t *resp, const modbus_req_resp_t *req, modbus_fun_code_t fun_code, void **data_tab)
+static void update_master_specific_data_type_from_modbus_msg(const modbus_buf_t *resp, const modbus_buf_t *req, modbus_fun_code_t fun_code, void **data_tab)
 {
-    modbus_data_qty_t data_qty = read_u16_from_buf(req->data + MODBUS_REQUEST_LEN_IDX);
-    modbus_adr_t data_start_adr = read_u16_from_buf(req->data + MODBUS_REQUEST_ADR_IDX);
+    modbus_data_qty_t data_qty = read_u16_from_buf(req+ MODBUS_REQUEST_LEN_IDX);
+    modbus_adr_t data_start_adr = read_u16_from_buf(req + MODBUS_REQUEST_ADR_IDX);
     switch (fun_code)
     {
     case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
     case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
-        set_inreg_hreg_value_from_modbus_msg(&resp->data[MODBUS_RESP_READ_DATA_IDX], data_start_adr, data_qty, (modbus_reg_t **)(data_tab));
+        set_inreg_hreg_value_from_modbus_msg(&resp[MODBUS_RESP_READ_DATA_IDX], data_start_adr, data_qty, (modbus_reg_t **)(data_tab));
         break;
     default:
-        set_coil_din_value_from_modbus_msg(&resp->data[MODBUS_RESP_READ_DATA_IDX], data_start_adr, data_qty, (modbus_coil_disin_t **)(data_tab));
+        set_coil_din_value_from_modbus_msg(&resp[MODBUS_RESP_READ_DATA_IDX], data_start_adr, data_qty, (modbus_coil_disin_t **)(data_tab));
+        
         break;
     }
 }
@@ -334,41 +335,98 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *modbus_msg, mo
 
 modbus_ret_t modbus_master_read_coils_resp(const modbus_msg_t *modbus_msg)
 {
-    return update_master_data_from_modbus_msg(modbus_msg->req, modbus_msg->resp, MODBUS_READ_COILS_FUNC_CODE, (void **)(Master_Coils));
+    if(NULL == modbus_msg)
+    {
+        return RET_NULL_PTR_ERROR;
+    }
+    else
+    {
+        return update_master_data_from_modbus_msg(modbus_msg->resp, modbus_msg->req, MODBUS_READ_COILS_FUNC_CODE, (void **)(Master_Coils));
+    }
+    
 }
 
 modbus_ret_t modbus_master_read_discrete_inputs_resp(const modbus_msg_t *modbus_msg)
 {
-    return update_master_data_from_modbus_msg(modbus_msg->req, modbus_msg->resp, MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, (void **)(Master_Discrete_Inputs));
+    if(NULL == modbus_msg)
+    {
+        return RET_NULL_PTR_ERROR;
+    }
+    else
+    {
+        return update_master_data_from_modbus_msg(modbus_msg->resp, modbus_msg->req, MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, (void **)(Master_Discrete_Inputs));
+    }
 }
 
 modbus_ret_t modbus_master_read_input_reg_resp(const modbus_msg_t *modbus_msg)
 {
-    return update_master_data_from_modbus_msg(modbus_msg->req, modbus_msg->resp, MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, (void **)(Master_Input_Registers));
+    if(NULL == modbus_msg)
+    {
+        return RET_NULL_PTR_ERROR;
+    }
+    else
+    {
+        return update_master_data_from_modbus_msg(modbus_msg->resp, modbus_msg->req, MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, (void **)(Master_Input_Registers));
+    }
 }
 
 modbus_ret_t modbus_master_read_holding_reg_resp(const modbus_msg_t *modbus_msg)
 {
-    return update_master_data_from_modbus_msg(modbus_msg->req, modbus_msg->resp, MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, (void **)(Master_Holding_Registers));
+    if(NULL == modbus_msg)
+    {
+        return RET_NULL_PTR_ERROR;
+    }
+    else
+    {
+        return update_master_data_from_modbus_msg(modbus_msg->resp, modbus_msg->req, MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, (void **)(Master_Holding_Registers));
+    }
 }
 
 modbus_ret_t modbus_master_write_single_coil_resp(const modbus_msg_t *modbus_msg)
 {
-    return check_write_slave_resp_vs_req(modbus_msg->req, modbus_msg->resp);
+    if(NULL == modbus_msg)
+    {
+        return RET_NULL_PTR_ERROR;
+    }
+    else
+    {
+        return check_write_slave_resp_vs_req(modbus_msg->resp, modbus_msg->req);
+    }
 }
 
 modbus_ret_t modbus_master_write_single_reg_resp(const modbus_msg_t *modbus_msg)
 {
-    return check_write_slave_resp_vs_req(modbus_msg->req, modbus_msg->resp);
+    if(NULL == modbus_msg)
+    {
+        return RET_NULL_PTR_ERROR;
+    }
+    else
+    {
+        return check_write_slave_resp_vs_req(modbus_msg->resp, modbus_msg->req);
+    }
 }
 
 modbus_ret_t modbus_master_write_multiple_coils_resp(const modbus_msg_t *modbus_msg)
 {
-    return check_write_slave_resp_vs_req(modbus_msg->req, modbus_msg->resp);
+    if(NULL == modbus_msg)
+    {
+        return RET_NULL_PTR_ERROR;
+    }
+    else
+    {
+        return check_write_slave_resp_vs_req(modbus_msg->resp, modbus_msg->req);
+    }
 }
 modbus_ret_t modbus_master_write_multiple_reg_resp(const modbus_msg_t *modbus_msg)
 {
-    return check_write_slave_resp_vs_req(modbus_msg->req, modbus_msg->resp);
+    if(NULL == modbus_msg)
+    {
+        return RET_NULL_PTR_ERROR;
+    }
+    else
+    {
+        return check_write_slave_resp_vs_req(modbus_msg->resp, modbus_msg->req);
+    }
 }
 
 // Slave API functions

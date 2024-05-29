@@ -40,7 +40,7 @@ TEST_GROUP_RUNNER(Modbus_Master_Read)
     RUN_TEST_CASE(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutAdrError);
     RUN_TEST_CASE(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartAdrAndIncorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutQtyError);
 
-    // RUN_TEST_CASE(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead);
+    // RUN_TEST_CASE(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead); // tego nie odpalaj tak było do zdabania po refactoringu
     // RUN_TEST_CASE(Modbus_Master_Read, );
     // RUN_TEST_CASE(Modbus_Master_Read, );
     // RUN_TEST_CASE(Modbus_Master_Read, );

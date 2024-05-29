@@ -77,7 +77,7 @@ set(TEST_SRCS
 )
 
 set(GLOBAL_DEFINES
-
+	-DUNIT_TESTS
 )
 
 include(${CUSTOM_TARGETS_FILE_DIR})
