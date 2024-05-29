@@ -42,15 +42,15 @@ extern "C"
     modbus_ret_t modbus_master_write_multiple_reg_resp(const modbus_msg_t *modbus_msg);
 
     // Slave Functionality
-    // modbus_ret_t modbus_slave_read_coils(modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-    // modbus_ret_t modbus_slave_read_discrete_inputs(modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-    // modbus_ret_t modbus_slave_read_holding_reg(modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-    // modbus_ret_t modbus_slave_read_input_reg(modbus_req_resp_t *resp, const modbus_req_resp_t *req);
+    modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg);
+    modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg);
+    modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg);
+    modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg);
 
-    // modbus_ret_t modbus_slave_write_single_coil(modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-    // modbus_ret_t modbus_slave_write_multiple_coils(modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-    // modbus_ret_t modbus_slave_write_single_reg(modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-    // modbus_ret_t modbus_slave_write_multiple_reg(modbus_req_resp_t *resp, const modbus_req_resp_t *req);
+    modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg);
+    modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg);
+    modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg);
+    modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg);
 
 #ifdef __cplusplus
 }
