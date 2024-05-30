@@ -37,7 +37,7 @@ extern "C"
     // modbus_master_error_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty);
 
     void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity);
-    // void modbus_update_modbus_manager(void);
+    void check_modbus_master_manager(void);
 
 
 

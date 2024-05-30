@@ -10,6 +10,7 @@
 #include "modbus_driver_interface.h"
 #include "mock_modbus_driver_interface.h"
 
+#include "mem.h"
 
 
 
@@ -23,6 +24,7 @@ typedef struct
 // modbus_buf_t *rx_data = NULL;
 // rx_cb_t rx_callback = NULL;
 
+modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
 
 driver_init_status_t mock_USART = {0,NONE,INIT_UNKNOWN};
 const struct modbus_RTU_driver_struct *get_RTU_driver_interface(void);
@@ -56,7 +58,8 @@ static void usart_init(baud_t baud, parity_t parity)
 }
 static void usart_send(modbus_buf_t *tx_msg, uint8_t msg_len)
 {
-
+    memcpy(slave_rx_buf,tx_msg,msg_len);
+    //ToDo możena wykorzystać zrobionego slave do odbierania danych i gnerowania ramki zwrotnej
 }
 static void enable_usart_rx_interrupt(modbus_buf_t *recv_buf)
 {

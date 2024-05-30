@@ -10,10 +10,11 @@
 TEST_GROUP(master_init);
 
 extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
-// extern modbus_queue_t master_msg_queue;
+
 extern struct modbus_RTU_driver_struct *RTU_driver;
 extern modbus_master_state_t master_manager_state_machine;
-extern modbus_queue_t *msg_q;
+extern modbus_queue_t *free_q;
+extern modbus_queue_t *tx_rx_q;
 
 TEST_SETUP(master_init)
 {
@@ -35,14 +36,20 @@ TEST(master_init, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegist
     }
 }
 
-TEST(master_init, WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized)
+TEST(master_init, WhenModbusMasterInitInRTUmodeThenTxRxRTUmsgQueueInitialized)
 {
     modbus_master_init(RTU, 0, 0);
 
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
-    {
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&modbus_msg[i], msg_q->modbus_msg[i], MAX_MODBUS_MSG_QUEUE_ITEMS);
-    }
+    TEST_ASSERT_EQUAL(0,tx_rx_q->head);
+    TEST_ASSERT_EQUAL(0,tx_rx_q->tail);
+}
+
+TEST(master_init, WhenModbusMasterInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFull)
+{
+    modbus_master_init(RTU, 0, 0);
+
+    TEST_ASSERT_EQUAL(0,free_q->tail);
+    TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1),free_q->head);
 }
 
 TEST(master_init, WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
@@ -70,11 +77,6 @@ TEST(master_init, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachi
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, master_manager_state_machine);
 }
 
-TEST(master_init, WhenModbusMasterInitInRTUmodeThenPushAllAvailableMsgBufferToQueue)
-{
-    modbus_master_init(RTU, 0, 0);
-    TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1), msg_q->head);
-}
 
 // TEST(master_init,)
 // {

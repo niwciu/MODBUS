@@ -14,16 +14,10 @@
 
 
 
-void modbus_queue_init(modbus_queue_t *q, modbus_msg_t *msg)
+void modbus_queue_init(modbus_queue_t *q)
 {
     q->head=0;
     q->tail=0;
-
-    uint8_t i;
-    for(i=0; i<MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
-    {
-        modbus_queue_push(q,&msg[i]); // tutaj trzea jakoś przekazać wskaźnik do bufora który jest zainicjalizowany w masterze lub slave (RTU lub inny)
-    }
 }
 
 void modbus_queue_push(modbus_queue_t *q, modbus_msg_t *data)
