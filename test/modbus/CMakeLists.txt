@@ -59,6 +59,7 @@ set(SRCS
 	../../src/common/modbus_crc.c
 	../../src/common/modbus_RTU.c
 	../../src/common/modbus_queue.c
+	../../src/modbus_master.c
 )
 
 set(TEST_SRCS
@@ -77,13 +78,18 @@ set(TEST_SRCS
 	modbus_RTU_test_runner.c
 	mock_slave_app_data.c
 	mock_master_app_data.c
-	
+
+	master_RTU_init_test_runner.c
+    master_RTU_init_test.c
+	master_RTU_test_runner.c
+	master_RTU_test.c
+	mock_modbus_driver_interface.c
 
 	#mock_module.c
 )
 
 set(GLOBAL_DEFINES
-	-DUNIT_TESTS
+	-DUNIT_TEST
 )
 
 include(${CUSTOM_TARGETS_FILE_DIR})

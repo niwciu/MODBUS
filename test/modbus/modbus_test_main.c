@@ -17,4 +17,6 @@ static void run_all_tests(void)
     RUN_TEST_GROUP(Modbus_Master_Read);
     RUN_TEST_GROUP(Modbus_CRC);
     RUN_TEST_GROUP(Modbus_RTU);
+    RUN_TEST_GROUP(master_init);
+    RUN_TEST_GROUP(master_RTU);
 }
