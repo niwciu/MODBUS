@@ -44,7 +44,7 @@ void register_app_data_to_modbus_master_din_table(modbus_adr_t disin_adr, modbus
 }
 void register_app_data_to_modbus_master_inreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
 {
-    
+    register_app_data_to_modbus_reg_table(Master_Input_Registers,reg_adr,app_data_ptr);
 }
 // void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
 // {
