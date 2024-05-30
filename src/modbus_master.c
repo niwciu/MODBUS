@@ -76,10 +76,10 @@ modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_da
     msg_buf = modbus_queue_pop(free_q);
     modbus_ret_t modbus_lib_ret;
 
-    // if(NULL == msg_buf)
-    // {
-    //     return MODBUS_MASTER_QUEUE_FULL_ERR;
-    // }
+    if(NULL == msg_buf)
+    {
+        return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR;
+    }
     modbus_lib_ret = modbus_master_read_holding_reg_req(msg_buf, adr, hreg_qty);
     // if(0 >= lib_ret)
     // {
