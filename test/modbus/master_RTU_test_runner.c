@@ -20,6 +20,10 @@ TEST_GROUP_RUNNER(master_RTU)
    RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
    RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
 
+   RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+   // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+   // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
+
    // RUN_TEST_CASE(master_RTU, );
    // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhen);
    // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhen);

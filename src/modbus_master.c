@@ -76,10 +76,12 @@ modbus_master_error_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty
     modbus_queue_push(tx_rx_q, msg_buf);
     return MODBUS_MASTER_REQUEST_SEND;
 }
-// modbus_master_error_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty)
-// {
-//     return 0;
-// }
+
+modbus_master_error_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID)
+{
+    return 0;
+}
+
 modbus_master_error_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID)
 {
     modbus_ret_t modbus_lib_ret;
