@@ -15,12 +15,11 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include "modbus_public_type.h"
+#include "modbus_config.h"
     // clang-format off
     // taken from modsbus frame buffer size specification
     #define MODBUS_RTU_BUFFER_SIZE 256U
     #define MODBUS_PDU_MAX_LEN 253U
-
-    #define MAX_MODBUS_MSG_ITEMS  10
 
     // max and min allowed values taken from Modbus standard documentation
     #define MODBUS_MAX_SPECIFIC_DATA_ITEMS_QTY  65535U 
@@ -122,7 +121,7 @@ extern "C"
         uint8_t head;
         uint8_t tail;
 
-        modbus_msg_t *modbus_msg[MAX_MODBUS_MSG_ITEMS];
+        modbus_msg_t *modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
     }modbus_queue_t;
 
 #ifdef __cplusplus

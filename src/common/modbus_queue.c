@@ -20,7 +20,7 @@ void modbus_queue_init(modbus_queue_t *q, modbus_msg_t *msg)
     q->tail=0;
 
     uint8_t i;
-    for(i=0; i<MAX_MODBUS_MSG_ITEMS; i++)
+    for(i=0; i<MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_push(q,&msg[i]); // tutaj trzea jakoś przekazać wskaźnik do bufora który jest zainicjalizowany w masterze lub slave (RTU lub inny)
     }
@@ -28,7 +28,7 @@ void modbus_queue_init(modbus_queue_t *q, modbus_msg_t *msg)
 
 void modbus_queue_push(modbus_queue_t *q, modbus_msg_t *data)
 {
-    int32_t new_head = (q->head + 1) % MAX_MODBUS_MSG_ITEMS;
+    int32_t new_head = (q->head + 1) % MAX_MODBUS_MSG_QUEUE_ITEMS;
 
     if (new_head == q->tail)
     {
@@ -50,7 +50,7 @@ modbus_msg_t* modbus_queue_pop(modbus_queue_t *q)
     }
 
     modbus_msg_t *ret = q->modbus_msg[q->tail];
-    q->tail = (q->tail + 1) % MAX_MODBUS_MSG_ITEMS;
+    q->tail = (q->tail + 1) % MAX_MODBUS_MSG_QUEUE_ITEMS;
 
     return ret;
 }
