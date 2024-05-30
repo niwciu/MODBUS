@@ -419,7 +419,7 @@ TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWi
     TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
 }
 
-TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue)
+TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue)
 {
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
@@ -427,7 +427,7 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleWithProper
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
     modbus_coil_disin_t coils_data[]= {!!COIL_ON,!!COIL_OFF,!!COIL_ON,!!COIL_ON};
-    modbus_buf_t expected_master_request[] = {0x09, 0x0F, 0x00, 0x02, 0x00, 0x04, 0x08, 0xFF, 0x00, 0x00, 0x00, 0xFF, 0x00, 0xFF, 0x00, 0x67, 0x84};
+    modbus_buf_t expected_master_request[] = {0x09, 0x0F, 0x00, 0x02, 0x00, 0x04, 0x01, 0x0d, 0x87, 0x35};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
 
     for (uint8_t i=0; i<coils_qty; i++)
