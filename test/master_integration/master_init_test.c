@@ -1,12 +1,14 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_master.h"
 #include "modbus_RTU.h"
+#include "modbus_type.h"
 
 // #include "tested_module.h"
 
 TEST_GROUP(master_init);
 
 extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_ITEMS];
+extern modbus_queue_t master_msg_queue;
 
 TEST_SETUP(master_init)
 {
@@ -28,10 +30,16 @@ TEST(master_init, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegist
     }
 }
 
-// TEST(master_init,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
-// }
+TEST(master_init,WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized)
+{
+    modbus_master_init(RTU);
+
+    for (int i = 0 ; i< MAX_MODBUS_MSG_ITEMS; i++)
+    {
+        TEST_ASSERT_EQUAL_UINT32_ARRAY(&modbus_msg[i],master_msg_queue.modbus_msg[i],MAX_MODBUS_MSG_ITEMS);
+    }
+    TEST_FAIL_MESSAGE("Implement your test!"); 
+}
 
 // TEST(master_init,)
 // {

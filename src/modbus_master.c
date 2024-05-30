@@ -30,7 +30,7 @@ typedef enum{
 }modbus_master_state_t;
 
 static modbus_master_state_t master_manager_state;
-static modbus_queue_t master_msg_queue;
+PRIVATE modbus_queue_t master_msg_queue;
 
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_ITEMS]; // w inicie przypisuje do modbus_msg.req.data adres na bufor req RTU i modbus_msg.resp.data adres resp RTU
                                                       // do tego init kolejki ktory podpina wskaźniki modbus_msg

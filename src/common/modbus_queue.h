@@ -19,14 +19,6 @@ extern "C"
 #include "modbus_type.h"
 // #include "modbus_public_type.h"
 
-typedef struct 
-{
-    uint8_t head;
-    uint8_t tail;
-
-    modbus_msg_t *modbus_msg[MAX_MODBUS_MSG_ITEMS];
-}modbus_queue_t;
-
 
 void modbus_queue_init(modbus_queue_t *q, modbus_msg_t *msg);
 void modbus_queue_push(modbus_queue_t *q, modbus_msg_t *data);

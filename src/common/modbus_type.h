@@ -117,6 +117,14 @@ extern "C"
         modbus_device_ID_t slave_id;
     } modbus_msg_t;
 
+    typedef struct 
+    {
+        uint8_t head;
+        uint8_t tail;
+
+        modbus_msg_t *modbus_msg[MAX_MODBUS_MSG_ITEMS];
+    }modbus_queue_t;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
