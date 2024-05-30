@@ -1,5 +1,6 @@
 #include "unity/fixture/unity_fixture.h"
-#include "modbus_PDU.h"
+#include "modbus_master_PDU.h"
+#include "modbus_slave_PDU.h"
 #include "buf_rw.h"
 #include "mock_slave_app_data.h"
 #include "mock_master_app_data.h"

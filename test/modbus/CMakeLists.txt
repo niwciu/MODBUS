@@ -44,6 +44,8 @@ set(INCLUDE_DIRS
 set(TEST_INCLUDE_DIRS
 	../../src
 	../../src/common
+	../../src/master_internall
+	../../src/slave_internall
 	..
 	.
 )

@@ -1,5 +1,6 @@
 #include "unity/fixture/unity_fixture.h"
-#include "modbus_PDU.h"
+#include "modbus_master_PDU.h"
+#include "modbus_slave_PDU.h"
 #include "mock_slave_app_data.h"
 
 TEST_GROUP(Modbus_Data);

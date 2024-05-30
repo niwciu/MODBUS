@@ -8,7 +8,7 @@
  *
  */
 
-#include "modbus_PDU.h"
+#include "modbus_slave_PDU.h"
 #include "modbus_data.h"
 #include "buf_rw.h"
 #include <stdio.h>
