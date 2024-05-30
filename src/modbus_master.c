@@ -62,6 +62,11 @@ modbus_master_error_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty
 {    
     modbus_ret_t modbus_lib_ret;
     msg_buf = modbus_queue_pop(free_q);
+    if(NULL == msg_buf)
+    {
+        return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR;
+    }
+    
     modbus_lib_ret = modbus_master_read_coils_req(msg_buf, adr, coils_qty);
     modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
     modbus_queue_push(tx_rx_q, msg_buf);
