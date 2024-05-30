@@ -59,8 +59,13 @@ void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_
 }
 
 modbus_master_error_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID)
-{
-    return 0;
+{    
+    modbus_ret_t modbus_lib_ret;
+    msg_buf = modbus_queue_pop(free_q);
+    modbus_lib_ret = modbus_master_read_coils_req(msg_buf, adr, coils_qty);
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    modbus_queue_push(tx_rx_q, msg_buf);
+    return MODBUS_MASTER_REQUEST_SEND;
 }
 // modbus_master_error_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty)
 // {
