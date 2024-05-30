@@ -12,7 +12,8 @@
 #include "buf_rw.h"
 #include <stdio.h>
 
-modbus_buf_t RTU_buf[MODBUS_RTU_BUFFER_SIZE] = {0};
+modbus_buf_t RTU_req_buf[MAX_MODBUS_MSG_ITEMS][MODBUS_RTU_BUFFER_SIZE];
+modbus_buf_t RTU_resp_buf[MAX_MODBUS_MSG_ITEMS][MODBUS_RTU_BUFFER_SIZE];
 
 modbus_ret_t modbus_RTU_send(modbus_buf_t *buf, modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID)
 {

@@ -116,8 +116,8 @@ extern "C"
 
     typedef struct
     {
-        modbus_req_resp_t *req;
-        modbus_req_resp_t *resp;
+        modbus_req_resp_t req;
+        modbus_req_resp_t resp;
         modbus_device_ID_t slave_id;
     } modbus_msg_t;
 

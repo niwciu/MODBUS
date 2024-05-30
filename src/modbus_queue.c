@@ -12,9 +12,6 @@
 #include <stdint.h>
 #include <stddef.h>
 
-
-
-modbus_msg_t modbus_msg[MAX_MODBUS_MSG_ITEMS];
 modbus_queue_t modbus_msg_queue;
 
 

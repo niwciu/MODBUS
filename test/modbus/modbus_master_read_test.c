@@ -4,16 +4,11 @@
 #include "mock_slave_app_data.h"
 #include "buf_rw.h"
 
-
-static uint8_t req_buf[MODBUS_RTU_BUFFER_SIZE] = {0};
-static uint8_t resp_buf[MODBUS_RTU_BUFFER_SIZE] = {0};
-static modbus_req_resp_t req;
-static modbus_req_resp_t resp;
-
 static modbus_ret_t status;
 
-static modbus_req_resp_t *RTU_req_frame=&req;
-static modbus_req_resp_t *RTU_resp_frame=&resp;
+static modbus_buf_t req_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
+static modbus_buf_t resp_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
+
 
 static modbus_msg_t modbus_msg;
 static modbus_msg_t *RTU_msg = &modbus_msg;
@@ -45,10 +40,8 @@ TEST_SETUP(Modbus_Master_Read)
     mock_reset_all_slave_inreg_value();
     mock_reset_all_slave_hreg_value();
 
-    req.data=req_buf;
-    resp.data=resp_buf;
-    modbus_msg.req=RTU_req_frame;
-    modbus_msg.resp=RTU_resp_frame;
+    RTU_msg->req.data=req_RTU_buf;
+    RTU_msg->resp.data=resp_RTU_buf;
 }
 
 TEST_TEAR_DOWN(Modbus_Master_Read)
@@ -82,7 +75,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_coils_req(RTU_msg, coil_adr, coils_qty);
     modbus_slave_read_coils(RTU_msg);
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++;
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
 
     modbus_master_read_coils_resp(RTU_msg);
 
@@ -98,7 +91,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_coils_req(RTU_msg, coil_adr, coils_qty);
     modbus_slave_read_coils(RTU_msg);
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++;
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_coils_resp(RTU_msg));
 }
@@ -129,7 +122,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
     modbus_master_read_discrete_inputs_req(RTU_msg, disin_adr, disin_qty);
     modbus_slave_read_discrete_inputs(RTU_msg);
 
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++;
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
     modbus_master_read_discrete_inputs_resp(RTU_msg);
 
     TEST_ASSERT_EQUAL_UINT8_ARRAY(expected_master_din_value, mock_master_dis_in, disin_adr + disin_qty);
@@ -145,7 +138,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
     modbus_master_read_discrete_inputs_req(RTU_msg, disin_adr, disin_qty);
     modbus_slave_read_discrete_inputs(RTU_msg);
 
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++;
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_discrete_inputs_resp(RTU_msg));
 }
@@ -175,7 +168,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_input_reg_req(RTU_msg, in_reg_adr, in_reg_qty);
     modbus_slave_read_input_reg(RTU_msg);
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++;
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
     modbus_master_read_input_reg_resp(RTU_msg);
 
     TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_inreg_val, mock_master_inreg, in_reg_adr + in_reg_qty);
@@ -190,7 +183,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_input_reg_req(RTU_msg, in_reg_adr, in_reg_qty);
     modbus_slave_read_input_reg(RTU_msg);
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++;
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_input_reg_resp(RTU_msg));
 }
@@ -205,7 +198,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadI
 
     modbus_master_read_input_reg_req(RTU_msg, in_reg_adr, in_reg_qty);
     modbus_slave_read_input_reg(RTU_msg);
-    RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX] = 7;
+    RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = 7;
     modbus_master_read_input_reg_resp(RTU_msg);
 
     TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_inreg_val, mock_master_inreg, in_reg_adr + in_reg_qty);
@@ -220,7 +213,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadI
 
     modbus_master_read_input_reg_req(RTU_msg, in_reg_adr, in_reg_qty);
     modbus_slave_read_input_reg(RTU_msg);
-    RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX] = 7;
+    RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = 7;
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT, modbus_master_read_input_reg_resp(RTU_msg));
 }
@@ -250,7 +243,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_holding_reg_req(RTU_msg, hreg_adr, hreg_qty);
     modbus_slave_read_holding_reg(RTU_msg);
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++;
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
     modbus_master_read_holding_reg_resp(RTU_msg);
 
     TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_hreg_val, mock_master_hreg, hreg_adr + hreg_qty);
@@ -265,7 +258,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead
 
     modbus_master_read_holding_reg_req(RTU_msg, hreg_adr, hreg_qty);
     modbus_slave_read_holding_reg(RTU_msg);
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++;
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_holding_reg_resp(RTU_msg));
 }
@@ -280,7 +273,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadH
 
     modbus_master_read_holding_reg_req(RTU_msg, hreg_adr, hreg_qty);
     modbus_slave_read_holding_reg(RTU_msg);
-    RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX] = 7;
+    RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = 7;
     modbus_master_read_holding_reg_resp(RTU_msg);
 
     TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_hreg_val, mock_master_hreg, hreg_adr + hreg_qty);
@@ -295,7 +288,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadH
 
     modbus_master_read_holding_reg_req(RTU_msg, hreg_adr, hreg_qty);
     modbus_slave_read_holding_reg(RTU_msg);
-    RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX] = 9;
+    RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = 9;
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT, modbus_master_read_holding_reg_resp(RTU_msg));
 }
@@ -317,7 +310,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeAndWrongOutputA
     modbus_master_write_single_coil_req(RTU_msg, coil_adr);
     modbus_slave_write_single_coil(RTU_msg);
 
-    write_u16_to_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX], coil_adr + 1);
+    write_u16_to_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], coil_adr + 1);
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_OUT_ADR, modbus_master_write_single_coil_resp(RTU_msg));
 }
 
@@ -328,7 +321,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWrit
     modbus_master_write_single_coil_req(RTU_msg, coil_adr);
     modbus_slave_write_single_coil(RTU_msg);
 
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++;
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_write_single_coil_resp(RTU_msg));
 }
 
@@ -341,7 +334,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeAndCorrectOutp
     ;
     modbus_slave_write_single_coil(RTU_msg);
 
-    write_u16_to_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], !!COIL_OFF);
+    write_u16_to_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], !!COIL_OFF);
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_VAL, modbus_master_write_single_coil_resp(RTU_msg));
 }
 
@@ -366,7 +359,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWrite
     modbus_master_write_single_reg_req(RTU_msg, reg_adr);
     modbus_slave_write_single_reg(RTU_msg);
 
-    write_u16_to_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX], reg_adr + 1);
+    write_u16_to_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], reg_adr + 1);
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_OUT_ADR, modbus_master_write_single_reg_resp(RTU_msg));
 }
 
@@ -379,7 +372,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWrit
     modbus_master_write_single_reg_req(RTU_msg, reg_adr);
     modbus_slave_write_single_reg(RTU_msg);
 
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++; // its 2 byte data so im incrementing LSB
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++; // its 2 byte data so im incrementing LSB
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_write_single_reg_resp(RTU_msg));
 }
@@ -393,7 +386,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorectFunctionCodeAndCorrectOutp
     modbus_master_write_single_reg_req(RTU_msg, reg_adr);
     modbus_slave_write_single_reg(RTU_msg);
 
-    write_u16_to_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], reg_val + 1);
+    write_u16_to_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], reg_val + 1);
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_SINGLE_OUT_VAL, modbus_master_write_single_reg_resp(RTU_msg));
 }
@@ -418,7 +411,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectSta
     modbus_master_write_multiple_coils_req(RTU_msg, coil_adr, coil_qty);
     modbus_slave_write_multiple_coils(RTU_msg);
 
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++; // change Function Code in resp
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++; // change Function Code in resp
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_write_multiple_coils_resp(RTU_msg));
 }
@@ -432,7 +425,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStar
     modbus_master_write_multiple_coils_req(RTU_msg, coil_adr, coil_qty);
     modbus_slave_write_multiple_coils(RTU_msg);
 
-    write_u16_to_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX], coil_adr + 1);
+    write_u16_to_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], coil_adr + 1);
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_OUT_ADR, modbus_master_write_multiple_coils_resp(RTU_msg));
 }
@@ -446,7 +439,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartA
     modbus_master_write_multiple_coils_req(RTU_msg, coil_adr, coil_qty);
     modbus_slave_write_multiple_coils(RTU_msg);
 
-    write_u16_to_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], coil_qty + 1);
+    write_u16_to_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], coil_qty + 1);
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_MULTI_OUT_QTY, modbus_master_write_multiple_coils_resp(RTU_msg));
 }
@@ -472,7 +465,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectSta
     modbus_master_write_multiple_reg_req(RTU_msg, reg_adr, reg_qty);
     modbus_slave_write_multiple_reg(RTU_msg);
 
-    RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]++; // change Function Code in resp
+    RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++; // change Function Code in resp
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_write_multiple_reg_resp(RTU_msg));
 }
@@ -486,7 +479,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStar
     modbus_master_write_multiple_reg_req(RTU_msg, reg_adr, reg_qty);
     modbus_slave_write_multiple_reg(RTU_msg);
 
-    write_u16_to_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX], reg_adr + 1);
+    write_u16_to_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], reg_adr + 1);
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_OUT_ADR, modbus_master_write_multiple_reg_resp(RTU_msg));
 }
@@ -500,7 +493,7 @@ TEST(Modbus_Master_Read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartA
     modbus_master_write_multiple_reg_req(RTU_msg, reg_adr, reg_qty);
     modbus_slave_write_multiple_reg(RTU_msg);
 
-    write_u16_to_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], reg_qty + 1);
+    write_u16_to_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], reg_qty + 1);
 
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_WRITE_MULTI_OUT_QTY, modbus_master_write_multiple_reg_resp(RTU_msg));
 }

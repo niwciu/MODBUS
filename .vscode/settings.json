@@ -65,7 +65,8 @@
     "modbus_rtu.h": "c",
     "core_init.h": "c",
     "stm32g070xx.h": "c",
-    "modbus_driver_interface.h": "c"
+    "modbus_driver_interface.h": "c",
+    "stdio.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "cmake.sourceDirectory": "D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/test/hw_test/STM32G070RB_MODBUS_MASTER"

@@ -4,15 +4,11 @@
 #include "mock_slave_app_data.h"
 #include "mock_master_app_data.h"
 
-static uint8_t req_buf[MODBUS_RTU_BUFFER_SIZE] = {0};
-static uint8_t resp_buf[MODBUS_RTU_BUFFER_SIZE] = {0};
-static modbus_req_resp_t req;
-static modbus_req_resp_t resp;
-
 modbus_ret_t status;
 
-static modbus_req_resp_t *RTU_req_frame=&req;
-static modbus_req_resp_t *RTU_resp_frame=&resp;
+static modbus_buf_t req_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
+static modbus_buf_t resp_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
+
 
 static modbus_msg_t modbus_msg;
 static modbus_msg_t *RTU_msg = &modbus_msg;
@@ -30,10 +26,9 @@ TEST_SETUP(Modbus_Slave_Resp)
 
     mock_set_all_slave_cails_to_off();
     mock_set_all_slave_din_to_off();
-    req.data=req_buf;
-    resp.data=resp_buf;
-    modbus_msg.req=RTU_req_frame;
-    modbus_msg.resp=RTU_resp_frame;
+
+    RTU_msg->req.data=req_RTU_buf;
+    RTU_msg->resp.data=resp_RTU_buf;
     
 }
 
@@ -54,10 +49,10 @@ TEST(Modbus_Slave_Resp, SlaveRead5Coils)
     modbus_master_read_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_read_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
     
 }
@@ -74,10 +69,10 @@ TEST(Modbus_Slave_Resp, SlaveRead8Coils)
     modbus_master_read_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_read_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -93,11 +88,11 @@ TEST(Modbus_Slave_Resp, SlaveRead9Coils)
     modbus_master_read_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_read_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 1]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -113,11 +108,11 @@ TEST(Modbus_Slave_Resp, SlaveRead16Coils)
     modbus_master_read_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_read_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 1]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -133,12 +128,12 @@ TEST(Modbus_Slave_Resp, SlaveRead17Coils)
     modbus_master_read_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_read_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[2], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 2]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[2], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 2]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -153,10 +148,10 @@ TEST(Modbus_Slave_Resp, SlaveRead5DiscreteInputs)
     modbus_master_read_discrete_inputs_req(RTU_msg, adr, din_qty);
     status = modbus_slave_read_discrete_inputs(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -171,10 +166,10 @@ TEST(Modbus_Slave_Resp, SlaveRead8DiscreteInputs)
     modbus_master_read_discrete_inputs_req(RTU_msg, adr, din_qty);
     status = modbus_slave_read_discrete_inputs(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -189,11 +184,11 @@ TEST(Modbus_Slave_Resp, SlaveRead9DiscreteInputs)
     modbus_master_read_discrete_inputs_req(RTU_msg, adr, din_qty);
     status = modbus_slave_read_discrete_inputs(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 1]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -209,11 +204,11 @@ TEST(Modbus_Slave_Resp, SlaveRead16DiscreteInputs)
     modbus_master_read_discrete_inputs_req(RTU_msg, adr, din_qty);
     status = modbus_slave_read_discrete_inputs(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 1]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -228,12 +223,12 @@ TEST(Modbus_Slave_Resp, SlaveRead17DiscreteInputs)
     modbus_master_read_discrete_inputs_req(RTU_msg, adr, din_qty);
     status = modbus_slave_read_discrete_inputs(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 1]);
-    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[2], RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 2]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
+    TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[2], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 2]);
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -249,10 +244,10 @@ TEST(Modbus_Slave_Resp, SlaveReadOneHoldingRegister)
     modbus_master_read_holding_reg_req(RTU_msg, adr, reg_qty);
     status = modbus_slave_read_holding_reg(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -268,12 +263,12 @@ TEST(Modbus_Slave_Resp, SlaveRead3HoldingRegisters)
     modbus_master_read_holding_reg_req(RTU_msg, adr, reg_qty);
     status = modbus_slave_read_holding_reg(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]));
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 2]));
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 4]));
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]));
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 2]));
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 4]));
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -289,10 +284,10 @@ TEST(Modbus_Slave_Resp, SlaveReadOneInputRegister)
     modbus_master_read_input_reg_req(RTU_msg, adr, reg_qty);
     status = modbus_slave_read_input_reg(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -308,12 +303,12 @@ TEST(Modbus_Slave_Resp, SlaveRead3InputRegisters)
     modbus_master_read_input_reg_req(RTU_msg, adr, reg_qty);
     status = modbus_slave_read_input_reg(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX]));
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 2]));
-    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + 4]));
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]));
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 2]));
+    TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 4]));
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -326,17 +321,17 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleCoil)
     modbus_master_write_single_coil_req(RTU_msg, adr);
     status = modbus_slave_write_single_coil(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(resp_buf_coil_expected_value, read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(resp_buf_coil_expected_value, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
 TEST(Modbus_Slave_Resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
 {
     modbus_adr_t adr = 0x0001;
-    // modbus_w_coil_t resp_buf_coil_expected_value = COIL_ON;
+    // modbus_w_coil_t RTU_msg->resp.data_coil_expected_value = COIL_ON;
 
     mock_set_all_slave_cails_to_off();
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr]);
@@ -344,7 +339,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
     modbus_master_write_single_coil_req(RTU_msg, adr);
     status = modbus_slave_write_single_coil(RTU_msg);
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr]);
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
     
 }
@@ -360,10 +355,10 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5Coils)
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_write_multiple_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -387,7 +382,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 5]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 6]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 7]);
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -402,10 +397,10 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8Coils)
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_write_multiple_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -427,7 +422,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 5]);
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr + 6]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 7]);
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -442,10 +437,10 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9Coils)
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_write_multiple_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -476,7 +471,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 13]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 14]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 15]);
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -491,10 +486,10 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils16Coils)
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_write_multiple_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -524,7 +519,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils16CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 13]);
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr + 14]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 15]);
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -539,10 +534,10 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils17Coils)
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     status = modbus_slave_write_multiple_coils(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -582,7 +577,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 23]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 24]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 25]);
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -595,10 +590,10 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleRegister)
     modbus_master_write_single_reg_req(RTU_msg, adr);
     status = modbus_slave_write_single_reg(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(resp_buf + MODBUS_RESP_WRITE_ADR_IDX));
-    TEST_ASSERT_EQUAL_HEX16(reg_val, read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(RTU_msg->resp.data + MODBUS_RESP_WRITE_ADR_IDX));
+    TEST_ASSERT_EQUAL_HEX16(reg_val, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 TEST(Modbus_Slave_Resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
@@ -611,7 +606,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
     status = modbus_slave_write_single_reg(RTU_msg);
 
     TEST_ASSERT_EQUAL_HEX16(reg_val, mock_slave_hreg[adr]);
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -626,10 +621,10 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3Reg)
     modbus_master_write_multiple_reg_req(RTU_msg, adr, reg_qty);
     status = modbus_slave_write_multiple_reg(RTU_msg);
 
-    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, RTU_msg->resp->data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(resp_buf + MODBUS_RESP_WRITE_ADR_IDX));
-    TEST_ASSERT_EQUAL_HEX16(reg_qty, read_u16_from_buf(&RTU_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(RTU_msg->resp.data + MODBUS_RESP_WRITE_ADR_IDX));
+    TEST_ASSERT_EQUAL_HEX16(reg_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -647,7 +642,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
     TEST_ASSERT_EQUAL_HEX16(exp_reg_val[0], mock_slave_hreg[adr]);
     TEST_ASSERT_EQUAL_HEX16(exp_reg_val[1], mock_slave_hreg[adr + 1]);
     TEST_ASSERT_EQUAL_HEX16(exp_reg_val[2], mock_slave_hreg[adr + 2]);
-    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp->len);
+    TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 

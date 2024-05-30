@@ -254,7 +254,7 @@ modbus_ret_t modbus_master_read_holding_reg_req(modbus_msg_t *modbus_msg, modbus
 {
     if (NULL != modbus_msg)
     {
-        return read_reg_request(modbus_msg->req, MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty);
+        return read_reg_request(&modbus_msg->req, MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty);
     }
     else
     {
@@ -264,43 +264,43 @@ modbus_ret_t modbus_master_read_holding_reg_req(modbus_msg_t *modbus_msg, modbus
 
 modbus_ret_t modbus_master_read_input_reg_req(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t reg_qty)
 {
-    return read_reg_request(modbus_msg->req, MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty);
+    return read_reg_request(&modbus_msg->req, MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty);
 }
 
 modbus_ret_t modbus_master_read_discrete_inputs_req(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t discrete_input_qty)
 {
-    return read_reg_request(modbus_msg->req, MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty);
+    return read_reg_request(&modbus_msg->req, MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty);
 }
 
 modbus_ret_t modbus_master_read_coils_req(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
 {
-    return read_reg_request(modbus_msg->req, MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty);
+    return read_reg_request(&modbus_msg->req, MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty);
 }
 
 modbus_ret_t modbus_master_write_single_reg_req(modbus_msg_t *modbus_msg, modbus_adr_t adr)
 {
-    return write_single_reg_coil_request(modbus_msg->req, MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr);
+    return write_single_reg_coil_request(&modbus_msg->req, MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr);
 }
 
 modbus_ret_t modbus_master_write_single_coil_req(modbus_msg_t *modbus_msg, modbus_adr_t adr)
 {
-    return write_single_reg_coil_request(modbus_msg->req, MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr);
+    return write_single_reg_coil_request(&modbus_msg->req, MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr);
 }
 
 modbus_ret_t modbus_master_write_multiple_reg_req(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t reg_qty)
 {
     if ((reg_qty <= MODBUS_MAX_WRITE_REG_QTY) && (reg_qty >= MODBUS_MIN_REG_COIL_QTY))
     {
-        modbus_msg->req->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
-        write_u16_to_buf(modbus_msg->req->data + MODBUS_REQUEST_ADR_IDX, adr);
-        write_u16_to_buf(modbus_msg->req->data + MODBUS_REQUEST_LEN_IDX, reg_qty);
-        modbus_msg->req->data[MODBUS_REQUEST_BYTE_CNT_IDX] = reg_qty * 2;
+        modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
+        write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX, adr);
+        write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_LEN_IDX, reg_qty);
+        modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX] = reg_qty * 2;
 
         for (modbus_data_qty_t i = 0; i < reg_qty; i++)
         {
-            write_u16_to_buf(modbus_msg->req->data + (MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)), get_holding_register_value(Master_Holding_Registers, adr + i));
+            write_u16_to_buf(modbus_msg->req.data + (MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)), get_holding_register_value(Master_Holding_Registers, adr + i));
         }
-        modbus_msg->req->len = MODBUS_WRITE_MULTI_REQUEST_LEN + modbus_msg->req->data[MODBUS_REQUEST_BYTE_CNT_IDX];
+        modbus_msg->req.len = MODBUS_WRITE_MULTI_REQUEST_LEN + modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX];
         return RET_OK;
     }
     else
@@ -314,16 +314,16 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *modbus_msg, mo
     modbus_byte_count_t byte_count = get_coil_din_byte_count(coils_qty);
     if ((coils_qty <= MODBUS_MAX_WRITE_COILS_QTY) && (coils_qty >= MODBUS_MIN_REG_COIL_QTY))
     {
-        modbus_msg->req->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
-        write_u16_to_buf(modbus_msg->req->data + MODBUS_REQUEST_ADR_IDX, adr);
-        write_u16_to_buf(modbus_msg->req->data + MODBUS_REQUEST_LEN_IDX, coils_qty);
-        modbus_msg->req->data[MODBUS_REQUEST_BYTE_CNT_IDX] = byte_count;
+        modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
+        write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX, adr);
+        write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_LEN_IDX, coils_qty);
+        modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX] = byte_count;
 
-        clear_coil_din_status_byte(&modbus_msg->req->data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], byte_count);
+        clear_coil_din_status_byte(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], byte_count);
         for (modbus_data_qty_t i = 0; i < coils_qty; i++)
         {
 
-            modbus_msg->req->data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i / 8)] |= (get_coil_state(Master_Coils, adr + i) << (i % 8));
+            modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i / 8)] |= (get_coil_state(Master_Coils, adr + i) << (i % 8));
         }
         return RET_OK;
     }
@@ -341,7 +341,7 @@ modbus_ret_t modbus_master_read_coils_resp(const modbus_msg_t *modbus_msg)
     }
     else
     {
-        return update_master_data_from_modbus_msg(modbus_msg->resp, modbus_msg->req, MODBUS_READ_COILS_FUNC_CODE, (void **)(Master_Coils));
+        return update_master_data_from_modbus_msg(&modbus_msg->resp, &modbus_msg->req, MODBUS_READ_COILS_FUNC_CODE, (void **)(Master_Coils));
     }
     
 }
@@ -354,7 +354,7 @@ modbus_ret_t modbus_master_read_discrete_inputs_resp(const modbus_msg_t *modbus_
     }
     else
     {
-        return update_master_data_from_modbus_msg(modbus_msg->resp, modbus_msg->req, MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, (void **)(Master_Discrete_Inputs));
+        return update_master_data_from_modbus_msg(&modbus_msg->resp, &modbus_msg->req, MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, (void **)(Master_Discrete_Inputs));
     }
 }
 
@@ -366,7 +366,7 @@ modbus_ret_t modbus_master_read_input_reg_resp(const modbus_msg_t *modbus_msg)
     }
     else
     {
-        return update_master_data_from_modbus_msg(modbus_msg->resp, modbus_msg->req, MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, (void **)(Master_Input_Registers));
+        return update_master_data_from_modbus_msg(&modbus_msg->resp, &modbus_msg->req, MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, (void **)(Master_Input_Registers));
     }
 }
 
@@ -378,7 +378,7 @@ modbus_ret_t modbus_master_read_holding_reg_resp(const modbus_msg_t *modbus_msg)
     }
     else
     {
-        return update_master_data_from_modbus_msg(modbus_msg->resp, modbus_msg->req, MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, (void **)(Master_Holding_Registers));
+        return update_master_data_from_modbus_msg(&modbus_msg->resp, &modbus_msg->req, MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, (void **)(Master_Holding_Registers));
     }
 }
 
@@ -390,7 +390,7 @@ modbus_ret_t modbus_master_write_single_coil_resp(const modbus_msg_t *modbus_msg
     }
     else
     {
-        return check_write_slave_resp_vs_req(modbus_msg->resp, modbus_msg->req);
+        return check_write_slave_resp_vs_req(&modbus_msg->resp, &modbus_msg->req);
     }
 }
 
@@ -402,7 +402,7 @@ modbus_ret_t modbus_master_write_single_reg_resp(const modbus_msg_t *modbus_msg)
     }
     else
     {
-        return check_write_slave_resp_vs_req(modbus_msg->resp, modbus_msg->req);
+        return check_write_slave_resp_vs_req(&modbus_msg->resp, &modbus_msg->req);
     }
 }
 
@@ -414,7 +414,7 @@ modbus_ret_t modbus_master_write_multiple_coils_resp(const modbus_msg_t *modbus_
     }
     else
     {
-        return check_write_slave_resp_vs_req(modbus_msg->resp, modbus_msg->req);
+        return check_write_slave_resp_vs_req(&modbus_msg->resp, &modbus_msg->req);
     }
 }
 modbus_ret_t modbus_master_write_multiple_reg_resp(const modbus_msg_t *modbus_msg)
@@ -425,7 +425,7 @@ modbus_ret_t modbus_master_write_multiple_reg_resp(const modbus_msg_t *modbus_ms
     }
     else
     {
-        return check_write_slave_resp_vs_req(modbus_msg->resp, modbus_msg->req);
+        return check_write_slave_resp_vs_req(&modbus_msg->resp, &modbus_msg->req);
     }
 }
 
@@ -447,20 +447,20 @@ modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(modbus_msg->req->data + MODBUS_REQUEST_ADR_IDX);
-        modbus_data_qty_t coil_qty = read_u16_from_buf(modbus_msg->req->data + MODBUS_REQUEST_LEN_IDX);
+        modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
+        modbus_data_qty_t coil_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_LEN_IDX);
         modbus_byte_count_t byte_cnt = get_coil_din_byte_count(coil_qty);
 
-        modbus_msg->resp->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
-        modbus_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
+        modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
-        clear_coil_din_status_byte(&modbus_msg->resp->data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
+        clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
 
         for (modbus_byte_count_t i = 0; i < coil_qty; i++)
         {
-            modbus_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_coil_state(Slave_Coils, adr + i) << (i % 8));
+            modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_coil_state(Slave_Coils, adr + i) << (i % 8));
         }
-        modbus_msg->resp->len = MODBUS_READ_RESP_LEN + byte_cnt;
+        modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
     }
     return RET_OK;
 }
@@ -473,20 +473,20 @@ modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t din_qty = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_LEN_IDX]);
+        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+        modbus_data_qty_t din_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_LEN_IDX]);
         modbus_byte_count_t byte_cnt = get_coil_din_byte_count(din_qty);
 
-        modbus_msg->resp->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
-        modbus_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
+        modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
-        clear_coil_din_status_byte(&modbus_msg->resp->data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
+        clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
 
         for (modbus_byte_count_t i = 0; i < din_qty; i++)
         {
-            modbus_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_discrete_input_state(Slave_Discrete_Inputs, adr + i) << (i % 8));
+            modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_discrete_input_state(Slave_Discrete_Inputs, adr + i) << (i % 8));
         }
-        modbus_msg->resp->len =MODBUS_READ_RESP_LEN + byte_cnt;
+        modbus_msg->resp.len =MODBUS_READ_RESP_LEN + byte_cnt;
         return RET_OK;
     }
 }
@@ -499,18 +499,18 @@ modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_LEN_IDX]);
+        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+        modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_LEN_IDX]);
         modbus_byte_count_t byte_cnt = 2 * reg_qty;
 
-        modbus_msg->resp->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
-        modbus_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
+        modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
         for (modbus_byte_count_t i = 0; i < reg_qty; i++)
         {
-            write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], get_holding_register_value(Slave_Holding_Registers, adr + i));
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], get_holding_register_value(Slave_Holding_Registers, adr + i));
         }
-        modbus_msg->resp->len = MODBUS_READ_RESP_LEN + byte_cnt;
+        modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
         return RET_OK;
     }
 }
@@ -523,18 +523,18 @@ modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_LEN_IDX]);
+        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+        modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_LEN_IDX]);
         modbus_byte_count_t byte_cnt = 2 * reg_qty;
 
-        modbus_msg->resp->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_INPUT_REGISTERS_FUNC_CODE;
-        modbus_msg->resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_INPUT_REGISTERS_FUNC_CODE;
+        modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
         for (modbus_byte_count_t i = 0; i < reg_qty; i++)
         {
-            write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], get_input_register_state(Slave_Input_Registers, adr + i));
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], get_input_register_state(Slave_Input_Registers, adr + i));
         }
-        modbus_msg->resp->len = MODBUS_READ_RESP_LEN + byte_cnt;
+        modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
         return RET_OK;
     }
 }
@@ -547,16 +547,16 @@ modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_w_coil_t coils_state = read_u16_from_buf(&modbus_msg->req->data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]);
+        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+        modbus_w_coil_t coils_state = read_u16_from_buf(&modbus_msg->req.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]);
 
-        modbus_msg->resp->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_COIL_FUNC_CODE;
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_COIL_FUNC_CODE;
 
         set_coil_state(Slave_Coils, adr, !!coils_state); // double logic negation make 1 from var that is different then 0 and 0 from var equal 0
 
-        write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-        write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], coils_state);
-        modbus_msg->resp->len =MODBUS_WRITE_SINGLE_RESP_LEN;
+        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], coils_state);
+        modbus_msg->resp.len =MODBUS_WRITE_SINGLE_RESP_LEN;
         return RET_OK;
     }
 }
@@ -569,15 +569,15 @@ modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t coils_qty = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_LEN_IDX]);
+        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+        modbus_data_qty_t coils_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_LEN_IDX]);
 
-        set_coil_din_value_from_modbus_msg(&modbus_msg->req->data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], adr, coils_qty, Slave_Coils);
+        set_coil_din_value_from_modbus_msg(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], adr, coils_qty, Slave_Coils);
 
-        modbus_msg->resp->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
-        write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-        write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], coils_qty);
-        modbus_msg->resp->len =MODBUS_WRITE_MULTI_RESP_LEN;
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
+        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], coils_qty);
+        modbus_msg->resp.len =MODBUS_WRITE_MULTI_RESP_LEN;
         return RET_OK;
     }
 }
@@ -590,15 +590,15 @@ modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_reg_t reg_val_to_save = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_LEN_IDX]);
+        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+        modbus_reg_t reg_val_to_save = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_LEN_IDX]);
 
         set_register_value(Slave_Holding_Registers, adr, reg_val_to_save);
 
-        modbus_msg->resp->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE;
-        write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-        write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], reg_val_to_save);
-        modbus_msg->resp->len = MODBUS_WRITE_SINGLE_RESP_LEN;
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE;
+        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], reg_val_to_save);
+        modbus_msg->resp.len = MODBUS_WRITE_SINGLE_RESP_LEN;
         return RET_OK;
     }
 }
@@ -611,19 +611,19 @@ modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t hreg_qty = read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_LEN_IDX]);
+        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+        modbus_data_qty_t hreg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_LEN_IDX]);
 
         for (modbus_data_qty_t i = 0; i < hreg_qty; i++)
         {
-            set_register_value(Slave_Holding_Registers, adr + i, read_u16_from_buf(&modbus_msg->req->data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)]));
+            set_register_value(Slave_Holding_Registers, adr + i, read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)]));
         }
 
-        modbus_msg->resp->data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
-        write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-        write_u16_to_buf(&modbus_msg->resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], hreg_qty);
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
+        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], hreg_qty);
 
-        modbus_msg->resp->len = MODBUS_WRITE_MULTI_RESP_LEN;
+        modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
         return RET_OK;
     }
 }

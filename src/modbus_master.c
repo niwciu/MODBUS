@@ -16,7 +16,13 @@
 
 #include <stdio.h>
 
+
 static modbus_master_state_t master_manager_state;
+
+static modbus_msg_t modbus_msg[MAX_MODBUS_MSG_ITEMS]; // w inicie przypisuje do modbus_msg.req.data adres na bufor req RTU i modbus_msg.resp.data adres resp RTU
+                                                      // do tego init kolejki ktory podpina wskaźniki modbus_msg
+
+
 
 void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
 {
