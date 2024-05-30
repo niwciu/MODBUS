@@ -93,6 +93,12 @@ extern "C"
         RET_ERROR = -1,
         RET_OK = 0,
     } modbus_ret_t;
+
+    typedef enum{
+    MODBUS_MASTER_IDLE,
+    MODBUS_MASTER_TRANSMISION,
+    
+    }modbus_master_state_t;
     
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;

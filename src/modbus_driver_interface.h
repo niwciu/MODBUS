@@ -31,7 +31,7 @@ extern "C"
         driver_send_t send;
         driver_enable_rx_t enable_rcev;
         driver_disable_rx_t disable_rcev;
-        driver_subscribe_rx_cb_t subscribe_rx_cb;
+        driver_subscribe_rx_cb_t subscribe_rx_cb; //ToDo pytanie czy będzie potrzebne
     };
 
     const struct modbus_RTU_driver_struct *get_RTU_driver_interface(void);

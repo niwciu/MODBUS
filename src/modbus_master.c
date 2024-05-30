@@ -23,13 +23,8 @@
 #else
 #define PRIVATE static
 #endif
-typedef enum{
-    MODBUS_MASTER_IDLE,
-    MODBUS_MASTER_TRANSMISION,
-    
-}modbus_master_state_t;
 
-static modbus_master_state_t master_manager_state;
+PRIVATE modbus_master_state_t master_manager_state_machine = MODBUS_MASTER_IDLE;
 
 PRIVATE const struct modbus_RTU_driver_struct *RTU_driver = NULL;
 

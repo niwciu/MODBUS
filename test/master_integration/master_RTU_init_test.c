@@ -12,6 +12,7 @@ TEST_GROUP(master_init);
 extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 extern modbus_queue_t master_msg_queue;
 extern struct modbus_RTU_driver_struct *RTU_driver;
+extern modbus_master_state_t master_manager_state_machine;
 
 
 
@@ -63,10 +64,12 @@ TEST(master_init,GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThenDriverIsI
     TEST_ASSERT_EQUAL(DRIVER_INITIALIZED, mock_USART.init_status);
 }
 
-// TEST(master_init,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
-// }
+TEST(master_init,WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachineIsSetToIdle)
+{
+    modbus_master_init(RTU,0,0);
+
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE,master_manager_state_machine);
+}
 
 // TEST(master_init,)
 // {
