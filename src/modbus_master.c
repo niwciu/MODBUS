@@ -143,19 +143,37 @@ modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_da
     return MODBUS_MASTER_REQUEST_SEND;
     
 }
-// modbus_master_error_t modbus_master_write_single_reg(modbus_adr_t adr)
+modbus_master_error_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_device_ID_t slave_ID)
+{
+    msg_buf = modbus_queue_pop(free_q);
+    modbus_ret_t modbus_lib_ret;
+
+    if(NULL == msg_buf)
+    {
+        return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR;
+    }
+    modbus_lib_ret = modbus_master_write_single_coil_req(msg_buf, adr);
+    if(0 > modbus_lib_ret)
+    {
+        return MODBUS_MASTER_LIB_REQ_ERROR;
+    }
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    if(RET_ERROR == modbus_lib_ret)
+    {
+        return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
+    }
+    modbus_queue_push(tx_rx_q, msg_buf);
+    return MODBUS_MASTER_REQUEST_SEND;
+}
+// modbus_master_error_t modbus_master_write_single_coil(modbus_adr_t adr, modbus_device_ID_t slave_ID)
 // {
 //     return 0;
 // }
-// modbus_master_error_t modbus_master_write_single_coil(modbus_adr_t adr)
+// modbus_master_error_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID)
 // {
 //     return 0;
 // }
-// modbus_master_error_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty)
-// {
-//     return 0;
-// }
-// modbus_master_error_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty)
+// modbus_master_error_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID)
 // {
 //     return 0;
 // }

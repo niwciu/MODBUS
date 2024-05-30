@@ -275,17 +275,36 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithWrongParam
     TEST_ASSERT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
 }
-// TEST(master_RTU,)
+
+TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue)
+{
+    modbus_adr_t coil_adr = 0x0005;
+    modbus_device_ID_t slave_ID = 0x01;
+    modbus_coil_disin_t coil_state = !!COIL_ON;
+    modbus_msg_t *tx_rx_msg_buf;
+    modbus_master_error_t ret_status;
+    
+    modbus_buf_t expected_master_request[] = {0x01, 0x05, 0x00, 0x05, 0xFF, 0x00, 0x9c, 0x3b};
+    uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
+
+    register_app_data_to_modbus_master_coils_table(coil_adr,&coil_state);
+
+    ret_status = modbus_master_write_single_reg(coil_adr, slave_ID);
+
+    tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
+
+    TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
+    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+}
+
+// TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
 // {
 //    TEST_FAIL_MESSAGE("Implement your test!");
 // }
 
-// TEST(master_RTU,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
-
-// TEST(master_RTU,)
+// TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
 // {
 //    TEST_FAIL_MESSAGE("Implement your test!");
 // }
