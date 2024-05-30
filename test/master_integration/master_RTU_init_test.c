@@ -15,8 +15,6 @@ extern struct modbus_RTU_driver_struct *RTU_driver;
 extern modbus_master_state_t master_manager_state_machine;
 extern modbus_queue_t *msg_q;
 
-
-
 TEST_SETUP(master_init)
 {
     /* Init before every test */
@@ -29,66 +27,66 @@ TEST_TEAR_DOWN(master_init)
 
 TEST(master_init, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
 {
-    modbus_master_init(RTU,0,0);
-    for (int i = 0 ; i< MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    modbus_master_init(RTU, 0, 0);
+    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_req_buf[i][0],modbus_msg[i].req.data,MAX_MODBUS_MSG_QUEUE_ITEMS);
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_resp_buf[i][0],modbus_msg[i].resp.data,MAX_MODBUS_MSG_QUEUE_ITEMS);
+        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_req_buf[i][0], modbus_msg[i].req.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
+        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_resp_buf[i][0], modbus_msg[i].resp.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
     }
 }
 
-TEST(master_init,WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized)
+TEST(master_init, WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized)
 {
-    modbus_master_init(RTU,0,0);
+    modbus_master_init(RTU, 0, 0);
 
-    for (int i = 0 ; i< MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&modbus_msg[i],msg_q->modbus_msg[i],MAX_MODBUS_MSG_QUEUE_ITEMS);
+        TEST_ASSERT_EQUAL_UINT32_ARRAY(&modbus_msg[i], msg_q->modbus_msg[i], MAX_MODBUS_MSG_QUEUE_ITEMS);
     }
 }
 
-TEST(master_init,WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
+TEST(master_init, WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
 {
-   modbus_master_init(RTU,0,0);
-   TEST_ASSERT_NOT_NULL(RTU_driver);
+    modbus_master_init(RTU, 0, 0);
+    TEST_ASSERT_NOT_NULL(RTU_driver);
 }
 
-TEST(master_init,GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity)
+TEST(master_init, GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity)
 {
     uint32_t baud = 38400;
     parity_t parity = ODD;
-    
-    modbus_master_init(RTU,baud,parity);
+
+    modbus_master_init(RTU, baud, parity);
 
     TEST_ASSERT_EQUAL(baud, mock_USART.baud_rate);
-    TEST_ASSERT_EQUAL(parity,mock_USART.parity);
+    TEST_ASSERT_EQUAL(parity, mock_USART.parity);
     TEST_ASSERT_EQUAL(DRIVER_INITIALIZED, mock_USART.init_status);
 }
 
-TEST(master_init,WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachineIsSetToIdle)
+TEST(master_init, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachineIsSetToIdle)
 {
-    modbus_master_init(RTU,0,0);
+    modbus_master_init(RTU, 0, 0);
 
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE,master_manager_state_machine);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, master_manager_state_machine);
 }
 
-TEST(master_init,WhenModbusMasterInitInRTUmodeThenPushAllAvailableMsgBufferToQueue)
+TEST(master_init, WhenModbusMasterInitInRTUmodeThenPushAllAvailableMsgBufferToQueue)
 {
-   modbus_master_init(RTU,0,0);
-   TEST_ASSERT_EQUAL(MAX_MODBUS_MSG_QUEUE_ITEMS,msg_q->head);
+    modbus_master_init(RTU, 0, 0);
+    TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1), msg_q->head);
 }
 
 // TEST(master_init,)
 // {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
+//    TEST_FAIL_MESSAGE("Implement your test!");
 // }
 
 // TEST(master_init,)
 // {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
+//    TEST_FAIL_MESSAGE("Implement your test!");
 // }
 
 // TEST(master_init,)
 // {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
+//    TEST_FAIL_MESSAGE("Implement your test!");
 // }

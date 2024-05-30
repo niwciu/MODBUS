@@ -36,6 +36,7 @@ PRIVATE modbus_msg_t * msg_buf = NULL;
 
 static void register_msg_resq_resp_data_buffers(modbus_mode_t mode);
 static void register_master_msg_queue(void);
+static void push_all_available_msg_buffer_to_queue(void);
 
 void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
 {
@@ -116,6 +117,7 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
     register_msg_resq_resp_data_buffers(mode);
     register_master_msg_queue();
+    push_all_available_msg_buffer_to_queue();
     
     RTU_driver=get_RTU_driver_interface();
     RTU_driver->init(baud_rate,parity);
@@ -165,5 +167,13 @@ static void register_master_msg_queue(void)
     for (uint8_t i=0; i<MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         master_msg_queue.modbus_msg[i]=&modbus_msg[i];
+    }
+}
+
+static void push_all_available_msg_buffer_to_queue(void)
+{
+    for (uint8_t i=0; i<MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    {
+        modbus_queue_push(msg_q,&modbus_msg[i]);
     }
 }
