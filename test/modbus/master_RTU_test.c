@@ -230,7 +230,7 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperPara
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
  
-    modbus_buf_t expected_master_request[] = {0x08, 0x01, 0x00, 0x05, 0x00, 0x03, 0x6c, 0x93};
+    modbus_buf_t expected_master_request[] = {0x08, 0x02, 0x00, 0x05, 0x00, 0x03, 0x28, 0x93};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
 
     ret_status = modbus_master_read_discrete_inputs(disin_adr, disin_qty, slave_ID);
