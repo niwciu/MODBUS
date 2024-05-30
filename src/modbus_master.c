@@ -72,7 +72,7 @@ modbus_master_error_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
     }
-    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, slave_ID);
     modbus_queue_push(tx_rx_q, msg_buf);
     return MODBUS_MASTER_REQUEST_SEND;
 }
@@ -91,7 +91,7 @@ modbus_master_error_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbu
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
     }
-    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, slave_ID);
     modbus_queue_push(tx_rx_q, msg_buf);
     return MODBUS_MASTER_REQUEST_SEND;
 }
@@ -111,7 +111,7 @@ modbus_master_error_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
     }
-    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, slave_ID);
     if(RET_ERROR == modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
@@ -134,7 +134,7 @@ modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_da
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
     }
-    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, slave_ID);
     if(RET_ERROR == modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
@@ -157,7 +157,7 @@ modbus_master_error_t modbus_master_write_single_coil(modbus_adr_t adr, modbus_d
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
     }
-    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, slave_ID);
     if(RET_ERROR == modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
@@ -179,7 +179,7 @@ modbus_master_error_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_de
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
     }
-    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, slave_ID);
     if(RET_ERROR == modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
@@ -201,7 +201,7 @@ modbus_master_error_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbus_
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
     }
-    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, slave_ID);
     if(RET_ERROR == modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
@@ -223,7 +223,7 @@ modbus_master_error_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbu
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
     }
-    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, slave_ID);
     if(RET_ERROR == modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;

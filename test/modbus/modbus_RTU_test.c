@@ -8,13 +8,16 @@
 TEST_GROUP(Modbus_RTU);
 
 modbus_buf_t buf[MODBUS_RTU_BUFFER_SIZE] = {0};
+// modbus_req_resp_t req_resp_struct;
+// modbus_req_resp_t *msg =&req_resp_struct;
 
 #define SLAVE_ID_1 0x02U
-#define CRC_LEN 2U
+
 
 TEST_SETUP(Modbus_RTU)
 {
     /* Init before every test */
+    // req_resp_struct.data=buf;
 }
 
 TEST_TEAR_DOWN(Modbus_RTU)
@@ -26,7 +29,7 @@ TEST(Modbus_RTU, AddSlaveIdToSendBuf)
 {
     modbus_buf_size_t buf_data_len = 15;
 
-    modbus_RTU_send(buf, buf_data_len, SLAVE_ID_1);
+    modbus_RTU_send(buf, &buf_data_len, SLAVE_ID_1);
 
     TEST_ASSERT_EQUAL_HEX8(SLAVE_ID_1, buf[MODBUS_SLAVE_ADR_IDX]);
 }
@@ -40,9 +43,9 @@ TEST(Modbus_RTU, AddCRCToSendBuf)
 
     memcpy(buf, PDU_frame, PDU_frame_size);
 
-    modbus_RTU_send(buf, buf_data_len, SLAVE_ID_1);
+    modbus_RTU_send(buf, &buf_data_len, SLAVE_ID_1);
 
-    TEST_ASSERT_EQUAL_HEX16(expected_CRC, read_u16_from_buf(buf + buf_data_len));
+    TEST_ASSERT_EQUAL_HEX16(expected_CRC, read_u16_from_buf(buf + (buf_data_len-2)));
 }
 
 TEST(Modbus_RTU, ModbusRtuSendWitnNullPtrAsBuffer)
@@ -51,7 +54,7 @@ TEST(Modbus_RTU, ModbusRtuSendWitnNullPtrAsBuffer)
     modbus_buf_size_t buf_data_len = 15;
     modbus_ret_t send_status;
 
-    send_status = modbus_RTU_send(NULL, buf_data_len, SLAVE_ID_1);
+    send_status = modbus_RTU_send(NULL, &buf_data_len, SLAVE_ID_1);
 
     TEST_ASSERT_EQUAL_HEX8(RET_ERROR, send_status);
 }
@@ -61,7 +64,7 @@ TEST(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLen)
     modbus_buf_size_t buf_data_len = MODBUS_PDU_MAX_LEN;
     modbus_ret_t send_status;
 
-    send_status = modbus_RTU_send(buf, buf_data_len, SLAVE_ID_1);
+    send_status = modbus_RTU_send(buf, &buf_data_len, SLAVE_ID_1);
 
     TEST_ASSERT_EQUAL_HEX8(RET_OK, send_status);
 }
@@ -71,7 +74,7 @@ TEST(Modbus_RTU, ModbusRtuSendWitnBufLenEqualToMaxPduLenPlus1)
     modbus_buf_size_t buf_data_len = MODBUS_PDU_MAX_LEN + 1;
     modbus_ret_t send_status;
 
-    send_status = modbus_RTU_send(buf, buf_data_len, SLAVE_ID_1);
+    send_status = modbus_RTU_send(buf, &buf_data_len, SLAVE_ID_1);
 
     TEST_ASSERT_EQUAL_HEX8(RET_ERROR, send_status);
 }
@@ -81,8 +84,8 @@ TEST(Modbus_RTU, SlaveIdIsCorrectInRecvBuffer)
     modbus_buf_size_t buf_data_len = 2;
     modbus_ret_t recv_status;
 
-    modbus_RTU_send(buf, buf_data_len, SLAVE_ID_1);
-    recv_status = modbus_RTU_recv(buf, buf_data_len + CRC_LEN, SLAVE_ID_1);
+    modbus_RTU_send(buf, &buf_data_len, SLAVE_ID_1);
+    recv_status = modbus_RTU_recv(buf, buf_data_len, SLAVE_ID_1);
 
     TEST_ASSERT_EQUAL_HEX8(RET_OK, recv_status);
 }
@@ -94,7 +97,7 @@ TEST(Modbus_RTU, SlaveIdIsNotCorrectInRecvBuffer)
     modbus_buf_size_t buf_data_len = 2;
     modbus_ret_t recv_status;
 
-    modbus_RTU_send(buf, buf_data_len, sended_slave_ID);
+    modbus_RTU_send(buf, &buf_data_len, sended_slave_ID);
     recv_status = modbus_RTU_recv(buf, buf_data_len, expected_slave_ID);
 
     TEST_ASSERT_EQUAL_HEX8(RET_ERROR_SLAVE_ID, recv_status);

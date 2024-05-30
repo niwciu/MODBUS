@@ -115,7 +115,7 @@ extern "C"
     typedef struct
     {
         modbus_buf_t *data;
-        uint8_t len;
+        modbus_buf_size_t len;
     } modbus_req_resp_t;
 
     typedef struct

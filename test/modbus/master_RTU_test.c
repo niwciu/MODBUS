@@ -78,8 +78,8 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWit
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len + 2);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
@@ -131,8 +131,8 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithP
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len + 2);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
@@ -184,8 +184,8 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithProperPara
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len + 2);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
@@ -238,8 +238,8 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperPara
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len + 2);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
@@ -294,8 +294,8 @@ TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithPrope
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len + 2);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
@@ -337,8 +337,8 @@ TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegisterWithP
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len + 2);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
@@ -381,8 +381,8 @@ TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWi
     ret_status = modbus_master_write_multiple_reg(hreg_adr,hreg_qty,slave_ID);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len + 2);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
@@ -437,8 +437,8 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithP
     ret_status = modbus_master_write_multiple_coils(coil_adr,coils_qty,slave_ID);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len + 2);
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len + 2);
+    TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
