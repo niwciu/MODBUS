@@ -40,6 +40,7 @@ PRIVATE modbus_msg_t *msg_buf = NULL;
 static void register_msg_resq_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 
+
 void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
 {
     register_app_data_to_modbus_coils_din_table(Master_Coils, coil_adr, app_data_ptr);
@@ -67,15 +68,24 @@ void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_
 // }
 modbus_master_error_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID)
 {
+    modbus_ret_t modbus_lib_ret;
+
     msg_buf = modbus_queue_pop(free_q);
     if(NULL == msg_buf)
     {
         return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR;
     }
-    
-    modbus_master_read_input_reg_req(msg_buf, adr, reg_qty);
-    modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
 
+    modbus_lib_ret = modbus_master_read_input_reg_req(msg_buf, adr, reg_qty);
+    if(0 > modbus_lib_ret)
+    {
+        return MODBUS_MASTER_LIB_REQ_ERROR;
+    }
+    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
+    if(RET_ERROR == modbus_lib_ret)
+    {
+        return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
+    }
     modbus_queue_push(tx_rx_q, msg_buf);
     return MODBUS_MASTER_REQUEST_SEND;
 }
@@ -101,6 +111,7 @@ modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_da
     }
     modbus_queue_push(tx_rx_q, msg_buf);
     return MODBUS_MASTER_REQUEST_SEND;
+    
 }
 // modbus_master_error_t modbus_master_write_single_reg(modbus_adr_t adr)
 // {
