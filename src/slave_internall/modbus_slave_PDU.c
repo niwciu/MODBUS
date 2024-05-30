@@ -55,7 +55,7 @@ static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_pt
 // Slave API functions
 modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
 {
-    if (NULL == modbus_msg)
+    if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
         return RET_NULL_PTR_ERROR;
     }
@@ -81,7 +81,7 @@ modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
 
 modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
 {
-    if (NULL == modbus_msg)
+    if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
         return RET_NULL_PTR_ERROR;
     }
@@ -107,7 +107,7 @@ modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
 
 modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
 {
-    if (NULL == modbus_msg)
+    if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
         return RET_NULL_PTR_ERROR;
     }
@@ -131,7 +131,7 @@ modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
 
 modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
 {
-    if (NULL == modbus_msg)
+    if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
         return RET_NULL_PTR_ERROR;
     }
@@ -155,7 +155,7 @@ modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
 
 modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
 {
-    if (NULL == modbus_msg)
+    if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
         return RET_NULL_PTR_ERROR;
     }
@@ -177,7 +177,7 @@ modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
 
 modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
 {
-    if (NULL == modbus_msg)
+    if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
         return RET_NULL_PTR_ERROR;
     }
@@ -198,7 +198,7 @@ modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
 
 modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
 {
-    if (NULL == modbus_msg)
+    if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
         return RET_NULL_PTR_ERROR;
     }
@@ -219,7 +219,7 @@ modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
 
 modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
 {
-    if (NULL == modbus_msg)
+    if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
         return RET_NULL_PTR_ERROR;
     }
