@@ -26,7 +26,10 @@ TEST_GROUP_RUNNER(master_RTU)
 
    RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
    RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
-   // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
+
+   RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegisterWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+   // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegisterWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+  
    // RUN_TEST_CASE(master_RTU, );
    // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhen);
    // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhen);
