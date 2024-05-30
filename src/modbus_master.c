@@ -35,6 +35,8 @@ static modbus_queue_t master_msg_queue;
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_ITEMS]; // w inicie przypisuje do modbus_msg.req.data adres na bufor req RTU i modbus_msg.resp.data adres resp RTU
                                                       // do tego init kolejki ktory podpina wskaźniki modbus_msg
 
+static register_msg_resq_resp_data_buffers(modbus_mode_t mode);
+
 // void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
 // {
     
@@ -105,14 +107,8 @@ PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_ITEMS]; // w inicie przypisuje do
 // }
 void modbus_master_init(modbus_mode_t mode)
 {
-    if (RTU == mode)
-    {
-        for (uint8_t i=0; i<MAX_MODBUS_MSG_ITEMS; i++)
-        {
-            modbus_msg[i].req.data= &RTU_req_buf[i][0];
-            modbus_msg[i].resp.data= &RTU_resp_buf[i][0];
-        }
-    }
+    register_msg_resq_resp_data_buffers(mode);
+
 }
 void modbus_update_modbus_manager(void)
 {
@@ -138,4 +134,16 @@ void modbus_update_modbus_manager(void)
     //     break;
 
     // }
+}
+
+static register_msg_resq_resp_data_buffers(modbus_mode_t mode)
+{
+    if (RTU == mode)
+    {
+        for (uint8_t i=0; i<MAX_MODBUS_MSG_ITEMS; i++)
+        {
+            modbus_msg[i].req.data= &RTU_req_buf[i][0];
+            modbus_msg[i].resp.data= &RTU_resp_buf[i][0];
+        }
+    }
 }
