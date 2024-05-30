@@ -68,7 +68,11 @@ void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_
 modbus_master_error_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID)
 {
     msg_buf = modbus_queue_pop(free_q);
-   
+    if(NULL == msg_buf)
+    {
+        return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR;
+    }
+    
     modbus_master_read_input_reg_req(msg_buf, adr, reg_qty);
     modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
 
