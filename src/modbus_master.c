@@ -81,11 +81,10 @@ modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_da
         return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR;
     }
     modbus_lib_ret = modbus_master_read_holding_reg_req(msg_buf, adr, hreg_qty);
-    // if(0 >= lib_ret)
-    // {
-
-    //     return MODBUS_MASTER_REQ_LIB_ERROR;
-    // }
+    if(0 > modbus_lib_ret)
+    {
+        return MODBUS_MASTER_LIB_REQ_ERROR;
+    }
     modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
     // modbus_RTU_send(&msg_buf->req.data,5,slave_ID);
     // if(RET_ERROR == modbus_lib_ret)

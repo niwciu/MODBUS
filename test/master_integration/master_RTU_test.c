@@ -101,7 +101,7 @@ TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWith
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR,ret_status);
 }
 
-TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
+TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
 {
     modbus_adr_t hreg_adr = 0x0000;
     modbus_device_ID_t slave_ID = 0x05;
