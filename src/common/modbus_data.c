@@ -20,6 +20,16 @@ modbus_reg_t *Master_Input_Registers[INPUT_REG_QTY] = {NULL};
 modbus_coil_disin_t *Master_Coils[COILS_QTY] = {NULL};
 modbus_coil_disin_t *Master_Discrete_Inputs[DISCRET_INPUT_QTY] = {NULL};
 
+void register_app_data_to_modbus_coils_din_table(modbus_coil_disin_t **coil_din_table, modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
+{
+    coil_din_table[coil_adr] = app_data_ptr;
+}
+void register_app_data_to_modbus_reg_table(modbus_reg_t **reg_table, modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
+{
+    reg_table[reg_adr] = app_data_ptr;
+}
+
+
 modbus_coil_disin_t get_coil_state(modbus_coil_disin_t **coils_tab_ptr, modbus_adr_t coil_adr)
 {
     if (NULL != (coils_tab_ptr[coil_adr]))
