@@ -243,23 +243,23 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperPara
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
-// TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
-// {
-//     modbus_adr_t coil_adr = 0x0005;
-//     modbus_device_ID_t slave_ID = 0x08;
-//     modbus_data_qty_t coil_qty = 3;
-//     modbus_msg_t *tx_rx_msg_buf;
-//     modbus_master_error_t ret_status;
+TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
+{
+    modbus_adr_t disin_adr = 0x0005;
+    modbus_device_ID_t slave_ID = 0x08;
+    modbus_data_qty_t disin_qty = 3;
+    modbus_msg_t *tx_rx_msg_buf;
+    modbus_master_error_t ret_status;
 
-//     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
-//     {
-//         modbus_queue_pop(free_q);
-//     }
-//     ret_status = modbus_master_read_coils(coil_adr, coil_qty, slave_ID);
-//     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
-//     TEST_ASSERT_NULL(tx_rx_msg_buf);
-//     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
-// }
+    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    {
+        modbus_queue_pop(free_q);
+    }
+    ret_status = modbus_master_read_discrete_inputs(disin_adr, disin_qty, slave_ID);
+    tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
+    TEST_ASSERT_NULL(tx_rx_msg_buf);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
+}
 
 // TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
 // {
