@@ -61,8 +61,10 @@ set(SRCS
 
 set(TEST_SRCS
     master_integration_test_main.c
-    master_integration_test_runner.c
+    master_RTU_init_test_runner.c
     master_RTU_init_test.c
+	master_RTU_test_runner.c
+	master_RTU_test.c
 	mock_modbus_driver_interface.c
 	#mock_module.c
 )

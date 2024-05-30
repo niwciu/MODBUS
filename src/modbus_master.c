@@ -109,6 +109,8 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     
     RTU_driver=get_RTU_driver_interface();
     RTU_driver->init(baud_rate,parity);
+
+    // ToDo rcv_callback ?? do we need this
 }
 void modbus_update_modbus_manager(void)
 {
