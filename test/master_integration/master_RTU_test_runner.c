@@ -9,8 +9,7 @@ TEST_GROUP_RUNNER(master_RTU)
    RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterHolRegPtrTableThenHolRegPtrIsEqualToRegisteredDataAdr);
 
    RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
-
-   // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhen);
+   RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
    // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhen);
    // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhen);
    // RUN_TEST_CASE(master_RTU, GivenModbusMasterInRTUmodeInitWhen);
