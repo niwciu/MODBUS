@@ -38,7 +38,6 @@ PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *msg_buf = NULL;
 
 static void register_msg_resq_resp_data_buffers(modbus_mode_t mode);
-static void register_master_msg_queue(void);
 static void push_all_available_msg_buffer_to_free_queue(void);
 
 void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
@@ -86,11 +85,10 @@ modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_da
         return MODBUS_MASTER_LIB_REQ_ERROR;
     }
     modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, msg_buf->req.len, slave_ID);
-    // modbus_RTU_send(&msg_buf->req.data,5,slave_ID);
-    // if(RET_ERROR == modbus_lib_ret)
-    // {
-    //     return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
-    // }
+    if(RET_ERROR == modbus_lib_ret)
+    {
+        return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
+    }
     modbus_queue_push(tx_rx_q, msg_buf);
     return MODBUS_MASTER_REQUEST_SEND;
 }
