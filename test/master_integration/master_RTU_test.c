@@ -50,10 +50,15 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterDisInP
     TEST_ASSERT_EQUAL(&app_data_disin,Master_Discrete_Inputs[disin_adr]);
 }
 
-// TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterInRegPtrTableThenInRegPtrIsEqualToRegisteredDataAdr)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
-// }
+TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterInRegPtrTableThenInRegPtrIsEqualToRegisteredDataAdr)
+{
+    modbus_adr_t inreg_adr = 0x0003;
+    modbus_reg_t app_data_inreg; 
+
+    register_app_data_to_modbus_master_inreg_table(inreg_adr,&app_data_inreg);
+    
+    TEST_ASSERT_EQUAL(&app_data_inreg,Master_Input_Registers[inreg_adr]);
+}
 
 // TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterHolRegPtrTableThenHolRegPtrIsEqualToRegisteredDataAdr)
 // {
