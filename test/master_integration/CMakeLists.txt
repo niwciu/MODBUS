@@ -24,7 +24,7 @@
 #############################################################################################################################
 cmake_minimum_required(VERSION 3.10)
 
-project(template_test C)
+project(modbus_master_integration)
 
 add_subdirectory(../unity unity)
 
@@ -39,26 +39,35 @@ endif()
 
 set(INCLUDE_DIRS
 	../../src
+	../../src/master_internall
+	../../src/common
 )
 
 set(TEST_INCLUDE_DIRS
 	..
 	.
+	
 )
 
 set(SRCS
-	#../../src/tested_module_folder/tested_module.c
+	../../src/master_internall/modbus_master_PDU.c
+	../../src/common/buf_rw.c
+	../../src/common/modbus_data.c
+	../../src/common/modbus_crc.c
+	../../src/common/modbus_RTU.c
+	../../src/common/modbus_queue.c
+	../../src/modbus_master.c
 )
 
 set(TEST_SRCS
-    template_test_main.c
-    template_test_runner.c
-    template_test.c
+    master_integration_test_main.c
+    master_integration_test_runner.c
+    master_init_test.c
 	#mock_module.c
 )
 
 set(GLOBAL_DEFINES
-
+	-DUNIT_TEST
 )
 
 include(${CUSTOM_TARGETS_FILE_DIR})

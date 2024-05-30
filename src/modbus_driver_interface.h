@@ -26,7 +26,7 @@ extern "C"
 
     typedef void (*driver_init_t)(uint32_t Baud, parity_t parity);
     typedef void (*driver_send_t)(modbus_buf_t *tx_msg, uint8_t msg_len);
-    typedef void (*driver_enable_rx_t)(RTU_buf_t *recv_buf);
+    typedef void (*driver_enable_rx_t)(modbus_buf_t *recv_buf);
     typedef void (*driver_disable_rx_t)(void);
 
     typedef void (*rx_cb_t)(modbus_buf_t *resp, uint8_t msg_len);

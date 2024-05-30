@@ -16,7 +16,9 @@ extern "C"
 #endif /* __cplusplus */
 #include <stdint.h>
 #include <stdbool.h>
-
+typedef enum{
+    RTU,
+}modbus_mode_t;
 typedef enum 
 {
     MODBUS_MASTER_OK,

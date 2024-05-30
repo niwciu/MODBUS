@@ -272,7 +272,6 @@ TEST(Modbus_Master_Requests, WriteMaxQtyMultipleRegisters)
 TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)
 {
     modbus_adr_t adr = 0x0080;
-    // modbus_reg_t values[MODBUS_MAX_READ_REG_QTY + 1] = {0x5A5A};
     modbus_data_qty_t reg_qty = MODBUS_MAX_READ_REG_QTY + 1;
     modbus_ret_t status;
 
@@ -283,7 +282,6 @@ TEST(Modbus_Master_Requests, WriteMultipleRegistersMaxQtyPlus1)
 TEST(Modbus_Master_Requests, WriteZeroMultipleRegisters)
 {
     modbus_adr_t adr = 0x0080;
-    // modbus_reg_t values[MODBUS_MAX_READ_REG_QTY] = {0x5A5A};
     modbus_data_qty_t reg_qty = 0;
     modbus_ret_t status;
 
@@ -341,7 +339,6 @@ TEST(Modbus_Master_Requests, WriteZeroMultipleCoils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coils_qty = 0;
-    // modbus_coil_disin_t coil_states[1] = {0};
     modbus_ret_t status;
 
     status = modbus_master_write_multiple_coils_req(RTU_msg, adr, coils_qty);

@@ -15,7 +15,6 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include "modbus_type.h"
-// #include "modbus_public_type.h"
 #include "modbus_config.h"
 
 #if MAIN_APP_HOLDING_REG_QTY < MODBUS_MAX_SPECIFIC_DATA_ITEMS_QTY

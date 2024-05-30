@@ -8,7 +8,7 @@
 
 
 #TARGETS FOR RUNNING UNIT TESTS
-add_custom_target(run lcd_hd44780_test)
+add_custom_target(run modbus_master_integration)
 
 # TARGET FOR CHECKING CODE COMPLEXITY METRICS"
 # check if lizard software is available 
