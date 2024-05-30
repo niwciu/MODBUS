@@ -46,10 +46,10 @@ void register_app_data_to_modbus_master_inreg_table(modbus_adr_t reg_adr, modbus
 {
     register_app_data_to_modbus_reg_table(Master_Input_Registers,reg_adr,app_data_ptr);
 }
-// void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
-// {
+void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
+{
     
-// }
+}
 
 
 // modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty,modbus_device_ID_t slave_ID)
