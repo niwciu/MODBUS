@@ -3,6 +3,8 @@
 #include "modbus_RTU.h"
 #include "modbus_type.h"
 
+#include "mock_modbus_driver_interface.h"
+
 // #include "tested_module.h"
 
 TEST_GROUP(master_init);
@@ -10,6 +12,8 @@ TEST_GROUP(master_init);
 extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 extern modbus_queue_t master_msg_queue;
 extern struct modbus_RTU_driver_struct *RTU_driver;
+
+
 
 TEST_SETUP(master_init)
 {
@@ -23,7 +27,7 @@ TEST_TEAR_DOWN(master_init)
 
 TEST(master_init, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
 {
-    modbus_master_init(RTU);
+    modbus_master_init(RTU,0,0);
     for (int i = 0 ; i< MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_req_buf[i][0],modbus_msg[i].req.data,MAX_MODBUS_MSG_QUEUE_ITEMS);
@@ -33,7 +37,7 @@ TEST(master_init, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegist
 
 TEST(master_init,WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized)
 {
-    modbus_master_init(RTU);
+    modbus_master_init(RTU,0,0);
 
     for (int i = 0 ; i< MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
@@ -43,14 +47,21 @@ TEST(master_init,WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized)
 
 TEST(master_init,WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
 {
-   modbus_master_init(RTU);
+   modbus_master_init(RTU,0,0);
    TEST_ASSERT_NOT_NULL(RTU_driver);
 }
 
-// TEST(master_init,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
-// }
+TEST(master_init,GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity)
+{
+    uint32_t baud = 38400;
+    parity_t parity = ODD;
+    
+    modbus_master_init(RTU,baud,parity);
+
+    TEST_ASSERT_EQUAL(baud, mock_USART.baud_rate);
+    TEST_ASSERT_EQUAL(parity,mock_USART.parity);
+    TEST_ASSERT_EQUAL(DRIVER_INITIALIZED, mock_USART.init_status);
+}
 
 // TEST(master_init,)
 // {

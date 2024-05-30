@@ -107,7 +107,7 @@ static void register_master_msg_queue(void);
 // {
 //     return 0;
 // }
-void modbus_master_init(modbus_mode_t mode)
+void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
     register_msg_resq_resp_data_buffers(mode);
     register_master_msg_queue();

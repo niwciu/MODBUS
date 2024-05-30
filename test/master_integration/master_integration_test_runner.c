@@ -6,7 +6,7 @@ TEST_GROUP_RUNNER(master_init)
    RUN_TEST_CASE(master_init, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegistered);
    RUN_TEST_CASE(master_init, WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized);
    RUN_TEST_CASE(master_init, WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered);
-   // RUN_TEST_CASE(master_init, WhenModbusMasterInitInRTUmodeThen );
+   RUN_TEST_CASE(master_init, GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity );
    // RUN_TEST_CASE(master_init, WhenModbusMasterInitInRTUmodeThen);
    // RUN_TEST_CASE(master_init, WhenModbusMasterInitInRTUmodeThen);
    // RUN_TEST_CASE(master_init, WhenModbusMasterInitInRTUmodeThen);

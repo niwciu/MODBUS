@@ -19,6 +19,13 @@ extern "C"
 typedef enum{
     RTU,
 }modbus_mode_t;
+
+typedef enum
+{
+    NONE,
+    ODD,
+    EVEN
+} parity_t;
 typedef enum 
 {
     MODBUS_MASTER_OK,
@@ -32,6 +39,7 @@ typedef bool modbus_coil_disin_t;
 typedef uint16_t modbus_reg_t;
 typedef uint16_t modbus_data_qty_t;
 typedef uint8_t modbus_device_ID_t;
+typedef uint32_t baud_t;
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
