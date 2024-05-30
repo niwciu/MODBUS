@@ -38,7 +38,6 @@ TEST(master_init,WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized)
     {
         TEST_ASSERT_EQUAL_UINT32_ARRAY(&modbus_msg[i],master_msg_queue.modbus_msg[i],MAX_MODBUS_MSG_ITEMS);
     }
-    TEST_FAIL_MESSAGE("Implement your test!"); 
 }
 
 // TEST(master_init,)
