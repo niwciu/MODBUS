@@ -40,6 +40,7 @@ endif()
 set(INCLUDE_DIRS
 	../../src
 	../../src/master_internall
+	../../src/slave_internall
 	../../src/common
 )
 
@@ -51,6 +52,7 @@ set(TEST_INCLUDE_DIRS
 
 set(SRCS
 	../../src/master_internall/modbus_master_PDU.c
+	../../src/slave_internall/modbus_slave_PDU.c
 	../../src/common/buf_rw.c
 	../../src/common/modbus_data.c
 	../../src/common/modbus_crc.c
@@ -66,6 +68,8 @@ set(TEST_SRCS
 	master_RTU_test_runner.c
 	master_RTU_test.c
 	mock_modbus_driver_interface.c
+	mock_slave_app_data.c
+	mock_master_app_data.c
 	#mock_module.c
 )
 

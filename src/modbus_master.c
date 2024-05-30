@@ -34,10 +34,10 @@ PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 static void register_msg_resq_resp_data_buffers(modbus_mode_t mode);
 static void register_master_msg_queue(void);
 
-// void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
-// {
+void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
+{
     
-// }
+}
 // void register_app_data_to_modbus_master_din_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
 // {
     
