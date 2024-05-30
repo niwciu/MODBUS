@@ -10,7 +10,7 @@
 
 
 TEST_GROUP(master_RTU);
-
+ extern modbus_msg_t * msg_buf;
 // extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 // extern modbus_queue_t master_msg_queue;
 // extern struct modbus_RTU_driver_struct *RTU_driver;
@@ -70,11 +70,25 @@ TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterHolRegP
     TEST_ASSERT_EQUAL(&app_data_hreg,Master_Holding_Registers[hreg_adr]);
 }
 
-// TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersAndGetAnswerBeforTimeOutThenMasterHoldingRegistersAreUpdatedWithSlaveValue)
-// {
-   
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
-// }
+TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersAndGetAnswerBeforTimeOutThenMasterHoldingRegistersAreUpdatedWithSlaveValue)
+{
+    modbus_adr_t hreg_adr=0x0002;
+    modbus_reg_t slave_reg_val=0x5A5A;
+    modbus_reg_t master_app_reg=0;
+    modbus_device_ID_t slave_ID=0x05;
+    modbus_data_qty_t hreg_qty= 1;
+    modbus_buf_t expected_master_request[] = {0x05,0x03,0x00,0x02,0x00,0x01,0x24,0x4e};
+    
+    mock_slave_hreg[hreg_adr]=slave_reg_val;
+    // mock set slave resp in rx buffer
+
+    register_app_data_to_modbus_master_hreg_table(hreg_adr,&master_app_reg);
+
+    modbus_master_read_holding_reg(hreg_adr,hreg_qty,slave_ID);
+    // TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request,msg_buf->req.data,msg_buf->req.len + 2);
+    
+    TEST_ASSERT_EQUAL_HEX16(slave_reg_val,master_app_reg);
+}
 
 
 

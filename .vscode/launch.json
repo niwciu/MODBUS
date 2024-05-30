@@ -69,5 +69,25 @@
         "samplesPerSecond": 4
       }
     },
+    {
+      "name": "debug integration_master",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/test/master_integration/out/modbus_master_integration.exe",
+      "args": [],
+      "stopAtEntry": true,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/Qt_6_5/Tools/mingw1120_64/bin/gdb.exe",
+      "setupCommands": [
+          {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+          }
+      ]
+  },
   ]
 }

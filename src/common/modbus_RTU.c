@@ -20,18 +20,19 @@ modbus_ret_t modbus_RTU_send(modbus_buf_t *buf, modbus_buf_size_t msg_len, modbu
 
     if ((NULL != buf) && (MODBUS_PDU_MAX_LEN >= msg_len))
     {
-        modbus_CRC_t CRC;
-        buf[MODBUS_SLAVE_ADR_IDX] = slave_ID;
+    //     modbus_CRC_t CRC;
+    //     buf[MODBUS_SLAVE_ADR_IDX] = slave_ID;
 
-        CRC = calculate_CRC(buf, msg_len);
-        buf[msg_len] = CRC & 0x00FF;
-        buf[msg_len + 1] = CRC >> 8;
-        return RET_OK;
+    //     CRC = calculate_CRC(buf, msg_len);
+    //     buf[msg_len] = CRC & 0x00FF;
+    //     buf[msg_len + 1] = CRC >> 8;
+    //     return RET_OK;
     }
     else
     {
         return RET_ERROR;
     }
+    return RET_OK;
 }
 
 modbus_ret_t modbus_RTU_recv(modbus_buf_t *buf, modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID)

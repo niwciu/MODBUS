@@ -1,1 +1,3 @@
 Testy do kolejnki!!!!
+
+refactor fukcji RTU Send + testy by poprawiała długość bufor po dodaniu CRC

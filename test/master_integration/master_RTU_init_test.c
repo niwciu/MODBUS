@@ -10,9 +10,10 @@
 TEST_GROUP(master_init);
 
 extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
-extern modbus_queue_t master_msg_queue;
+// extern modbus_queue_t master_msg_queue;
 extern struct modbus_RTU_driver_struct *RTU_driver;
 extern modbus_master_state_t master_manager_state_machine;
+extern modbus_queue_t *msg_q;
 
 
 
@@ -42,7 +43,7 @@ TEST(master_init,WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized)
 
     for (int i = 0 ; i< MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&modbus_msg[i],master_msg_queue.modbus_msg[i],MAX_MODBUS_MSG_QUEUE_ITEMS);
+        TEST_ASSERT_EQUAL_UINT32_ARRAY(&modbus_msg[i],msg_q->modbus_msg[i],MAX_MODBUS_MSG_QUEUE_ITEMS);
     }
 }
 
@@ -71,10 +72,11 @@ TEST(master_init,WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachin
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE,master_manager_state_machine);
 }
 
-// TEST(master_init,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
-// }
+TEST(master_init,WhenModbusMasterInitInRTUmodeThenPushAllAvailableMsgBufferToQueue)
+{
+   modbus_master_init(RTU,0,0);
+   TEST_ASSERT_EQUAL(MAX_MODBUS_MSG_QUEUE_ITEMS,msg_q->head);
+}
 
 // TEST(master_init,)
 // {

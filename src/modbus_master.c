@@ -28,8 +28,11 @@ PRIVATE modbus_master_state_t master_manager_state_machine = MODBUS_MASTER_IDLE;
 
 PRIVATE const struct modbus_RTU_driver_struct *RTU_driver = NULL;
 
-PRIVATE modbus_queue_t master_msg_queue;
-PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];                                                
+static modbus_queue_t master_msg_queue;
+PRIVATE modbus_queue_t *msg_q=&master_msg_queue;
+PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
+
+PRIVATE modbus_msg_t * msg_buf = NULL;
 
 static void register_msg_resq_resp_data_buffers(modbus_mode_t mode);
 static void register_master_msg_queue(void);
@@ -52,30 +55,7 @@ void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_
 }
 
 
-// modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty,modbus_device_ID_t slave_ID)
-// {
-//     // modbus_master_error_t status;
-//     // modbus_msg_t * msg_buf =  modbus_queue_pop();
-//     // modbus_ret_t modbus_lib_ret;
-
-//     // if(NULL == msg_buf)
-//     // {
-//     //     return MODBUS_MASTER_QUEUE_FULL_ERR;
-//     // }
-//     // modbus_ret = modbus_master_read_holding_reg_req(msg_buf->req,adr,hreg_qty);
-//     // if(0 >= lib_ret)
-//     // {
-
-//     //     return MODBUS_MASTER_REQ_LIB_ERROR;
-//     // }
-//     // modbus_lib_ret= modbus_RTU_send(msg_buf->req,modbus_ret,slave_ID);
-//     // if(RET_ERROR == modbus_lib_ret)
-//     // {
-//     //     return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
-//     // }
-//     // return status;
-// }
-// modbus_master_error_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty)
+// modbus_master_error_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty)
 // {
 //     return 0;
 // }
@@ -83,10 +63,39 @@ void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_
 // {
 //     return 0;
 // }
-// modbus_master_error_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty)
+// modbus_master_error_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty)
 // {
 //     return 0;
 // }
+
+modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty,modbus_device_ID_t slave_ID)
+{
+    msg_buf =  modbus_queue_pop(msg_q);
+    modbus_ret_t modbus_lib_ret;
+
+    // if(NULL == msg_buf)
+    // {
+    //     return MODBUS_MASTER_QUEUE_FULL_ERR;
+    // }
+    modbus_lib_ret = modbus_master_read_holding_reg_req(msg_buf,adr,hreg_qty);
+    // if(0 >= lib_ret)
+    // {
+
+    //     return MODBUS_MASTER_REQ_LIB_ERROR;
+    // }
+    printf("\r\n test\r\n");
+    uint8_t len = msg_buf->req.len;
+    printf("msg_len = %d",len);
+    // modbus_lib_ret= modbus_RTU_send(&msg_buf->req.data,msg_buf->req.len,slave_ID);
+    // modbus_RTU_send(&msg_buf->req.data,5,slave_ID);
+    // if(RET_ERROR == modbus_lib_ret)
+    // {
+    //     return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
+    // }
+    // RTU_driver->send(msg_buf->req.data,msg_buf->req.len);
+    // RTU_driver->enable_rcev(msg_buf->resp.data);
+    return MODBUS_MASTER_REQUEST_SEND;
+}
 // modbus_master_error_t modbus_master_write_single_reg(modbus_adr_t adr)
 // {
 //     return 0;
