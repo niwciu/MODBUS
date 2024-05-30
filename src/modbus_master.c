@@ -48,7 +48,7 @@ void register_app_data_to_modbus_master_inreg_table(modbus_adr_t reg_adr, modbus
 }
 void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
 {
-    
+    register_app_data_to_modbus_reg_table(Master_Holding_Registers,reg_adr,app_data_ptr);
 }
 
 
