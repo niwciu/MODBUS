@@ -8,9 +8,8 @@
  * 
  */
 
-#include "modbus_PDU.h"
+#include "modbus_master_PDU.h"
 #include "buf_rw.h"
-// #include "modbus_data.h"  // dodane w hederze modsbus_PDU.h
 #include <stdio.h>
 
 static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data_len);

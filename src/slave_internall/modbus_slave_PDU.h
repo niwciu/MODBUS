@@ -15,7 +15,6 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include "modbus_data.h"
-// #include "modbus_public_type.h"
 
     // Slave Functionality
     modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg);

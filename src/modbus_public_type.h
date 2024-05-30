@@ -25,7 +25,6 @@ typedef enum
     MODBUS_MASTER_LIB_RTU_SEND_ERROR,
 }modbus_master_error_t;
 
-
 typedef uint16_t modbus_adr_t;
 typedef bool modbus_coil_disin_t;
 typedef uint16_t modbus_reg_t;
