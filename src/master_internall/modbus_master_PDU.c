@@ -325,6 +325,7 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *modbus_msg, mo
 
             modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i / 8)] |= (get_coil_state(Master_Coils, adr + i) << (i % 8));
         }
+        modbus_msg->req.len = MODBUS_WRITE_MULTI_REQUEST_LEN + modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX];
         return RET_OK;
     }
     else

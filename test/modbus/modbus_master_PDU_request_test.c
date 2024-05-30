@@ -305,6 +305,7 @@ TEST(Modbus_Master_Requests, Write5MultipleCoils)
     TEST_ASSERT_EQUAL_UINT16(coils_qty, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_LEN_IDX));
     TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt, RTU_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_coil_states_in_PDU, RTU_msg->req.data + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX, expected_byte_cnt);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + expected_byte_cnt,RTU_msg->req.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -322,6 +323,7 @@ TEST(Modbus_Master_Requests, WriteMaxQtyMultipleCoils)
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(coils_qty, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_LEN_IDX));
     TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt, RTU_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX]);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + expected_byte_cnt,RTU_msg->req.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
