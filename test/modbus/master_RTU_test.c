@@ -386,10 +386,28 @@ TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWi
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
 }
 
-// TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
+{
+    modbus_adr_t hreg_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t hreg_qty = 4;
+    modbus_msg_t *tx_rx_msg_buf;
+    modbus_master_error_t ret_status;
+    modbus_reg_t hreg_data[]= {0x2001,0x2002,0x2003, 0x2004};
+    for (uint8_t i=0; i<hreg_qty; i++)
+    {
+        register_app_data_to_modbus_master_hreg_table(hreg_adr+i,hreg_data+i);
+    }
+    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    {
+        modbus_queue_pop(free_q);
+    }
+    ret_status = modbus_master_write_multiple_reg(hreg_adr,hreg_qty,slave_ID);
+    tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
+    TEST_ASSERT_NULL(tx_rx_msg_buf);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
+
+}
 
 // TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
 // {
