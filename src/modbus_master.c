@@ -31,7 +31,7 @@ typedef enum{
 
 static modbus_master_state_t master_manager_state;
 
-PRIVATE struct modbus_RTU_driver_struct *RTU_driver = NULL;
+PRIVATE const struct modbus_RTU_driver_struct *RTU_driver = NULL;
 
 PRIVATE modbus_queue_t master_msg_queue;
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];                                                
@@ -113,7 +113,7 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     register_master_msg_queue();
     
     RTU_driver=get_RTU_driver_interface();
-
+    RTU_driver->init(baud_rate,parity);
 }
 void modbus_update_modbus_manager(void)
 {
