@@ -154,19 +154,19 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithP
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
 }
 
-// TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
-// {
-//     modbus_adr_t hreg_adr = 0x0000;
-//     modbus_device_ID_t slave_ID = 0x05;
-//     modbus_data_qty_t hreg_qty = MODBUS_MAX_READ_REG_QTY + 1;
-//     modbus_msg_t *tx_rx_msg_buf;
-//     modbus_master_error_t ret_status;
-//     ret_status = modbus_master_read_holding_reg(hreg_adr, hreg_qty, slave_ID);
+TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
+{
+    modbus_adr_t inreg_adr = 0x0000;
+    modbus_device_ID_t slave_ID = 0x05;
+    modbus_data_qty_t inreg_qty = MODBUS_MAX_READ_REG_QTY + 1;
+    modbus_msg_t *tx_rx_msg_buf;
+    modbus_master_error_t ret_status;
+    ret_status = modbus_master_read_input_reg(inreg_adr, inreg_qty, slave_ID);
 
-//     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
-//     TEST_ASSERT_NULL(tx_rx_msg_buf);
-//     TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
-// }
+    tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
+    TEST_ASSERT_NULL(tx_rx_msg_buf);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
+}
 
 
 // TEST(master_RTU,)
