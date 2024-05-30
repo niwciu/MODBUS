@@ -9,6 +9,7 @@ TEST_GROUP(master_init);
 
 extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 extern modbus_queue_t master_msg_queue;
+extern struct modbus_RTU_driver_struct *RTU_driver;
 
 TEST_SETUP(master_init)
 {
@@ -40,10 +41,12 @@ TEST(master_init,WhenModbusMasterInitInRTUmodeThenRTUmsgQueueInitialized)
     }
 }
 
-// TEST(master_init,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
-// }
+TEST(master_init,WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
+{
+   modbus_master_init(RTU);
+   TEST_ASSERT_NOT_NULL(RTU_driver);
+   TEST_FAIL_MESSAGE("Implement your test!"); 
+}
 
 // TEST(master_init,)
 // {
