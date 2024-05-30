@@ -101,7 +101,7 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWit
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
 }
 
-TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
+TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
 {
     modbus_adr_t hreg_adr = 0x0000;
     modbus_device_ID_t slave_ID = 0x05;
@@ -154,7 +154,7 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithP
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
 }
 
-TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
+TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
 {
     modbus_adr_t inreg_adr = 0x0000;
     modbus_device_ID_t slave_ID = 0x05;
@@ -207,14 +207,14 @@ TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithProperPara
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
 }
 
-TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithProperParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
+TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError)
 {
     modbus_adr_t coil_adr = 0x0005;
     modbus_device_ID_t slave_ID = 0x08;
-    modbus_data_qty_t coil_qty = 3;
+    modbus_data_qty_t coil_qty = MODBUS_MAX_READ_COILS_QTY + 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
-    
+
     ret_status = modbus_master_read_coils(coil_adr, coil_qty, slave_ID);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
