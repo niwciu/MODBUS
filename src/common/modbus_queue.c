@@ -12,10 +12,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-modbus_queue_t modbus_msg_queue;
 
 
-void modbus_queue_init(modbus_queue_t *q)
+void modbus_queue_init(modbus_queue_t *q, modbus_msg_t *msg)
 {
     q->head=0;
     q->tail=0;
@@ -23,7 +22,7 @@ void modbus_queue_init(modbus_queue_t *q)
     uint8_t i;
     for(i=0; i<MAX_MODBUS_MSG_ITEMS; i++)
     {
-        modbus_queue_push(&modbus_msg_queue,&modbus_msg[i]);
+        modbus_queue_push(q,&msg[i]); // tutaj trzea jakoś przekazać wskaźnik do bufora który jest zainicjalizowany w masterze lub slave (RTU lub inny)
     }
 }
 

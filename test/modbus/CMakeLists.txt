@@ -54,6 +54,7 @@ set(SRCS
 	../../src/modbus_data.c
 	../../src/common/modbus_crc.c
 	../../src/common/modbus_RTU.c
+	../../src/common/modbus_queue.c
 )
 
 set(TEST_SRCS

@@ -27,11 +27,7 @@ typedef struct
 }modbus_queue_t;
 
 
-
-typedef modbus_msg_t *buf_t;
-extern modbus_queue_t modbus_msg_queue;
-
-void modbus_queue_init(modbus_queue_t *q);
+void modbus_queue_init(modbus_queue_t *q, modbus_msg_t *msg);
 void modbus_queue_push(modbus_queue_t *q, modbus_msg_t *data);
 modbus_msg_t* modbus_queue_pop(modbus_queue_t *q);
 #ifdef __cplusplus
