@@ -45,7 +45,6 @@ TEST(master_init,WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
 {
    modbus_master_init(RTU);
    TEST_ASSERT_NOT_NULL(RTU_driver);
-   TEST_FAIL_MESSAGE("Implement your test!"); 
 }
 
 // TEST(master_init,)

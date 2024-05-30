@@ -111,6 +111,8 @@ void modbus_master_init(modbus_mode_t mode)
 {
     register_msg_resq_resp_data_buffers(mode);
     register_master_msg_queue();
+    
+    RTU_driver=get_RTU_driver_interface();
 
 }
 void modbus_update_modbus_manager(void)
