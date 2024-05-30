@@ -15,7 +15,8 @@
 extern "C"
 {
 #endif /* __cplusplus */
-#include "modbus_type.h"
+// #include "modbus_type.h"
+#include <stdint.h>
 
     uint16_t calculate_CRC(uint8_t *data_buf, uint32_t data_buf_len);
 

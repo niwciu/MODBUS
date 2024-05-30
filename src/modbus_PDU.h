@@ -15,6 +15,7 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include "modbus_data.h"
+#include "modbus_public_type.h"
 
     // Master and Slave Functionality
     void register_app_data_to_modbus_coils_din_table(modbus_coil_disin_t **modbus_data_type, modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr);

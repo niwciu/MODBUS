@@ -16,19 +16,10 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include "modbus_data.h"
+#include "modbus_public_type"
 
-typedef enum 
-{
-    MODBUS_MASTER_OK,
-    MODBUS_MASTER_QUEUE_FULL_ERR,
-    MODBUS_MASTER_REQ_LIB_ERROR,
-    MODBUS_MASTER_LIB_RTU_SEND_ERROR,
-}modbus_master_error_t;
-typedef enum{
-    MODBUS_MASTER_IDLE,
-    MODBUS_MASTER_TRANSMISION,
-    
-}modbus_master_state_t
+
+
 
     void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr);
     void register_app_data_to_modbus_master_din_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr);

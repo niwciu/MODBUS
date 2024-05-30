@@ -16,6 +16,11 @@
 
 #include <stdio.h>
 
+typedef enum{
+    MODBUS_MASTER_IDLE,
+    MODBUS_MASTER_TRANSMISION,
+    
+}modbus_master_state_t
 
 static modbus_master_state_t master_manager_state;
 static modbus_queue_t master_msg_queue;

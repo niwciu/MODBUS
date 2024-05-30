@@ -14,8 +14,7 @@
 extern "C"
 {
 #endif /* __cplusplus */
-#include <stdint.h>
-#include <stdbool.h>
+#include "modbus_public_type.h"
     // clang-format off
     // taken from modsbus frame buffer size specification
     #define MODBUS_RTU_BUFFER_SIZE 256U
@@ -96,17 +95,17 @@ extern "C"
         RET_OK = 0,
     } modbus_ret_t;
 
-    typedef uint16_t modbus_adr_t;
-    typedef uint16_t modbus_reg_t;
-    typedef uint16_t modbus_data_qty_t;
+    
+    
+    
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
     typedef uint8_t modbus_buf_t;
     typedef uint8_t modbus_buf_size_t;
-    typedef uint8_t modbus_device_ID_t;
+    
     typedef uint16_t modbus_CRC_t;
-    typedef bool modbus_coil_disin_t;
+    
     
     typedef struct
     {
