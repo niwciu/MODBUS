@@ -38,10 +38,10 @@ void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbu
 {
     register_app_data_to_modbus_coils_din_table(Master_Coils,coil_adr,app_data_ptr);
 }
-// void register_app_data_to_modbus_master_din_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
-// {
+void register_app_data_to_modbus_master_din_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
+{
     
-// }
+}
 // void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
 // {
     

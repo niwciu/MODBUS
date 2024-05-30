@@ -38,13 +38,17 @@ TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterCoilPtr
     register_app_data_to_modbus_master_coils_table(coil_adr,&app_data_coil);
     
     TEST_ASSERT_EQUAL(&app_data_coil,Master_Coils[coil_adr]);
-    // TEST_FAIL_MESSAGE("Implement your test!"); 
 }
 
-// TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterDisInPtrTableThenDisInPtrIsEqualToRegisteredDataAdr)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!"); 
-// }
+TEST(master_RTU, GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterDisInPtrTableThenDisInPtrIsEqualToRegisteredDataAdr)
+{
+    modbus_adr_t disin_adr = 0x0003;
+    modbus_coil_disin_t app_data_disin; 
+
+    register_app_data_to_modbus_master_din_table(disin_adr,&app_data_disin);
+    
+    TEST_ASSERT_EQUAL(&app_data_disin,Master_Discrete_Inputs[disin_adr]);
+}
 
 // TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterInRegPtrTableThenInRegPtrIsEqualToRegisteredDataAdr)
 // {
