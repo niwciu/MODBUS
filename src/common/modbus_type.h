@@ -102,6 +102,15 @@ extern "C"
         MODBUS_MASTER_RESP_ANALYSE,
         MODBUS_MASTER_ERROR_SERVICE,
     }modbus_master_state_t;
+
+    typedef enum
+    {
+        MODBUS_SLAVE_IDLE,
+        // MODBUS_SLAVE_TRANSMISION,
+        // MODBUS_SLAVE_RECEIVING,
+        // MODBUS_SLAVE_RESP_ANALYSE,
+        // MODBUS_SLAVE_ERROR_SERVICE,
+    }modbus_slave_state_t;
     
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;

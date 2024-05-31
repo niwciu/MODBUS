@@ -20,6 +20,7 @@
 #define PRIVATE static
 #endif
 
+PRIVATE modbus_slave_state_t slave_manager_state_machine = MODBUS_SLAVE_IDLE;
 PRIVATE const modbus_RTU_driver_struct_t *slave_RTU_driver = NULL;
 
 static modbus_queue_t slave_free_queue;

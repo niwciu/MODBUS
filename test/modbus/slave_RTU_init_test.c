@@ -15,6 +15,7 @@ extern modbus_queue_t *slave_free_q;
 extern modbus_queue_t *slave_tx_rx_q;
 
 extern modbus_RTU_driver_struct_t *slave_RTU_driver;
+extern modbus_slave_state_t slave_manager_state_machine;
 
 TEST_SETUP(Slave_RTU_init_test)
 {
@@ -70,10 +71,12 @@ TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenD
     TEST_ASSERT_EQUAL(DRIVER_INITIALIZED, mock_slave_USART.init_status);
 }
 
-// TEST(Slave_RTU_init_test, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStateMachineIsSetToIdle)
+{
+    modbus_slave_init(RTU, 0, 0);
+
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
+}
 
 // TEST(Slave_RTU_init_test, )
 // {
