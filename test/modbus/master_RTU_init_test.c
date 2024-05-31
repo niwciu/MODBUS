@@ -3,7 +3,7 @@
 #include "modbus_RTU.h"
 #include "modbus_type.h"
 
-#include "mock_modbus_driver_interface.h"
+#include "mock_master_driver_interface.h"
 
 // #include "tested_module.h"
 

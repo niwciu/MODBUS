@@ -8,7 +8,7 @@
  * 
  */
 #include "modbus_driver_interface.h"
-#include "mock_modbus_driver_interface.h"
+#include "mock_master_driver_interface.h"
 
 #include "mem.h"
 
@@ -27,7 +27,7 @@ typedef struct
 modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
 
 driver_init_status_t mock_USART = {0,NONE,INIT_UNKNOWN};
-const struct modbus_RTU_driver_struct *get_RTU_driver_interface(void);
+const modbus_RTU_driver_struct_t *get_RTU_driver_interface(void);
 
 static void usart_init(baud_t baud, parity_t parity);
 static void usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
@@ -37,7 +37,7 @@ static void uasrt_subscribe_rx_callback(rx_cb_t callback);
 
 
 
-static const struct modbus_RTU_driver_struct RTU_driver_interface = {
+static const modbus_RTU_driver_struct_t master_RTU_driver_interface = {
     usart_init,
     usart_send,
     enable_usart_rx_interrupt,
@@ -45,9 +45,9 @@ static const struct modbus_RTU_driver_struct RTU_driver_interface = {
     uasrt_subscribe_rx_callback,
 };
 
-const struct modbus_RTU_driver_struct *get_RTU_driver_interface(void)
+const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void)
 {
-    return &RTU_driver_interface;
+    return &master_RTU_driver_interface;
 }
 
 static void usart_init(baud_t baud, parity_t parity)

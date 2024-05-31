@@ -26,7 +26,7 @@
 
 PRIVATE modbus_master_state_t master_manager_state_machine = MODBUS_MASTER_IDLE;
 
-PRIVATE const struct modbus_RTU_driver_struct *RTU_driver = NULL;
+PRIVATE const modbus_RTU_driver_struct_t *RTU_driver = NULL;
 
 static modbus_queue_t master_free_queue;
 static modbus_queue_t master_tx_rx_queue;
@@ -102,7 +102,7 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     modbus_queue_init(tx_rx_q);
     push_all_available_msg_buffer_to_free_queue();
 
-    RTU_driver = get_RTU_driver_interface();
+    RTU_driver = get_master_RTU_driver_interface();
     RTU_driver->init(baud_rate, parity);
 
     // ToDo rcv_callback ?? do we need this

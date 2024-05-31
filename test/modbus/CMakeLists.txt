@@ -79,7 +79,8 @@ set(TEST_SRCS
 	modbus_RTU_test_runner.c
 	mock_slave_app_data.c
 	mock_master_app_data.c
-
+	mock_master_driver_interface.c
+	
 	master_RTU_init_test_runner.c
     master_RTU_init_test.c
 	master_RTU_test_runner.c
@@ -88,7 +89,7 @@ set(TEST_SRCS
     slave_RTU_init_test.c
 	slave_RTU_test_runner.c
 	slave_RTU_test.c
-	mock_modbus_driver_interface.c
+	
 
 	#mock_module.c
 )

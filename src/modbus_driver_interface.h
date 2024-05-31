@@ -25,16 +25,17 @@ extern "C"
     typedef void (*rx_cb_t)(modbus_buf_t *resp, uint8_t msg_len);
     typedef void (*driver_subscribe_rx_cb_t)(rx_cb_t callback);
 
-    struct modbus_RTU_driver_struct
+    typedef struct 
     {
         driver_init_t init;
         driver_send_t send;
         driver_enable_rx_t enable_rcev;
         driver_disable_rx_t disable_rcev;
         driver_subscribe_rx_cb_t subscribe_rx_cb; //ToDo pytanie czy będzie potrzebne
-    };
+    }modbus_RTU_driver_struct_t;
 
-    const struct modbus_RTU_driver_struct *get_RTU_driver_interface(void);
+    const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void);
+    const modbus_RTU_driver_struct_t *get_slave_RTU_driver_interface(void);
 
 #ifdef __cplusplus
 }

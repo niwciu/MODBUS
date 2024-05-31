@@ -4,7 +4,7 @@
 #include "modbus_type.h"
 #include "modbus_queue.h"
 
-#include "mock_modbus_driver_interface.h"
+#include "mock_master_driver_interface.h"
 // #include "mock_master_app_data.h"
 #include "mock_slave_app_data.h"
 #include <mem.h>
