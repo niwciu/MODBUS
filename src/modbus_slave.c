@@ -44,11 +44,18 @@ void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 
     slave_RTU_driver= get_slave_RTU_driver_interface();
     slave_RTU_driver->init(38400,ODD);
-    slave_RTU_driver->enable_rcev(modbus_queue_pop(slave_free_q));
+    slave_msg_buf=modbus_queue_pop(slave_free_q);
+    slave_RTU_driver->enable_rcev(&slave_msg_buf->resp);
 }
 
-void parse_modbus_request(void)
+void check_modbus_request(void)
 {
+    if(slave_tx_rx_q->head != slave_tx_rx_q->tail)
+    {
+        slave_msg_buf=modbus_queue_pop(slave_tx_rx_q);
+        parse_master_request_and_prepare_resp(slave_msg_buf);
+        // bufor zwalnia przerwanie od wysłania ostatniego znaku
+    }
 
 }
 

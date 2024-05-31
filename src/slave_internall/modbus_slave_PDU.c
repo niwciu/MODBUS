@@ -11,46 +11,58 @@
 #include "modbus_slave_PDU.h"
 #include "modbus_data.h"
 #include "buf_rw.h"
+// #include "modbus_type.h"
 #include <stdio.h>
 
+static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg);
+static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg);
+static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg);
+static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg);
+
+static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg);
+static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg);
+static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg);
+static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg);
+    
 static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty);
 static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty);
 static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab);
 
-static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty)
+void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 {
-    modbus_byte_count_t byte_count;
-
-    byte_count = (coil_qty / 8);
-    if (coil_qty % 8)
+    switch(rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX])
     {
-        byte_count++;
+    case MODBUS_READ_COILS_FUNC_CODE:
+        modbus_slave_read_coils(rx_msg);
+        break;
+    case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
+        modbus_slave_read_discrete_inputs(rx_msg);
+        break;
+    case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
+        modbus_slave_read_holding_reg(rx_msg);
+        break;
+    case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
+        modbus_slave_read_input_reg(rx_msg);
+        break;
+    case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
+        modbus_slave_write_single_coil(rx_msg);
+        break;
+    case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
+        modbus_slave_write_single_reg(rx_msg);
+        break;
+    case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
+        modbus_slave_write_multiple_coils(rx_msg);
+        break;
+    case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
+        modbus_slave_write_multiple_reg(rx_msg);
+        break;
+    default:
+        // send resp with unsuported func code
+        break;
     }
-    return byte_count;
+
 }
 
-static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty)
-{
-    for (uint8_t i = 0; i < qty; i++)
-    {
-        *(buf + i) = 0;
-    }
-}
-
-static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab)
-{
-    for (modbus_data_qty_t i = 0; i < coil_din_qty; i++)
-    {
-        if (0 != (*(data_state_ptr + (i / 8)) & (1 << (i % 8))))
-        {
-            set_coil_state(data_tab, (start_adr + i), 1);
-        }
-        else
-        {
-            set_coil_state(data_tab, (start_adr + i), 0);
-        }
-    }
-}
 
 // Slave API functions
 modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
@@ -239,5 +251,40 @@ modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
 
         modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
         return RET_OK;
+    }
+}
+
+static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty)
+{
+    modbus_byte_count_t byte_count;
+
+    byte_count = (coil_qty / 8);
+    if (coil_qty % 8)
+    {
+        byte_count++;
+    }
+    return byte_count;
+}
+
+static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty)
+{
+    for (uint8_t i = 0; i < qty; i++)
+    {
+        *(buf + i) = 0;
+    }
+}
+
+static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab)
+{
+    for (modbus_data_qty_t i = 0; i < coil_din_qty; i++)
+    {
+        if (0 != (*(data_state_ptr + (i / 8)) & (1 << (i % 8))))
+        {
+            set_coil_state(data_tab, (start_adr + i), 1);
+        }
+        else
+        {
+            set_coil_state(data_tab, (start_adr + i), 0);
+        }
     }
 }
