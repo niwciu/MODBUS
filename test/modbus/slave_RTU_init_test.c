@@ -61,7 +61,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegis
 
 TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity)
 {
-    uint32_t baud = 38400;
+    baud_t baud = 38400;
     parity_t parity = ODD;
 
     modbus_slave_init(RTU, baud, parity);
@@ -87,10 +87,15 @@ TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenR
 
 }
 
-// TEST(Slave_RTU_init_test, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgTxFinishCallbackIsRegistered)
+{
+    baud_t baud = 38400;
+    parity_t parity = ODD;
+
+    modbus_slave_init(RTU, baud, parity);
+    TEST_ASSERT_NOT_NULL (mock_msg_tx_finish_cb);
+    
+}
 
 // TEST(Slave_RTU_init_test, )
 // {

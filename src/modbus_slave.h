@@ -17,7 +17,7 @@ extern "C"
 #include "modbus_public_type.h"
 
 void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity);
-void parse_modbus_request(void);
+void check_modbus_request(void);
 
 #ifdef __cplusplus
 }

@@ -106,6 +106,7 @@ extern "C"
     typedef enum
     {
         MODBUS_SLAVE_IDLE,
+        MODBUS_SLAVE_TRANSMITING_RESP,
         // MODBUS_SLAVE_TRANSMISION,
         // MODBUS_SLAVE_RECEIVING,
         // MODBUS_SLAVE_RESP_ANALYSE,
