@@ -11,8 +11,8 @@ TEST_GROUP_RUNNER(Slave_RTU_init_test)
    RUN_TEST_CASE(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity);
    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStateMachineIsSetToIdle);
    RUN_TEST_CASE(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenRxInterruptEnable);
-   RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgTxFinishCallbackIsRegistered);
-   // RUN_TEST_CASE(Slave_RTU_init_test, );
+   RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgTxDoneCallbackIsRegistered);
+   RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgRxDoneCallbackIsRegistered);
    // RUN_TEST_CASE(Slave_RTU_init_test, );
    // RUN_TEST_CASE(Slave_RTU_init_test, );
    // RUN_TEST_CASE(Slave_RTU_init_test, );

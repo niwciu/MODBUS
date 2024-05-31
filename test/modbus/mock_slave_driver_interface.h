@@ -41,5 +41,6 @@ typedef struct
 
 extern driver_init_status_t mock_slave_USART;
 extern rx_tx_done_cb_t mock_msg_tx_done_cb;
+extern rx_tx_done_cb_t mock_msg_rx_done_cb;
 
 

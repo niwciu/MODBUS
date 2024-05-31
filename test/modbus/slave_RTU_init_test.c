@@ -87,13 +87,23 @@ TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenR
 
 }
 
-TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgTxFinishCallbackIsRegistered)
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgTxDoneCallbackIsRegistered)
 {
     baud_t baud = 38400;
     parity_t parity = ODD;
 
     modbus_slave_init(RTU, baud, parity);
     TEST_ASSERT_NOT_NULL (mock_msg_tx_done_cb);
+    
+}
+
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgRxDoneCallbackIsRegistered)
+{
+    baud_t baud = 38400;
+    parity_t parity = ODD;
+
+    modbus_slave_init(RTU, baud, parity);
+    TEST_ASSERT_NOT_NULL (mock_msg_rx_done_cb);
     
 }
 
