@@ -19,4 +19,6 @@ static void run_all_tests(void)
     RUN_TEST_GROUP(Modbus_RTU_test);
     RUN_TEST_GROUP(master_RTU_init_test);
     RUN_TEST_GROUP(master_RTU_test);
+    RUN_TEST_GROUP(Slave_RTU_init_test);
+    // RUN_TEST_GROUP(Slave_RTU_test);
 }

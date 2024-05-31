@@ -37,7 +37,7 @@ PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 
 PRIVATE modbus_msg_t *msg_buf = NULL;
 
-static void register_msg_resq_resp_data_buffers(modbus_mode_t mode);
+static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static modbus_master_error_t generate_request(modbus_fun_code_t fun_code,modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID);
 static modbus_ret_t add_PDU_request_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty);
@@ -97,7 +97,7 @@ modbus_master_error_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbu
 }
 void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
-    register_msg_resq_resp_data_buffers(mode);
+    register_msg_req_resp_data_buffers(mode);
     modbus_queue_init(free_q);
     modbus_queue_init(tx_rx_q);
     push_all_available_msg_buffer_to_free_queue();
@@ -138,7 +138,7 @@ void check_modbus_master_manager(void)
     // }
 }
 
-static void register_msg_resq_resp_data_buffers(modbus_mode_t mode)
+static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 {
     if (RTU == mode)
     {
@@ -149,7 +149,6 @@ static void register_msg_resq_resp_data_buffers(modbus_mode_t mode)
         }
     }
 }
-
 
 static void push_all_available_msg_buffer_to_free_queue(void)
 {
