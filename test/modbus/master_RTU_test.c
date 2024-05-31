@@ -7,15 +7,20 @@
 #include "mock_modbus_driver_interface.h"
 // #include "mock_master_app_data.h"
 #include "mock_slave_app_data.h"
+#include <mem.h>
 
 TEST_GROUP(master_RTU);
 extern modbus_queue_t *tx_rx_q;
 extern modbus_queue_t *free_q;
 
+static void reset_all_RTU_buffers(void);
+
 TEST_SETUP(master_RTU)
 {
     /* Init before every test */
     modbus_master_init(RTU, 9600, ODD);
+    reset_all_RTU_buffers();
+
 }
 
 TEST_TEAR_DOWN(master_RTU)
@@ -508,3 +513,17 @@ TEST(master_RTU,GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithWr
 // {
 //    TEST_FAIL_MESSAGE("Implement your test!");
 // }
+static void reset_all_RTU_buffers(void)
+{
+    modbus_msg_t *msg;
+    for (int i =0; i<MAX_MODBUS_MSG_QUEUE_ITEMS;i++)
+    {
+        msg=modbus_queue_pop(free_q);
+        if(NULL!=msg)
+        {
+            memset(msg->req.data,0,MODBUS_RTU_BUFFER_SIZE);
+            memset(msg->resp.data,0,MODBUS_RTU_BUFFER_SIZE);
+            modbus_queue_push(free_q,msg);
+        }
+    }
+}
