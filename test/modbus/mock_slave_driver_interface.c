@@ -31,10 +31,11 @@ typedef struct
 driver_init_status_t mock_slave_USART = {0,NONE,INIT_UNKNOWN,IRQ_DISABLED,IRQ_DISABLED};
 timer_state_t mock_1_5char_timer;
 timer_state_t mock_2char_timer;
+modbus_msg_t *rx_buf=NULL;
 
 static void slave_usart_init(baud_t baud, parity_t parity);
 static void slave_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
-// static void enable_usart_rx_interrupt(modbus_buf_t *recv_buf);
+static void slave_enable_usart_rx_interrupt(modbus_buf_t *recv_buf);
 // static void disable_usart_rx_interrupt(void);
 static void slave_uasrt_subscribe_rx_callback(rx_cb_t callback);
 
@@ -43,7 +44,7 @@ static void slave_uasrt_subscribe_rx_callback(rx_cb_t callback);
 static const modbus_RTU_driver_struct_t slave_RTU_driver_interface = {
     slave_usart_init,
     slave_usart_send,
-    NULL,
+    slave_enable_usart_rx_interrupt,
     NULL,
     slave_uasrt_subscribe_rx_callback,
 };
@@ -64,10 +65,11 @@ static void slave_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len)
     // memcpy(slave_rx_buf,tx_msg,msg_len);
     //ToDo możena wykorzystać zrobionego slave do odbierania danych i gnerowania ramki zwrotnej
 }
-// static void enable_usart_rx_interrupt(modbus_buf_t *recv_buf)
-// {
-
-// }
+static void slave_enable_usart_rx_interrupt(modbus_buf_t *recv_buf)
+{
+    rx_buf=recv_buf;
+    mock_slave_USART.Rx_IRQ=IRQ_ENABLED;
+}
 // static void disable_usart_rx_interrupt(void)
 // {
 

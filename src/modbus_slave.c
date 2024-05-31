@@ -44,6 +44,7 @@ void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 
     slave_RTU_driver= get_slave_RTU_driver_interface();
     slave_RTU_driver->init(38400,ODD);
+    slave_RTU_driver->enable_rcev(modbus_queue_pop(slave_free_q));
 }
 
 void parse_modbus_request(void)

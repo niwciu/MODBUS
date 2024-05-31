@@ -46,10 +46,10 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenTxRxRTUmsgQueueInitial
     TEST_ASSERT_EQUAL(0,slave_tx_rx_q->tail);
 }
 
-TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFull)
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFullAndOneMsgBuffPop)
 {
     modbus_slave_init(RTU, 0, 0);
-    TEST_ASSERT_EQUAL(0,slave_free_q->tail);
+    TEST_ASSERT_EQUAL(1,slave_free_q->tail);
     TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1),slave_free_q->head);
 }
 
