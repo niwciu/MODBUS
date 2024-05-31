@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2024
  *
  */
-#include "modbus_type.h"
+#include "modbus_driver_interface.h"
 
 #pragma once
 

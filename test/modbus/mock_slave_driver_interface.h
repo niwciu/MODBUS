@@ -9,7 +9,7 @@
  */
 #pragma once
 
-#include "modbus_type.h"
+#include "modbus_driver_interface.h"
 
 typedef enum{
     INIT_UNKNOWN,

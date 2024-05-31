@@ -19,6 +19,7 @@
 #else
 #define PRIVATE static
 #endif
+PRIVATE modbus_device_ID_t modbus_slave_ID;
 
 PRIVATE modbus_slave_state_t slave_manager_state_machine = MODBUS_SLAVE_IDLE;
 PRIVATE const modbus_RTU_driver_struct_t *slave_RTU_driver = NULL;
@@ -38,7 +39,7 @@ static void modbus_resp_send_callback(void);
 static void modbus_req_recv_callback (void);
 static void modbus_req_start_processing_callback(void);
 
-void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
+void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity, modbus_device_ID_t slave_ID)
 {
     register_msg_req_resp_data_buffers(mode);
     modbus_queue_init(slave_tx_rx_q);
@@ -52,6 +53,7 @@ void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     slave_RTU_driver->subscribe_msg_tx_done_cb(modbus_resp_send_callback);
     slave_RTU_driver->subscribe_msg_rx_done_cb(modbus_req_recv_callback);
     slave_RTU_driver->subscribe_start_req_processing_cb(modbus_req_start_processing_callback);
+
 }
 
 void check_modbus_request(void)

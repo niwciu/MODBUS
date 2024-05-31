@@ -20,7 +20,7 @@ extern "C"
     typedef void (*init_func_ptr_t)(baud_t baud, parity_t parity);
     typedef void (*send_func_ptr_t)(modbus_buf_t *tx_msg, uint8_t msg_len);
     typedef void (*enable_rx_func_ptr_t)(modbus_req_resp_t *recv_buf);
-    typedef void (*disable_rx_func_ptr_t)(void);
+    typedef void (*driver_func_ptr_t)(void);
 
     typedef void (*driver_subscr_cb_t)(void);
     typedef void (*subscribed_func_ptr_t)(driver_subscr_cb_t callback);
@@ -30,7 +30,8 @@ extern "C"
         init_func_ptr_t init;
         send_func_ptr_t send;
         enable_rx_func_ptr_t enable_rcev;
-        disable_rx_func_ptr_t disable_rcev;
+        driver_func_ptr_t disable_rcev;
+        driver_func_ptr_t enable_silence_timer; 
         subscribed_func_ptr_t subscribe_msg_rx_done_cb; //ToDo pytanie czy będzie potrzebne
         subscribed_func_ptr_t subscribe_msg_tx_done_cb;
         subscribed_func_ptr_t subscribe_start_req_processing_cb;

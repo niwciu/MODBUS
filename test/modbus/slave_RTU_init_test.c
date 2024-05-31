@@ -16,6 +16,7 @@ extern modbus_queue_t *slave_tx_rx_q;
 
 extern modbus_RTU_driver_struct_t *slave_RTU_driver;
 extern modbus_slave_state_t slave_manager_state_machine;
+extern modbus_device_ID_t modbus_slave_ID;
 
 TEST_SETUP(Slave_RTU_init_test)
 {
@@ -29,7 +30,7 @@ TEST_TEAR_DOWN(Slave_RTU_init_test)
 
 TEST(Slave_RTU_init_test, WhenModbusSlavenitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
 {
-    modbus_slave_init(RTU, 0, 0);
+    modbus_slave_init(RTU, 0, 0,0);
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_req_buf[i][0], slave_msg[i].req.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
@@ -40,7 +41,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlavenitInRTUmodeThenRtuReqAndRespBuffersAre
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenTxRxRTUmsgQueueInitialized )
 {
-    modbus_slave_init(RTU, 0, 0);
+    modbus_slave_init(RTU, 0, 0,0);
 
     TEST_ASSERT_EQUAL(0,slave_tx_rx_q->head);
     TEST_ASSERT_EQUAL(0,slave_tx_rx_q->tail);
@@ -48,14 +49,14 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenTxRxRTUmsgQueueInitial
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFullAndOneMsgBuffPop)
 {
-    modbus_slave_init(RTU, 0, 0);
+    modbus_slave_init(RTU, 0, 0,0);
     TEST_ASSERT_EQUAL(1,slave_free_q->tail);
     TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1),slave_free_q->head);
 }
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegistered)
 {
-    modbus_slave_init(RTU, 0, 0);
+    modbus_slave_init(RTU, 0, 0,0);
     TEST_ASSERT_NOT_NULL(slave_RTU_driver);
 }
 
@@ -64,7 +65,7 @@ TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenD
     baud_t baud = 38400;
     parity_t parity = ODD;
 
-    modbus_slave_init(RTU, baud, parity);
+    modbus_slave_init(RTU, baud, parity,0);
 
     TEST_ASSERT_EQUAL(baud, mock_slave_USART.baud_rate);
     TEST_ASSERT_EQUAL(parity, mock_slave_USART.parity);
@@ -73,7 +74,7 @@ TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenD
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStateMachineIsSetToIdle)
 {
-    modbus_slave_init(RTU, 0, 0);
+    modbus_slave_init(RTU, 0, 0,0);
 
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
 }
@@ -81,7 +82,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStat
 TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenRxInterruptEnable)
 {
     
-    modbus_slave_init(RTU, 0, 0);
+    modbus_slave_init(RTU, 0, 0,0);
 
     TEST_ASSERT_EQUAL(IRQ_ENABLED, mock_slave_USART.Rx_IRQ);
 
@@ -92,7 +93,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgTxDoneCallbackIsReg
     baud_t baud = 38400;
     parity_t parity = ODD;
 
-    modbus_slave_init(RTU, baud, parity);
+    modbus_slave_init(RTU, baud, parity,0);
     TEST_ASSERT_NOT_NULL (mock_msg_tx_done_cb);
     
 }
@@ -102,7 +103,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgRxDoneCallbackIsReg
     baud_t baud = 38400;
     parity_t parity = ODD;
 
-    modbus_slave_init(RTU, baud, parity);
+    modbus_slave_init(RTU, baud, parity,0);
     TEST_ASSERT_NOT_NULL (mock_msg_rx_done_cb);
     
 }
@@ -112,10 +113,26 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgStartProcessingCall
     baud_t baud = 38400;
     parity_t parity = ODD;
 
-    modbus_slave_init(RTU, baud, parity);
+    modbus_slave_init(RTU, baud, parity,0);
     TEST_ASSERT_NOT_NULL (mock_msg_start_processing_cb);
     
 }
+
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeWithDefinedSlaveIdThenModbusSlaveIdIsAssigned)
+{
+    baud_t baud = 38400;
+    parity_t parity = ODD;
+    modbus_device_ID_t expected_slave_ID= 0x12;
+
+    modbus_slave_init(RTU,baud,parity, expected_slave_ID);
+
+    TEST_ASSERT_EQUAL(expected_slave_ID,modbus_slave_ID);
+}
+
+// TEST(Slave_RTU_init_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
+// }
 
 // TEST(Slave_RTU_init_test, )
 // {
