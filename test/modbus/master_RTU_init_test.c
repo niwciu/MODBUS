@@ -7,7 +7,7 @@
 
 // #include "tested_module.h"
 
-TEST_GROUP(master_init);
+TEST_GROUP(master_RTU_init_test);
 
 extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 
@@ -16,17 +16,17 @@ extern modbus_master_state_t master_manager_state_machine;
 extern modbus_queue_t *free_q;
 extern modbus_queue_t *tx_rx_q;
 
-TEST_SETUP(master_init)
+TEST_SETUP(master_RTU_init_test)
 {
     /* Init before every test */
 }
 
-TEST_TEAR_DOWN(master_init)
+TEST_TEAR_DOWN(master_RTU_init_test)
 {
     /* Cleanup after every test */
 }
 
-TEST(master_init, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
 {
     modbus_master_init(RTU, 0, 0);
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
@@ -36,7 +36,7 @@ TEST(master_init, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegist
     }
 }
 
-TEST(master_init, WhenModbusMasterInitInRTUmodeThenTxRxRTUmsgQueueInitialized)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenTxRxRTUmsgQueueInitialized)
 {
     modbus_master_init(RTU, 0, 0);
 
@@ -44,7 +44,7 @@ TEST(master_init, WhenModbusMasterInitInRTUmodeThenTxRxRTUmsgQueueInitialized)
     TEST_ASSERT_EQUAL(0,tx_rx_q->tail);
 }
 
-TEST(master_init, WhenModbusMasterInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFull)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFull)
 {
     modbus_master_init(RTU, 0, 0);
 
@@ -52,13 +52,13 @@ TEST(master_init, WhenModbusMasterInitInRTUmodeThenFreeRTUmsgQueueInitializedAnd
     TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1),free_q->head);
 }
 
-TEST(master_init, WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
 {
     modbus_master_init(RTU, 0, 0);
     TEST_ASSERT_NOT_NULL(RTU_driver);
 }
 
-TEST(master_init, GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity)
+TEST(master_RTU_init_test, GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity)
 {
     uint32_t baud = 38400;
     parity_t parity = ODD;
@@ -70,7 +70,7 @@ TEST(master_init, GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThenDriverIs
     TEST_ASSERT_EQUAL(DRIVER_INITIALIZED, mock_USART.init_status);
 }
 
-TEST(master_init, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachineIsSetToIdle)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachineIsSetToIdle)
 {
     modbus_master_init(RTU, 0, 0);
 
@@ -78,17 +78,17 @@ TEST(master_init, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachi
 }
 
 
-// TEST(master_init,)
+// TEST(master_RTU_init_test,)
 // {
 //    TEST_FAIL_MESSAGE("Implement your test!");
 // }
 
-// TEST(master_init,)
+// TEST(master_RTU_init_test,)
 // {
 //    TEST_FAIL_MESSAGE("Implement your test!");
 // }
 
-// TEST(master_init,)
+// TEST(master_RTU_init_test,)
 // {
 //    TEST_FAIL_MESSAGE("Implement your test!");
 // }

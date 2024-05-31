@@ -64,16 +64,16 @@ set(SRCS
 
 set(TEST_SRCS
     modbus_test_main.c
-    modbus_master_PDU_request_test_runner.c
-    modbus_master_PDU_request_test.c
-	modbus_master_PDU_read_test_runner.c
-	modbus_master_PDU_read_test.c
-	modbus_slave_PDU_resp_test_runner.c
-	modbus_slave_PDU_resp_test.c
+    master_PDU_req_test_runner.c
+    master_PDU_req_test.c
+	master_PDU_read_test_runner.c
+	master_PDU_read_test.c
+	slave_PDU_resp_test_runner.c
+	slave_PDU_resp_test.c
 	modbus_data_test.c
 	modbus_data_test_runner.c
-	modbus_crc_test.c
-	modbus_crc_test_runner.c
+	modbus_CRC_test.c
+	modbus_CRC_test_runner.c
 	modbus_RTU_test.c
 	modbus_RTU_test_runner.c
 	mock_slave_app_data.c

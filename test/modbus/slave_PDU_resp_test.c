@@ -15,9 +15,9 @@ static modbus_msg_t modbus_msg;
 static modbus_msg_t *RTU_msg = &modbus_msg;
 
 
-TEST_GROUP(Modbus_Slave_Resp);
+TEST_GROUP(Slave_PDU_resp);
 
-TEST_SETUP(Modbus_Slave_Resp)
+TEST_SETUP(Slave_PDU_resp)
 {
     /* Init before every test */
     mock_register_slave_coils_data();
@@ -33,12 +33,12 @@ TEST_SETUP(Modbus_Slave_Resp)
     
 }
 
-TEST_TEAR_DOWN(Modbus_Slave_Resp)
+TEST_TEAR_DOWN(Slave_PDU_resp)
 {
     /* Cleanup after every test */
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead5Coils)
+TEST(Slave_PDU_resp, SlaveRead5Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 5;
@@ -58,7 +58,7 @@ TEST(Modbus_Slave_Resp, SlaveRead5Coils)
     
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead8Coils)
+TEST(Slave_PDU_resp, SlaveRead8Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 8;
@@ -77,7 +77,7 @@ TEST(Modbus_Slave_Resp, SlaveRead8Coils)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead9Coils)
+TEST(Slave_PDU_resp, SlaveRead9Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 9;
@@ -97,7 +97,7 @@ TEST(Modbus_Slave_Resp, SlaveRead9Coils)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead16Coils)
+TEST(Slave_PDU_resp, SlaveRead16Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 16;
@@ -117,7 +117,7 @@ TEST(Modbus_Slave_Resp, SlaveRead16Coils)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead17Coils)
+TEST(Slave_PDU_resp, SlaveRead17Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 17;
@@ -138,7 +138,7 @@ TEST(Modbus_Slave_Resp, SlaveRead17Coils)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead5DiscreteInputs)
+TEST(Slave_PDU_resp, SlaveRead5DiscreteInputs)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t din_qty = 5;
@@ -156,7 +156,7 @@ TEST(Modbus_Slave_Resp, SlaveRead5DiscreteInputs)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead8DiscreteInputs)
+TEST(Slave_PDU_resp, SlaveRead8DiscreteInputs)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t din_qty = 8;
@@ -174,7 +174,7 @@ TEST(Modbus_Slave_Resp, SlaveRead8DiscreteInputs)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead9DiscreteInputs)
+TEST(Slave_PDU_resp, SlaveRead9DiscreteInputs)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t din_qty = 9;
@@ -193,7 +193,7 @@ TEST(Modbus_Slave_Resp, SlaveRead9DiscreteInputs)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead16DiscreteInputs)
+TEST(Slave_PDU_resp, SlaveRead16DiscreteInputs)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t din_qty = 16;
@@ -213,7 +213,7 @@ TEST(Modbus_Slave_Resp, SlaveRead16DiscreteInputs)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead17DiscreteInputs)
+TEST(Slave_PDU_resp, SlaveRead17DiscreteInputs)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t din_qty = 17;
@@ -233,7 +233,7 @@ TEST(Modbus_Slave_Resp, SlaveRead17DiscreteInputs)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveReadOneHoldingRegister)
+TEST(Slave_PDU_resp, SlaveReadOneHoldingRegister)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t reg_qty = 1;
@@ -252,7 +252,7 @@ TEST(Modbus_Slave_Resp, SlaveReadOneHoldingRegister)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead3HoldingRegisters)
+TEST(Slave_PDU_resp, SlaveRead3HoldingRegisters)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t reg_qty = 3;
@@ -273,7 +273,7 @@ TEST(Modbus_Slave_Resp, SlaveRead3HoldingRegisters)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveReadOneInputRegister)
+TEST(Slave_PDU_resp, SlaveReadOneInputRegister)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t reg_qty = 1;
@@ -292,7 +292,7 @@ TEST(Modbus_Slave_Resp, SlaveReadOneInputRegister)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveRead3InputRegisters)
+TEST(Slave_PDU_resp, SlaveRead3InputRegisters)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t reg_qty = 3;
@@ -313,7 +313,7 @@ TEST(Modbus_Slave_Resp, SlaveRead3InputRegisters)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteSingleCoil)
+TEST(Slave_PDU_resp, SlaveWriteSingleCoil)
 {
     modbus_adr_t adr = 0x0000;
     modbus_w_coil_t resp_buf_coil_expected_value = COIL_ON;
@@ -329,7 +329,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleCoil)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
+TEST(Slave_PDU_resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
 {
     modbus_adr_t adr = 0x0001;
     // modbus_w_coil_t RTU_msg->resp.data_coil_expected_value = COIL_ON;
@@ -345,7 +345,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
     
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5Coils)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils5Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 5;
@@ -363,7 +363,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5Coils)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 5;
@@ -387,7 +387,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8Coils)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils8Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 8;
@@ -405,7 +405,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8Coils)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 8;
@@ -427,7 +427,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9Coils)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils9Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 9;
@@ -445,7 +445,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9Coils)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 9;
@@ -476,7 +476,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils16Coils)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils16Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 16;
@@ -494,7 +494,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils16Coils)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils16CoilsAndCheckCoilsStatus)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils16CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 16;
@@ -524,7 +524,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils16CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils17Coils)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils17Coils)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 16;
@@ -542,7 +542,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils17Coils)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus)
+TEST(Slave_PDU_resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 17;
@@ -582,7 +582,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteSingleRegister)
+TEST(Slave_PDU_resp, SlaveWriteSingleRegister)
 {
     modbus_adr_t adr = 0x0000;
     modbus_reg_t reg_val = 0x5A5A;
@@ -597,7 +597,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleRegister)
     TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
-TEST(Modbus_Slave_Resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
+TEST(Slave_PDU_resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
 {
     modbus_adr_t adr = 0x0001;
     modbus_reg_t reg_val = 0x5A5A;
@@ -611,7 +611,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3Reg)
+TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3Reg)
 {
     modbus_adr_t adr = 0x0001;
     // modbus_reg_t reg_val[3] = {0x5A5A, 0xA5A5, 0x5A5A};
@@ -629,7 +629,7 @@ TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3Reg)
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
-TEST(Modbus_Slave_Resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
+TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
 {
     modbus_adr_t adr = 0x0001;
     modbus_reg_t exp_reg_val[3] = {0x5A5A, 0xA5A5, 0x5A5A};
