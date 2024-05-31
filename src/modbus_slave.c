@@ -35,6 +35,7 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
     register_msg_req_resp_data_buffers(RTU);
+    modbus_queue_init(slave_tx_rx_q);
 }
 
 void parse_modbus_request(void)
