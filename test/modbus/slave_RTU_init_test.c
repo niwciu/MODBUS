@@ -2,6 +2,7 @@
 #include "modbus_slave.h"
 #include "modbus_RTU.h"
 #include "modbus_type.h"
+#include "modbus_driver_interface.h"
 
 // #include "tested_module.h"
 
@@ -11,6 +12,8 @@ extern modbus_msg_t slave_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 
 extern modbus_queue_t *slave_free_q;
 extern modbus_queue_t *slave_tx_rx_q;
+
+extern modbus_RTU_driver_struct_t *slave_RTU_driver;
 
 TEST_SETUP(Slave_RTU_init_test)
 {
@@ -48,10 +51,11 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenFreeRTUmsgQueueInitial
     TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1),slave_free_q->head);
 }
 
-// TEST(Slave_RTU_init_test, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegistered)
+{
+    modbus_slave_init(RTU, 0, 0);
+    TEST_ASSERT_NOT_NULL(slave_RTU_driver);
+}
 
 // TEST(Slave_RTU_init_test, )
 // {
