@@ -25,8 +25,9 @@ typedef struct
 
 // modbus_buf_t *rx_data = NULL;
 // rx_cb_t rx_callback = NULL;
-rx_tx_done_cb_t mock_msg_tx_done_cb= NULL;
-rx_tx_done_cb_t mock_msg_rx_done_cb = NULL;
+driver_subscr_cb_t mock_msg_tx_done_cb= NULL;
+driver_subscr_cb_t mock_msg_rx_done_cb = NULL;
+driver_subscr_cb_t mock_msg_start_processing_cb = NULL;
 
 // modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
 
@@ -40,8 +41,9 @@ static void slave_usart_init(baud_t baud, parity_t parity);
 static void slave_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
 // static void disable_usart_rx_interrupt(void);
-static void slave_uasrt_subscribe_msg_rx_done_callback(rx_tx_done_cb_t callback);
-static void slave_uasrt_subscribe_msg_tx_done_callback(rx_tx_done_cb_t callback);
+static void slave_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callback);
+static void slave_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback);
+static void slave_subscribe_msg_ready_to_process_callback(driver_subscr_cb_t callback);
 
 
 
@@ -52,6 +54,7 @@ static const modbus_RTU_driver_struct_t slave_RTU_driver_interface = {
     NULL,
     slave_uasrt_subscribe_msg_rx_done_callback,
     slave_uasrt_subscribe_msg_tx_done_callback,
+    slave_subscribe_msg_ready_to_process_callback,
 };
 
 const modbus_RTU_driver_struct_t *get_slave_RTU_driver_interface(void)
@@ -79,12 +82,17 @@ static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 // {
 
 // }
-static void slave_uasrt_subscribe_msg_rx_done_callback(rx_tx_done_cb_t callback)
+static void slave_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callback)
 {
     mock_msg_rx_done_cb=callback;
 }
 
-static void slave_uasrt_subscribe_msg_tx_done_callback(rx_tx_done_cb_t callback)
+static void slave_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback)
 {
     mock_msg_tx_done_cb=callback;
+}
+
+static void slave_subscribe_msg_ready_to_process_callback(driver_subscr_cb_t callback)
+{
+    mock_msg_start_processing_cb=callback;
 }
