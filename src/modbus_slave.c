@@ -53,7 +53,7 @@ void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity, mo
     slave_RTU_driver->subscribe_msg_tx_done_cb(modbus_resp_send_callback);
     slave_RTU_driver->subscribe_msg_rx_done_cb(modbus_req_recv_callback);
     slave_RTU_driver->subscribe_start_req_processing_cb(modbus_req_start_processing_callback);
-
+    modbus_slave_ID=slave_ID;
 }
 
 void check_modbus_request(void)
