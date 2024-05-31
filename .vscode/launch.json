@@ -88,6 +88,33 @@
               "ignoreFailures": true
           }
       ]
-  },
+    },
+    {
+      "name": "debug modbus tests",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/test/modbus/out/modbus_test.exe",
+      "args": [
+        "${cmake.testArgs}"
+      ],
+      "stopAtEntry": true,
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/Qt_6_5/Tools/mingw1120_64/bin/gdb.exe",
+      "setupCommands": [
+          {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+          },
+          {
+            "description": "Set Disassembly Flavor to Intel",
+            "text": "-gdb-set disassembly-flavor intel",
+            "ignoreFailures": true
+        }
+      ]
+    },
   ]
 }

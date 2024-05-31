@@ -91,6 +91,9 @@ set(TEST_SRCS
 set(GLOBAL_DEFINES
 	-DUNIT_TEST
 )
+# set -g3 flag for enabling debug on developing maching
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3")
+
 
 include(${CUSTOM_TARGETS_FILE_DIR})
 
