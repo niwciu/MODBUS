@@ -42,7 +42,7 @@ void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     push_all_available_msg_buffer_to_free_queue();
 
     slave_RTU_driver= get_slave_RTU_driver_interface();
-    // slave_RTU_driver->init(9600,ODD);
+    slave_RTU_driver->init(38400,ODD);
 }
 
 void parse_modbus_request(void)
