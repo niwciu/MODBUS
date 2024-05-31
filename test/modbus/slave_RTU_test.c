@@ -1,6 +1,7 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_slave.h"
 #include "modbus_master_PDU.h"
+#include "modbus_RTU.h"
 #include "mock_slave_driver_interface.h"
 // #include <mem.h>
 // #include "modbus_public_type.h"
@@ -32,10 +33,61 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdReciv
 {
     modbus_adr_t coil_adr=0x0001;
     modbus_data_qty_t coils_qty=2;
+    modbus_device_ID_t msg_slave_ID = 0x99;
 
     modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, msg_slave_ID);
 
     mock_msg_rx_done_cb(); 
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
     TEST_ASSERT_EQUAL(0,slave_msg_buf->req.len);
 }
+
+TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdRecivedWhenTimer1_5CharTrigerThenStartSilenceTimerAndGoToSilenceBrakeState)
+{
+    modbus_adr_t coil_adr=0x0001;
+    modbus_data_qty_t coils_qty=2;
+
+    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
+
+    mock_msg_rx_done_cb(); 
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_ID_OK_REQUIRED_SILANCE_PENDING, slave_manager_state_machine);
+    TEST_ASSERT_EQUAL(TIMER_COUNTING,mock_2char_timer);
+
+}
+
+// TEST(Slave_RTU_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
+
+// TEST(Slave_RTU_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
+
+// TEST(Slave_RTU_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
+
+// TEST(Slave_RTU_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
+
+// TEST(Slave_RTU_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
+
+// TEST(Slave_RTU_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
+
+// TEST(Slave_RTU_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }

@@ -32,7 +32,7 @@ driver_subscr_cb_t mock_msg_start_processing_cb = NULL;
 
 driver_init_status_t mock_slave_USART = {0,NONE,INIT_UNKNOWN,IRQ_DISABLED,IRQ_DISABLED};
 // timer_state_t mock_1_5char_timer;
-// timer_state_t mock_2char_timer;
+timer_state_t mock_2char_timer = TIMER_INACTIVE;
 
 modbus_req_resp_t *rx_buf=NULL;
 
@@ -85,7 +85,7 @@ static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 // }
 static void slave_enable_silence_timer(void)
 {
-    
+    mock_2char_timer=TIMER_COUNTING;
 }
 static void slave_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callback)
 {
