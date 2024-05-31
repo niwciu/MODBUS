@@ -1,0 +1,1 @@
+REAFACTOR -> wspólne funkcje statyczne dla mastera i slave przerzucić do jednego pliku common w internall 

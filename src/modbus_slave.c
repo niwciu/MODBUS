@@ -31,11 +31,14 @@ PRIVATE modbus_msg_t slave_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *slave_msg_buf = NULL;
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
+static void push_all_available_msg_buffer_to_free_queue(void);
 
 void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
     register_msg_req_resp_data_buffers(RTU);
     modbus_queue_init(slave_tx_rx_q);
+    modbus_queue_init(slave_free_q);
+    push_all_available_msg_buffer_to_free_queue();
 }
 
 void parse_modbus_request(void)
@@ -52,5 +55,13 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
             slave_msg[i].req.data = &RTU_req_buf[i][0];
             slave_msg[i].resp.data = &RTU_resp_buf[i][0];
         }
+    }
+}
+
+static void push_all_available_msg_buffer_to_free_queue(void)
+{
+    for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    {
+        modbus_queue_push(slave_free_q, &slave_msg[i]);
     }
 }
