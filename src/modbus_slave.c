@@ -34,7 +34,7 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 
 void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
-
+    register_msg_req_resp_data_buffers(RTU);
 }
 
 void parse_modbus_request(void)
@@ -44,12 +44,12 @@ void parse_modbus_request(void)
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 {
-    // if (RTU == mode)
-    // {
-    //     for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
-    //     {
-    //         slave_msg[i].req.data = &RTU_req_buf[i][0];
-    //         slave_msg[i].resp.data = &RTU_resp_buf[i][0];
-    //     }
-    // }
+    if (RTU == mode)
+    {
+        for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+        {
+            slave_msg[i].req.data = &RTU_req_buf[i][0];
+            slave_msg[i].resp.data = &RTU_resp_buf[i][0];
+        }
+    }
 }
