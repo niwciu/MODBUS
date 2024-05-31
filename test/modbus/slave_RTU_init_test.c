@@ -3,6 +3,7 @@
 #include "modbus_RTU.h"
 #include "modbus_type.h"
 #include "modbus_driver_interface.h"
+#include "mock_slave_driver_interface.h"
 
 // #include "tested_module.h"
 
@@ -57,10 +58,17 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegis
     TEST_ASSERT_NOT_NULL(slave_RTU_driver);
 }
 
-// TEST(Slave_RTU_init_test, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity)
+{
+    uint32_t baud = 38400;
+    parity_t parity = ODD;
+
+    modbus_slave_init(RTU, baud, parity);
+
+    TEST_ASSERT_EQUAL(baud, mock_slave_USART.baud_rate);
+    TEST_ASSERT_EQUAL(parity, mock_slave_USART.parity);
+    TEST_ASSERT_EQUAL(DRIVER_INITIALIZED, mock_slave_USART.init_status);
+}
 
 // TEST(Slave_RTU_init_test, )
 // {
