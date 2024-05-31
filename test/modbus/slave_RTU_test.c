@@ -28,11 +28,11 @@ TEST_TEAR_DOWN(Slave_RTU_test)
     /* Cleanup after every test */
 }
 
-TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdRecivedWhenTimer1_5CharTrigerThenSkiMsgGoBackToIdleState)
+TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdRecivedWhenTimer1_5CharTrigerThenModbusManagerGoBackToIdleStateWithEmptyMsgReqBuffer)
 {
     modbus_adr_t coil_adr=0x0001;
     modbus_data_qty_t coils_qty=2;
-    
+
     modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
 
     mock_msg_rx_done_cb(); 

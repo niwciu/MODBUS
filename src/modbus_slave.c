@@ -116,6 +116,14 @@ static void modbus_req_recv_callback (void)
  *
  * 
  * **/
+    if(RET_ERROR_SLAVE_ID==modbus_RTU_recv(slave_msg_buf->req.data,slave_msg->req.len,modbus_slave_ID))
+    {
+        slave_msg_buf->req.len=0;
+    }
+    else
+    {
+
+    }
 }
 
 static void modbus_req_start_processing_callback(void)
