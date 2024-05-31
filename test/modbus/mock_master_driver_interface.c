@@ -33,7 +33,8 @@ static void master_usart_init(baud_t baud, parity_t parity);
 static void master_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
 static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
 static void master_disable_usart_rx_interrupt(void);
-static void master_uasrt_subscribe_rx_callback(rx_cb_t callback);
+static void master_uasrt_subscribe_msg_rx_done_callback(rx_tx_done_cb_t callback);
+static void master_uasrt_subscribe_msg_tx_done_callback(rx_tx_done_cb_t callback);
 
 
 
@@ -42,8 +43,8 @@ static const modbus_RTU_driver_struct_t master_RTU_driver_interface = {
     master_usart_send,
     master_enable_usart_rx_interrupt,
     master_disable_usart_rx_interrupt,
-    master_uasrt_subscribe_rx_callback,
-    NULL,
+    master_uasrt_subscribe_msg_rx_done_callback,
+    master_uasrt_subscribe_msg_tx_done_callback,
 };
 
 const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void)
@@ -70,7 +71,11 @@ static void master_disable_usart_rx_interrupt(void)
 {
 
 }
-static void master_uasrt_subscribe_rx_callback(rx_cb_t callback)
+static void master_uasrt_subscribe_msg_rx_done_callback(rx_tx_done_cb_t callback)
+{
+
+}
+static void master_uasrt_subscribe_msg_tx_done_callback(rx_tx_done_cb_t callback)
 {
 
 }

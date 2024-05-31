@@ -22,10 +22,8 @@ extern "C"
     typedef void (*driver_enable_rx_t)(modbus_req_resp_t *recv_buf);
     typedef void (*driver_disable_rx_t)(void);
 
-    typedef void (*rx_cb_t)(modbus_buf_t *resp, uint8_t msg_len);
-    typedef void (*tx_finish_cb_t)(void);
-    typedef void (*driver_subscribe_rx_cb_t)(rx_cb_t callback);
-    typedef void (*driver_subscribe_tx_finish_cb_t)(tx_finish_cb_t callback);
+    typedef void (*rx_tx_done_cb_t)(void);
+    typedef void (*driver_subscribe_tx_rx_done_cb_t)(rx_tx_done_cb_t callback);
 
     typedef struct 
     {
@@ -33,8 +31,8 @@ extern "C"
         driver_send_t send;
         driver_enable_rx_t enable_rcev;
         driver_disable_rx_t disable_rcev;
-        driver_subscribe_rx_cb_t subscribe_rx_cb; //ToDo pytanie czy będzie potrzebne
-        driver_subscribe_tx_finish_cb_t subscribe_msg_tx_finish_cb;
+        driver_subscribe_tx_rx_done_cb_t subscribe_msg_rx_done_cb; //ToDo pytanie czy będzie potrzebne
+        driver_subscribe_tx_rx_done_cb_t subscribe_msg_tx_done_cb;
     }modbus_RTU_driver_struct_t;
 
     const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void);

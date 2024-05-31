@@ -40,6 +40,6 @@ typedef struct
 }driver_init_status_t ;
 
 extern driver_init_status_t mock_slave_USART;
-extern tx_finish_cb_t mock_msg_tx_finish_cb;
+extern rx_tx_done_cb_t mock_msg_tx_done_cb;
 
 
