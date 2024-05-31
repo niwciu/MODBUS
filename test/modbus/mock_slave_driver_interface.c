@@ -10,7 +10,7 @@
  */
 
 #include "modbus_driver_interface.h"
-#include "mock_master_driver_interface.h"
+#include "mock_slave_driver_interface.h"
 
 #include "mem.h"
 
@@ -28,7 +28,9 @@ typedef struct
 
 // modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
 
-driver_init_status_t mock_slave_USART = {0,NONE,INIT_UNKNOWN};
+driver_init_status_t mock_slave_USART = {0,NONE,INIT_UNKNOWN,IRQ_DISABLED,IRQ_DISABLED};
+timer_state_t mock_1_5char_timer;
+timer_state_t mock_2char_timer;
 
 static void slave_usart_init(baud_t baud, parity_t parity);
 static void slave_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);

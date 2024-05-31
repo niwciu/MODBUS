@@ -78,10 +78,14 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStat
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
 }
 
-// TEST(Slave_RTU_init_test, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenRxInterruptEnable)
+{
+    
+    modbus_slave_init(RTU, 0, 0);
+
+    TEST_ASSERT_EQUAL(IRQ_ENABLED, mock_slave_USART.Rx_IRQ);
+
+}
 
 // TEST(Slave_RTU_init_test, )
 // {
