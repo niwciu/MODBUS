@@ -62,15 +62,15 @@ TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveInRe
     TEST_ASSERT_EQUAL(&app_data_inreg, Slave_Input_Registers[inreg_adr]);
 }
 
-// TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveHolRegPtrTableThenHolRegPtrIsEqualToRegisteredDataAdr)
-// {
-//     modbus_adr_t hreg_adr = 0x0003;
-//     modbus_reg_t app_data_hreg;
+TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveHolRegPtrTableThenHolRegPtrIsEqualToRegisteredDataAdr)
+{
+    modbus_adr_t hreg_adr = 0x0003;
+    modbus_reg_t app_data_hreg;
 
-//     register_app_data_to_modbus_slave_hreg_table(hreg_adr, &app_data_hreg);
+    register_app_data_to_modbus_slave_hreg_table(hreg_adr, &app_data_hreg);
 
-//     TEST_ASSERT_EQUAL(&app_data_hreg, Slave_Holding_Registers[hreg_adr]);
-// }
+    TEST_ASSERT_EQUAL(&app_data_hreg, Slave_Holding_Registers[hreg_adr]);
+}
 
 
 TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqRecivedWhenTimer1_5CharTrigerThenModbusManagerGoToModbusSlaveMsgRecived)
