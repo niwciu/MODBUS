@@ -107,6 +107,8 @@ void mock_USART_RX_IRQ(void)
 {
     if ((TIMER_FIRED == mock_1_5_char_timer) && (TIMER_FIRED == mock_3_5_char_timer))
     {
+        // czyli odebrano msg i teraz przychodzi coś nowego 
+        // czy tutaj mam już bufor? gzie zarządzam pobieraniem nowego bufora?
     }
     if ((TIMER_FIRED == mock_1_5_char_timer) && (TIMER_COUNTING == mock_3_5_char_timer))
     {
