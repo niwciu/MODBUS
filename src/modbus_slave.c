@@ -36,6 +36,7 @@ PRIVATE modbus_msg_t *slave_msg_buf = NULL;
 PRIVATE modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE modbus_status_flag_t RESP_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
 
 static void init_modbus_data_buffers_and_queues(modbus_mode_t mode);
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
@@ -82,7 +83,14 @@ void check_modbus_request(void)
         }
         else if((MODBUS_FLAG_CLEARED== FRAME_ERROR_FLAG) &&( MODBUS_FLAG_SET == TIMER_3_5_CHAR_FLAG))
         {
-            // tutadj odebrałem poprawnie ramkę zachowując wymagane czasy przerwy
+            // analiza zapytania i stworzenie odpowiedzi
+            parse_master_request_and_prepare_resp(slave_msg_buf);
+            modbus_RTU_send(slave_msg_buf->resp.data,&slave_msg_buf->resp.len,modbus_slave_ID);
+            // ustwa flagę transmisji i przejście do stanu wysyłam odpowiedź
+            // RESP_TRANSMITION_FLAG = MODBUS_FLAG_SET;
+            // slave_manager_state_machine = MODBUS_SLAVE_TRANSMITING_RESP;
+            // uruchomienie wysyłania 
+            // wysłanie odpowiedzi
         }
         break;
     case MODBUS_SLAVE_TRANSMITING_RESP:
@@ -140,6 +148,7 @@ static void init_modbus_slave_internall_data(modbus_device_ID_t Slave_ID)
     TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
     TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
     FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+    RESP_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
 }
 
 static void push_all_available_msg_buffer_to_free_queue(void)

@@ -9,8 +9,8 @@ TEST_GROUP_RUNNER(Slave_RTU_test)
    RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcAndReciverTimer1_5CharTrigerWhenRxCharBeforeT3_5timerTriegerdThenIgnoreFrameAndGoToIdleState);
    RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndIncorrectCrcRecivedAndReciverTimer1_5CharTrigerWhenT3_5timerTriegerdThenIgnoreFrameAndGoToIdleState);
 //    
-//    RUN_TEST_CASE(Slave_RTU_test, );
-//    RUN_TEST_CASE(Slave_RTU_test, );
+   RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerThenSlavePrepareRespond);
+//    RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerThenSlaveGoToModbusSlaveTransmittingRes;
 //    RUN_TEST_CASE(Slave_RTU_test, );
 //    RUN_TEST_CASE(Slave_RTU_test, );
 //    RUN_TEST_CASE(Slave_RTU_test, );

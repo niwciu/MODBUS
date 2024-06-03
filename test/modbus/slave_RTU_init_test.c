@@ -21,6 +21,7 @@ extern modbus_device_ID_t modbus_slave_ID;
 extern modbus_status_flag_t TIMER_1_5_CHAR_FLAG;
 extern modbus_status_flag_t TIMER_3_5_CHAR_FLAG;
 extern modbus_status_flag_t FRAME_ERROR_FLAG;
+extern modbus_status_flag_t RESP_TRANSMITION_FLAG;
 
 TEST_SETUP(Slave_RTU_init_test)
 {
@@ -160,9 +161,12 @@ TEST(Slave_RTU_init_test,WhenModbusSlaveInitInRTUmodeThenAllModbusStatusFlagsAre
     parity_t parity = ODD;
     modbus_device_ID_t expected_slave_ID= 0x12;
 
+    modbus_slave_init(RTU,baud,parity, expected_slave_ID);
+    
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,TIMER_1_5_CHAR_FLAG);
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,TIMER_3_5_CHAR_FLAG);
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,FRAME_ERROR_FLAG);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,RESP_TRANSMITION_FLAG);
 }
 
 // TEST(Slave_RTU_init_test, )
