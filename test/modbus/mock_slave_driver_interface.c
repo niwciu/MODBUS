@@ -35,8 +35,11 @@ timer_state_t mock_3_5_char_timer = TIMER_INACTIVE;
 
 modbus_req_resp_t *rx_buf = NULL;
 
+USART_Rx_status_t USART_Tx_status= USART_IDLE;
+modbus_buf_t mock_rx_buffer[MODBUS_RTU_BUFFER_SIZE];
+
 static void slave_usart_init(baud_t baud, parity_t parity);
-static void slave_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
+static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
 static void slave_enable_silence_timer(void); // ToDo do usuniecia
 static void slave_t_1_5_char_expired_callback_subscribe(driver_subscr_cb_t callback);
@@ -66,24 +69,20 @@ static void slave_usart_init(baud_t baud, parity_t parity)
     mock_slave_USART.parity = parity;
     mock_slave_USART.init_status = DRIVER_INITIALIZED;
 }
-static void slave_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len)
+static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 {
-    // memcpy(slave_rx_buf,tx_msg,msg_len);
-    // ToDo możena wykorzystać zrobionego slave do odbierania danych i gnerowania ramki zwrotnej
+   for(uint8_t i=0; i<msg_len; i++)
+   {
+    mock_rx_buffer[i]=tx_msg[i];
+   }
+   USART_Tx_status= USART_SENDING_DATA;
 }
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 {
     rx_buf = recv_buf;
     mock_slave_USART.Rx_IRQ = IRQ_ENABLED;
 }
-// static void disable_usart_rx_interrupt(void)
-// {
 
-// }
-static void slave_enable_silence_timer(void)
-{
-    // mock_2char_timer=TIMER_COUNTING;
-}
 static void slave_t_1_5_char_expired_callback_subscribe(driver_subscr_cb_t callback)
 {
     mock_1_5_char_break_cb = callback;

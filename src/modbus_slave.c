@@ -83,14 +83,8 @@ void check_modbus_request(void)
         }
         else if((MODBUS_FLAG_CLEARED== FRAME_ERROR_FLAG) &&( MODBUS_FLAG_SET == TIMER_3_5_CHAR_FLAG))
         {
-            // analiza zapytania i stworzenie odpowiedzi
             parse_master_request_and_prepare_resp(slave_msg_buf);
             modbus_RTU_send(slave_msg_buf->resp.data,&slave_msg_buf->resp.len,modbus_slave_ID);
-            // ustwa flagę transmisji i przejście do stanu wysyłam odpowiedź
-            // RESP_TRANSMITION_FLAG = MODBUS_FLAG_SET;
-            // slave_manager_state_machine = MODBUS_SLAVE_TRANSMITING_RESP;
-            // uruchomienie wysyłania 
-            // wysłanie odpowiedzi
         }
         break;
     case MODBUS_SLAVE_TRANSMITING_RESP:
