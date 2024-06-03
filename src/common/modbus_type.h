@@ -119,6 +119,7 @@ extern "C"
     {
         MODBUS_FLAG_CLEARED,
         MODBUS_FLAG_SET,
+        MODBUS_FLAG_UNKNOWN,
 
     }modbus_status_flag_t;
     

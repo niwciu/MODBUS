@@ -33,15 +33,16 @@ PRIVATE modbus_msg_t slave_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 
 PRIVATE modbus_msg_t *slave_msg_buf = NULL;
 
-modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
-modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
-modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
+modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
+modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static void modbus_resp_send_callback(void);
 static void modbus_T_1_5_char_expired_callback(void);
 static void modbus_T_3_5_char_expired_callback(void);
+static void modbus_frame_error_callback(void);
 
 void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity, modbus_device_ID_t slave_ID)
 {
@@ -57,8 +58,12 @@ void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity, mo
     slave_RTU_driver->subscribe_msg_tx_done_cb(modbus_resp_send_callback);
     slave_RTU_driver->subscribe_msg_rx_done_cb(modbus_T_1_5_char_expired_callback);
     slave_RTU_driver->subscribe_start_req_processing_cb(modbus_T_3_5_char_expired_callback);
+    slave_RTU_driver->subscribe_modbus_frame_error_cb(modbus_frame_error_callback);
     modbus_slave_ID = slave_ID;
     slave_manager_state_machine = MODBUS_SLAVE_IDLE;
+    TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+    TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+    FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
 }
 
 void check_modbus_request(void)
@@ -88,8 +93,15 @@ void check_modbus_request(void)
         }
         break;
     case MODBUS_SLAVE_RECIVER_SILANCE_PENDING:
-        
-
+        if ((MODBUS_FLAG_SET== FRAME_ERROR_FLAG) &&( MODBUS_FLAG_SET == TIMER_3_5_CHAR_FLAG))
+        {
+            slave_msg_buf->req.len = 0;
+            slave_manager_state_machine = MODBUS_SLAVE_IDLE;
+        }
+        else if((MODBUS_FLAG_CLEARED== FRAME_ERROR_FLAG) &&( MODBUS_FLAG_SET == TIMER_3_5_CHAR_FLAG))
+        {
+            // tutadj odebrałem poprawnie ramkę zachowując wymagane czasy przerwy
+        }
         break;
     case MODBUS_SLAVE_TRANSMITING_RESP:
         // waiting for end of resp transmission
@@ -133,4 +145,9 @@ static void modbus_T_1_5_char_expired_callback(void)
 static void modbus_T_3_5_char_expired_callback(void)
 {
     TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_SET;
+}
+
+static void modbus_frame_error_callback(void)
+{
+    FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
 }

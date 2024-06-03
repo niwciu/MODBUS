@@ -35,6 +35,7 @@ extern "C"
         subscribed_func_ptr_t subscribe_msg_rx_done_cb; //ToDo pytanie czy będzie potrzebne
         subscribed_func_ptr_t subscribe_msg_tx_done_cb;
         subscribed_func_ptr_t subscribe_start_req_processing_cb;
+        subscribed_func_ptr_t subscribe_modbus_frame_error_cb;
     }modbus_RTU_driver_struct_t;
 
     const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void);

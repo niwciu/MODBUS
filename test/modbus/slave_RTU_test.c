@@ -83,7 +83,9 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndReci
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
-    mock_USART_RX_IRQ();
+    mock_USART_RX_IRQ(); //this is recived data before 3,5char time expired. According to modbus doc such event should trigger frame error flag and msg should be ignored after 3,5 char expired
+    check_modbus_request();
+    mock_3_5_char_timer_IRQ();
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
 }

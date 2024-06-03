@@ -17,7 +17,7 @@ TEST_GROUP_RUNNER(Slave_RTU_init_test)
    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeWithDefinedSlaveIdThenModbusSlaveIdIsAssigned);
    RUN_TEST_CASE(Slave_RTU_init_test,  WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStateMachineIsSetToModbusSlaveIdle);
    
-   // RUN_TEST_CASE(Slave_RTU_init_test, );
+   // RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenAllModbusStatusFlagsAreCleared);
    // RUN_TEST_CASE(Slave_RTU_init_test, );
    // RUN_TEST_CASE(Slave_RTU_init_test, );
    // RUN_TEST_CASE(Slave_RTU_init_test, );

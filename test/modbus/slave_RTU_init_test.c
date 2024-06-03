@@ -140,7 +140,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStat
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE,slave_manager_state_machine);
 }
 
-// TEST(Slave_RTU_init_test, )
+// TEST(Slave_RTU_init_test,WhenModbusSlaveInitInRTUmodeThenAllModbusStatusFlagsAreCleared )
 // {
 //     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
 // }
