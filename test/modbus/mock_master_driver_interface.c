@@ -73,10 +73,6 @@ static void master_disable_usart_rx_interrupt(void)
 {
 
 }
-static void master_enable_silence_timer(void)
-{
-    
-}
 static void master_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callback)
 {
 
