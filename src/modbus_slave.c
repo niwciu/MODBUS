@@ -13,6 +13,7 @@
 #include "modbus_RTU.h"
 #include "modbus_type.h"
 #include "modbus_driver_interface.h"
+#include <stddef.h>
 
 #ifdef UNIT_TEST
 #define PRIVATE
@@ -24,11 +25,11 @@ PRIVATE modbus_device_ID_t modbus_slave_ID;
 PRIVATE modbus_slave_state_t slave_manager_state_machine = MODBUS_SLAVE_UNKNOWN;
 PRIVATE const modbus_RTU_driver_struct_t *slave_RTU_driver = NULL;
 
-static modbus_queue_t slave_free_queue;
-static modbus_queue_t slave_tx_rx_queue;
+// static modbus_queue_t slave_free_queue;
+// static modbus_queue_t slave_tx_rx_queue;
 
-PRIVATE modbus_queue_t *slave_free_q = &slave_free_queue;
-PRIVATE modbus_queue_t *slave_tx_rx_q = &slave_tx_rx_queue;
+// PRIVATE modbus_queue_t *slave_free_q = &slave_free_queue;
+// PRIVATE modbus_queue_t *slave_tx_rx_q = &slave_tx_rx_queue;
 PRIVATE modbus_msg_t slave_msg;
 
 PRIVATE modbus_msg_t *slave_msg_ptr = NULL;
@@ -135,7 +136,7 @@ static void init_modbus_driver (modbus_mode_t mode, baud_t baud_rate, parity_t p
     {
         slave_RTU_driver = get_slave_RTU_driver_interface();
         slave_RTU_driver->init(baud_rate, parity);
-        slave_RTU_driver->enable_rcev(&slave_msg_ptr->resp);
+        slave_RTU_driver->enable_rcev(&slave_msg_ptr->req);
         slave_RTU_driver->subscribe_msg_tx_done_cb(modbus_resp_send_callback);
         slave_RTU_driver->subscribe_t_1_5_char_expired_cb(modbus_T_1_5_char_expired_callback);
         slave_RTU_driver->subscribe_t_3_5_char_expired_cb(modbus_T_3_5_char_expired_callback);
