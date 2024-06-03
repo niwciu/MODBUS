@@ -25,8 +25,8 @@ typedef struct
 // modbus_buf_t *rx_data = NULL;
 // rx_cb_t rx_callback = NULL;
 driver_subscr_cb_t mock_msg_tx_done_cb= NULL;
-driver_subscr_cb_t mock_msg_rx_done_cb = NULL;
-driver_subscr_cb_t mock_msg_start_processing_cb = NULL;
+driver_subscr_cb_t mock_1_5_char_break_cb = NULL;
+driver_subscr_cb_t mock_3_5_char_break_cb = NULL;
 
 // modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
 
@@ -85,11 +85,11 @@ static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 // }
 static void slave_enable_silence_timer(void)
 {
-    mock_2char_timer=TIMER_COUNTING;
+    // mock_2char_timer=TIMER_COUNTING;
 }
 static void slave_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callback)
 {
-    mock_msg_rx_done_cb=callback;
+    mock_1_5_char_break_cb=callback;
 }
 
 static void slave_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback)
@@ -99,5 +99,5 @@ static void slave_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callba
 
 static void slave_subscribe_msg_ready_to_process_callback(driver_subscr_cb_t callback)
 {
-    mock_msg_start_processing_cb=callback;
+    mock_3_5_char_break_cb=callback;
 }

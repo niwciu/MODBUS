@@ -38,7 +38,12 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdReciv
     modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
     modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, msg_slave_ID);
 
-    mock_msg_rx_done_cb(); 
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
+    mock_1_5_char_break_cb(); 
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
+    check_modbus_request();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
+    check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
     TEST_ASSERT_EQUAL(0,slave_msg_buf->req.len);
 }
@@ -51,10 +56,13 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdRecived
     modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
     modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
 
-    mock_msg_rx_done_cb(); 
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_ID_OK_REQUIRED_SILANCE_PENDING, slave_manager_state_machine);
-    TEST_ASSERT_EQUAL(TIMER_COUNTING,mock_2char_timer);
-
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
+    mock_1_5_char_break_cb();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine); 
+    check_modbus_request();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
+    check_modbus_request();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
 }
 
 // TEST(Slave_RTU_test, )

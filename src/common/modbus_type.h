@@ -106,13 +106,20 @@ extern "C"
     typedef enum
     {
         MODBUS_SLAVE_IDLE,
-        MODBUS_SLAVE_ID_OK_REQUIRED_SILANCE_PENDING,
+        MODBUS_SLAVE_MSG_RECIVED,
+        MODBUS_SLAVE_RECIVER_SILANCE_PENDING,
         MODBUS_SLAVE_TRANSMITING_RESP,
         // MODBUS_SLAVE_TRANSMISION,
         // MODBUS_SLAVE_RECEIVING,
         // MODBUS_SLAVE_RESP_ANALYSE,
         // MODBUS_SLAVE_ERROR_SERVICE,
     }modbus_slave_state_t;
+    typedef enum
+    {
+        MODBUS_FLAG_CLEARED,
+        MODBUS_FLAG_SET,
+
+    }modbus_status_flag_t;
     
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;

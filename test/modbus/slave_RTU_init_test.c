@@ -104,7 +104,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgRxDoneCallbackIsReg
     parity_t parity = ODD;
 
     modbus_slave_init(RTU, baud, parity,0);
-    TEST_ASSERT_NOT_NULL (mock_msg_rx_done_cb);
+    TEST_ASSERT_NOT_NULL (mock_1_5_char_break_cb);
     
 }
 
@@ -114,7 +114,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgStartProcessingCall
     parity_t parity = ODD;
 
     modbus_slave_init(RTU, baud, parity,0);
-    TEST_ASSERT_NOT_NULL (mock_msg_start_processing_cb);
+    TEST_ASSERT_NOT_NULL (mock_3_5_char_break_cb);
     
 }
 

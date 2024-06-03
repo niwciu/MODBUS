@@ -41,8 +41,8 @@ typedef struct
 
 extern driver_init_status_t mock_slave_USART;
 extern driver_subscr_cb_t mock_msg_tx_done_cb;
-extern driver_subscr_cb_t mock_msg_rx_done_cb;
-extern driver_subscr_cb_t mock_msg_start_processing_cb;
+extern driver_subscr_cb_t mock_1_5_char_break_cb;
+extern driver_subscr_cb_t mock_3_5_char_break_cb;
 extern timer_state_t mock_2char_timer;
 
 
