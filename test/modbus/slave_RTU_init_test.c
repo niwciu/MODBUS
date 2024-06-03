@@ -102,7 +102,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgTxDoneCallbackIsReg
     
 }
 
-TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgRxDoneCallbackIsRegistered)
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenT1_5CharExpiredCallbackIsRegistered)
 {
     baud_t baud = 38400;
     parity_t parity = ODD;
@@ -112,7 +112,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgRxDoneCallbackIsReg
     
 }
 
-TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgStartProcessingCallbackIsRegistered)
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenT3_5CharExpiredCallbackIsRegistered)
 {
     baud_t baud = 38400;
     parity_t parity = ODD;
