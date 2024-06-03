@@ -21,7 +21,7 @@
 #endif
 PRIVATE modbus_device_ID_t modbus_slave_ID;
 
-PRIVATE modbus_slave_state_t slave_manager_state_machine = MODBUS_SLAVE_IDLE;
+PRIVATE modbus_slave_state_t slave_manager_state_machine = MODBUS_SLAVE_UNKNOWN;
 PRIVATE const modbus_RTU_driver_struct_t *slave_RTU_driver = NULL;
 
 static modbus_queue_t slave_free_queue;
@@ -58,6 +58,7 @@ void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity, mo
     slave_RTU_driver->subscribe_msg_rx_done_cb(modbus_T_1_5_char_expired_callback);
     slave_RTU_driver->subscribe_start_req_processing_cb(modbus_T_3_5_char_expired_callback);
     modbus_slave_ID = slave_ID;
+    
 }
 
 void check_modbus_request(void)

@@ -113,6 +113,7 @@ extern "C"
         // MODBUS_SLAVE_RECEIVING,
         // MODBUS_SLAVE_RESP_ANALYSE,
         // MODBUS_SLAVE_ERROR_SERVICE,
+        MODBUS_SLAVE_UNKNOWN,
     }modbus_slave_state_t;
     typedef enum
     {

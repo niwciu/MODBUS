@@ -31,8 +31,8 @@ driver_subscr_cb_t mock_3_5_char_break_cb = NULL;
 // modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
 
 driver_init_status_t mock_slave_USART = {0,NONE,INIT_UNKNOWN,IRQ_DISABLED,IRQ_DISABLED};
-// timer_state_t mock_1_5char_timer;
-timer_state_t mock_2char_timer = TIMER_INACTIVE;
+timer_state_t mock_1_5_char_timer = TIMER_INACTIVE;
+timer_state_t mock_3_5_char_timer = TIMER_INACTIVE;
 
 modbus_req_resp_t *rx_buf=NULL;
 
@@ -40,10 +40,11 @@ static void slave_usart_init(baud_t baud, parity_t parity);
 static void slave_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
 // static void disable_usart_rx_interrupt(void);
-static void slave_enable_silence_timer(void);
+static void slave_enable_silence_timer(void); //ToDo do usuniecia
 static void slave_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callback);
 static void slave_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback);
 static void slave_subscribe_msg_ready_to_process_callback(driver_subscr_cb_t callback);
+
 
 
 
@@ -100,4 +101,21 @@ static void slave_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callba
 static void slave_subscribe_msg_ready_to_process_callback(driver_subscr_cb_t callback)
 {
     mock_3_5_char_break_cb=callback;
+}
+
+void mock_USART_RX_IRQ(void)
+{
+    // tutaj trzeba jakoś ogarnąć czy odbieram po 1,5 i przed 3,5
+    // clear 1,5 char timer -> done automatically in STM32 with USART 1 and 2
+    // clear 3,5 char timer 
+}
+void mock_1_5_char_timer_IRQ (void)
+{
+    mock_1_5_char_timer = TIMER_FIRED;
+    mock_1_5_char_break_cb();
+}
+void mock_3_5_char_timer_IRQ (void)
+{
+    mock_3_5_char_timer = TIMER_FIRED;
+    mock_3_5_char_break_cb();
 }

@@ -129,10 +129,16 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeWithDefinedSlaveIdThenModb
     TEST_ASSERT_EQUAL(expected_slave_ID,modbus_slave_ID);
 }
 
-// TEST(Slave_RTU_init_test, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStateMachineIsSetToModbusSlaveIdle)
+{
+    baud_t baud = 38400;
+    parity_t parity = ODD;
+    modbus_device_ID_t expected_slave_ID= 0x12;
+
+    modbus_slave_init(RTU,baud,parity, expected_slave_ID);
+
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE,slave_manager_state_machine);
+}
 
 // TEST(Slave_RTU_init_test, )
 // {
