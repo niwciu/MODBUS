@@ -18,6 +18,10 @@ extern modbus_RTU_driver_struct_t *slave_RTU_driver;
 extern modbus_slave_state_t slave_manager_state_machine;
 extern modbus_device_ID_t modbus_slave_ID;
 
+extern modbus_status_flag_t TIMER_1_5_CHAR_FLAG;
+extern modbus_status_flag_t TIMER_3_5_CHAR_FLAG;
+extern modbus_status_flag_t FRAME_ERROR_FLAG;
+
 TEST_SETUP(Slave_RTU_init_test)
 {
     /* Init before every test */
@@ -118,6 +122,16 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgStartProcessingCall
     
 }
 
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgFrameErrorCallbackIsRegistered)
+{
+    baud_t baud = 38400;
+    parity_t parity = ODD;
+
+    modbus_slave_init(RTU, baud, parity,0);
+    TEST_ASSERT_NOT_NULL (mock_frame_error_cb);
+    
+}
+
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeWithDefinedSlaveIdThenModbusSlaveIdIsAssigned)
 {
     baud_t baud = 38400;
@@ -140,7 +154,23 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStat
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE,slave_manager_state_machine);
 }
 
-// TEST(Slave_RTU_init_test,WhenModbusSlaveInitInRTUmodeThenAllModbusStatusFlagsAreCleared )
+TEST(Slave_RTU_init_test,WhenModbusSlaveInitInRTUmodeThenAllModbusStatusFlagsAreCleared )
+{
+    baud_t baud = 38400;
+    parity_t parity = ODD;
+    modbus_device_ID_t expected_slave_ID= 0x12;
+
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,TIMER_1_5_CHAR_FLAG);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,TIMER_3_5_CHAR_FLAG);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,FRAME_ERROR_FLAG);
+}
+
+// TEST(Slave_RTU_init_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
+// }
+
+// TEST(Slave_RTU_init_test, )
 // {
 //     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
 // }

@@ -33,9 +33,9 @@ PRIVATE modbus_msg_t slave_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 
 PRIVATE modbus_msg_t *slave_msg_buf = NULL;
 
-modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
-modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
-modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
