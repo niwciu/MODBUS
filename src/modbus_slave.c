@@ -56,8 +56,8 @@ void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity, mo
     slave_msg_buf = modbus_queue_pop(slave_free_q);
     slave_RTU_driver->enable_rcev(&slave_msg_buf->resp);
     slave_RTU_driver->subscribe_msg_tx_done_cb(modbus_resp_send_callback);
-    slave_RTU_driver->subscribe_msg_rx_done_cb(modbus_T_1_5_char_expired_callback);
-    slave_RTU_driver->subscribe_start_req_processing_cb(modbus_T_3_5_char_expired_callback);
+    slave_RTU_driver->subscribe_t_1_5_char_expired_cb(modbus_T_1_5_char_expired_callback);
+    slave_RTU_driver->subscribe_t_3_5_char_expired_cb(modbus_T_3_5_char_expired_callback);
     slave_RTU_driver->subscribe_modbus_frame_error_cb(modbus_frame_error_callback);
     modbus_slave_ID = slave_ID;
     slave_manager_state_machine = MODBUS_SLAVE_IDLE;
@@ -89,7 +89,6 @@ void check_modbus_request(void)
         else
         {
             slave_manager_state_machine = MODBUS_SLAVE_RECIVER_SILANCE_PENDING;
-            slave_RTU_driver->enable_silence_timer();
         }
         break;
     case MODBUS_SLAVE_RECIVER_SILANCE_PENDING:

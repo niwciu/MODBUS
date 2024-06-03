@@ -43,7 +43,6 @@ static const modbus_RTU_driver_struct_t master_RTU_driver_interface = {
     master_usart_send,
     master_enable_usart_rx_interrupt,
     master_disable_usart_rx_interrupt,
-    master_enable_silence_timer,
     master_uasrt_subscribe_msg_rx_done_callback,
     master_uasrt_subscribe_msg_tx_done_callback,
     NULL,

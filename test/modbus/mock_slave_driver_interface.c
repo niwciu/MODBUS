@@ -38,23 +38,21 @@ modbus_req_resp_t *rx_buf = NULL;
 static void slave_usart_init(baud_t baud, parity_t parity);
 static void slave_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
-// static void disable_usart_rx_interrupt(void);
 static void slave_enable_silence_timer(void); // ToDo do usuniecia
-static void slave_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callback);
-static void slave_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback);
-static void slave_subscribe_msg_ready_to_process_callback(driver_subscr_cb_t callback);
-static void slave_subscribe_msg_frame_erroro_callback(driver_subscr_cb_t callback);
+static void slave_t_1_5_char_expired_callback_subscribe(driver_subscr_cb_t callback);
+static void slave_msg_tx_done_callback_subscribe(driver_subscr_cb_t callback);
+static void slave_t_3_5_char_expired_callback_subscribe(driver_subscr_cb_t callback);
+static void slave_msg_frame_erroro_callback_subscribe(driver_subscr_cb_t callback);
 
 static const modbus_RTU_driver_struct_t slave_RTU_driver_interface = {
     slave_usart_init,
     slave_usart_send,
     slave_enable_usart_rx_interrupt,
     NULL,
-    slave_enable_silence_timer,
-    slave_uasrt_subscribe_msg_rx_done_callback,
-    slave_uasrt_subscribe_msg_tx_done_callback,
-    slave_subscribe_msg_ready_to_process_callback,
-    slave_subscribe_msg_frame_erroro_callback,
+    slave_t_1_5_char_expired_callback_subscribe,
+    slave_msg_tx_done_callback_subscribe,
+    slave_t_3_5_char_expired_callback_subscribe,
+    slave_msg_frame_erroro_callback_subscribe,
     };
 
 const modbus_RTU_driver_struct_t *get_slave_RTU_driver_interface(void)
@@ -86,21 +84,21 @@ static void slave_enable_silence_timer(void)
 {
     // mock_2char_timer=TIMER_COUNTING;
 }
-static void slave_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callback)
+static void slave_t_1_5_char_expired_callback_subscribe(driver_subscr_cb_t callback)
 {
     mock_1_5_char_break_cb = callback;
 }
 
-static void slave_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback)
+static void slave_msg_tx_done_callback_subscribe(driver_subscr_cb_t callback)
 {
     mock_msg_tx_done_cb = callback;
 }
 
-static void slave_subscribe_msg_ready_to_process_callback(driver_subscr_cb_t callback)
+static void slave_t_3_5_char_expired_callback_subscribe(driver_subscr_cb_t callback)
 {
     mock_3_5_char_break_cb = callback;
 }
-static void slave_subscribe_msg_frame_erroro_callback(driver_subscr_cb_t callback)
+static void slave_msg_frame_erroro_callback_subscribe(driver_subscr_cb_t callback)
 {
     mock_frame_error_cb = callback;
 }

@@ -31,10 +31,9 @@ extern "C"
         send_func_ptr_t send;
         enable_rx_func_ptr_t enable_rcev;
         driver_func_ptr_t disable_rcev;
-        driver_func_ptr_t enable_silence_timer; 
-        subscribed_func_ptr_t subscribe_msg_rx_done_cb; //ToDo pytanie czy będzie potrzebne
+        subscribed_func_ptr_t subscribe_t_1_5_char_expired_cb; 
         subscribed_func_ptr_t subscribe_msg_tx_done_cb;
-        subscribed_func_ptr_t subscribe_start_req_processing_cb;
+        subscribed_func_ptr_t subscribe_t_3_5_char_expired_cb;
         subscribed_func_ptr_t subscribe_modbus_frame_error_cb;
     }modbus_RTU_driver_struct_t;
 
