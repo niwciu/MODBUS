@@ -85,6 +85,9 @@ void check_modbus_request(void)
         {
             parse_master_request_and_prepare_resp(slave_msg_buf);
             modbus_RTU_send(slave_msg_buf->resp.data,&slave_msg_buf->resp.len,modbus_slave_ID);
+            slave_RTU_driver->send(slave_msg_buf->resp.data,slave_msg_buf->resp.len);
+            RESP_TRANSMITION_FLAG = MODBUS_FLAG_SET;
+            slave_manager_state_machine = MODBUS_SLAVE_TRANSMITING_RESP;
         }
         break;
     case MODBUS_SLAVE_TRANSMITING_RESP:
