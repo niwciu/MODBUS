@@ -88,7 +88,8 @@ void check_modbus_request(void)
         }
         break;
     case MODBUS_SLAVE_RECIVER_SILANCE_PENDING:
-        // tutaj sprwdzam flagę ustawioną przez przerwanie 3,5_t bo jak to przerwanie by zmieniło stan a byłbym jeszczez w modbus_slave
+        
+
         break;
     case MODBUS_SLAVE_TRANSMITING_RESP:
         // waiting for end of resp transmission

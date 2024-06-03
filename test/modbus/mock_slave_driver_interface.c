@@ -105,9 +105,20 @@ static void slave_subscribe_msg_ready_to_process_callback(driver_subscr_cb_t cal
 
 void mock_USART_RX_IRQ(void)
 {
-    // tutaj trzeba jakoś ogarnąć czy odbieram po 1,5 i przed 3,5
-    // clear 1,5 char timer -> done automatically in STM32 with USART 1 and 2
-    // clear 3,5 char timer 
+    if( (TIMER_FIRED == mock_1_5_char_timer)&&(TIMER_FIRED == mock_3_5_char_timer))
+    {
+
+    }
+    if( (TIMER_FIRED == mock_1_5_char_timer)&&(TIMER_COUNTING == mock_3_5_char_timer))
+    {
+
+    }
+    else
+    {
+        mock_1_5_char_timer = TIMER_COUNTING;
+        mock_3_5_char_timer = TIMER_COUNTING;
+    }
+
 }
 void mock_1_5_char_timer_IRQ (void)
 {

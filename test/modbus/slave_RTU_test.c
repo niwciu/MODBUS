@@ -37,9 +37,10 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdReciv
 
     modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
     modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, msg_slave_ID);
+    mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
 
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
-    mock_1_5_char_break_cb(); 
+    mock_1_5_char_timer_IRQ();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
@@ -55,9 +56,10 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdRecived
 
     modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
     modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
+    mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
 
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
-    mock_1_5_char_break_cb();
+    mock_1_5_char_timer_IRQ();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine); 
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
@@ -65,10 +67,26 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdRecived
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
 }
 
-// TEST(Slave_RTU_test, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
-// }
+TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndReciverTimer1_5CharTrigerWhenRxCharBeforeT3_5timerTriegerdThenIgnoreFrameAndGoToIdleState)
+{
+    modbus_adr_t coil_adr=0x0001;
+    modbus_data_qty_t coils_qty=2;
+
+    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
+    mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
+
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
+    mock_1_5_char_timer_IRQ();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine); 
+    check_modbus_request();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
+    check_modbus_request();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
+    mock_USART_RX_IRQ();
+    check_modbus_request();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
+}
 
 // TEST(Slave_RTU_test, )
 // {
