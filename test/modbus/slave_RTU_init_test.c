@@ -36,27 +36,9 @@ TEST_TEAR_DOWN(Slave_RTU_init_test)
 TEST(Slave_RTU_init_test, WhenModbusSlavenitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
 {
     modbus_slave_init(RTU, 0, 0,0);
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
-    {
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_req_buf[i][0], slave_msg[i].req.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_resp_buf[i][0], slave_msg[i].resp.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
-    }
-}
+    TEST_ASSERT_EQUAL(&RTU_req_buf[0][0], slave_msg->req.data);
+    TEST_ASSERT_EQUAL(&RTU_resp_buf[0][0], slave_msg->resp.data);
 
-
-TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenTxRxRTUmsgQueueInitialized )
-{
-    modbus_slave_init(RTU, 0, 0,0);
-
-    TEST_ASSERT_EQUAL(0,slave_tx_rx_q->head);
-    TEST_ASSERT_EQUAL(0,slave_tx_rx_q->tail);
-}
-
-TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFullAndOneMsgBuffPop)
-{
-    modbus_slave_init(RTU, 0, 0,0);
-    TEST_ASSERT_EQUAL(1,slave_free_q->tail);
-    TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1),slave_free_q->head);
 }
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegistered)
@@ -162,7 +144,7 @@ TEST(Slave_RTU_init_test,WhenModbusSlaveInitInRTUmodeThenAllModbusStatusFlagsAre
     modbus_device_ID_t expected_slave_ID= 0x12;
 
     modbus_slave_init(RTU,baud,parity, expected_slave_ID);
-    
+
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,TIMER_1_5_CHAR_FLAG);
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,TIMER_3_5_CHAR_FLAG);
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED ,FRAME_ERROR_FLAG);

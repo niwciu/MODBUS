@@ -16,7 +16,7 @@ extern "C"
 #endif /* __cplusplus */
     // clang-format off
 
-#define MAX_MODBUS_MSG_QUEUE_ITEMS  10
+#define MAX_MODBUS_MSG_QUEUE_ITEMS  2
 
 #ifdef  UNIT_TEST
 #define MAIN_APP_COILS_QTY              MODBUS_MAX_SPECIFIC_DATA_ITEMS_QTY
