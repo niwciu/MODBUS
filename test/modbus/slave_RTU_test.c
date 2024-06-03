@@ -32,6 +32,47 @@ TEST_TEAR_DOWN(Slave_RTU_test)
     /* Cleanup after every test */
 }
 
+TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveCoilPtrTableThenCoilPtrIsEqualToRegisteredDataAdr)
+{
+    modbus_adr_t coil_adr = 0x0003;
+    modbus_coil_disin_t app_data_coil = !!COIL_OFF;
+
+    register_app_data_to_modbus_slave_coils_table(coil_adr, &app_data_coil);
+
+    TEST_ASSERT_EQUAL(&app_data_coil, Slave_Coils[coil_adr]);
+}
+
+// TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveDisInPtrTableThenDisInPtrIsEqualToRegisteredDataAdr)
+// {
+//     modbus_adr_t disin_adr = 0x0003;
+//     modbus_coil_disin_t app_data_disin;
+
+//     register_app_data_to_modbus_master_din_table(disin_adr, &app_data_disin);
+
+//     TEST_ASSERT_EQUAL(&app_data_disin, Master_Discrete_Inputs[disin_adr]);
+// }
+
+// TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveInRegPtrTableThenInRegPtrIsEqualToRegisteredDataAdr)
+// {
+//     modbus_adr_t inreg_adr = 0x0003;
+//     modbus_reg_t app_data_inreg;
+
+//     register_app_data_to_modbus_master_inreg_table(inreg_adr, &app_data_inreg);
+
+//     TEST_ASSERT_EQUAL(&app_data_inreg, Master_Input_Registers[inreg_adr]);
+// }
+
+// TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveHolRegPtrTableThenHolRegPtrIsEqualToRegisteredDataAdr)
+// {
+//     modbus_adr_t hreg_adr = 0x0003;
+//     modbus_reg_t app_data_hreg;
+
+//     register_app_data_to_modbus_master_hreg_table(hreg_adr, &app_data_hreg);
+
+//     TEST_ASSERT_EQUAL(&app_data_hreg, Master_Holding_Registers[hreg_adr]);
+// }
+
+
 TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqRecivedWhenTimer1_5CharTrigerThenModbusManagerGoToModbusSlaveMsgRecived)
 {
     modbus_adr_t coil_adr=0x0001;

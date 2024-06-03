@@ -33,7 +33,7 @@ int main(void)
 {
   core_init();
   modbus_slave_init(RTU,115200,NONE,0x01);
-  register_app
+  
   /* Loop forever */
 	while(1)
   {

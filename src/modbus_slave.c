@@ -49,6 +49,23 @@ static void modbus_T_1_5_char_expired_callback(void);
 static void modbus_T_3_5_char_expired_callback(void);
 static void modbus_frame_error_callback(void);
 
+void register_app_data_to_modbus_slave_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
+{
+    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, app_data_ptr);
+}
+void register_app_data_to_modbus_slave_din_table(modbus_adr_t disin_adr, modbus_coil_disin_t *app_data_ptr)
+{
+    register_app_data_to_modbus_coils_din_table(Slave_Discrete_Inputs, disin_adr, app_data_ptr);
+}
+void register_app_data_to_modbus_slave_inreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
+{
+    register_app_data_to_modbus_reg_table(Slave_Input_Registers, reg_adr, app_data_ptr);
+}
+void register_app_data_to_modbus_slave_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
+{
+    register_app_data_to_modbus_reg_table(Slave_Holding_Registers, reg_adr, app_data_ptr);
+}
+
 void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity, modbus_device_ID_t slave_ID)
 {
 

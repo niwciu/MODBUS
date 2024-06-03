@@ -4,6 +4,7 @@
 #include "modbus_type.h"
 #include "modbus_driver_interface.h"
 #include "mock_slave_driver_interface.h"
+#include "modbus_queue.h"
 
 // #include "tested_module.h"
 
