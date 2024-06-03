@@ -64,22 +64,23 @@ void check_modbus_request(void)
     case MODBUS_SLAVE_IDLE:
         if (TIMER_1_5_CHAR_FLAG == MODBUS_FLAG_SET)
         {
+            modbus_ret_t RTU_status;
+            TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+            RTU_status = modbus_RTU_recv(slave_msg_buf->req.data, slave_msg->req.len, modbus_slave_ID);
+            if( RTU_status != RET_OK)
+            {
+                FRAME_ERROR_FLAG=MODBUS_FLAG_SET;
+            }
             slave_manager_state_machine = MODBUS_SLAVE_MSG_RECIVED;
         }
         break;
     case MODBUS_SLAVE_MSG_RECIVED:
-        modbus_ret_t RTU_status = modbus_RTU_recv(slave_msg_buf->req.data, slave_msg->req.len, modbus_slave_ID);
-        if( RTU_status != RET_OK)
-        {
-             FRAME_ERROR_FLAG=MODBUS_FLAG_SET;
-        }
-        slave_manager_state_machine = MODBUS_SLAVE_RECIVER_SILANCE_PENDING;
-        break;
-    case MODBUS_SLAVE_RECIVER_SILANCE_PENDING:
         if ((MODBUS_FLAG_SET== FRAME_ERROR_FLAG) &&( MODBUS_FLAG_SET == TIMER_3_5_CHAR_FLAG))
         {
             slave_msg_buf->req.len = 0;
             slave_manager_state_machine = MODBUS_SLAVE_IDLE;
+            FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+            TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
         }
         else if((MODBUS_FLAG_CLEARED== FRAME_ERROR_FLAG) &&( MODBUS_FLAG_SET == TIMER_3_5_CHAR_FLAG))
         {
@@ -88,15 +89,29 @@ void check_modbus_request(void)
             slave_RTU_driver->send(slave_msg_buf->resp.data,slave_msg_buf->resp.len);
             RESP_TRANSMITION_FLAG = MODBUS_FLAG_SET;
             slave_manager_state_machine = MODBUS_SLAVE_TRANSMITING_RESP;
+            TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+        }
+        else
+        {
+            // do nothing untill flags are set as expected 
         }
         break;
     case MODBUS_SLAVE_TRANSMITING_RESP:
-        // waiting for end of resp transmission
-        // jeśli flaga końca transmisji ustawiona to ustaw wsk bufora na 0 i przejsć do idle
-        //pytanie co z pozostałymi flagami -> do sprawdzenia
+        if(MODBUS_FLAG_CLEARED == RESP_TRANSMITION_FLAG)
+        {
+            slave_manager_state_machine = MODBUS_SLAVE_IDLE;
+            slave_msg_buf->resp.len=0;
+            slave_msg_buf->req.len=0;
+        }
         break;
     default:
         slave_manager_state_machine = MODBUS_SLAVE_IDLE;
+        TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+        TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+        FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+        RESP_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
+        slave_msg_buf->resp.len=0;
+        slave_msg_buf->req.len=0;
         break;
     }
 }

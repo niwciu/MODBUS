@@ -64,7 +64,6 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdReciv
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
     check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
     check_modbus_request();
     mock_3_5_char_timer_IRQ();
     check_modbus_request();
@@ -86,8 +85,7 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine); 
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
-    check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
+
 }
 
 
@@ -106,7 +104,6 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
     check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
     mock_USART_RX_IRQ(); //this is recived data before 3,5char time expired. According to modbus doc such event should trigger frame error flag and msg should be ignored after 3,5 char expired
     check_modbus_request();
     mock_3_5_char_timer_IRQ();
@@ -130,7 +127,6 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndInco
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
     check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
     check_modbus_request();
     mock_3_5_char_timer_IRQ();
     check_modbus_request();
@@ -159,7 +155,6 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
     check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
     check_modbus_request();
     mock_3_5_char_timer_IRQ();
     check_modbus_request();
@@ -186,7 +181,6 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
     check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
     check_modbus_request();
     mock_3_5_char_timer_IRQ();
     check_modbus_request();
@@ -214,16 +208,14 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
     check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
     check_modbus_request();
     mock_3_5_char_timer_IRQ();
     check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_TRANSMITING_RESP, slave_manager_state_machine);
     mock_USART_Tx_Done_IRQ();
     check_modbus_request();
     TEST_ASSERT_EQUAL(0,slave_msg_buf->req.len);
     TEST_ASSERT_EQUAL(0,slave_msg_buf->resp.len);
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_TRANSMITING_RESP, slave_manager_state_machine);
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
 }
 
 // TEST(Slave_RTU_test, )

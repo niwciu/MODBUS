@@ -107,12 +107,7 @@ extern "C"
     {
         MODBUS_SLAVE_IDLE,
         MODBUS_SLAVE_MSG_RECIVED,
-        MODBUS_SLAVE_RECIVER_SILANCE_PENDING,
         MODBUS_SLAVE_TRANSMITING_RESP,
-        // MODBUS_SLAVE_TRANSMISION,
-        // MODBUS_SLAVE_RECEIVING,
-        // MODBUS_SLAVE_RESP_ANALYSE,
-        // MODBUS_SLAVE_ERROR_SERVICE,
         MODBUS_SLAVE_UNKNOWN,
     }modbus_slave_state_t;
     typedef enum
