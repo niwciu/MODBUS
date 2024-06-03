@@ -64,6 +64,10 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdReciv
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
     check_modbus_request();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_RECIVER_SILANCE_PENDING, slave_manager_state_machine);
+    check_modbus_request();
+    mock_3_5_char_timer_IRQ();
+    check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
     TEST_ASSERT_EQUAL(0,slave_msg_buf->req.len);
 }

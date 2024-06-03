@@ -68,18 +68,11 @@ void check_modbus_request(void)
         break;
     case MODBUS_SLAVE_MSG_RECIVED:
         modbus_ret_t RTU_status = modbus_RTU_recv(slave_msg_buf->req.data, slave_msg->req.len, modbus_slave_ID);
-        if (RET_ERROR_SLAVE_ID == RTU_status)
+        if( RTU_status != RET_OK)
         {
-            slave_msg_buf->req.len = 0;
-            slave_manager_state_machine = MODBUS_SLAVE_IDLE;
+             FRAME_ERROR_FLAG=MODBUS_FLAG_SET;
         }
-        else if(RET_ERROR_CRC == RTU_status)
-        {
-        }
-        else
-        {
-            slave_manager_state_machine = MODBUS_SLAVE_RECIVER_SILANCE_PENDING;
-        }
+        slave_manager_state_machine = MODBUS_SLAVE_RECIVER_SILANCE_PENDING;
         break;
     case MODBUS_SLAVE_RECIVER_SILANCE_PENDING:
         if ((MODBUS_FLAG_SET== FRAME_ERROR_FLAG) &&( MODBUS_FLAG_SET == TIMER_3_5_CHAR_FLAG))
