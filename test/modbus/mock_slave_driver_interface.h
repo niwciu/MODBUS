@@ -55,6 +55,7 @@ extern USART_Rx_status_t USART_Tx_status;
 void mock_USART_RX_IRQ(void);
 void mock_1_5_char_timer_IRQ (void);
 void mock_3_5_char_timer_IRQ (void);
+void mock_USART_Tx_Done_IRQ(void);
 
 
 

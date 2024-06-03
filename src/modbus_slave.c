@@ -92,6 +92,8 @@ void check_modbus_request(void)
         break;
     case MODBUS_SLAVE_TRANSMITING_RESP:
         // waiting for end of resp transmission
+        // jeśli flaga końca transmisji ustawiona to ustaw wsk bufora na 0 i przejsć do idle
+        //pytanie co z pozostałymi flagami -> do sprawdzenia
         break;
     default:
         slave_manager_state_machine = MODBUS_SLAVE_IDLE;
@@ -158,8 +160,7 @@ static void push_all_available_msg_buffer_to_free_queue(void)
 
 static void modbus_resp_send_callback(void)
 {
-    // modbus_queue_push(slave_free_q, slave_msg_buf);
-    // slave_manager_state_machine = MODBUS_SLAVE_IDLE;
+    RESP_TRANSMITION_FLAG= MODBUS_FLAG_CLEARED;
 }
 
 static void modbus_T_1_5_char_expired_callback(void)

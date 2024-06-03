@@ -129,3 +129,7 @@ void mock_3_5_char_timer_IRQ(void)
     mock_3_5_char_timer = TIMER_FIRED;
     mock_3_5_char_break_cb();
 }
+void mock_USART_Tx_Done_IRQ(void)
+{
+    mock_msg_tx_done_cb();
+}
