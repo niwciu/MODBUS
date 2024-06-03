@@ -12,7 +12,7 @@
 TEST_GROUP(Slave_RTU_test);
 
 extern modbus_slave_state_t slave_manager_state_machine;
-extern modbus_msg_t *slave_msg_buf;
+extern modbus_msg_t *slave_msg_ptr;
 
 modbus_device_ID_t device_ID = 0x12;
 baud_t baud = 38400;
@@ -32,14 +32,55 @@ TEST_TEAR_DOWN(Slave_RTU_test)
     /* Cleanup after every test */
 }
 
+TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveCoilPtrTableThenCoilPtrIsEqualToRegisteredDataAdr)
+{
+    modbus_adr_t coil_adr = 0x0003;
+    modbus_coil_disin_t app_data_coil = !!COIL_OFF;
+
+    register_app_data_to_modbus_slave_coils_table(coil_adr, &app_data_coil);
+
+    TEST_ASSERT_EQUAL(&app_data_coil, Slave_Coils[coil_adr]);
+}
+
+TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveDisInPtrTableThenDisInPtrIsEqualToRegisteredDataAdr)
+{
+    modbus_adr_t disin_adr = 0x0003;
+    modbus_coil_disin_t app_data_disin;
+
+    register_app_data_to_modbus_slave_din_table(disin_adr, &app_data_disin);
+
+    TEST_ASSERT_EQUAL(&app_data_disin, Slave_Discrete_Inputs[disin_adr]);
+}
+
+TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveInRegPtrTableThenInRegPtrIsEqualToRegisteredDataAdr)
+{
+    modbus_adr_t inreg_adr = 0x0003;
+    modbus_reg_t app_data_inreg;
+
+    register_app_data_to_modbus_slave_inreg_table(inreg_adr, &app_data_inreg);
+
+    TEST_ASSERT_EQUAL(&app_data_inreg, Slave_Input_Registers[inreg_adr]);
+}
+
+TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveHolRegPtrTableThenHolRegPtrIsEqualToRegisteredDataAdr)
+{
+    modbus_adr_t hreg_adr = 0x0003;
+    modbus_reg_t app_data_hreg;
+
+    register_app_data_to_modbus_slave_hreg_table(hreg_adr, &app_data_hreg);
+
+    TEST_ASSERT_EQUAL(&app_data_hreg, Slave_Holding_Registers[hreg_adr]);
+}
+
+
 TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqRecivedWhenTimer1_5CharTrigerThenModbusManagerGoToModbusSlaveMsgRecived)
 {
     modbus_adr_t coil_adr=0x0001;
     modbus_data_qty_t coils_qty=2;
     modbus_device_ID_t msg_slave_ID = 0x99;
 
-    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
-    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, msg_slave_ID);
+    modbus_master_read_coils_req(slave_msg_ptr,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_ptr->req.data,&slave_msg_ptr->req.len, msg_slave_ID);
     mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
     mock_1_5_char_timer_IRQ();
@@ -54,8 +95,8 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdReciv
     modbus_data_qty_t coils_qty=2;
     modbus_device_ID_t msg_slave_ID = 0x99;
 
-    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
-    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, msg_slave_ID);
+    modbus_master_read_coils_req(slave_msg_ptr,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_ptr->req.data,&slave_msg_ptr->req.len, msg_slave_ID);
     mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
 
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
@@ -68,7 +109,7 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdReciv
     mock_3_5_char_timer_IRQ();
     check_modbus_request();
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
-    TEST_ASSERT_EQUAL(0,slave_msg_buf->req.len);
+    TEST_ASSERT_EQUAL(0,slave_msg_ptr->req.len);
 }
 
 TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedWhenTimer1_5CharTrigerThenGoToModbusSlaveReciverSilancePendingState)
@@ -76,8 +117,8 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     modbus_adr_t coil_adr=0x0001;
     modbus_data_qty_t coils_qty=2;
 
-    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
-    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
+    modbus_master_read_coils_req(slave_msg_ptr,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_ptr->req.data,&slave_msg_ptr->req.len, device_ID);
     mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
 
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
@@ -94,8 +135,8 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     modbus_adr_t coil_adr=0x0001;
     modbus_data_qty_t coils_qty=2;
 
-    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
-    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
+    modbus_master_read_coils_req(slave_msg_ptr,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_ptr->req.data,&slave_msg_ptr->req.len, device_ID);
     mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
 
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
@@ -116,8 +157,8 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndInco
     modbus_adr_t coil_adr=0x0001;
     modbus_data_qty_t coils_qty=2;
    
-    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
-    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
+    modbus_master_read_coils_req(slave_msg_ptr,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_ptr->req.data,&slave_msg_ptr->req.len, device_ID);
     modify_CRC_in_msg_frame();
     mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
 
@@ -146,8 +187,8 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     register_app_data_to_modbus_coils_din_table(Slave_Coils,coil_adr,&coil_1);
     register_app_data_to_modbus_coils_din_table(Slave_Coils,coil_adr+1,&coil_2);
    
-    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
-    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
+    modbus_master_read_coils_req(slave_msg_ptr,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_ptr->req.data,&slave_msg_ptr->req.len, device_ID);
     mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
     
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
@@ -158,7 +199,7 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     check_modbus_request();
     mock_3_5_char_timer_IRQ();
     check_modbus_request();
-    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_resp,slave_msg_buf->resp.data,slave_msg_buf->resp.len);
+    TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_resp,slave_msg_ptr->resp.data,slave_msg_ptr->resp.len);
 
 }
 
@@ -172,8 +213,8 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     register_app_data_to_modbus_coils_din_table(Slave_Coils,coil_adr,&coil_1);
     register_app_data_to_modbus_coils_din_table(Slave_Coils,coil_adr+1,&coil_2);
    
-    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
-    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
+    modbus_master_read_coils_req(slave_msg_ptr,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_ptr->req.data,&slave_msg_ptr->req.len, device_ID);
     mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
     
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
@@ -199,8 +240,8 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     register_app_data_to_modbus_coils_din_table(Slave_Coils,coil_adr,&coil_1);
     register_app_data_to_modbus_coils_din_table(Slave_Coils,coil_adr+1,&coil_2);
    
-    modbus_master_read_coils_req(slave_msg_buf,coil_adr,coils_qty);
-    modbus_RTU_send(slave_msg_buf->req.data,&slave_msg_buf->req.len, device_ID);
+    modbus_master_read_coils_req(slave_msg_ptr,coil_adr,coils_qty);
+    modbus_RTU_send(slave_msg_ptr->req.data,&slave_msg_ptr->req.len, device_ID);
     mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
     
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
@@ -213,8 +254,8 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     check_modbus_request();
     mock_USART_Tx_Done_IRQ();
     check_modbus_request();
-    TEST_ASSERT_EQUAL(0,slave_msg_buf->req.len);
-    TEST_ASSERT_EQUAL(0,slave_msg_buf->resp.len);
+    TEST_ASSERT_EQUAL(0,slave_msg_ptr->req.len);
+    TEST_ASSERT_EQUAL(0,slave_msg_ptr->resp.len);
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
 }
 
@@ -231,8 +272,8 @@ static void modify_CRC_in_msg_frame(void)
 {
     modbus_CRC_t CRC;
 
-    CRC= read_u16_from_buf(&slave_msg_buf->req.data[slave_msg_buf->req.len -2]);
+    CRC= read_u16_from_buf(&slave_msg_ptr->req.data[slave_msg_ptr->req.len -2]);
     CRC++;
-    write_u16_to_buf(&slave_msg_buf->req.data[slave_msg_buf->req.len -2],CRC);
+    write_u16_to_buf(&slave_msg_ptr->req.data[slave_msg_ptr->req.len -2],CRC);
 
 }

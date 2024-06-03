@@ -55,6 +55,21 @@
       }
     },
     {
+      "cwd": "${workspaceFolder}/test/hw_test/STM32G070RB_MODBUS_SLAVE",
+      "executable": "./Debug/STM32G070RB_MODBUS_SLAVE_HW_TEST.elf",
+      "name": "Debug with ST-Link Modbus Slave HW test",
+      "request": "launch",
+      "type": "cortex-debug",
+      "runToEntryPoint": "main",
+      "showDevDebugOutput": "none",
+      "servertype": "stlink",
+      "svdFile": "C:/ST/STM32CubeCLT/STMicroelectronics_CMSIS_SVD/STM32G070.svd",
+      "liveWatch": {
+        "enabled": true,
+        "samplesPerSecond": 4
+      }
+    },
+    {
       "cwd": "${workspaceFolder}/examples/STM32G070RB_MODBUS_MASTER",
       "executable": "./Debug/STM32G070RB_MODBUS_MASTER.elf",
       "name": "Debug with ST-Link Modbus Master",
