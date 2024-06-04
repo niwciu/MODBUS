@@ -23,6 +23,7 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg);
+static void modbus_slave_unsupoerted_function_error(modbus_msg_t *rx_msg);
     
 static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty);
 static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty);
@@ -57,17 +58,14 @@ void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
         modbus_slave_write_multiple_reg(rx_msg);
         break;
     default:
-        // send resp with unsuported func code
-        rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]=rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-        rx_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]= MODBUS_ERROR_CODE_MASK|MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR;
+        modbus_slave_unsupoerted_function_error(rx_msg);
         break;
     }
 
 }
 
 
-// Slave API functions
-modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
+static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
@@ -93,7 +91,7 @@ modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
     return RET_OK;
 }
 
-modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
+static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
@@ -119,7 +117,7 @@ modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
     }
 }
 
-modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
+static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
@@ -143,7 +141,7 @@ modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
     }
 }
 
-modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
+static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
@@ -167,7 +165,7 @@ modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
     }
 }
 
-modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
+static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
@@ -189,7 +187,7 @@ modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
     }
 }
 
-modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
+static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
@@ -210,7 +208,7 @@ modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
     }
 }
 
-modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
+static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
@@ -231,7 +229,7 @@ modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
     }
 }
 
-modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
+static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
@@ -254,6 +252,12 @@ modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
         modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
         return RET_OK;
     }
+}
+
+static void modbus_slave_unsupoerted_function_error(modbus_msg_t *rx_msg)
+{
+    rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]=rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
+    rx_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]= MODBUS_ERROR_CODE_MASK|MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR;
 }
 
 static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty)
