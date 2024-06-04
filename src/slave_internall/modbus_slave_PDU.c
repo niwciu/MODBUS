@@ -58,6 +58,8 @@ void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
         break;
     default:
         // send resp with unsuported func code
+        rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]=rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
+        rx_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]= MODBUS_ERROR_CODE_MASK|MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR;
         break;
     }
 

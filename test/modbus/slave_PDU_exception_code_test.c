@@ -22,14 +22,13 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveRequestWithUnsuportedFunctionCodeT
     modbus_buf_t master_request[]= {0x01, fun_code, 0x41, 0xe2}; //07 (0x07) Read Exception Status (Serial Line only)
     modbus_msg_t msg;
     
-    msg.req.data=&master_request;
+    msg.req.data=master_request;
     msg.req.len= sizeof(master_request)/sizeof(modbus_buf_t);
 
     parse_master_request_and_prepare_resp(&msg);
 
     TEST_ASSERT_EQUAL(fun_code,msg.resp.data[MODBUS_FUNCTION_CODE_IDX]);
-    TEST_ASSERT_EQUAL(MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR, msg.resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
-    TEST_FAIL_MESSAGE("Implement your test!");
+    TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR, msg.resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
 // TEST(Slave_PDU_exception_code, )
