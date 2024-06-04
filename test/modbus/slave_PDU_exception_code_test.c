@@ -3,6 +3,7 @@
 #include "modbus_slave_PDU.h"
 #include "modbus_master_PDU.h"
 #include "modbus_RTU.h"
+#include "buf_rw.h"
 
 // #include "tested_module.h"
 
@@ -44,12 +45,19 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveRequestWithUnsuportedFunctionCodeT
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithMoreCoilsToReadThanSlaveSupportsThenSlaveRespondWithExceptionCode03)
 {
     modbus_adr_t coil_adr = 0x0000;
+    modbus_data_qty_t coil_qty;
 
     modbus_master_read_coils_req(RTU_msg, coil_adr, MODBUS_MAX_READ_COILS_QTY);
     
+    coil_qty = read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX);
+    coil_qty++;
+    write_u16_to_buf(RTU_msg->req.data+MODBUS_REQUEST_QTY_IDX,coil_qty);
+
     parse_master_request_and_prepare_resp(RTU_msg);
+    
     TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    
 }
 
 // TEST(Slave_PDU_exception_code, )

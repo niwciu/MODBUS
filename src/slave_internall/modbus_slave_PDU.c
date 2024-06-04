@@ -76,11 +76,15 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
     modbus_data_qty_t coil_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
     modbus_byte_count_t byte_cnt = get_coil_din_byte_count(coil_qty);
 
+    
+
     if((0 == coil_qty )||(  MODBUS_MAX_READ_COILS_QTY < coil_qty))
     {
-        
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
+        modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]= MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
+        return RET_ERROR;
     }
-
+    
     modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
     modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
