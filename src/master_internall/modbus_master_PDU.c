@@ -12,7 +12,7 @@
 #include "buf_rw.h"
 #include <stdio.h>
 
-static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data_len);
+static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_qty_t data_len);
 static modbus_ret_t write_single_reg_coil_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr);
 static modbus_data_t modbus_get_max_len(modbus_req_t req_code);
 static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty);
@@ -25,13 +25,13 @@ static modbus_byte_count_t get_expected_byte_cnt(modbus_fun_code_t func_code, mo
 static modbus_ret_t check_write_slave_resp_vs_req(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
 static modbus_ret_t check_out_val_or_out_qty_correctnes(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
 
-static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_t data_len)
+static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_qty_t data_len)
 {
     if ((data_len <= modbus_get_max_len(req_code)) && (data_len >= MODBUS_MIN_REG_COIL_QTY))
     {
         req->data[MODBUS_FUNCTION_CODE_IDX] = req_code;
         write_u16_to_buf(req->data + MODBUS_REQUEST_ADR_IDX, adr);
-        write_u16_to_buf(req->data + MODBUS_REQUEST_LEN_IDX, data_len);
+        write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, data_len);
         req->len = MODBUS_READ_REQUEST_LEN;
         return RET_OK;
     }
@@ -49,11 +49,11 @@ static modbus_ret_t write_single_reg_coil_request(modbus_req_resp_t *req, modbus
         write_u16_to_buf(req->data + MODBUS_REQUEST_ADR_IDX, adr);
         if (MODBUS_WRITE_SINGLE_COIL_FUNC_CODE == req_code)
         {
-            write_u16_to_buf(req->data + MODBUS_REQUEST_LEN_IDX, (get_coil_state(Master_Coils, adr) * COIL_ON));
+            write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, (get_coil_state(Master_Coils, adr) * COIL_ON));
         }
         else
         {
-            write_u16_to_buf(req->data + MODBUS_REQUEST_LEN_IDX, get_holding_register_value(Master_Holding_Registers, adr));
+            write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, get_holding_register_value(Master_Holding_Registers, adr));
         }
         req->len = MODBUS_WRITE_SINGLE_REQUEST_LEN;
         return RET_OK;
@@ -140,7 +140,7 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
 {
 
     modbus_byte_count_t slave_resp_byte_cnt = resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX];
-    modbus_data_qty_t requested_data_qty = read_u16_from_buf(req->data + MODBUS_REQUEST_LEN_IDX);
+    modbus_data_qty_t requested_data_qty = read_u16_from_buf(req->data + MODBUS_REQUEST_QTY_IDX);
     modbus_data_qty_t expected_byte_cnt;
     modbus_reg_t status;
     expected_byte_cnt = get_expected_byte_cnt(fun_code, requested_data_qty);
@@ -169,7 +169,7 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
 }
 static void update_master_specific_data_type_from_modbus_msg(const modbus_buf_t *resp, const modbus_buf_t *req, modbus_fun_code_t fun_code, void **data_tab)
 {
-    modbus_data_qty_t data_qty = read_u16_from_buf(req + MODBUS_REQUEST_LEN_IDX);
+    modbus_data_qty_t data_qty = read_u16_from_buf(req + MODBUS_REQUEST_QTY_IDX);
     modbus_adr_t data_start_adr = read_u16_from_buf(req + MODBUS_REQUEST_ADR_IDX);
     switch (fun_code)
     {
@@ -293,7 +293,7 @@ modbus_ret_t modbus_master_write_multiple_reg_req(modbus_msg_t *modbus_msg, modb
     {
         modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
         write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX, adr);
-        write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_LEN_IDX, reg_qty);
+        write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX, reg_qty);
         modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX] = reg_qty * 2;
 
         for (modbus_data_qty_t i = 0; i < reg_qty; i++)
@@ -316,7 +316,7 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *modbus_msg, mo
     {
         modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
         write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX, adr);
-        write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_LEN_IDX, coils_qty);
+        write_u16_to_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX, coils_qty);
         modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX] = byte_count;
 
         clear_coil_din_status_byte(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], byte_count);

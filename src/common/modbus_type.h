@@ -37,7 +37,7 @@ extern "C"
     #define MODBUS_PDU_BUF_OFFSET                   MODBUS_SLAVE_ADR_BYTE_LEN
     #define MODBUS_FUNCTION_CODE_IDX                MODBUS_PDU_BUF_OFFSET
     #define MODBUS_REQUEST_ADR_IDX                  (MODBUS_PDU_BUF_OFFSET + 1)
-    #define MODBUS_REQUEST_LEN_IDX                  (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_REQUEST_QTY_IDX                  (MODBUS_PDU_BUF_OFFSET + 3)
     #define MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX    (MODBUS_PDU_BUF_OFFSET + 3)
     #define MODBUS_REQUEST_BYTE_CNT_IDX             (MODBUS_PDU_BUF_OFFSET + 5)
     #define MODBUS_REQUEST_WRITE_MULTI_DATA_IDX     (MODBUS_PDU_BUF_OFFSET + 6)
@@ -76,10 +76,10 @@ extern "C"
 
     typedef enum
     {
-        MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR=0x01U,
-        MODBUS_REQUEST_ADRES_RANGE_ERROR=0x02U,
-        MODBUS_REQUEST_DATA_QUANTITY_ERROR_=0x03U,
-        MODBUS_REQUEST_PROCESSING_ERROR_=0x04U,
+        MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR = 0x01U,
+        MODBUS_REQUEST_ADRES_RANGE_ERROR = 0x02U,
+        MODBUS_REQUEST_DATA_QUANTITY_ERROR = 0x03U,
+        MODBUS_REQUEST_PROCESSING_ERROR = 0x04U,
     } modbus_error_code_t;
 
     typedef enum
@@ -110,7 +110,7 @@ extern "C"
         MODBUS_MASTER_RECEIVING,
         MODBUS_MASTER_RESP_ANALYSE,
         MODBUS_MASTER_ERROR_SERVICE,
-    }modbus_master_state_t;
+    } modbus_master_state_t;
 
     typedef enum
     {
@@ -118,24 +118,23 @@ extern "C"
         MODBUS_SLAVE_MSG_RECIVED,
         MODBUS_SLAVE_TRANSMITING_RESP,
         MODBUS_SLAVE_UNKNOWN,
-    }modbus_slave_state_t;
+    } modbus_slave_state_t;
     typedef enum
     {
         MODBUS_FLAG_CLEARED,
         MODBUS_FLAG_SET,
         MODBUS_FLAG_UNKNOWN,
 
-    }modbus_status_flag_t;
-    
+    } modbus_status_flag_t;
+
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
     typedef uint8_t modbus_buf_t;
     typedef uint8_t modbus_buf_size_t;
-    
+
     typedef uint16_t modbus_CRC_t;
-    
-    
+
     typedef struct
     {
         modbus_buf_t *data;
@@ -148,8 +147,6 @@ extern "C"
         modbus_req_resp_t resp;
         // modbus_device_ID_t slave_id;
     } modbus_msg_t;
-
-
 
 #ifdef __cplusplus
 }
