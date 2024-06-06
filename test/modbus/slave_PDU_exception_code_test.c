@@ -16,6 +16,8 @@ static modbus_buf_t resp_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 static modbus_msg_t modbus_msg;
 static modbus_msg_t *RTU_msg = &modbus_msg;
 
+static void increase_obj_qty_in_req_frame(modbus_msg_t *msg);
+
 TEST_SETUP(Slave_PDU_exception_code)
 {
     /* Init before every test */
@@ -42,16 +44,13 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveRequestWithUnsuportedFunctionCodeT
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithMoreCoilsToReadThanSlaveSupportsThenSlaveRespondWithExceptionCode03)
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
     modbus_adr_t coil_adr = 0x0000;
-    modbus_data_qty_t coil_qty;
+    
 
     modbus_master_read_coils_req(RTU_msg, coil_adr, MODBUS_MAX_READ_COILS_QTY);
-    
-    coil_qty = read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX);
-    coil_qty++;
-    write_u16_to_buf(RTU_msg->req.data+MODBUS_REQUEST_QTY_IDX,coil_qty);
+    increase_obj_qty_in_req_frame(RTU_msg);
 
     parse_master_request_and_prepare_resp(RTU_msg);
     
@@ -104,3 +103,11 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithMoreCoilsToRea
 // {
 //     TEST_FAIL_MESSAGE("Implement your test!");
 // }
+
+static void increase_obj_qty_in_req_frame(modbus_msg_t *msg)
+{
+    modbus_data_qty_t coil_qty;
+    coil_qty = read_u16_from_buf(msg->req.data + MODBUS_REQUEST_QTY_IDX);
+    coil_qty++;
+    write_u16_to_buf(msg->req.data+MODBUS_REQUEST_QTY_IDX,coil_qty);
+}
