@@ -238,7 +238,7 @@ TEST(Master_PDU_req, WriteSingleCoilOn)
 
 TEST(Master_PDU_req, WriteMultipleRegisters)
 {
-    modbus_adr_t adr = 0x0080;
+    modbus_adr_t adr = 0x0008;
     // modbus_reg_t values[5] = {1, 2, 3, 4, 5};
     modbus_data_qty_t reg_qty = 5;
 

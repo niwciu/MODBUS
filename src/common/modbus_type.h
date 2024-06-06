@@ -59,6 +59,7 @@ extern "C"
     #define MODBUS_WRITE_SINGLE_RESP_LEN  6
     #define MODBUS_WRITE_MULTI_RESP_LEN   6
     #define MODBUS_ERROR_CODE_RESP_LEN    3
+    
     // clang-format on
     typedef enum
     {

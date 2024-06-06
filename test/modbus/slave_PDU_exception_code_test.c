@@ -18,6 +18,8 @@ static modbus_msg_t *RTU_msg = &modbus_msg;
 
 static void increase_obj_qty_in_req_frame(modbus_msg_t *msg);
 static void set_zero_obj_qty_in_req_frame(modbus_msg_t *msg);
+static void set_out_of_range_obj_adress(modbus_msg_t *msg);
+
 
 TEST_SETUP(Slave_PDU_exception_code)
 {
@@ -72,10 +74,18 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToRead
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-// TEST(Slave_PDU_exception_code, )
-// {
-//     TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
+{
+    modbus_adr_t coil_adr = 0x0000;
+
+    modbus_master_read_coils_req(RTU_msg, coil_adr, 1);
+    set_out_of_range_obj_adress(RTU_msg);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+}
 
 // TEST(Slave_PDU_exception_code, )
 // {
@@ -123,4 +133,9 @@ static void increase_obj_qty_in_req_frame(modbus_msg_t *msg)
 static void set_zero_obj_qty_in_req_frame(modbus_msg_t *msg)
 {
     write_u16_to_buf(msg->req.data+MODBUS_REQUEST_QTY_IDX,0);
+}
+
+static void set_out_of_range_obj_adress(modbus_msg_t *msg)
+{
+    write_u16_to_buf(msg->req.data+MODBUS_REQUEST_ADR_IDX,MAIN_APP_COILS_QTY+1);
 }
