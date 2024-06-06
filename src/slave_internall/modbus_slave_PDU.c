@@ -67,36 +67,41 @@ void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 
 static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
 {
+    modbus_ret_t status;
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
-        return RET_NULL_PTR_ERROR; // to jest exception code 04
+        status =  RET_NULL_PTR_ERROR; 
     }
-    
-    modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
-    modbus_data_qty_t coil_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
-    modbus_byte_count_t byte_cnt = get_coil_din_byte_count(coil_qty);
-
-    
-
-    if((0 == coil_qty )||(  MODBUS_MAX_READ_COILS_QTY < coil_qty))
+    else
     {
+        modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
+        modbus_data_qty_t coil_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
+        modbus_byte_count_t byte_cnt = get_coil_din_byte_count(coil_qty);
+
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
-        modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]= MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
-        return RET_ERROR;
-    }
-    
-    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
-    modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
-    clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
+        if((0 == coil_qty )||(  MODBUS_MAX_READ_COILS_QTY < coil_qty))
+        {
+            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]= MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
+            status = RET_ERROR;
+        }
+        else
+        {
+            
+            modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
-    for (modbus_data_qty_t i = 0; i < coil_qty; i++)
-    {
-        modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_coil_state(Slave_Coils, adr + i) << (i % 8));
+            clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
+            for (modbus_data_qty_t i = 0; i < coil_qty; i++)
+            {
+                modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_coil_state(Slave_Coils, adr + i) << (i % 8));
+            }
+
+            modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
+            
+            status = RET_OK;
+        }
     }
-    modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-    
-    return RET_OK;
+    return status;
 }
 
 static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
