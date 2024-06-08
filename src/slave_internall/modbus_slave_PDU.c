@@ -31,6 +31,7 @@ static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_pt
 
 static void set_exception_code_resp(modbus_msg_t *modbus_msg, modbus_exception_code_t exception_code);
 static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modbus_ret_t last_ret_val, modbus_byte_count_t byte_cnt);
+static modbus_ret_t check_read_data_qty(modbus_msg_t *modbus_msg,modbus_data_qty_t max_read_qty ,modbus_data_qty_t app_data_qty);
 
 void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 {
@@ -76,24 +77,13 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
-        modbus_data_qty_t coil_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
-        modbus_byte_count_t byte_cnt = get_coil_din_byte_count(coil_qty);
-
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
-
-        if ((0 == coil_qty) || (MODBUS_MAX_READ_COILS_QTY < coil_qty))
+        status = check_read_data_qty(modbus_msg,MODBUS_MAX_READ_COILS_QTY,MAIN_APP_COILS_QTY);
+        if(RET_ERROR != status)
         {
-            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_VALUE_ERROR);
-            status = RET_ERROR;
-        }
-        else if (((adr + coil_qty) > MAIN_APP_COILS_QTY))
-        {
-            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
-            status = RET_ERROR;
-        }
-        else
-        {
+            modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
+            modbus_data_qty_t coil_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
+            modbus_byte_count_t byte_cnt = get_coil_din_byte_count(coil_qty);
             modbus_ret_t read_coil_val = RET_OK;
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
@@ -126,24 +116,15 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t din_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-        modbus_byte_count_t byte_cnt = get_coil_din_byte_count(din_qty);
-
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
-        if ((0 == din_qty) || (MODBUS_MAX_READ_DISCRETE_INPUTS_QTY < din_qty))
+        status = check_read_data_qty(modbus_msg,MODBUS_MAX_READ_DISCRETE_INPUTS_QTY,MAIN_APP_DISCRET_INPUTS_QTY);
+        if(RET_OK == status)
         {
-            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_VALUE_ERROR);
-            status = RET_ERROR;
-        }
-        else if (((adr + din_qty) > MAIN_APP_DISCRET_INPUTS_QTY))
-        {
-            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
-            status = RET_ERROR;
-        }
-        else
-        {
+            modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+            modbus_data_qty_t din_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+            modbus_byte_count_t byte_cnt = get_coil_din_byte_count(din_qty);
             modbus_ret_t read_discrete_input_val = RET_OK;
+
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
             clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
             for (modbus_data_qty_t i = 0; i < din_qty; i++)
@@ -174,23 +155,13 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-        modbus_byte_count_t byte_cnt = 2 * reg_qty;
-
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
-        if ((0 == reg_qty) || (MODBUS_MAX_READ_REG_QTY < reg_qty))
+        status = check_read_data_qty(modbus_msg,MODBUS_MAX_READ_REG_QTY,MAIN_APP_HOLDING_REG_QTY);
+        if(RET_OK == status)
         {
-            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_VALUE_ERROR);
-            status = RET_ERROR;
-        }
-        else if (((adr + reg_qty) > MAIN_APP_HOLDING_REG_QTY))
-        {
-            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
-            status = RET_ERROR;
-        }
-        else
-        {
+            modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+            modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+            modbus_byte_count_t byte_cnt = 2 * reg_qty;
             modbus_ret_t read_hreg_val = RET_OK;
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
@@ -222,23 +193,13 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-        modbus_byte_count_t byte_cnt = 2 * reg_qty;
-
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_INPUT_REGISTERS_FUNC_CODE;
-        if ((0 == reg_qty) || (MODBUS_MAX_READ_REG_QTY < reg_qty))
+        status = check_read_data_qty(modbus_msg,MODBUS_MAX_READ_REG_QTY,MAIN_APP_INPUT_REG_QTY);
+        if(RET_OK == status)
         {
-            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_VALUE_ERROR);
-            status = RET_ERROR;
-        }
-        else if (((adr + reg_qty) > MAIN_APP_INPUT_REG_QTY))
-        {
-            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
-            status = RET_ERROR;
-        }
-        else
-        {
+            modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+            modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+            modbus_byte_count_t byte_cnt = 2 * reg_qty;
             modbus_ret_t read_input_reg_val = RET_OK;
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
             for (modbus_data_qty_t i = 0; i < reg_qty; i++)
@@ -286,7 +247,6 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
         }
         else
         {
-
             if (RET_OK == set_coil_state(Slave_Coils, adr, !!coils_state))
             {
                 write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
@@ -428,4 +388,22 @@ static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modb
     }
     else
         return RET_ERROR;
+}
+static modbus_ret_t check_read_data_qty(modbus_msg_t *modbus_msg,modbus_data_qty_t max_read_qty ,modbus_data_qty_t app_data_qty)
+{
+    modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
+    modbus_data_qty_t data_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
+    modbus_ret_t status=RET_OK;
+    if ((0 == data_qty) || (max_read_qty < data_qty))
+    {
+        set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_VALUE_ERROR);
+        status = RET_ERROR;
+    }
+    else if (((adr + data_qty) > app_data_qty))
+    {
+        set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
+        status = RET_ERROR;
+    }
+    else status=RET_OK;
+    return status;
 }
