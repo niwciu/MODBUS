@@ -53,7 +53,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveRequestWithUnsuportedFunctionCodeT
 }
 
 
-
+// read coils exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
     modbus_adr_t coil_adr = 0x0000;
@@ -110,8 +110,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestAndGetErrorWhenRea
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
-
-
+// read discrete inputs exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
     modbus_adr_t coil_adr = MAIN_APP_COILS_QTY-1;
@@ -332,10 +331,18 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndGetErrorS
 
 
 
-// TEST(Slave_PDU_exception_code, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestAndGetErrorWhenReadingDicreteInputsThenSlaveRespondWithExceptionCode04)
+{
+    modbus_adr_t din_adr = 0x0001;
+    modbus_data_qty_t din_qty =4;
+    modbus_master_read_discrete_inputs_req(RTU_msg, din_adr,din_qty);
+    mock_clear_modbus_slave_discrete_inputs_data_table();
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL((MODBUS_READ_COILS_FUNC_CODE | MODBUS_ERROR_CODE_MASK) ,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_SERVER_DEVICE_FAILURE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+}
 
 // TEST(Slave_PDU_exception_code, )
 // {
