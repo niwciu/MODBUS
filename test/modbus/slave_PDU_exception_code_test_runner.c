@@ -17,14 +17,14 @@ TEST_GROUP_RUNNER(Slave_PDU_exception_code)
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorrectStartingAddressAndQuantitiofOutputsThenSlaveRespondWithExceptionCode02);
    // Don't see place for adopting exception code 04 while if coil is not registered it will retunr 0
-   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestAndCatchErrorDuringProcessingOfRequestThenSlaveRespondWithExceptionCode04);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestAndCatchErrorDuringProcessingOfRequestThenSlaveRespondWithExceptionCode04);
    
-   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithDiscreteInputsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03);
-   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithDiscreteInputsQtyToReadEqual0ThenSlaveRespondWithExceptionCode03);
-   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
-   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithIncorrectStartingAddressAndQuantitiofOutputsThenSlaveRespondWithExceptionCode02);
+   RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadEqual0ThenSlaveRespondWithExceptionCode03);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorrectStartingAddressAndQuantitiofOutputsThenSlaveRespondWithExceptionCode02);
    // Don't see place for adopting exception code 04 while if coil is not registered it will retunr 0
-   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestAndCatchErrorDuringProcessingOfRequestThenSlaveRespondWithExceptionCode04);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestAndCatchErrorDuringProcessingOfRequestThenSlaveRespondWithExceptionCode04);
 
    // RUN_TEST_CASE(Slave_PDU_exception_code, );
    // RUN_TEST_CASE(Slave_PDU_exception_code, );

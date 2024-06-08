@@ -150,10 +150,18 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorr
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-// TEST(Slave_PDU_exception_code, )
-// {
-//     TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
+{
+    modbus_adr_t in_reg = 0x0000;
+
+    modbus_master_read_input_reg_req(RTU_msg, in_reg, MODBUS_MAX_READ_DISCRETE_INPUTS_QTY);
+    increase_obj_qty_in_req_frame(RTU_msg);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+}
 
 // TEST(Slave_PDU_exception_code, )
 // {
