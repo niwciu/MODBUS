@@ -154,7 +154,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputR
 {
     modbus_adr_t in_reg = 0x0000;
 
-    modbus_master_read_input_reg_req(RTU_msg, in_reg, MODBUS_MAX_READ_DISCRETE_INPUTS_QTY);
+    modbus_master_read_input_reg_req(RTU_msg, in_reg, MODBUS_MAX_READ_REG_QTY);
     increase_obj_qty_in_req_frame(RTU_msg);
 
     parse_master_request_and_prepare_resp(RTU_msg);
