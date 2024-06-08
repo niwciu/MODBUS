@@ -230,10 +230,18 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHold
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-// TEST(Slave_PDU_exception_code, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
+{
+    modbus_adr_t in_reg_adr = 0x0000;
+
+    modbus_master_read_holding_reg_req(RTU_msg, in_reg_adr, 1);
+    set_out_of_range_obj_adress(RTU_msg,MAIN_APP_INPUT_REG_QTY);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+}
 
 // TEST(Slave_PDU_exception_code, )
 // {
