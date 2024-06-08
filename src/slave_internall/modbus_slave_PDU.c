@@ -29,6 +29,9 @@ static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty);
 static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty);
 static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab);
 
+static void set_exception_code_resp(modbus_msg_t *modbus_msg, modbus_exception_code_t exception_code);
+static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modbus_ret_t last_ret_val, modbus_byte_count_t byte_cnt);
+
 void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 {
     switch (rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX])
@@ -81,16 +84,12 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
 
         if ((0 == coil_qty) || (MODBUS_MAX_READ_COILS_QTY < coil_qty))
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK; 
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_VALUE_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_VALUE_ERROR);
             status = RET_ERROR;
         }
         else if (((adr + coil_qty) > MAIN_APP_COILS_QTY))
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_ADDRESS_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
             status = RET_ERROR;
         }
         else
@@ -104,10 +103,7 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
                 read_coil_val = get_coil_din_state(Slave_Coils, adr + i);
                 if( RET_ERROR == read_coil_val)
                 {
-                    // modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-                    // modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_SERVER_DEVICE_FAILURE_ERROR;
-                    // modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
-                    status = RET_ERROR;
+                    // here exception code 4
                     break;
                 }
                 else
@@ -116,11 +112,7 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
                 }
                 
             }
-            if( RET_ERROR != read_coil_val)
-            {
-                modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-                status = RET_OK;
-            }
+            status = update_msg_len_and_ret_status(modbus_msg,read_coil_val,byte_cnt);
         }
     }
     return status;
@@ -142,16 +134,12 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
         if ((0 == din_qty) || (MODBUS_MAX_READ_DISCRETE_INPUTS_QTY < din_qty))
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_VALUE_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_VALUE_ERROR);
             status = RET_ERROR;
         }
         else if (((adr + din_qty) > MAIN_APP_DISCRET_INPUTS_QTY))
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_ADDRESS_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
             status = RET_ERROR;
         }
         else
@@ -164,10 +152,7 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
                 read_discrete_input_val = get_coil_din_state(Slave_Discrete_Inputs, adr + i);
                 if( RET_ERROR == read_discrete_input_val)
                 {
-                    // modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-                    // modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_SERVER_DEVICE_FAILURE_ERROR;
-                    // modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
-                    status = RET_ERROR;
+                    // here exception code 4
                     break;
                 }
                 else
@@ -176,11 +161,7 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
                 }
                 
             }
-            if( RET_ERROR != read_discrete_input_val)
-            {
-                modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-                status = RET_OK;
-            }
+            status = update_msg_len_and_ret_status(modbus_msg,read_discrete_input_val,byte_cnt);
         }
     }
     return status;
@@ -202,16 +183,12 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
         if ((0 == reg_qty) || (MODBUS_MAX_READ_REG_QTY < reg_qty))
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_VALUE_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_VALUE_ERROR);
             status = RET_ERROR;
         }
         else if (((adr + reg_qty) > MAIN_APP_HOLDING_REG_QTY))
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_ADDRESS_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
             status = RET_ERROR;
         }
         else
@@ -225,7 +202,6 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
                 if( RET_ERROR == read_hreg_val)
                 {
                     // here set exception code 4
-                    status = RET_ERROR;
                     break;
                 }
                 else
@@ -234,11 +210,7 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
                 }
                 
             }
-            if( RET_ERROR != read_hreg_val)
-            {
-                modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-                status = RET_OK;
-            }
+            status = update_msg_len_and_ret_status(modbus_msg,read_hreg_val,byte_cnt);
         }
     }
     return status;
@@ -260,35 +232,24 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_INPUT_REGISTERS_FUNC_CODE;
         if ((0 == reg_qty) || (MODBUS_MAX_READ_REG_QTY < reg_qty))
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_VALUE_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_VALUE_ERROR);
             status = RET_ERROR;
         }
         else if (((adr + reg_qty) > MAIN_APP_INPUT_REG_QTY))
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_ADDRESS_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
             status = RET_ERROR;
         }
         else
         {
             modbus_ret_t read_input_reg_val;
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
-            // for (modbus_data_qty_t i = 0; i < reg_qty; i++)
-            // {
-            //     write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], get_register_state(Slave_Input_Registers, adr + i));
-            // }
-            // modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-            // status = RET_OK;
             for (modbus_data_qty_t i = 0; i < reg_qty; i++)
             {
                 read_input_reg_val = get_register_state(Slave_Input_Registers, adr + i);
                 if( RET_ERROR == read_input_reg_val)
                 {
                     // here set exception code 4
-                    status = RET_ERROR;
                     break;
                 }
                 else
@@ -297,11 +258,7 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
                 }
                 
             }
-            if( RET_ERROR != read_input_reg_val)
-            {
-                modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-                status = RET_OK;
-            }
+            status = update_msg_len_and_ret_status(modbus_msg,read_input_reg_val,byte_cnt);
         }
     }
     return status;
@@ -323,16 +280,12 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
 
         if ((coils_state != COIL_OFF) && (coils_state != COIL_ON))
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_VALUE_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_VALUE_ERROR);
             status = RET_ERROR;
         }
         else if(adr>=MAIN_APP_COILS_QTY)
         {
-            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_ADDRESS_ERROR;
-            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            set_exception_code_resp(modbus_msg,MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
             status = RET_ERROR;
         }
         else
@@ -347,9 +300,7 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
             }
             else
             {
-                modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-                modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_SERVER_DEVICE_FAILURE_ERROR;
-                modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+                set_exception_code_resp(modbus_msg,MODBUS_SERVER_DEVICE_FAILURE_ERROR);
                 status = RET_ERROR;
             }
         }
@@ -463,4 +414,21 @@ static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_pt
             set_coil_state(data_tab, (start_adr + i), 0);
         }
     }
+}
+
+static void set_exception_code_resp(modbus_msg_t *modbus_msg, modbus_exception_code_t exception_code)
+{
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK; 
+    modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = exception_code;
+    modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+}
+
+static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modbus_ret_t last_ret_val,modbus_byte_count_t byte_cnt)
+{
+    if( RET_ERROR != last_ret_val)
+    {
+        modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
+        return RET_OK;
+    }
+    else return RET_ERROR;
 }
