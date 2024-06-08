@@ -261,7 +261,13 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_VALUE_ERROR;
             modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
             status = RET_ERROR;
-
+        }
+        else if(adr>=MAIN_APP_COILS_QTY)
+        {
+            modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
+            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_DATA_ADDRESS_ERROR;
+            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+            status = RET_ERROR;
         }
         else
         {
