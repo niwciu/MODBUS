@@ -37,13 +37,13 @@ TEST(Modbus_Data_test, ReadRegisteredCoil)
     // register_app_data_to_slave_coils_table(coil_adr, &app_coil_data);
     register_app_data_to_modbus_coils_din_table(Slave_Coils,coil_adr,&app_coil_data);
 
-    TEST_ASSERT_EQUAL(app_coil_data, get_coil_state(Slave_Coils, coil_adr));
+    TEST_ASSERT_EQUAL(app_coil_data, get_coil_din_state(Slave_Coils, coil_adr));
 }
 
 TEST(Modbus_Data_test, ReadUnregisteredCoil)
 {
     modbus_adr_t coil_adr = 0x0001;
-    TEST_ASSERT_EQUAL(RET_ERROR, get_coil_state(Slave_Coils, coil_adr));
+    TEST_ASSERT_EQUAL(RET_ERROR, get_coil_din_state(Slave_Coils, coil_adr));
 }
 
 TEST(Modbus_Data_test, WriteRegisteredCoil)
@@ -87,14 +87,14 @@ TEST(Modbus_Data_test, ReadRegisteredDiscreteInput)
     // register_app_data_to_slave_discrete_inputs_table(din_adr, &app_din_data);
     register_app_data_to_modbus_coils_din_table(Slave_Discrete_Inputs,din_adr,&app_din_data);
 
-    TEST_ASSERT_EQUAL(app_din_data, get_discrete_input_state(Slave_Discrete_Inputs, din_adr));
+    TEST_ASSERT_EQUAL(app_din_data, get_coil_din_state(Slave_Discrete_Inputs, din_adr));
 }
 
 TEST(Modbus_Data_test, ReadUnegisteredDiscreteInput)
 {
     modbus_adr_t din_adr = 0x0001;
 
-    TEST_ASSERT_EQUAL(RET_ERROR, get_discrete_input_state(Slave_Discrete_Inputs, din_adr));
+    TEST_ASSERT_EQUAL(RET_ERROR, get_coil_din_state(Slave_Discrete_Inputs, din_adr));
 }
 
 // Input Registers Data tests
@@ -115,14 +115,14 @@ TEST(Modbus_Data_test, ReadRegisteredInputRegister)
     // register_app_data_to_slave_input_registers_table(inreg_adr, &app_inreg_data);
     register_app_data_to_modbus_reg_table(Slave_Input_Registers,inreg_adr,&app_inreg_data);
 
-    TEST_ASSERT_EQUAL_HEX16(app_inreg_data, get_input_register_state(Slave_Input_Registers, inreg_adr));
+    TEST_ASSERT_EQUAL_HEX16(app_inreg_data, get_register_state(Slave_Input_Registers, inreg_adr));
 }
 
 TEST(Modbus_Data_test, ReadUnregisteredInputRegister)
 {
     modbus_adr_t inreg_adr = 0x0001;
 
-    TEST_ASSERT_EQUAL(RET_ERROR, get_input_register_state(Slave_Input_Registers, inreg_adr));
+    TEST_ASSERT_EQUAL(RET_ERROR, get_register_state(Slave_Input_Registers, inreg_adr));
 }
 
 // Holding Registers Data tests
@@ -143,14 +143,14 @@ TEST(Modbus_Data_test, ReadRegisteredHoldingRegister)
     // register_app_data_to_slave_holding_registers_table(hreg_adr, &app_hreg_data);
     register_app_data_to_modbus_reg_table(Slave_Holding_Registers,hreg_adr,&app_hreg_data);
 
-    TEST_ASSERT_EQUAL_HEX16(app_hreg_data, get_holding_register_value(Slave_Holding_Registers, hreg_adr));
+    TEST_ASSERT_EQUAL_HEX16(app_hreg_data, get_register_state(Slave_Holding_Registers, hreg_adr));
 }
 
 TEST(Modbus_Data_test, ReadUnregisteredHoldingRegister)
 {
     modbus_adr_t hreg_adr = 0x0001;
 
-    TEST_ASSERT_EQUAL(RET_ERROR, get_holding_register_value(Slave_Holding_Registers, hreg_adr));
+    TEST_ASSERT_EQUAL(RET_ERROR, get_register_state(Slave_Holding_Registers, hreg_adr));
 }
 TEST(Modbus_Data_test, WriteRegisteredHoldingRegister)
 {

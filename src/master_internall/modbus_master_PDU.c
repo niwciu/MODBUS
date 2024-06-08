@@ -49,11 +49,11 @@ static modbus_ret_t write_single_reg_coil_request(modbus_req_resp_t *req, modbus
         write_u16_to_buf(req->data + MODBUS_REQUEST_ADR_IDX, adr);
         if (MODBUS_WRITE_SINGLE_COIL_FUNC_CODE == req_code)
         {
-            write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, (get_coil_state(Master_Coils, adr) * COIL_ON));
+            write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, (get_coil_din_state(Master_Coils, adr) * COIL_ON));
         }
         else
         {
-            write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, get_holding_register_value(Master_Holding_Registers, adr));
+            write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, get_register_state(Master_Holding_Registers, adr));
         }
         req->len = MODBUS_WRITE_SINGLE_REQUEST_LEN;
         return RET_OK;
@@ -298,7 +298,7 @@ modbus_ret_t modbus_master_write_multiple_reg_req(modbus_msg_t *modbus_msg, modb
 
         for (modbus_data_qty_t i = 0; i < reg_qty; i++)
         {
-            write_u16_to_buf(modbus_msg->req.data + (MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)), get_holding_register_value(Master_Holding_Registers, adr + i));
+            write_u16_to_buf(modbus_msg->req.data + (MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)), get_register_state(Master_Holding_Registers, adr + i));
         }
         modbus_msg->req.len = MODBUS_WRITE_MULTI_REQUEST_LEN + modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX];
         return RET_OK;
@@ -323,7 +323,7 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *modbus_msg, mo
         for (modbus_data_qty_t i = 0; i < coils_qty; i++)
         {
 
-            modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i / 8)] |= (get_coil_state(Master_Coils, adr + i) << (i % 8));
+            modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i / 8)] |= (get_coil_din_state(Master_Coils, adr + i) << (i % 8));
         }
         modbus_msg->req.len = MODBUS_WRITE_MULTI_REQUEST_LEN + modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX];
         return RET_OK;
