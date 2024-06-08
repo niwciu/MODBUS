@@ -43,7 +43,7 @@ TEST(Modbus_Data_test, ReadRegisteredCoil)
 TEST(Modbus_Data_test, ReadUnregisteredCoil)
 {
     modbus_adr_t coil_adr = 0x0001;
-    TEST_ASSERT_EQUAL(0, get_coil_state(Slave_Coils, coil_adr));
+    TEST_ASSERT_EQUAL(RET_ERROR, get_coil_state(Slave_Coils, coil_adr));
 }
 
 TEST(Modbus_Data_test, WriteRegisteredCoil)
@@ -94,7 +94,7 @@ TEST(Modbus_Data_test, ReadUnegisteredDiscreteInput)
 {
     modbus_adr_t din_adr = 0x0001;
 
-    TEST_ASSERT_EQUAL(0, get_discrete_input_state(Slave_Discrete_Inputs, din_adr));
+    TEST_ASSERT_EQUAL(RET_ERROR, get_discrete_input_state(Slave_Discrete_Inputs, din_adr));
 }
 
 // Input Registers Data tests
@@ -122,7 +122,7 @@ TEST(Modbus_Data_test, ReadUnregisteredInputRegister)
 {
     modbus_adr_t inreg_adr = 0x0001;
 
-    TEST_ASSERT_EQUAL(0, get_input_register_state(Slave_Input_Registers, inreg_adr));
+    TEST_ASSERT_EQUAL(RET_ERROR, get_input_register_state(Slave_Input_Registers, inreg_adr));
 }
 
 // Holding Registers Data tests
@@ -150,7 +150,7 @@ TEST(Modbus_Data_test, ReadUnregisteredHoldingRegister)
 {
     modbus_adr_t hreg_adr = 0x0001;
 
-    TEST_ASSERT_EQUAL(0, get_holding_register_value(Slave_Holding_Registers, hreg_adr));
+    TEST_ASSERT_EQUAL(RET_ERROR, get_holding_register_value(Slave_Holding_Registers, hreg_adr));
 }
 TEST(Modbus_Data_test, WriteRegisteredHoldingRegister)
 {

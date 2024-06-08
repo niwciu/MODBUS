@@ -284,7 +284,7 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
             // status = RET_OK;
             for (modbus_data_qty_t i = 0; i < reg_qty; i++)
             {
-                read_input_reg_val = get_holding_register_value(Slave_Holding_Registers, adr + i);
+                read_input_reg_val = get_input_register_state(Slave_Input_Registers, adr + i);
                 if( RET_ERROR == read_input_reg_val)
                 {
                     // here set exception code 4
