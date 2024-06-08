@@ -59,6 +59,7 @@ void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
         break;
     default:
         modbus_slave_unsupoerted_function_error(rx_msg);
+        rx_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
         break;
     }
 }
@@ -81,11 +82,13 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
         if ((0 == coil_qty) || (MODBUS_MAX_READ_COILS_QTY < coil_qty))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
+            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
             status = RET_ERROR;
         }
         else if (((adr + coil_qty) > MAIN_APP_COILS_QTY))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
+            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
             status = RET_ERROR;
         }
         else
@@ -125,10 +128,12 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
             status = RET_ERROR;
+            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
         }
         else if (((adr + din_qty) > MAIN_APP_DISCRET_INPUTS_QTY))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
+            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
             status = RET_ERROR;
         }
         else
@@ -163,11 +168,13 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
         if ((0 == reg_qty) || (MODBUS_MAX_READ_REG_QTY < reg_qty))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
+            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
             status = RET_ERROR;
         }
         else if (((adr + reg_qty) > MAIN_APP_HOLDING_REG_QTY))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
+            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
             status = RET_ERROR;
         }
         else
@@ -202,11 +209,13 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
         if ((0 == reg_qty) || (MODBUS_MAX_READ_REG_QTY < reg_qty))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
+            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
             status = RET_ERROR;
         }
         else if (((adr + reg_qty) > MAIN_APP_INPUT_REG_QTY))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
+            modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
             status = RET_ERROR;
         }
         else
