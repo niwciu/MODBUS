@@ -89,7 +89,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStart
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStartingAddressAndQuantitiofOutputsThenSlaveRespondWithExceptionCode02)
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
     modbus_adr_t coil_adr = MAIN_APP_COILS_QTY;
 
@@ -140,7 +140,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorr
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorrectStartingAddressAndQuantitiofOutputsThenSlaveRespondWithExceptionCode02)
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
     modbus_adr_t din_adr = MAIN_APP_DISCRET_INPUTS_QTY;
 
@@ -191,7 +191,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorr
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorrectStartingAddressAndQuantitiofOutputsThenSlaveRespondWithExceptionCode02)
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
     modbus_adr_t in_reg_adr = MAIN_APP_INPUT_REG_QTY-1;
 
@@ -201,6 +201,8 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorr
     TEST_ASSERT_EQUAL(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
+
+
 
 // TEST(Slave_PDU_exception_code, )
 // {
