@@ -82,7 +82,7 @@ extern "C"
         MODBUS_ILLEGAL_DATA_ADDRESS_ERROR = 0x02U,
         MODBUS_ILLEGAL_DATA_VALUE_ERROR = 0x03U,
         MODBUS_SERVER_DEVICE_FAILURE_ERROR = 0x04U,
-    } modbus_error_code_t;
+    } modbus_exception_code_t;
 
     typedef enum
     {
