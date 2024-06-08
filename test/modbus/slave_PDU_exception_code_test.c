@@ -99,7 +99,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStart
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-TEST(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithDiscreteInputsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03 )
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithDiscreteInputsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03 )
 {
     modbus_adr_t din_adr = 0x0000;
 
@@ -112,7 +112,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithDiscre
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-TEST(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithDiscreteInputsQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithDiscreteInputsQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
 {
     modbus_adr_t din_adr = 0x0000;
 
@@ -125,7 +125,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithDiscre
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-TEST(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
 {
     modbus_adr_t din_adr = 0x0000;
 
@@ -138,7 +138,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithIncorr
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
 
-TEST(Slave_PDU_exception_code, WhenSlaveReciveReadSicreteInputsRequestWithIncorrectStartingAddressAndQuantitiofOutputsThenSlaveRespondWithExceptionCode02)
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorrectStartingAddressAndQuantitiofOutputsThenSlaveRespondWithExceptionCode02)
 {
     modbus_adr_t din_adr = MAIN_APP_DISCRET_INPUTS_QTY;
 
