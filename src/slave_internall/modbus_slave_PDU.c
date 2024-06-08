@@ -126,6 +126,11 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
             status = RET_ERROR;
         }
+        else if ((adr > MAIN_APP_DISCRET_INPUTS_QTY) || ((adr + din_qty) > MAIN_APP_DISCRET_INPUTS_QTY))
+        {
+            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
+            status = RET_ERROR;
+        }
         else
         {
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
