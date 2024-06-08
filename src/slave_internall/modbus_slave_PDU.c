@@ -93,7 +93,7 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
                 read_coil_val = get_coil_din_state(Slave_Coils, adr + i);
                 if (RET_ERROR == read_coil_val)
                 {
-                    // here exception code 4
+                    set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
                     break;
                 }
                 else
