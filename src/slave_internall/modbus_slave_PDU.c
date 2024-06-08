@@ -111,9 +111,10 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
 
 static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
 {
+    modbus_ret_t status;
     if ((NULL == modbus_msg)||(NULL== modbus_msg->req.data) ||(NULL== modbus_msg->resp.data))
     {
-        return RET_NULL_PTR_ERROR;
+        status = RET_NULL_PTR_ERROR;
     }
     else
     {
@@ -122,17 +123,25 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
         modbus_byte_count_t byte_cnt = get_coil_din_byte_count(din_qty);
 
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
-        modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
-
-        clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
-
-        for (modbus_data_qty_t i = 0; i < din_qty; i++)
+        if((MODBUS_MAX_READ_DISCRETE_INPUTS_QTY < din_qty))
         {
-            modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_discrete_input_state(Slave_Discrete_Inputs, adr + i) << (i % 8));
+            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]= MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
+            status = RET_ERROR;
         }
-        modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-        return RET_OK;
+        else
+        {
+            modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+            clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
+            for (modbus_data_qty_t i = 0; i < din_qty; i++)
+            {
+                modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_discrete_input_state(Slave_Discrete_Inputs, adr + i) << (i % 8));
+            }
+            modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
+            status = RET_OK;
+        }
+
     }
+    return status;
 }
 
 static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
