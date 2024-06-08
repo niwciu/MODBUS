@@ -339,7 +339,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestAndGetErro
     mock_clear_modbus_slave_discrete_inputs_data_table();
     parse_master_request_and_prepare_resp(RTU_msg);
     
-    TEST_ASSERT_EQUAL((MODBUS_READ_COILS_FUNC_CODE | MODBUS_ERROR_CODE_MASK) ,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL((MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE | MODBUS_ERROR_CODE_MASK) ,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_SERVER_DEVICE_FAILURE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
