@@ -515,9 +515,9 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsW
 // }
 static void reset_all_RTU_buffers(void)
 {
-    modbus_msg_t *msg;
     for (int i =0; i<MAX_MODBUS_MSG_QUEUE_ITEMS;i++)
     {
+        modbus_msg_t *msg;
         msg=modbus_queue_pop(free_q);
         if(NULL!=msg)
         {

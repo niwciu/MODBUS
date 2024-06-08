@@ -32,7 +32,7 @@ else()
 	message(STATUS "CppCheck was not found. \r\n\tInstall CppCheck to get predefined targets for static analize")
 endif()
 # Prints static analize output for src folder in the console
-add_custom_target(cppcheck_src cppcheck ../../../src --enable=all --inconclusive --force --inline-suppr --platform=win64 --suppress=missingIncludeSystem --suppress=unusedFunction) #--suppress=missingInclude
+add_custom_target(cppcheck_src cppcheck ../../../src --enable=all --inconclusive --force --inline-suppr --platform=win64 --suppress=missingIncludeSystem --suppress=unusedFunction --suppress=missingInclude)
 # Prints static analize output for specific test_module folder in the console
 add_custom_target(cppcheck_test cppcheck ../../../test/modbus -itest/modbus/out -itest/modbus/out_avr --enable=all --inconclusive --force --inline-suppr --platform=win64 --suppress=missingInclude --suppress=missingIncludeSystem) 
 

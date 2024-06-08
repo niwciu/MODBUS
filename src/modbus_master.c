@@ -39,7 +39,7 @@ PRIVATE modbus_msg_t *msg_buf = NULL;
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
-static modbus_master_error_t generate_request(modbus_fun_code_t fun_code,modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID);
+static modbus_master_error_t generate_request(modbus_fun_code_t fun_code,modbus_adr_t adr, modbus_data_qty_t obj_qty, modbus_device_ID_t slave_ID);
 static modbus_ret_t add_PDU_request_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty);
 
 

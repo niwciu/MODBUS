@@ -14,11 +14,11 @@
 
 
 
-typedef struct
-{
-    modbus_buf_t *cur_byte_ptr;
-    modbus_buf_t *last_byte_ptr;
-} tx_buf_t;
+// typedef struct
+// {
+//     modbus_buf_t *cur_byte_ptr;
+//     modbus_buf_t *last_byte_ptr;
+// } tx_buf_t;
 // tx_buf_t tx_buf;
 
 // modbus_buf_t *rx_data = NULL;
@@ -29,7 +29,7 @@ modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
 driver_init_status_t mock_USART = {0,NONE,INIT_UNKNOWN};
 
 static void master_usart_init(baud_t baud, parity_t parity);
-static void master_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len);
+static void master_usart_send(const modbus_buf_t *tx_msg, uint8_t msg_len);
 static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
 static void master_disable_usart_rx_interrupt(void);
 static void master_enable_silence_timer(void);
@@ -60,7 +60,7 @@ static void master_usart_init(baud_t baud, parity_t parity)
     mock_USART.parity=parity;
     mock_USART.init_status=DRIVER_INITIALIZED;
 }
-static void master_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len)
+static void master_usart_send(const modbus_buf_t *tx_msg, uint8_t msg_len)
 {
     memcpy(slave_rx_buf,tx_msg,msg_len);
     //ToDo możena wykorzystać zrobionego slave do odbierania danych i gnerowania ramki zwrotnej
