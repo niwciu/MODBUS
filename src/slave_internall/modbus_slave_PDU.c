@@ -160,18 +160,18 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
         modbus_byte_count_t byte_cnt = 2 * reg_qty;
 
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
-        // if ((0 == reg_qty) || (MODBUS_MAX_READ_REG_QTY < reg_qty))
-        // {
-        //     modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
-        //     status = RET_ERROR;
-        // }
-        // else if ((adr > MAIN_APP_INPUT_REG_QTY) || ((adr + reg_qty) > MAIN_APP_INPUT_REG_QTY))
-        // {
-        //     modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
-        //     status = RET_ERROR;
-        // }
-        // else
-        // {
+        if ((0 == reg_qty) || (MODBUS_MAX_READ_REG_QTY < reg_qty))
+        {
+            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
+            status = RET_ERROR;
+        }
+        else if (((adr + reg_qty) > MAIN_APP_HOLDING_REG_QTY))
+        {
+            modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
+            status = RET_ERROR;
+        }
+        else
+        {
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
             for (modbus_data_qty_t i = 0; i < reg_qty; i++)
@@ -180,7 +180,7 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
             }
             modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
             status = RET_OK;
-        // }
+        }
     }
     return status;
 }
