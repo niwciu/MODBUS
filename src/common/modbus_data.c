@@ -30,14 +30,14 @@ void register_app_data_to_modbus_reg_table(modbus_reg_t **reg_table, modbus_adr_
 }
 
 
-modbus_coil_disin_t get_coil_state(modbus_coil_disin_t **coils_tab_ptr, modbus_adr_t coil_adr)
+modbus_ret_t get_coil_state(modbus_coil_disin_t **coils_tab_ptr, modbus_adr_t coil_adr)
 {
     if (NULL != (coils_tab_ptr[coil_adr]))
     {
-        return *(coils_tab_ptr[coil_adr]);
+        return (modbus_ret_t)(*coils_tab_ptr[coil_adr]);
     }
     else
-        return 0;
+        return RET_ERROR;
 }
 
 modbus_ret_t set_coil_state(modbus_coil_disin_t **coils_tab_ptr, modbus_adr_t coil_adr, modbus_coil_disin_t coil_state)
@@ -51,34 +51,34 @@ modbus_ret_t set_coil_state(modbus_coil_disin_t **coils_tab_ptr, modbus_adr_t co
         return RET_ERROR;
 }
 
-modbus_coil_disin_t get_discrete_input_state(modbus_coil_disin_t **disin_tab_ptr, modbus_adr_t din_adr)
+modbus_ret_t get_discrete_input_state(modbus_coil_disin_t **disin_tab_ptr, modbus_adr_t din_adr) // ToDo zrefaktorować do jednej funkcji z Coil
 {
     if (NULL != (disin_tab_ptr[din_adr]))
     {
-        return *disin_tab_ptr[din_adr];
+        return (modbus_ret_t)(*disin_tab_ptr[din_adr]);
     }
     else
-        return 0;
+        return RET_ERROR;
 }
 
-modbus_reg_t get_input_register_state(modbus_reg_t **inreg_tab_ptr, modbus_adr_t input_reg_adr)
+modbus_ret_t get_input_register_state(modbus_reg_t **inreg_tab_ptr, modbus_adr_t input_reg_adr)
 {
     if (NULL != (inreg_tab_ptr[input_reg_adr]))
     {
-        return *inreg_tab_ptr[input_reg_adr];
+        return (modbus_ret_t)(*inreg_tab_ptr[input_reg_adr]);
     }
     else
-        return 0;
+        return RET_ERROR;
 }
 
-modbus_reg_t get_holding_register_value(modbus_reg_t **hreg_tab_ptr, modbus_adr_t holding_reg_adr)
+modbus_ret_t get_holding_register_value(modbus_reg_t **hreg_tab_ptr, modbus_adr_t holding_reg_adr) // ToDo zrefaktorować od 1 funkcji z get input register
 {
     if (NULL != (hreg_tab_ptr[holding_reg_adr]))
     {
-        return *hreg_tab_ptr[holding_reg_adr];
+        return (modbus_ret_t)(*hreg_tab_ptr[holding_reg_adr]);
     }
     else
-        return 0;
+        return RET_ERROR;
 }
 
 modbus_ret_t set_register_value(modbus_reg_t **hreg_tab_ptr, modbus_adr_t holding_reg_adr, modbus_reg_t hreg_val)

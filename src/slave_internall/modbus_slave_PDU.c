@@ -95,18 +95,32 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
         }
         else
         {
-
+            modbus_ret_t read_coil_val;
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
             clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
             for (modbus_data_qty_t i = 0; i < coil_qty; i++)
             {
-                modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_coil_state(Slave_Coils, adr + i) << (i % 8));
+                read_coil_val = get_coil_state(Slave_Coils, adr + i);
+                if( RET_ERROR == read_coil_val)
+                {
+                    // modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
+                    // modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_SERVER_DEVICE_FAILURE_ERROR;
+                    // modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+                    status = RET_ERROR;
+                    break;
+                }
+                else
+                {
+                    modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (read_coil_val << (i % 8));
+                }
+                
             }
-
-            modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-
-            status = RET_OK;
+            if( RET_ERROR != read_coil_val)
+            {
+                modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
+                status = RET_OK;
+            }
         }
     }
     return status;
@@ -142,14 +156,31 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
         }
         else
         {
+            modbus_ret_t read_discrete_input_val;
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
             clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
             for (modbus_data_qty_t i = 0; i < din_qty; i++)
             {
-                modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (get_discrete_input_state(Slave_Discrete_Inputs, adr + i) << (i % 8));
+                read_discrete_input_val = get_discrete_input_state(Slave_Discrete_Inputs, adr + i);
+                if( RET_ERROR == read_discrete_input_val)
+                {
+                    // modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
+                    // modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_SERVER_DEVICE_FAILURE_ERROR;
+                    // modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+                    status = RET_ERROR;
+                    break;
+                }
+                else
+                {
+                    modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (read_discrete_input_val << (i % 8));
+                }
+                
             }
-            modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-            status = RET_OK;
+            if( RET_ERROR != read_discrete_input_val)
+            {
+                modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
+                status = RET_OK;
+            }
         }
     }
     return status;
@@ -185,14 +216,29 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
         }
         else
         {
+            modbus_ret_t read_hreg_val;
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
 
             for (modbus_data_qty_t i = 0; i < reg_qty; i++)
             {
-                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], get_holding_register_value(Slave_Holding_Registers, adr + i));
+                read_hreg_val = get_holding_register_value(Slave_Holding_Registers, adr + i);
+                if( RET_ERROR == read_hreg_val)
+                {
+                    // here set exception code 4
+                    status = RET_ERROR;
+                    break;
+                }
+                else
+                {
+                    write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], read_hreg_val);
+                }
+                
             }
-            modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-            status = RET_OK;
+            if( RET_ERROR != read_hreg_val)
+            {
+                modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
+                status = RET_OK;
+            }
         }
     }
     return status;
@@ -228,14 +274,34 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
         }
         else
         {
-
+            modbus_ret_t read_input_reg_val;
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+            // for (modbus_data_qty_t i = 0; i < reg_qty; i++)
+            // {
+            //     write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], get_input_register_state(Slave_Input_Registers, adr + i));
+            // }
+            // modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
+            // status = RET_OK;
             for (modbus_data_qty_t i = 0; i < reg_qty; i++)
             {
-                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], get_input_register_state(Slave_Input_Registers, adr + i));
+                read_input_reg_val = get_holding_register_value(Slave_Holding_Registers, adr + i);
+                if( RET_ERROR == read_input_reg_val)
+                {
+                    // here set exception code 4
+                    status = RET_ERROR;
+                    break;
+                }
+                else
+                {
+                    write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], read_input_reg_val);
+                }
+                
             }
-            modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
-            status = RET_OK;
+            if( RET_ERROR != read_input_reg_val)
+            {
+                modbus_msg->resp.len = MODBUS_READ_RESP_LEN + byte_cnt;
+                status = RET_OK;
+            }
         }
     }
     return status;
