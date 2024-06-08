@@ -23,7 +23,7 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg);
-static void modbus_slave_unsupoerted_function_error(modbus_msg_t *rx_msg);
+// static void modbus_slave_unsupoerted_function_error(modbus_msg_t *rx_msg);
 
 static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty);
 static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty);
@@ -61,8 +61,8 @@ void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
         modbus_slave_write_multiple_reg(rx_msg);
         break;
     default:
-        modbus_slave_unsupoerted_function_error(rx_msg);
-        rx_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+        rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
+        set_exception_code_resp(rx_msg,MODBUS_ILLEGAL_FUNCTION_ERROR);
         break;
     }
 }
@@ -375,11 +375,11 @@ static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
     }
 }
 
-static void modbus_slave_unsupoerted_function_error(modbus_msg_t *rx_msg)
-{
-    rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = (rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX] | MODBUS_ERROR_CODE_MASK);
-    rx_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_FUNCTION_ERROR;
-}
+// static void modbus_slave_unsupoerted_function_error(modbus_msg_t *rx_msg)
+// {
+//     rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = (rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX] | MODBUS_ERROR_CODE_MASK);
+//     rx_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_FUNCTION_ERROR;
+// }
 
 static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty)
 {
