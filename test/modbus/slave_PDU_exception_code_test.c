@@ -9,6 +9,8 @@
 
 TEST_GROUP(Slave_PDU_exception_code);
 
+#define EXPECTED_PDU_EXCEPTION_CODE_MSG_LED 3
+
 static modbus_buf_t req_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 static modbus_buf_t resp_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 
@@ -36,6 +38,7 @@ TEST_TEAR_DOWN(Slave_PDU_exception_code)
 TEST(Slave_PDU_exception_code, WhenSlaveReciveRequestWithUnsuportedFunctionCodeThenRespondWithExceptionCode01)
 {
     modbus_fun_code_t fun_code = 0x07;
+    
     modbus_buf_t master_request[] = {0x01, fun_code, 0x41, 0xe2}; // 07 (0x07) Read Exception Status (Serial Line only)
 
     RTU_msg->req.data = master_request;
@@ -45,6 +48,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveRequestWithUnsuportedFunctionCodeT
 
     TEST_ASSERT_EQUAL(fun_code, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 
@@ -60,6 +64,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToRead
     
     TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
     
 }
 
@@ -74,6 +79,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToRead
     
     TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
@@ -87,6 +93,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStart
 
     TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
@@ -99,6 +106,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCorrectStartin
 
     TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithDiscreteInputsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03 )
@@ -112,6 +120,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithDiscre
     
     TEST_ASSERT_EQUAL(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithDiscreteInputsQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
@@ -125,6 +134,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithDiscre
     
     TEST_ASSERT_EQUAL(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
@@ -138,6 +148,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorr
 
     TEST_ASSERT_EQUAL(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
@@ -150,6 +161,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithCorrec
 
     TEST_ASSERT_EQUAL(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
@@ -163,6 +175,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputR
     
     TEST_ASSERT_EQUAL(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
@@ -176,6 +189,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputR
     
     TEST_ASSERT_EQUAL(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
@@ -189,6 +203,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorr
     
     TEST_ASSERT_EQUAL(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
@@ -200,6 +215,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithCorrec
     
     TEST_ASSERT_EQUAL(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 
@@ -215,6 +231,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHold
     
     TEST_ASSERT_EQUAL(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHoldingRegisterQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
@@ -228,6 +245,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHold
     
     TEST_ASSERT_EQUAL(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
@@ -241,6 +259,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithInco
     
     TEST_ASSERT_EQUAL(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
@@ -252,6 +271,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithCorr
     
     TEST_ASSERT_EQUAL(MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
 // TEST(Slave_PDU_exception_code, )
