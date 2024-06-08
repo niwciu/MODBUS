@@ -271,12 +271,21 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
         }
         else
         {
-            set_coil_state(Slave_Coils, adr, !!coils_state); // double logic negation make 1 from var that is different then 0 and 0 from var equal 0
-
-            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], coils_state);
-            modbus_msg->resp.len = MODBUS_WRITE_SINGLE_RESP_LEN;
-            status = RET_OK;
+            
+            if (RET_OK ==set_coil_state(Slave_Coils, adr, !!coils_state))
+            {
+                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], coils_state);
+                modbus_msg->resp.len = MODBUS_WRITE_SINGLE_RESP_LEN;
+                status = RET_OK;
+            }
+            else
+            {
+                modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
+                modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_SERVER_DEVICE_FAILURE_ERROR;
+                modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
+                status = RET_ERROR;
+            }
         }
     }
     return status;

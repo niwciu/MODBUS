@@ -4,6 +4,7 @@
 #include "modbus_master_PDU.h"
 #include "modbus_RTU.h"
 #include "buf_rw.h"
+#include "mock_slave_app_data.h"
 
 // #include "tested_module.h"
 
@@ -302,10 +303,17 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrec
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
-// TEST(Slave_PDU_exception_code, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestGetRET_ERROR_statusWhenWritingCoilThenSlaveRespondWithExceptionCode04)
+{
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_master_write_single_coil_req(RTU_msg, coil_adr);
+    mock_clear_modbus_slave_coils_data_table();
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL((MODBUS_WRITE_SINGLE_COIL_FUNC_CODE | MODBUS_ERROR_CODE_MASK) ,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    // TEST_ASSERT_EQUAL_INT16(MODBUS_SERVER_DEVICE_FAILURE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+}
 
 // TEST(Slave_PDU_exception_code, )
 // {

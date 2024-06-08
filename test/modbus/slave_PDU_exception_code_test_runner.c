@@ -35,8 +35,7 @@ TEST_GROUP_RUNNER(Slave_PDU_exception_code)
    
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectCoilValueThenSlaveRespondWithExceptionCode03);
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02);
-   // Don't see place for adopting exception code 04 while if coil is not registered it will retunr 0
-   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndCatchErrorDuringProcessingOfRequestThenSlaveRespondWithExceptionCode04);
+   RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestGetRET_ERROR_statusWhenWritingCoilThenSlaveRespondWithExceptionCode04);
 
    
    
