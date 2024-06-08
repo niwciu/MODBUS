@@ -83,7 +83,7 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
             status = RET_ERROR;
         }
-        else if ((adr > MAIN_APP_COILS_QTY) || ((adr + coil_qty) > MAIN_APP_COILS_QTY))
+        else if (((adr + coil_qty) > MAIN_APP_COILS_QTY))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
             status = RET_ERROR;
@@ -126,7 +126,7 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
             status = RET_ERROR;
         }
-        else if ((adr > MAIN_APP_DISCRET_INPUTS_QTY) || ((adr + din_qty) > MAIN_APP_DISCRET_INPUTS_QTY))
+        else if (((adr + din_qty) > MAIN_APP_DISCRET_INPUTS_QTY))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
             status = RET_ERROR;
@@ -204,7 +204,7 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR;
             status = RET_ERROR;
         }
-        else if ((adr > MAIN_APP_INPUT_REG_QTY) || ((adr + reg_qty) > MAIN_APP_INPUT_REG_QTY))
+        else if (((adr + reg_qty) > MAIN_APP_INPUT_REG_QTY))
         {
             modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR;
             status = RET_ERROR;
