@@ -35,7 +35,7 @@ TEST_GROUP_RUNNER(Slave_PDU_exception_code)
    
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectCoilValueThenSlaveRespondWithExceptionCode03);
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02);
-   RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestGetRET_ERROR_statusWhenWritingCoilThenSlaveRespondWithExceptionCode04);
+   RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndGetErrorStatusWhenWritingCoilThenSlaveRespondWithExceptionCode04);
 
    
    

@@ -303,7 +303,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrec
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
-TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestGetRET_ERROR_statusWhenWritingCoilThenSlaveRespondWithExceptionCode04)
+TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndGetErrorStatusWhenWritingCoilThenSlaveRespondWithExceptionCode04)
 {
     modbus_adr_t coil_adr = 0x0001;
     modbus_master_write_single_coil_req(RTU_msg, coil_adr);
