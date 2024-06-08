@@ -213,7 +213,6 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
         {
 
             modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
-
             for (modbus_data_qty_t i = 0; i < reg_qty; i++)
             {
                 write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], get_input_register_state(Slave_Input_Registers, adr + i));

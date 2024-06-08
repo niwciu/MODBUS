@@ -18,7 +18,7 @@ static modbus_msg_t *RTU_msg = &modbus_msg;
 
 static void increase_obj_qty_in_req_frame(modbus_msg_t *msg);
 static void set_zero_obj_qty_in_req_frame(modbus_msg_t *msg);
-static void set_out_of_range_obj_adress(modbus_msg_t *msg);
+static void set_out_of_range_obj_adress(modbus_msg_t *msg, modbus_data_qty_t max_obj_adr_by_one);
 
 
 TEST_SETUP(Slave_PDU_exception_code)
@@ -46,6 +46,8 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveRequestWithUnsuportedFunctionCodeT
     TEST_ASSERT_EQUAL(fun_code, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_ERROR_CODE_MASK | MODBUS_FUNCTION_CODE_NOT_SUPPORTED_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
+
+
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
@@ -79,7 +81,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStart
     modbus_adr_t coil_adr = 0x0000;
 
     modbus_master_read_coils_req(RTU_msg, coil_adr, 1);
-    set_out_of_range_obj_adress(RTU_msg);
+    set_out_of_range_obj_adress(RTU_msg,MAIN_APP_COILS_QTY);
 
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -130,7 +132,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorr
     modbus_adr_t din_adr = 0x0000;
 
     modbus_master_read_discrete_inputs_req(RTU_msg, din_adr, 1);
-    set_out_of_range_obj_adress(RTU_msg);
+    set_out_of_range_obj_adress(RTU_msg,MAIN_APP_DISCRET_INPUTS_QTY);
 
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -152,9 +154,9 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDicreteInputsRequestWithIncorr
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
-    modbus_adr_t in_reg = 0x0000;
+    modbus_adr_t in_reg_adr = 0x0000;
 
-    modbus_master_read_input_reg_req(RTU_msg, in_reg, MODBUS_MAX_READ_REG_QTY);
+    modbus_master_read_input_reg_req(RTU_msg, in_reg_adr, MODBUS_MAX_READ_REG_QTY);
     increase_obj_qty_in_req_frame(RTU_msg);
 
     parse_master_request_and_prepare_resp(RTU_msg);
@@ -165,9 +167,9 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputR
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
 {
-    modbus_adr_t in_reg = 0x0000;
+    modbus_adr_t in_reg_adr = 0x0000;
 
-    modbus_master_read_input_reg_req(RTU_msg, in_reg, MODBUS_MAX_READ_REG_QTY);
+    modbus_master_read_input_reg_req(RTU_msg, in_reg_adr, MODBUS_MAX_READ_REG_QTY);
     set_zero_obj_qty_in_req_frame(RTU_msg);
 
     parse_master_request_and_prepare_resp(RTU_msg);
@@ -175,6 +177,55 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputR
     TEST_ASSERT_EQUAL(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_DATA_QUANTITY_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
 }
+
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
+{
+    modbus_adr_t in_reg_adr = 0x0000;
+
+    modbus_master_read_input_reg_req(RTU_msg, in_reg_adr, 1);
+    set_out_of_range_obj_adress(RTU_msg,MAIN_APP_INPUT_REG_QTY);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_ERROR_CODE_MASK | MODBUS_REQUEST_ADRES_RANGE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+}
+
+// TEST(Slave_PDU_exception_code, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
+// }
+
+// TEST(Slave_PDU_exception_code, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
+// }
+
+// TEST(Slave_PDU_exception_code, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
+// }
+
+// TEST(Slave_PDU_exception_code, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
+// }
+
+// TEST(Slave_PDU_exception_code, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
+// }
+
+// TEST(Slave_PDU_exception_code, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
+// }
+
+// TEST(Slave_PDU_exception_code, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
+// }
+
 
 static void increase_obj_qty_in_req_frame(modbus_msg_t *msg)
 {
@@ -189,7 +240,7 @@ static void set_zero_obj_qty_in_req_frame(modbus_msg_t *msg)
     write_u16_to_buf(msg->req.data+MODBUS_REQUEST_QTY_IDX,0);
 }
 
-static void set_out_of_range_obj_adress(modbus_msg_t *msg)
+static void set_out_of_range_obj_adress(modbus_msg_t *msg, modbus_data_qty_t max_obj_adr_by_one)
 {
-    write_u16_to_buf(msg->req.data+MODBUS_REQUEST_ADR_IDX,MAIN_APP_COILS_QTY+1);
+    write_u16_to_buf(msg->req.data+MODBUS_REQUEST_ADR_IDX,max_obj_adr_by_one);
 }
