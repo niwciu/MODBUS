@@ -537,10 +537,19 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithW
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
-// TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
+{
+    modbus_adr_t reg_adr = 0x0000;
+
+    modbus_master_write_multiple_reg_req(RTU_msg, reg_adr, 20);
+    set_out_of_range_obj_adress(RTU_msg,MAIN_APP_HOLDING_REG_QTY);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL((MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE | MODBUS_ERROR_CODE_MASK),RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(MODBUS_ILLEGAL_DATA_ADDRESS_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+}
 
 // TEST(Slave_PDU_exception_code, )
 // {
