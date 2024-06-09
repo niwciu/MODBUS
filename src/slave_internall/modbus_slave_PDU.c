@@ -245,18 +245,16 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
             status = RET_ERROR;
         }
         else
-        {
-            if (RET_OK == set_coil_state(Slave_Coils, adr, !!coils_state))
+        {   status = set_coil_state(Slave_Coils, adr, !!coils_state);
+            if (RET_OK == status)
             {
                 write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
                 write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], coils_state);
                 modbus_msg->resp.len = MODBUS_WRITE_SINGLE_RESP_LEN;
-                status = RET_OK;
             }
             else
             {
                 set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
-                status = RET_ERROR;
             }
         }
     }
