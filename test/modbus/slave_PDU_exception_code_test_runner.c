@@ -37,6 +37,12 @@ TEST_GROUP_RUNNER(Slave_PDU_exception_code)
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02);
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestAndGetErrorStatusWhenWritingRegisterThenSlaveRespondWithExceptionCode04);
    
+   RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCoilsQtyToWriteAboveAllowedValueThenSlaveRespondWithExceptionCode03);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCoilsQtyToWriteEqual0ThenSlaveRespondWithExceptionCode03);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithWrongByteCountThenSlaveRespondWithExceptionCode03);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestAndGetErrorWhenReadingCoilsThenSlaveRespondWithExceptionCode04);
    
    // RUN_TEST_CASE(Slave_PDU_exception_code, );
    // RUN_TEST_CASE(Slave_PDU_exception_code, );

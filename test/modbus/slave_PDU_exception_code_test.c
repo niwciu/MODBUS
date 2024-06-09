@@ -412,10 +412,19 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestAndGetEr
 }
 
 
-// TEST(Slave_PDU_exception_code, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCoilsQtyToWriteAboveAllowedValueThenSlaveRespondWithExceptionCode03)
+{
+    modbus_adr_t coil_adr = 0x0000;
+
+    modbus_master_write_multiple_coils_req(RTU_msg, coil_adr, MODBUS_MAX_WRITE_COILS_QTY);
+    increase_obj_qty_in_req_frame(RTU_msg);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL((MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE | MODBUS_ERROR_CODE_MASK),RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(MODBUS_ILLEGAL_DATA_VALUE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+}
 
 // TEST(Slave_PDU_exception_code, )
 // {
