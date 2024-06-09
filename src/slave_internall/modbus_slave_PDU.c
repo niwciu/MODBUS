@@ -207,7 +207,7 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
                 read_input_reg_val = get_register_state(Slave_Input_Registers, adr + i);
                 if (RET_ERROR == read_input_reg_val)
                 {
-                    // here set exception code 4
+                    set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
                     break;
                 }
                 else
