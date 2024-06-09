@@ -328,6 +328,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestAndGetEr
     TEST_ASSERT_EQUAL_INT16(MODBUS_SERVER_DEVICE_FAILURE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
+
 // Write Signle Coil exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectCoilValueThenSlaveRespondWithExceptionCode03)
 {
@@ -369,7 +370,46 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndGetErrorS
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
+// Write Signle Register exception tests
+// TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectCoilValueThenSlaveRespondWithExceptionCode03)
+// {
+//     modbus_adr_t reg_adr = 0x0000;
+//     modbus_data_t incorrect_msg_coil_value = 0xFFFF;
+//     modbus_master_write_single_coil_req(RTU_msg, reg_adr);
+    
+//     write_u16_to_buf (&RTU_msg->req.data[MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX],incorrect_msg_coil_value);
 
+//     parse_master_request_and_prepare_resp(RTU_msg);
+    
+//     TEST_ASSERT_EQUAL((MODBUS_WRITE_SINGLE_COIL_FUNC_CODE | MODBUS_ERROR_CODE_MASK) ,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+//     TEST_ASSERT_EQUAL_INT16(MODBUS_ILLEGAL_DATA_VALUE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+//     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+// }
+
+TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02)
+{
+    modbus_adr_t reg_adr = 0x0000;
+    modbus_master_write_single_reg_req(RTU_msg, reg_adr);
+    set_out_of_range_obj_adress(RTU_msg,MAIN_APP_HOLDING_REG_QTY);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL((MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE | MODBUS_ERROR_CODE_MASK) ,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_ILLEGAL_DATA_ADDRESS_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+}
+
+// TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndGetErrorStatusWhenWritingCoilThenSlaveRespondWithExceptionCode04)
+// {
+//     modbus_adr_t reg_adr = 0x0001;
+//     modbus_master_write_single_reg_req(RTU_msg, reg_adr);
+//     mock_clear_modbus_slave_holding_resgister_data_table();
+//     parse_master_request_and_prepare_resp(RTU_msg);
+    
+//     TEST_ASSERT_EQUAL((MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE | MODBUS_ERROR_CODE_MASK) ,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+//     TEST_ASSERT_EQUAL(MODBUS_SERVER_DEVICE_FAILURE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+//     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+// }
 
 
 // TEST(Slave_PDU_exception_code, )

@@ -33,6 +33,9 @@ TEST_GROUP_RUNNER(Slave_PDU_exception_code)
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02);
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndGetErrorStatusWhenWritingCoilThenSlaveRespondWithExceptionCode04);
 
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestWithIncorrectRegisterValueThenSlaveRespondWithExceptionCode03);
+   RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02);
+   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestAndGetErrorStatusWhenWritingRegisterThenSlaveRespondWithExceptionCode04);
    
    
    // RUN_TEST_CASE(Slave_PDU_exception_code, );
