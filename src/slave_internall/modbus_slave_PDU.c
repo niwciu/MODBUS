@@ -353,13 +353,19 @@ static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
 
             for (modbus_data_qty_t i = 0; i < hreg_qty; i++)
             {
-                set_register_value(Slave_Holding_Registers, adr + i, read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)]));
+                status = set_register_value(Slave_Holding_Registers, adr + i, read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)]));
+                if(RET_ERROR == status) break;
             }
-            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], hreg_qty);
-
-            modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
-            status = RET_OK;
+            if(RET_OK==status)
+            {
+                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], hreg_qty);
+                modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
+            }
+            else
+            {
+                set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
+            }
         }
 
     }
