@@ -267,7 +267,7 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
 
 static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
 {
-    modbus_ret_t status;
+    modbus_ret_t status = RET_OK;
     if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
     {
         status = RET_NULL_PTR_ERROR;
@@ -282,7 +282,7 @@ static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
             modbus_data_qty_t coils_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
 
             status = set_coil_din_value_from_modbus_msg(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], adr, coils_qty, Slave_Coils);
-            if( RET_OK == status)
+            if(RET_OK == status)
             {
                 write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
                 write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], coils_qty);
@@ -394,7 +394,7 @@ static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty)
 
 static modbus_ret_t set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab)
 {
-    modbus_ret_t status;
+    modbus_ret_t status= RET_OK;
     for (modbus_data_qty_t i = 0; i < coil_din_qty; i++)
     {
         if (0 != (*(data_state_ptr + (i / 8)) & (1 << (i % 8))))
