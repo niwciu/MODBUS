@@ -485,6 +485,10 @@ static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *mod
     {
         return RET_OK;
     }
-    else return RET_ERROR;
+    else
+    {
+        set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_VALUE_ERROR);
+        return RET_ERROR;
+    } 
 }
 
