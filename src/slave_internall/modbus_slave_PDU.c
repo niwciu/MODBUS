@@ -15,9 +15,13 @@
 #include <stdio.h>
 
 static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg);
+static modbus_ret_t handle_slave_read_coil_service(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg);
+static modbus_ret_t handle_slave_read_discrete_inputs_service(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg);
+static modbus_ret_t handle_slave_read_holding_reg_service(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg);
+static modbus_ret_t handle_slave_read_input_reg_service(modbus_msg_t *modbus_msg);
 
 static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg);
@@ -84,30 +88,34 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
         status = check_read_req_data_correcntess(modbus_msg,MODBUS_MAX_READ_COILS_QTY,MAIN_APP_COILS_QTY);
         if(RET_ERROR != status)
         {
-            modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
-            modbus_data_qty_t coil_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
-            modbus_byte_count_t byte_cnt = get_coil_din_byte_count(coil_qty);
-            modbus_ret_t read_coil_val = RET_OK;
-            modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
-
-            clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
-            for (modbus_data_qty_t i = 0; i < coil_qty; i++)
-            {
-                read_coil_val = get_coil_din_state(Slave_Coils, adr + i);
-                if (RET_ERROR == read_coil_val)
-                {
-                    set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
-                    break;
-                }
-                else
-                {
-                    modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (read_coil_val << (i % 8));
-                }
-            }
-            status = update_msg_len_and_ret_status(modbus_msg, read_coil_val, byte_cnt);
+           status = handle_slave_read_coil_service(modbus_msg);
         }
     }
     return status;
+}
+static modbus_ret_t handle_slave_read_coil_service(modbus_msg_t *modbus_msg)
+{
+    modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
+    modbus_data_qty_t coil_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
+    modbus_byte_count_t byte_cnt = get_coil_din_byte_count(coil_qty);
+    modbus_ret_t read_coil_val = RET_OK;
+    modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+
+    clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
+    for (modbus_data_qty_t i = 0; i < coil_qty; i++)
+    {
+        read_coil_val = get_coil_din_state(Slave_Coils, adr + i);
+        if (RET_ERROR == read_coil_val)
+        {
+            set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
+            break;
+        }
+        else
+        {
+            modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (read_coil_val << (i % 8));
+        }
+    }
+    return update_msg_len_and_ret_status(modbus_msg, read_coil_val, byte_cnt); 
 }
 
 static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
@@ -123,30 +131,34 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
         status = check_read_req_data_correcntess(modbus_msg,MODBUS_MAX_READ_DISCRETE_INPUTS_QTY,MAIN_APP_DISCRET_INPUTS_QTY);
         if(RET_OK == status)
         {
-            modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-            modbus_data_qty_t din_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-            modbus_byte_count_t byte_cnt = get_coil_din_byte_count(din_qty);
-            modbus_ret_t read_discrete_input_val = RET_OK;
-
-            modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
-            clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
-            for (modbus_data_qty_t i = 0; i < din_qty; i++)
-            {
-                read_discrete_input_val = get_coil_din_state(Slave_Discrete_Inputs, adr + i);
-                if (RET_ERROR == read_discrete_input_val)
-                {
-                    set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
-                    break;
-                }
-                else
-                {
-                    modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (read_discrete_input_val << (i % 8));
-                }
-            }
-            status = update_msg_len_and_ret_status(modbus_msg, read_discrete_input_val, byte_cnt);
+            status = handle_slave_read_discrete_inputs_service(modbus_msg);
         }
     }
     return status;
+}
+static modbus_ret_t handle_slave_read_discrete_inputs_service(modbus_msg_t *modbus_msg)
+{
+    modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+    modbus_data_qty_t din_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+    modbus_byte_count_t byte_cnt = get_coil_din_byte_count(din_qty);
+    modbus_ret_t read_discrete_input_val = RET_OK;
+
+    modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+    clear_coil_din_status_byte(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX], byte_cnt);
+    for (modbus_data_qty_t i = 0; i < din_qty; i++)
+    {
+        read_discrete_input_val = get_coil_din_state(Slave_Discrete_Inputs, adr + i);
+        if (RET_ERROR == read_discrete_input_val)
+        {
+            set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
+            break;
+        }
+        else
+        {
+            modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i / 8)] |= (read_discrete_input_val << (i % 8));
+        }
+    }
+    return update_msg_len_and_ret_status(modbus_msg, read_discrete_input_val, byte_cnt);
 }
 
 static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
@@ -162,29 +174,34 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
         status = check_read_req_data_correcntess(modbus_msg,MODBUS_MAX_READ_REG_QTY,MAIN_APP_HOLDING_REG_QTY);
         if(RET_OK == status)
         {
-            modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-            modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-            modbus_byte_count_t byte_cnt = 2 * reg_qty;
-            modbus_ret_t read_hreg_val = RET_OK;
-            modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
-
-            for (modbus_data_qty_t i = 0; i < reg_qty; i++)
-            {
-                read_hreg_val = get_register_state(Slave_Holding_Registers, adr + i);
-                if (RET_ERROR == read_hreg_val)
-                {
-                    set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
-                    break;
-                }
-                else
-                {
-                    write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], read_hreg_val);
-                }
-            }
-            status = update_msg_len_and_ret_status(modbus_msg, read_hreg_val, byte_cnt);
+            status = handle_slave_read_holding_reg_service(modbus_msg);
         }
     }
     return status;
+}
+
+static modbus_ret_t handle_slave_read_holding_reg_service(modbus_msg_t *modbus_msg)
+{
+    modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+    modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+    modbus_byte_count_t byte_cnt = 2 * reg_qty;
+    modbus_ret_t read_hreg_val = RET_OK;
+    modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+
+    for (modbus_data_qty_t i = 0; i < reg_qty; i++)
+    {
+        read_hreg_val = get_register_state(Slave_Holding_Registers, adr + i);
+        if (RET_ERROR == read_hreg_val)
+        {
+            set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
+            break;
+        }
+        else
+        {
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], read_hreg_val);
+        }
+    }
+    return update_msg_len_and_ret_status(modbus_msg, read_hreg_val, byte_cnt);
 }
 
 static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
@@ -200,28 +217,33 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
         status = check_read_req_data_correcntess(modbus_msg,MODBUS_MAX_READ_REG_QTY,MAIN_APP_INPUT_REG_QTY);
         if(RET_OK == status)
         {
-            modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-            modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-            modbus_byte_count_t byte_cnt = 2 * reg_qty;
-            modbus_ret_t read_input_reg_val = RET_OK;
-            modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
-            for (modbus_data_qty_t i = 0; i < reg_qty; i++)
-            {
-                read_input_reg_val = get_register_state(Slave_Input_Registers, adr + i);
-                if (RET_ERROR == read_input_reg_val)
-                {
-                    set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
-                    break;
-                }
-                else
-                {
-                    write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], read_input_reg_val);
-                }
-            }
-            status = update_msg_len_and_ret_status(modbus_msg, read_input_reg_val, byte_cnt);
+            status = handle_slave_read_input_reg_service(modbus_msg);
         }
     }
     return status;
+}
+
+static modbus_ret_t handle_slave_read_input_reg_service(modbus_msg_t *modbus_msg)
+{
+    modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+    modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+    modbus_byte_count_t byte_cnt = 2 * reg_qty;
+    modbus_ret_t read_input_reg_val = RET_OK;
+    modbus_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = byte_cnt;
+    for (modbus_data_qty_t i = 0; i < reg_qty; i++)
+    {
+        read_input_reg_val = get_register_state(Slave_Input_Registers, adr + i);
+        if (RET_ERROR == read_input_reg_val)
+        {
+            set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
+            break;
+        }
+        else
+        {
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], read_input_reg_val);
+        }
+    }
+    return update_msg_len_and_ret_status(modbus_msg, read_input_reg_val, byte_cnt);
 }
 
 static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
