@@ -468,10 +468,18 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithIncor
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
-// TEST(Slave_PDU_exception_code, )
-// {
-//     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
-// }
+TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
+{
+    modbus_adr_t coil_adr = MAIN_APP_COILS_QTY-1;
+
+    modbus_master_write_multiple_coils_req(RTU_msg, coil_adr, 2);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL((MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE | MODBUS_ERROR_CODE_MASK),RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(MODBUS_ILLEGAL_DATA_ADDRESS_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+}
 
 // TEST(Slave_PDU_exception_code, )
 // {
