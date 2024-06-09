@@ -32,6 +32,8 @@ static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_pt
 static void set_exception_code_resp(modbus_msg_t *modbus_msg, modbus_exception_code_t exception_code);
 static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modbus_ret_t last_ret_val, modbus_byte_count_t byte_cnt);
 static modbus_ret_t check_read_data_qty(modbus_msg_t *modbus_msg,modbus_data_qty_t max_read_qty ,modbus_data_qty_t app_data_qty);
+static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg,modbus_data_qty_t max_write_data_qty ,modbus_data_qty_t app_data_qty);
+static modbus_ret_t check_write_req_byte_count_correctenss (modbus_msg_t *modbus_msg);
 
 void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 {
@@ -271,7 +273,8 @@ static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
     else
     {
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
-        status = check_read_data_qty(modbus_msg,MODBUS_MAX_WRITE_COILS_QTY,MAIN_APP_COILS_QTY);
+        status = check_write_req_data_correctness(modbus_msg,MODBUS_MAX_WRITE_COILS_QTY,MAIN_APP_COILS_QTY);
+        // status = check_read_data_qty(modbus_msg,MODBUS_MAX_WRITE_COILS_QTY,MAIN_APP_COILS_QTY);
         if(RET_OK == status)
         {
             modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
@@ -401,7 +404,7 @@ static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modb
     else
         return RET_ERROR;
 }
-static modbus_ret_t check_read_data_qty(modbus_msg_t *modbus_msg,modbus_data_qty_t max_read_qty ,modbus_data_qty_t app_data_qty)
+static modbus_ret_t check_read_data_qty(modbus_msg_t *modbus_msg,modbus_data_qty_t max_read_qty ,modbus_data_qty_t app_data_qty) // refactor nazwy
 {
     modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
     modbus_data_qty_t data_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
@@ -419,3 +422,29 @@ static modbus_ret_t check_read_data_qty(modbus_msg_t *modbus_msg,modbus_data_qty
     else status=RET_OK;
     return status;
 }
+static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg,modbus_data_qty_t max_write_data_qty ,modbus_data_qty_t app_data_qty)
+{
+    modbus_ret_t status = check_read_data_qty(modbus_msg,max_write_data_qty,app_data_qty);
+    if (RET_OK == status)
+    {
+       status = check_write_req_byte_count_correctenss(modbus_msg);
+    }
+    return status;
+}
+
+static modbus_ret_t check_write_req_byte_count_correctenss (modbus_msg_t *modbus_msg)
+{
+    modbus_byte_count_t byte_count = modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX];
+    modbus_data_qty_t coils_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+
+    if (byte_count == get_coil_din_byte_count(coils_qty))
+    {
+        return RET_OK;
+    }
+    else 
+    {
+        set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_VALUE_ERROR);
+        return RET_ERROR;
+    }
+}
+
