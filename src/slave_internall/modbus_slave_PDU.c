@@ -286,13 +286,14 @@ static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
 
 static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
 {
+    modbus_ret_t status;
     if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
     {
-        return RET_NULL_PTR_ERROR;
+        status = RET_NULL_PTR_ERROR;
     }
     else
     {
-        modbus_ret_t status;
+        
         modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
         modbus_reg_t reg_val_to_save = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
 
@@ -304,16 +305,21 @@ static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
         }
         else
         {
-            set_register_value(Slave_Holding_Registers, adr, reg_val_to_save);
-            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], reg_val_to_save);
-            modbus_msg->resp.len = MODBUS_WRITE_SINGLE_RESP_LEN;
-            status = RET_OK;
+            status = set_register_value(Slave_Holding_Registers, adr, reg_val_to_save);
+            if (RET_OK == status)
+            {
+                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], reg_val_to_save);
+                modbus_msg->resp.len = MODBUS_WRITE_SINGLE_RESP_LEN;
+            }
+            else
+            {
+                set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
+            }
+
         }
-
-
-        return status;
     }
+    return status;
 }
 
 static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
@@ -340,12 +346,6 @@ static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
         return RET_OK;
     }
 }
-
-// static void modbus_slave_unsupoerted_function_error(modbus_msg_t *rx_msg)
-// {
-//     rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = (rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX] | MODBUS_ERROR_CODE_MASK);
-//     rx_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = MODBUS_ILLEGAL_FUNCTION_ERROR;
-// }
 
 static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty)
 {
