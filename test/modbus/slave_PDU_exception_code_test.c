@@ -509,6 +509,20 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithR
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
+TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithRegisterQtyToWriteEqual0ThenSlaveRespondWithExceptionCode03)
+{
+    modbus_adr_t reg_adr = 0x0000;
+
+    modbus_master_write_multiple_reg_req(RTU_msg, reg_adr, MODBUS_MAX_WRITE_REG_QTY);
+    set_zero_obj_qty_in_req_frame(RTU_msg);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL((MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE | MODBUS_ERROR_CODE_MASK),RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL(MODBUS_ILLEGAL_DATA_VALUE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+}
+
 // TEST(Slave_PDU_exception_code, )
 // {
 //     TEST_FAIL_MESSAGE("ADDED NEW TEST !!!");
