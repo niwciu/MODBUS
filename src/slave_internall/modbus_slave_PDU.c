@@ -170,7 +170,7 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
                 read_hreg_val = get_register_state(Slave_Holding_Registers, adr + i);
                 if (RET_ERROR == read_hreg_val)
                 {
-                    // here set exception code 4
+                    set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
                     break;
                 }
                 else
