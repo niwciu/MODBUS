@@ -263,23 +263,27 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
 
 static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
 {
+    modbus_ret_t status;
     if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
     {
-        return RET_NULL_PTR_ERROR;
+        status = RET_NULL_PTR_ERROR;
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t coils_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-
-        set_coil_din_value_from_modbus_msg(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], adr, coils_qty, Slave_Coils);
-
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
-        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], coils_qty);
-        modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
-        return RET_OK;
+        status = check_read_data_qty(modbus_msg,MODBUS_MAX_WRITE_COILS_QTY,MAIN_APP_COILS_QTY);
+        if(RET_OK == status)
+        {
+            modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+            modbus_data_qty_t coils_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+
+            set_coil_din_value_from_modbus_msg(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], adr, coils_qty, Slave_Coils);
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], coils_qty);
+            modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
+        }
     }
+    return status;
 }
 
 static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
