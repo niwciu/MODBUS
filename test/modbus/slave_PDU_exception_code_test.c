@@ -316,6 +316,19 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithCorr
     TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
 }
 
+TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestAndGetErrorWhenReadingHoldingRegisterThenSlaveRespondWithExceptionCode04)
+{
+    modbus_adr_t hreg_adr = 0x0001;
+    modbus_data_qty_t hreg_qty =4;
+    modbus_master_read_holding_reg_req(RTU_msg, hreg_adr,hreg_qty);
+    mock_clear_modbus_slave_holding_resgister_data_table();;
+    parse_master_request_and_prepare_resp(RTU_msg);
+    
+    TEST_ASSERT_EQUAL((MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE | MODBUS_ERROR_CODE_MASK) ,RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
+    TEST_ASSERT_EQUAL_INT16(MODBUS_SERVER_DEVICE_FAILURE_ERROR, RTU_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX]);
+    TEST_ASSERT_EQUAL(EXPECTED_PDU_EXCEPTION_CODE_MSG_LED,RTU_msg->resp.len);
+}
+// Write Signle Coil exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectCoilValueThenSlaveRespondWithExceptionCode03)
 {
     modbus_adr_t coil_adr = 0x0000;
