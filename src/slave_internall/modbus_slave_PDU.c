@@ -234,7 +234,6 @@ static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
         modbus_w_coil_t coils_state = read_u16_from_buf(&modbus_msg->req.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]);
 
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_COIL_FUNC_CODE;
-
         if ((coils_state != COIL_OFF) && (coils_state != COIL_ON))
         {
             set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_VALUE_ERROR);
@@ -293,16 +292,27 @@ static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
     }
     else
     {
+        modbus_ret_t status;
         modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
         modbus_reg_t reg_val_to_save = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
 
-        set_register_value(Slave_Holding_Registers, adr, reg_val_to_save);
-
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE;
-        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], reg_val_to_save);
-        modbus_msg->resp.len = MODBUS_WRITE_SINGLE_RESP_LEN;
-        return RET_OK;
+        if( MAIN_APP_HOLDING_REG_QTY<=adr)
+        {
+            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
+            status = RET_ERROR;
+        }
+        else
+        {
+            set_register_value(Slave_Holding_Registers, adr, reg_val_to_save);
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], reg_val_to_save);
+            modbus_msg->resp.len = MODBUS_WRITE_SINGLE_RESP_LEN;
+            status = RET_OK;
+        }
+
+
+        return status;
     }
 }
 
