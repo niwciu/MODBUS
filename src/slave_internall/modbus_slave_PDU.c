@@ -34,6 +34,7 @@ static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modb
 static modbus_ret_t check_read_req_data_correcntess(modbus_msg_t *modbus_msg,modbus_data_qty_t max_read_data_qty ,modbus_data_qty_t app_data_qty);
 static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg,modbus_data_qty_t max_write_data_qty ,modbus_data_qty_t app_data_qty);
 static modbus_ret_t check_write_req_byte_count_correctenss (modbus_msg_t *modbus_msg);
+static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *modbus_msg);
 
 void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 {
@@ -275,7 +276,6 @@ static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
     {
         modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
         status = check_write_req_data_correctness(modbus_msg,MODBUS_MAX_WRITE_COILS_QTY,MAIN_APP_COILS_QTY);
-        // status = check_read_req_data_correcntess(modbus_msg,MODBUS_MAX_WRITE_COILS_QTY,MAIN_APP_COILS_QTY);
         if(RET_OK == status)
         {
             modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
@@ -337,27 +337,33 @@ static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
 
 static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
 {
+    modbus_ret_t status;
     if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
     {
-        return RET_NULL_PTR_ERROR;
+        status = RET_NULL_PTR_ERROR;
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_data_qty_t hreg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-
-        for (modbus_data_qty_t i = 0; i < hreg_qty; i++)
+        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
+        status = check_write_req_data_correctness(modbus_msg,MODBUS_MAX_WRITE_REG_QTY,MAIN_APP_HOLDING_REG_QTY);
+        if(RET_OK == status)
         {
-            set_register_value(Slave_Holding_Registers, adr + i, read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)]));
+            modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+            modbus_data_qty_t hreg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+
+            for (modbus_data_qty_t i = 0; i < hreg_qty; i++)
+            {
+                set_register_value(Slave_Holding_Registers, adr + i, read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + (i * 2)]));
+            }
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], hreg_qty);
+
+            modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
+            status = RET_OK;
         }
 
-        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
-        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-        write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], hreg_qty);
-
-        modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
-        return RET_OK;
     }
+    return status;
 }
 
 static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty)
@@ -435,10 +441,23 @@ static modbus_ret_t check_read_req_data_correcntess(modbus_msg_t *modbus_msg,mod
 }
 static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg,modbus_data_qty_t max_write_data_qty ,modbus_data_qty_t app_data_qty)
 {
+    modbus_fun_code_t func_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
     modbus_ret_t status = check_read_req_data_correcntess(modbus_msg,max_write_data_qty,app_data_qty);
     if (RET_OK == status)
     {
-       status = check_write_req_byte_count_correctenss(modbus_msg);
+        if (MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE == func_code)
+        {
+            status = check_write_req_byte_count_correctenss(modbus_msg);
+        }
+        else if (MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE == func_code)
+        {
+            status = check_write_req_reg_byte_count_correctenss(modbus_msg);
+        }
+        else
+        {
+            status = RET_ERROR;
+        }
+        
     }
     return status;
 }
@@ -457,5 +476,15 @@ static modbus_ret_t check_write_req_byte_count_correctenss (modbus_msg_t *modbus
         set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_VALUE_ERROR);
         return RET_ERROR;
     }
+}
+static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *modbus_msg)
+{
+    modbus_byte_count_t byte_count = modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX];
+    modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+    if (byte_count == (reg_qty*2))
+    {
+        return RET_OK;
+    }
+    else return RET_ERROR;
 }
 
