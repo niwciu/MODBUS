@@ -49,7 +49,7 @@ TEST_GROUP_RUNNER(Slave_PDU_exception_code)
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithWrongByteCountThenSlaveRespondWithExceptionCode03);
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02);
-   // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestAndGetErrorWhenReadingCoilsThenSlaveRespondWithExceptionCode04);
+   RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestAndGetErrorWhenReadingCoilsThenSlaveRespondWithExceptionCode04);
    // RUN_TEST_CASE(Slave_PDU_exception_code, );
    // RUN_TEST_CASE(Slave_PDU_exception_code, );
 
