@@ -29,7 +29,6 @@ void register_app_data_to_modbus_reg_table(modbus_reg_t **reg_table, modbus_adr_
     reg_table[reg_adr] = app_data_ptr;
 }
 
-
 modbus_ret_t get_coil_din_state(modbus_coil_disin_t **coils_din_tab_ptr, modbus_adr_t coil_din_adr)
 {
     if (NULL != (coils_din_tab_ptr[coil_din_adr]))

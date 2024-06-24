@@ -68,7 +68,7 @@ void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
     modbus_fun_code_t req_fun_code = rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
     uint32_t mapper_size = MODBUS_FUNCTIONS_MAPPER_SIZE;
     bool UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_SET;
-    
+
     for (uint32_t i = 0; i < mapper_size; i++)
     {
         if (req_fun_code == modbus_functions_mapper[i].fun_code)
@@ -77,7 +77,7 @@ void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
             UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_CLEARED;
         }
     }
-    if(MODBUS_FLAG_SET == UNSUPORTED_FUNC_CODE_FLAG)
+    if (MODBUS_FLAG_SET == UNSUPORTED_FUNC_CODE_FLAG)
     {
         rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
         set_exception_code_resp(rx_msg, MODBUS_ILLEGAL_FUNCTION_ERROR);

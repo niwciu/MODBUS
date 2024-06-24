@@ -1,11 +1,11 @@
 /**
  * @file modbus_slave_PDU.h
  * @author niwciu (niwciu@gmail.com)
- * @brief 
+ * @brief
  * @date 2024-05-30
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #ifndef _MODBUS_SLAVE_PDU_H_
 #define _MODBUS_SLAVE_PDU_H_

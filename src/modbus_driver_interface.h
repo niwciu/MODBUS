@@ -25,17 +25,17 @@ extern "C"
     typedef void (*driver_subscr_cb_t)(void);
     typedef void (*subscribed_func_ptr_t)(driver_subscr_cb_t callback);
 
-    typedef struct 
+    typedef struct
     {
         init_func_ptr_t init;
         send_func_ptr_t send;
         enable_rx_func_ptr_t enable_rcev;
         driver_func_ptr_t disable_rcev;
-        subscribed_func_ptr_t subscribe_t_1_5_char_expired_cb; 
+        subscribed_func_ptr_t subscribe_t_1_5_char_expired_cb;
         subscribed_func_ptr_t subscribe_msg_tx_done_cb;
         subscribed_func_ptr_t subscribe_t_3_5_char_expired_cb;
         subscribed_func_ptr_t subscribe_modbus_frame_error_cb;
-    }modbus_RTU_driver_struct_t;
+    } modbus_RTU_driver_struct_t;
 
     const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void);
     const modbus_RTU_driver_struct_t *get_slave_RTU_driver_interface(void);
