@@ -7,19 +7,16 @@
 static modbus_buf_t req_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 static modbus_buf_t resp_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 
-
 static modbus_msg_t modbus_msg;
 static modbus_msg_t *RTU_msg = &modbus_msg;
-
 
 TEST_GROUP(Master_PDU_req);
 
 TEST_SETUP(Master_PDU_req)
 {
     /* Init before every test */
-    RTU_msg->req.data=req_RTU_buf;
-    RTU_msg->resp.data=resp_RTU_buf;
-
+    RTU_msg->req.data = req_RTU_buf;
+    RTU_msg->resp.data = resp_RTU_buf;
 
     mock_register_master_coils_data();
     mock_register_master_discrete_inputs_data();
@@ -29,7 +26,6 @@ TEST_SETUP(Master_PDU_req)
 
 TEST_TEAR_DOWN(Master_PDU_req)
 {
-
 
     /* Cleanup after every test */
 }
@@ -45,8 +41,7 @@ TEST(Master_PDU_req, ReadSingleHoldingRegisterRequest)
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(len, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX));
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
-    
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
 }
 
 TEST(Master_PDU_req, ReadMaxQtyHoldingRegisterRequest)
@@ -56,7 +51,7 @@ TEST(Master_PDU_req, ReadMaxQtyHoldingRegisterRequest)
     modbus_reg_t status = modbus_master_read_holding_reg_req(RTU_msg, adr, len);
 
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
 }
 
 TEST(Master_PDU_req, ReadHoldingRegisterMaxQtyPlus1Request)
@@ -87,7 +82,7 @@ TEST(Master_PDU_req, ReadSingleInputRegisterRequest)
     TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, RTU_msg->req.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(len, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX));
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -97,7 +92,7 @@ TEST(Master_PDU_req, ReadMaxQtyInputRegisterRequest)
     modbus_data_qty_t len = MODBUS_MAX_READ_REG_QTY;
     modbus_ret_t status = modbus_master_read_input_reg_req(RTU_msg, adr, len);
 
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -129,7 +124,7 @@ TEST(Master_PDU_req, ReadDiscreteInputsRequest)
     TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->req.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(input_qty, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX));
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -143,7 +138,7 @@ TEST(Master_PDU_req, ReadMaxQtyDiscreteInputsRequest)
     TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, RTU_msg->req.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(input_qty, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX));
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -175,7 +170,7 @@ TEST(Master_PDU_req, ReadCoilsRequest)
     TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->req.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(input_qty, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX));
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -184,7 +179,7 @@ TEST(Master_PDU_req, ReadCoilsMaxQtyRequest)
     modbus_adr_t adr = 0x0003;
     modbus_data_qty_t input_qty = MODBUS_MAX_READ_COILS_QTY;
     modbus_ret_t status = modbus_master_read_coils_req(RTU_msg, adr, input_qty);
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -217,7 +212,7 @@ TEST(Master_PDU_req, WriteSingleRegister)
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, RTU_msg->req.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(value, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX));
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -232,7 +227,7 @@ TEST(Master_PDU_req, WriteSingleCoilOn)
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, RTU_msg->req.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(COIL_ON, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX));
-    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_READ_REQUEST_LEN, RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -254,7 +249,7 @@ TEST(Master_PDU_req, WriteMultipleRegisters)
     TEST_ASSERT_EQUAL_HEX16(0x5A5A, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 4));
     TEST_ASSERT_EQUAL_HEX16(0xA5A5, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 6));
     TEST_ASSERT_EQUAL_HEX16(0x5A5A, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX + 8));
-    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + (reg_qty * 2),RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + (reg_qty * 2), RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -265,7 +260,7 @@ TEST(Master_PDU_req, WriteMaxQtyMultipleRegisters)
     modbus_ret_t status;
 
     status = modbus_master_write_multiple_reg_req(RTU_msg, adr, reg_qty);
-    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + (reg_qty * 2),RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + (reg_qty * 2), RTU_msg->req.len);
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
@@ -305,7 +300,7 @@ TEST(Master_PDU_req, Write5MultipleCoils)
     TEST_ASSERT_EQUAL_UINT16(coils_qty, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX));
     TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt, RTU_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_coil_states_in_PDU, RTU_msg->req.data + MODBUS_REQUEST_WRITE_MULTI_DATA_IDX, expected_byte_cnt);
-    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + expected_byte_cnt,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + expected_byte_cnt, RTU_msg->req.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 
@@ -323,7 +318,7 @@ TEST(Master_PDU_req, WriteMaxQtyMultipleCoils)
     TEST_ASSERT_EQUAL_UINT16(adr, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_ADR_IDX));
     TEST_ASSERT_EQUAL_UINT16(coils_qty, read_u16_from_buf(RTU_msg->req.data + MODBUS_REQUEST_QTY_IDX));
     TEST_ASSERT_EQUAL_UINT8(expected_byte_cnt, RTU_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX]);
-    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + expected_byte_cnt,RTU_msg->req.len);
+    TEST_ASSERT_EQUAL_INT8(MODBUS_WRITE_MULTI_REQUEST_LEN + expected_byte_cnt, RTU_msg->req.len);
     TEST_ASSERT_EQUAL(RET_OK, status);
 }
 

@@ -25,7 +25,7 @@ TEST(Modbus_Data_test, RegisterCoilData)
     modbus_coil_disin_t app_coil_data = 1;
     modbus_adr_t coil_adr = 0x0001;
     // register_app_data_to_slave_coils_table(coil_adr, &app_coil_data);
-    register_app_data_to_modbus_coils_din_table(Slave_Coils,coil_adr,&app_coil_data);
+    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, &app_coil_data);
 
     TEST_ASSERT_EQUAL(&app_coil_data, Slave_Coils[coil_adr]);
 }
@@ -35,7 +35,7 @@ TEST(Modbus_Data_test, ReadRegisteredCoil)
     modbus_coil_disin_t app_coil_data = 1;
     modbus_adr_t coil_adr = 0x0001;
     // register_app_data_to_slave_coils_table(coil_adr, &app_coil_data);
-    register_app_data_to_modbus_coils_din_table(Slave_Coils,coil_adr,&app_coil_data);
+    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, &app_coil_data);
 
     TEST_ASSERT_EQUAL(app_coil_data, get_coil_din_state(Slave_Coils, coil_adr));
 }
@@ -75,7 +75,7 @@ TEST(Modbus_Data_test, RegisterDiscreteInputData)
     modbus_coil_disin_t app_din_data = 1;
     modbus_adr_t din_adr = 0x0001;
     // register_app_data_to_slave_discrete_inputs_table(din_adr, &app_din_data);
-    register_app_data_to_modbus_coils_din_table(Slave_Discrete_Inputs,din_adr,&app_din_data);
+    register_app_data_to_modbus_coils_din_table(Slave_Discrete_Inputs, din_adr, &app_din_data);
 
     TEST_ASSERT_EQUAL(&app_din_data, Slave_Discrete_Inputs[din_adr]);
 }
@@ -85,7 +85,7 @@ TEST(Modbus_Data_test, ReadRegisteredDiscreteInput)
     modbus_coil_disin_t app_din_data = 1;
     modbus_adr_t din_adr = 0x0001;
     // register_app_data_to_slave_discrete_inputs_table(din_adr, &app_din_data);
-    register_app_data_to_modbus_coils_din_table(Slave_Discrete_Inputs,din_adr,&app_din_data);
+    register_app_data_to_modbus_coils_din_table(Slave_Discrete_Inputs, din_adr, &app_din_data);
 
     TEST_ASSERT_EQUAL(app_din_data, get_coil_din_state(Slave_Discrete_Inputs, din_adr));
 }
@@ -103,7 +103,7 @@ TEST(Modbus_Data_test, RegisterInputRegisterData)
     modbus_reg_t app_inreg_data = 0x5A5A;
     modbus_adr_t inreg_adr = 0x0001;
     // register_app_data_to_slave_input_registers_table(inreg_adr, &app_inreg_data);
-    register_app_data_to_modbus_reg_table(Slave_Input_Registers,inreg_adr,&app_inreg_data);
+    register_app_data_to_modbus_reg_table(Slave_Input_Registers, inreg_adr, &app_inreg_data);
 
     TEST_ASSERT_EQUAL(&app_inreg_data, Slave_Input_Registers[inreg_adr]);
 }
@@ -113,7 +113,7 @@ TEST(Modbus_Data_test, ReadRegisteredInputRegister)
     modbus_reg_t app_inreg_data = 0x5A5A;
     modbus_adr_t inreg_adr = 0x0001;
     // register_app_data_to_slave_input_registers_table(inreg_adr, &app_inreg_data);
-    register_app_data_to_modbus_reg_table(Slave_Input_Registers,inreg_adr,&app_inreg_data);
+    register_app_data_to_modbus_reg_table(Slave_Input_Registers, inreg_adr, &app_inreg_data);
 
     TEST_ASSERT_EQUAL_HEX16(app_inreg_data, get_register_state(Slave_Input_Registers, inreg_adr));
 }
@@ -131,7 +131,7 @@ TEST(Modbus_Data_test, RegisterHoldingRegisterData)
     modbus_reg_t app_hreg_data = 0xA5A5;
     modbus_adr_t hreg_adr = 0x0001;
     // register_app_data_to_slave_holding_registers_table(hreg_adr, &app_hreg_data);
-    register_app_data_to_modbus_reg_table(Slave_Holding_Registers,hreg_adr,&app_hreg_data);
+    register_app_data_to_modbus_reg_table(Slave_Holding_Registers, hreg_adr, &app_hreg_data);
 
     TEST_ASSERT_EQUAL(&app_hreg_data, Slave_Holding_Registers[hreg_adr]);
 }
@@ -141,7 +141,7 @@ TEST(Modbus_Data_test, ReadRegisteredHoldingRegister)
     modbus_reg_t app_hreg_data = 0xA5A5;
     modbus_adr_t hreg_adr = 0x0001;
     // register_app_data_to_slave_holding_registers_table(hreg_adr, &app_hreg_data);
-    register_app_data_to_modbus_reg_table(Slave_Holding_Registers,hreg_adr,&app_hreg_data);
+    register_app_data_to_modbus_reg_table(Slave_Holding_Registers, hreg_adr, &app_hreg_data);
 
     TEST_ASSERT_EQUAL_HEX16(app_hreg_data, get_register_state(Slave_Holding_Registers, hreg_adr));
 }

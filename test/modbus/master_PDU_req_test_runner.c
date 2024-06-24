@@ -17,7 +17,7 @@ TEST_GROUP_RUNNER(Master_PDU_req)
     RUN_TEST_CASE(Master_PDU_req, ReadMaxQtyDiscreteInputsRequest);
     RUN_TEST_CASE(Master_PDU_req, ReadMaxQtPlus1DiscreteInputsRequest);
     RUN_TEST_CASE(Master_PDU_req, ReadZeroDiscreteInputsRequest);
-    
+
     RUN_TEST_CASE(Master_PDU_req, ReadCoilsRequest);
     RUN_TEST_CASE(Master_PDU_req, ReadCoilsMaxQtyRequest);
     RUN_TEST_CASE(Master_PDU_req, ReadCoilsMaxQtyPlus1Request);
@@ -37,6 +37,5 @@ TEST_GROUP_RUNNER(Master_PDU_req)
     RUN_TEST_CASE(Master_PDU_req, WriteMultipleCoilsMaxQtyPlus1);
     RUN_TEST_CASE(Master_PDU_req, WriteZeroMultipleCoils);
 
-    
     // RUN_TEST_CASE(Master_PDU_req, );
 }

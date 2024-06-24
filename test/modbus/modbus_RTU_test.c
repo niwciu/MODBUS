@@ -13,7 +13,6 @@ modbus_buf_t buf[MODBUS_RTU_BUFFER_SIZE] = {0};
 
 #define SLAVE_ID_1 0x02U
 
-
 TEST_SETUP(Modbus_RTU_test)
 {
     /* Init before every test */
@@ -45,7 +44,7 @@ TEST(Modbus_RTU_test, AddCRCToSendBuf)
 
     modbus_RTU_send(buf, &buf_data_len, SLAVE_ID_1);
 
-    TEST_ASSERT_EQUAL_HEX16(expected_CRC, read_u16_from_buf(buf + (buf_data_len-2)));
+    TEST_ASSERT_EQUAL_HEX16(expected_CRC, read_u16_from_buf(buf + (buf_data_len - 2)));
 }
 
 TEST(Modbus_RTU_test, ModbusRtuSendWitnNullPtrAsBuffer)

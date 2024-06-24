@@ -40,16 +40,16 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenTxRxRTUmsgQueueIniti
 {
     modbus_master_init(RTU, 0, 0);
 
-    TEST_ASSERT_EQUAL(0,tx_rx_q->head);
-    TEST_ASSERT_EQUAL(0,tx_rx_q->tail);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->head);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->tail);
 }
 
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFull)
 {
     modbus_master_init(RTU, 0, 0);
 
-    TEST_ASSERT_EQUAL(0,free_q->tail);
-    TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1),free_q->head);
+    TEST_ASSERT_EQUAL(0, free_q->tail);
+    TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1), free_q->head);
 }
 
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
@@ -76,7 +76,6 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerS
 
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, master_manager_state_machine);
 }
-
 
 // TEST(master_RTU_init_test,)
 // {

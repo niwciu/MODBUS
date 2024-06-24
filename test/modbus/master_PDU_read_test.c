@@ -10,7 +10,6 @@ static modbus_ret_t status;
 static modbus_buf_t req_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 static modbus_buf_t resp_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 
-
 static modbus_msg_t modbus_msg;
 static modbus_msg_t *RTU_msg = &modbus_msg;
 
@@ -41,8 +40,8 @@ TEST_SETUP(Master_PDU_read)
     mock_reset_all_slave_inreg_value();
     mock_reset_all_slave_hreg_value();
 
-    RTU_msg->req.data=req_RTU_buf;
-    RTU_msg->resp.data=resp_RTU_buf;
+    RTU_msg->req.data = req_RTU_buf;
+    RTU_msg->resp.data = resp_RTU_buf;
 }
 
 TEST_TEAR_DOWN(Master_PDU_read)
@@ -60,10 +59,9 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadCoil
     modbus_master_read_coils_req(RTU_msg, coil_adr, coils_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
-    status=modbus_master_read_coils_resp(RTU_msg);
-    
-    
-    TEST_ASSERT_EQUAL(RET_OK,status);
+    status = modbus_master_read_coils_resp(RTU_msg);
+
+    TEST_ASSERT_EQUAL(RET_OK, status);
     TEST_ASSERT_EQUAL_UINT8_ARRAY(mock_slave_coil, mock_master_coil, coil_adr + coils_qty);
 }
 
@@ -156,7 +154,6 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInpu
     parse_master_request_and_prepare_resp(RTU_msg);
 
     modbus_master_read_input_reg_resp(RTU_msg);
-    
 
     TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_inreg, mock_master_inreg, in_reg_adr + in_reg_qty);
 }
@@ -232,7 +229,6 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadHold
     parse_master_request_and_prepare_resp(RTU_msg);
 
     modbus_master_read_holding_reg_resp(RTU_msg);
-    
 
     TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_hreg, mock_master_hreg, hreg_adr + hreg_qty);
 }
@@ -335,7 +331,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeAndCorrectOutputA
 
     mock_master_coil[coil_adr] = !!COIL_ON;
     modbus_master_write_single_coil_req(RTU_msg, coil_adr);
-    
+
     parse_master_request_and_prepare_resp(RTU_msg);
 
     write_u16_to_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX], !!COIL_OFF);

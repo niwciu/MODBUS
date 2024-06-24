@@ -10,10 +10,8 @@ modbus_ret_t status;
 static modbus_buf_t req_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 static modbus_buf_t resp_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 
-
 static modbus_msg_t modbus_msg;
 static modbus_msg_t *RTU_msg = &modbus_msg;
-
 
 TEST_GROUP(Slave_PDU_resp);
 
@@ -28,9 +26,8 @@ TEST_SETUP(Slave_PDU_resp)
     mock_set_all_slave_cails_to_off();
     mock_set_all_slave_din_to_off();
 
-    RTU_msg->req.data=req_RTU_buf;
-    RTU_msg->resp.data=resp_RTU_buf;
-    
+    RTU_msg->req.data = req_RTU_buf;
+    RTU_msg->resp.data = resp_RTU_buf;
 }
 
 TEST_TEAR_DOWN(Slave_PDU_resp)
@@ -53,7 +50,7 @@ TEST(Slave_PDU_resp, SlaveRead5Coils)
     TEST_ASSERT_EQUAL_UINT8(MODBUS_READ_COILS_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
     TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
-    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);   
+    TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
 }
 
 TEST(Slave_PDU_resp, SlaveRead8Coils)
@@ -72,7 +69,6 @@ TEST(Slave_PDU_resp, SlaveRead8Coils)
     TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX16(exp_readed_coil_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead9Coils)
@@ -92,7 +88,6 @@ TEST(Slave_PDU_resp, SlaveRead9Coils)
     TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
     TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead16Coils)
@@ -112,7 +107,6 @@ TEST(Slave_PDU_resp, SlaveRead16Coils)
     TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
     TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead17Coils)
@@ -133,7 +127,6 @@ TEST(Slave_PDU_resp, SlaveRead17Coils)
     TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
     TEST_ASSERT_EQUAL_HEX8(exp_readed_coil_value[2], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 2]);
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead5DiscreteInputs)
@@ -151,7 +144,6 @@ TEST(Slave_PDU_resp, SlaveRead5DiscreteInputs)
     TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead8DiscreteInputs)
@@ -169,7 +161,6 @@ TEST(Slave_PDU_resp, SlaveRead8DiscreteInputs)
     TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead9DiscreteInputs)
@@ -188,7 +179,6 @@ TEST(Slave_PDU_resp, SlaveRead9DiscreteInputs)
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead16DiscreteInputs)
@@ -208,7 +198,6 @@ TEST(Slave_PDU_resp, SlaveRead16DiscreteInputs)
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[0], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]);
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead17DiscreteInputs)
@@ -228,7 +217,6 @@ TEST(Slave_PDU_resp, SlaveRead17DiscreteInputs)
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[1], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 1]);
     TEST_ASSERT_EQUAL_HEX8(exp_readed_din_value[2], RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 2]);
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveReadOneHoldingRegister)
@@ -247,7 +235,6 @@ TEST(Slave_PDU_resp, SlaveReadOneHoldingRegister)
     TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead3HoldingRegisters)
@@ -268,7 +255,6 @@ TEST(Slave_PDU_resp, SlaveRead3HoldingRegisters)
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 2]));
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 4]));
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveReadOneInputRegister)
@@ -287,7 +273,6 @@ TEST(Slave_PDU_resp, SlaveReadOneInputRegister)
     TEST_ASSERT_EQUAL(expected_byte_count, RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX]);
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[0], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveRead3InputRegisters)
@@ -308,7 +293,6 @@ TEST(Slave_PDU_resp, SlaveRead3InputRegisters)
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[1], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 2]));
     TEST_ASSERT_EQUAL_HEX16(exp_readed_reg_value[2], read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + 4]));
     TEST_ASSERT_EQUAL(MODBUS_READ_RESP_LEN + expected_byte_count, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteSingleCoil)
@@ -324,7 +308,6 @@ TEST(Slave_PDU_resp, SlaveWriteSingleCoil)
     TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
     TEST_ASSERT_EQUAL_HEX16(resp_buf_coil_expected_value, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
@@ -339,8 +322,6 @@ TEST(Slave_PDU_resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
     parse_master_request_and_prepare_resp(RTU_msg);
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr]);
     TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
-
-    
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils5Coils)
@@ -358,7 +339,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils5Coils)
     TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
     TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus)
@@ -382,7 +362,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 6]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 7]);
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils8Coils)
@@ -400,7 +379,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils8Coils)
     TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
     TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
@@ -422,7 +400,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr + 6]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 7]);
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils9Coils)
@@ -440,7 +417,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils9Coils)
     TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
     TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
@@ -471,7 +447,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 14]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 15]);
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils16Coils)
@@ -489,7 +464,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils16Coils)
     TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
     TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils16CoilsAndCheckCoilsStatus)
@@ -519,7 +493,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils16CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr + 14]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 15]);
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils17Coils)
@@ -537,7 +510,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils17Coils)
     TEST_ASSERT_EQUAL_HEX16(adr, RTU_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX]);
     TEST_ASSERT_EQUAL_HEX16(coil_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus)
@@ -577,7 +549,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus)
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 24]);
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr + 25]);
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteSingleRegister)
@@ -593,7 +564,6 @@ TEST(Slave_PDU_resp, SlaveWriteSingleRegister)
     TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(RTU_msg->resp.data + MODBUS_RESP_WRITE_ADR_IDX));
     TEST_ASSERT_EQUAL_HEX16(reg_val, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
-
 }
 TEST(Slave_PDU_resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
 {
@@ -606,7 +576,6 @@ TEST(Slave_PDU_resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
 
     TEST_ASSERT_EQUAL_HEX16(reg_val, mock_slave_hreg[adr]);
     TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3Reg)
@@ -624,7 +593,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3Reg)
     TEST_ASSERT_EQUAL_HEX16(adr, read_u16_from_buf(RTU_msg->resp.data + MODBUS_RESP_WRITE_ADR_IDX));
     TEST_ASSERT_EQUAL_HEX16(reg_qty, read_u16_from_buf(&RTU_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]));
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
@@ -642,7 +610,6 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
     TEST_ASSERT_EQUAL_HEX16(exp_reg_val[1], mock_slave_hreg[adr + 1]);
     TEST_ASSERT_EQUAL_HEX16(exp_reg_val[2], mock_slave_hreg[adr + 2]);
     TEST_ASSERT_EQUAL(MODBUS_WRITE_MULTI_RESP_LEN, RTU_msg->resp.len);
-
 }
 
 //

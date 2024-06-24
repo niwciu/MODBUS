@@ -35,7 +35,7 @@ timer_state_t mock_3_5_char_timer = TIMER_INACTIVE;
 
 modbus_req_resp_t *rx_buf = NULL;
 
-USART_Rx_status_t USART_Tx_status= USART_IDLE;
+USART_Rx_status_t USART_Tx_status = USART_IDLE;
 modbus_buf_t mock_rx_buffer[MODBUS_RTU_BUFFER_SIZE];
 modbus_buf_t *mock_rx_buffer_ptr;
 
@@ -56,7 +56,7 @@ static const modbus_RTU_driver_struct_t slave_RTU_driver_interface = {
     slave_msg_tx_done_callback_subscribe,
     slave_t_3_5_char_expired_callback_subscribe,
     slave_msg_frame_erroro_callback_subscribe,
-    };
+};
 
 const modbus_RTU_driver_struct_t *get_slave_RTU_driver_interface(void)
 {
@@ -71,12 +71,12 @@ static void slave_usart_init(baud_t baud, parity_t parity)
 }
 static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 {
-   for(uint8_t i=0; i<msg_len; i++)
-   {
-    mock_rx_buffer[i]=tx_msg[i];
-   }
-   mock_rx_buffer_ptr=tx_msg;
-   USART_Tx_status= USART_SENDING_DATA;
+    for (uint8_t i = 0; i < msg_len; i++)
+    {
+        mock_rx_buffer[i] = tx_msg[i];
+    }
+    mock_rx_buffer_ptr = tx_msg;
+    USART_Tx_status = USART_SENDING_DATA;
 }
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 {
@@ -107,7 +107,7 @@ void mock_USART_RX_IRQ(void)
 {
     if ((TIMER_FIRED == mock_1_5_char_timer) && (TIMER_FIRED == mock_3_5_char_timer))
     {
-        // czyli odebrano msg i teraz przychodzi coś nowego 
+        // czyli odebrano msg i teraz przychodzi coś nowego
         // czy tutaj mam już bufor? gzie zarządzam pobieraniem nowego bufora?
     }
     if ((TIMER_FIRED == mock_1_5_char_timer) && (TIMER_COUNTING == mock_3_5_char_timer))
