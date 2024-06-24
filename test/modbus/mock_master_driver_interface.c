@@ -62,9 +62,7 @@ static void master_usart_init(baud_t baud, parity_t parity)
 }
 static void master_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 {
-    // memcpy(slave_rx_buf,*tx_msg,msg_len);
     slave_rx_buf_ptr=tx_msg;
-    //ToDo możena wykorzystać zrobionego slave do odbierania danych i gnerowania ramki zwrotnej
 }
 static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 {

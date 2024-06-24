@@ -82,13 +82,3 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerS
 // {
 //    TEST_FAIL_MESSAGE("Implement your test!");
 // }
-
-// TEST(master_RTU_init_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
-
-// TEST(master_RTU_init_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
