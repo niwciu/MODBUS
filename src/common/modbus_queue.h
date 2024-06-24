@@ -1,5 +1,5 @@
 /**
- * @file modbus_manager.h
+ * @file modbus_queue.h
  * @author niwciu (niwciu@gmail.com)
  * @brief
  * @date 2024-05-27
@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef _MODBUS_MANAGER_H_
-#define _MODBUS_MANAGER_H_
+#ifndef _MODBUS_QUEUE_H_
+#define _MODBUS_QUEUE_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -33,4 +33,4 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-#endif /* _MODBUS_MANAGER_H_ */
+#endif /* _MODBUS_QUEUE_H_ */
