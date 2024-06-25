@@ -32,6 +32,13 @@ TEST_TEAR_DOWN(Slave_RTU_test)
     /* Cleanup after every test */
 }
 
+TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitAndModbusManagerStateMachineChangedToUnknownStateWhenCheckModbusRequestCalledThenModbusManagerStateMachineIsEqualToModbusSlaveIdle)
+{
+    slave_manager_state_machine = MODBUS_SLAVE_UNKNOWN;
+    check_modbus_request();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
+}
+
 TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveCoilPtrTableThenCoilPtrIsEqualToRegisteredDataAdr)
 {
     modbus_adr_t coil_adr = 0x0003;
