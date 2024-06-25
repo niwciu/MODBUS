@@ -13,6 +13,7 @@ TEST_GROUP(Slave_RTU_test);
 
 extern modbus_slave_state_t slave_manager_state_machine;
 extern modbus_msg_t *slave_msg_ptr;
+extern modbus_slave_state_t slave_manager_state_machine;
 
 modbus_device_ID_t device_ID = 0x12;
 baud_t baud = 38400;
@@ -30,6 +31,13 @@ TEST_SETUP(Slave_RTU_test)
 TEST_TEAR_DOWN(Slave_RTU_test)
 {
     /* Cleanup after every test */
+}
+
+TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitAndModbusManagerStateMachineChangedToUnknownStateWhenCheckModbusRequestCalledThenModbusManagerStateMachineIsEqualToModbusSlaveIdle)
+{
+    slave_manager_state_machine = MODBUS_SLAVE_UNKNOWN;
+    check_modbus_request();
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
 }
 
 TEST(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveCoilPtrTableThenCoilPtrIsEqualToRegisteredDataAdr)

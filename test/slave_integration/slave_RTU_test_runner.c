@@ -3,10 +3,13 @@
 TEST_GROUP_RUNNER(Slave_RTU_test)
 {
     /* Test cases to run */
+    RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitAndModbusManagerStateMachineChangedToUnknownStateWhenCheckModbusRequestCalledThenModbusManagerStateMachineIsEqualToModbusSlaveIdle);
+
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveCoilPtrTableThenCoilPtrIsEqualToRegisteredDataAdr);
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveDisInPtrTableThenDisInPtrIsEqualToRegisteredDataAdr);
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveInRegPtrTableThenInRegPtrIsEqualToRegisteredDataAdr);
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInRTUmodeInitWhenRegisterAppDataToSlaveHolRegPtrTableThenHolRegPtrIsEqualToRegisteredDataAdr);
+    
 
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqRecivedWhenTimer1_5CharTrigerThenModbusManagerGoToModbusSlaveMsgRecived);
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithIncorectSlaveIdRecivedWhenTimer1_5CharTrigerThenModbusManagerGoBackToIdleStateWithEmptyMsgReqBuffer);
