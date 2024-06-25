@@ -83,14 +83,14 @@ set(TEST_SRCS
 	mock_master_driver_interface.c
 	mock_slave_driver_interface.c
 
-	# master_RTU_init_test_runner.c
-    # master_RTU_init_test.c
-	# master_RTU_test_runner.c
-	# master_RTU_test.c
-	# slave_RTU_init_test_runner.c
-    # slave_RTU_init_test.c
-	# slave_RTU_test_runner.c
-	# slave_RTU_test.c
+	master_RTU_init_test_runner.c
+    master_RTU_init_test.c
+	master_RTU_test_runner.c
+	master_RTU_test.c
+	slave_RTU_init_test_runner.c
+    slave_RTU_init_test.c
+	slave_RTU_test_runner.c
+	slave_RTU_test.c
 	
 
 	#mock_module.c
