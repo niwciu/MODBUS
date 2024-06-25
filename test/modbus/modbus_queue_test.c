@@ -41,6 +41,33 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenH
     TEST_ASSERT_EQUAL(0,q->tail);
 }
 
+TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenTailQueueMsgPtrIsEqualToPushedModbusMsgAdress)
+{
+    modbus_queue_init(q);
+    modbus_queue_push(q,&msg_buf[0]);
+    TEST_ASSERT_EQUAL(&msg_buf[0],q->modbus_msg[q->tail]);
+}
+
+// TEST(Modbus_Queue_test, )
+// {
+//     TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(Modbus_Queue_test, )
+// {
+//     TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(Modbus_Queue_test, )
+// {
+//     TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(Modbus_Queue_test, )
+// {
+//     TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
 // TEST(Modbus_Queue_test, )
 // {
 //     TEST_FAIL_MESSAGE("Implement your test!");

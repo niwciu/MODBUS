@@ -5,6 +5,11 @@ TEST_GROUP_RUNNER(Modbus_Queue_test)
    /* Test cases to run */
    RUN_TEST_CASE(Modbus_Queue_test, WhenModbusQueueInitThenQueueHeadAndTailIsEqualToZero);
    RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenHeadisEqualTo1AndTailIsEqualTo0);
-   // RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenQueueMsgPtrIsEqualToPushedModbusMsgAdress);
+   RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenTailQueueMsgPtrIsEqualToPushedModbusMsgAdress);
+   // test jak wrzucam do pełnej kolejki
+   // test na zrzucenie z kolejki 
+   // test na zrzucenie z pustej kolejki
+   // test jak zawijam kolejkę
+
    // RUN_TEST_CASE(Modbus_Queue_test, );
 }
