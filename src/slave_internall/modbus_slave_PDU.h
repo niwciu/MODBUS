@@ -17,7 +17,7 @@ extern "C"
 #include "modbus_data.h"
 
     // Slave Functionality
-    void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg);
+    modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg);
 
 #ifdef __cplusplus
 }

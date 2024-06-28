@@ -63,25 +63,33 @@ const struct modbus_functions modbus_functions_mapper[] = {
 
 #define MODBUS_FUNCTIONS_MAPPER_SIZE (sizeof(modbus_functions_mapper) / sizeof(modbus_functions_mapper[0]));
 
-void parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
-{
-    modbus_fun_code_t req_fun_code = rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-    uint32_t mapper_size = MODBUS_FUNCTIONS_MAPPER_SIZE;
-    bool UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_SET;
-
-    for (uint32_t i = 0; i < mapper_size; i++)
-    {
-        if (req_fun_code == modbus_functions_mapper[i].fun_code)
+modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
+{	 
+    modbus_ret_t msg_parse_status;   
+    if ((NULL == rx_msg) || (NULL == rx_msg->req.data) || (NULL == rx_msg->resp.data))
+	{
+	    msg_parse_status = RET_NULL_PTR_ERROR;
+    }
+	else
+	{
+        modbus_fun_code_t req_fun_code = rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
+        uint32_t mapper_size = MODBUS_FUNCTIONS_MAPPER_SIZE;
+        bool UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_SET;
+        for (uint32_t i = 0; i < mapper_size; i++)
         {
-            modbus_functions_mapper[i].fun_code_action(rx_msg);
-            UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_CLEARED;
+            if (req_fun_code == modbus_functions_mapper[i].fun_code)
+            {
+                msg_parse_status= modbus_functions_mapper[i].fun_code_action(rx_msg);
+                UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_CLEARED;
+            }
+        }
+        if (MODBUS_FLAG_SET == UNSUPORTED_FUNC_CODE_FLAG)
+        {
+            rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
+            set_exception_code_resp(rx_msg, MODBUS_ILLEGAL_FUNCTION_ERROR);
         }
     }
-    if (MODBUS_FLAG_SET == UNSUPORTED_FUNC_CODE_FLAG)
-    {
-        rx_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-        set_exception_code_resp(rx_msg, MODBUS_ILLEGAL_FUNCTION_ERROR);
-    }
+    return msg_parse_status;
 }
 
 static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
