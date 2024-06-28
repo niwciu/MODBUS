@@ -3,12 +3,13 @@
 
 // #include "tested_module.h"
 
+#define MAX_HEAD_INDEX (MAX_MODBUS_MSG_QUEUE_ITEMS-1)
 TEST_GROUP(Modbus_Queue_test);
 modbus_queue_t test_queue;
 modbus_queue_t *q;
-modbus_buf_t req_buf[5];
-modbus_buf_t resp_buf[5];
-modbus_msg_t msg_buf[5];
+modbus_buf_t req_buf[MAX_MODBUS_MSG_QUEUE_ITEMS+3];
+modbus_buf_t resp_buf[MAX_MODBUS_MSG_QUEUE_ITEMS+3];
+modbus_msg_t msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS+3];
 
 TEST_SETUP(Modbus_Queue_test)
 {
@@ -48,10 +49,20 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenT
     TEST_ASSERT_EQUAL(&msg_buf[0],q->modbus_msg[q->tail]);
 }
 
-// TEST(Modbus_Queue_test, )
-// {
-//     TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMasgPushToModbusQueueThenMsgNotPlacedInQueue)
+{
+    modbus_queue_init(q);
+    for (uint8_t i=0; i<MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    {
+        modbus_queue_push(q,&msg_buf[i]);
+    }
+    TEST_ASSERT_EQUAL(MAX_HEAD_INDEX,q->head);
+    TEST_ASSERT_EQUAL(0,q->tail);
+
+    modbus_queue_push(q,&msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS]);
+    TEST_ASSERT_EQUAL(MAX_HEAD_INDEX,q->head);
+    TEST_ASSERT_EQUAL(0,q->tail);
+}
 
 // TEST(Modbus_Queue_test, )
 // {
