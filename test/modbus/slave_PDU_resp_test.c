@@ -38,8 +38,7 @@ TEST_TEAR_DOWN(Slave_PDU_resp)
 TEST(Slave_PDU_resp, SlaveParseMsgWhenRtuMsgPassAsNullPtrArgumentToParse)
 {
     static modbus_msg_t *RTU_NULL_msg;
-    modbus_ret_t status= parse_master_request_and_prepare_resp(RTU_NULL_msg);
-    TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, status);
+    TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, parse_master_request_and_prepare_resp(RTU_NULL_msg));
 }
 
 TEST(Slave_PDU_resp, SlaveParseMsgWhenReqDataBufferPassAsNullPtrArgumentToParse)
