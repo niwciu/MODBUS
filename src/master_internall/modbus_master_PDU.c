@@ -1,11 +1,11 @@
 /**
  * @file modbus_master_PDU.c
  * @author niwciu (niwciu@gmail.com)
- * @brief 
+ * @brief
  * @date 2024-06-28
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 
 #include "modbus_master_PDU.h"
@@ -14,7 +14,7 @@
 
 static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_qty_t data_len);
 static modbus_ret_t write_single_reg_coil_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr);
-static modbus_data_t modbus_get_max_len(modbus_req_t req_code);
+static modbus_data_t modbus_get_max_len_2_read(modbus_req_t req_code);
 static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty);
 static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty);
 static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab);
@@ -53,7 +53,7 @@ modbus_ret_t modbus_master_read_input_reg_req(modbus_msg_t *modbus_msg, modbus_a
 }
 
 modbus_ret_t modbus_master_read_discrete_inputs_req(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t discrete_input_qty)
-{  
+{
     if (RET_OK == check_null_ptr_correctness(modbus_msg))
     {
         return read_reg_request(&modbus_msg->req, MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty);
@@ -132,7 +132,7 @@ modbus_ret_t modbus_master_write_multiple_reg_req(modbus_msg_t *modbus_msg, modb
 modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
 {
     if (RET_OK == check_null_ptr_correctness(modbus_msg))
-    {   
+    {
         modbus_byte_count_t byte_count = get_coil_din_byte_count(coils_qty);
         if ((coils_qty <= MODBUS_MAX_WRITE_COILS_QTY) && (coils_qty >= MODBUS_MIN_REG_COIL_QTY))
         {
@@ -260,7 +260,7 @@ modbus_ret_t modbus_master_write_multiple_reg_resp(modbus_msg_t *modbus_msg)
 // Master internall functions
 static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_qty_t data_len)
 {
-    if ((data_len <= modbus_get_max_len(req_code)) && (data_len >= MODBUS_MIN_REG_COIL_QTY))
+    if ((data_len <= modbus_get_max_len_2_read(req_code)) && (data_len >= MODBUS_MIN_REG_COIL_QTY))
     {
         req->data[MODBUS_FUNCTION_CODE_IDX] = req_code;
         write_u16_to_buf(req->data + MODBUS_REQUEST_ADR_IDX, adr);
@@ -290,32 +290,21 @@ static modbus_ret_t write_single_reg_coil_request(modbus_req_resp_t *req, modbus
     return RET_OK;
 }
 
-static modbus_data_t modbus_get_max_len(modbus_req_t req_code)
+static modbus_data_t modbus_get_max_len_2_read(modbus_req_t req_code)
 {
     modbus_data_t max_len = 0;
-    switch (req_code)
+    if (MODBUS_READ_COILS_FUNC_CODE == req_code)
     {
-    case MODBUS_READ_COILS_FUNC_CODE:
         max_len = MODBUS_MAX_READ_COILS_QTY;
-        break;
-    case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
-        max_len = MODBUS_MAX_WRITE_COILS_QTY;
-        break;
-    case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
+    }
+    else if (MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE == req_code)
+    {
         max_len = MODBUS_MAX_READ_DISCRETE_INPUTS_QTY;
-        break;
-    case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
-    case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
+    }
+    else
+    {
+        // MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE & MODBUS_READ_INPUT_REGISTERS_FUNC_CODE
         max_len = MODBUS_MAX_READ_REG_QTY;
-        break;
-    case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
-        max_len = MODBUS_MAX_WRITE_REG_QTY;
-        break;
-    case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
-    case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
-    default:
-        max_len = MODBUS_MIN_REG_COIL_QTY;
-        break;
     }
     return max_len;
 }
@@ -445,25 +434,20 @@ static modbus_ret_t check_write_slave_resp_vs_req(const modbus_req_resp_t *resp,
 static modbus_ret_t check_out_val_or_out_qty_correctnes(const modbus_req_resp_t *resp, const modbus_req_resp_t *req)
 {
     modbus_ret_t status = RET_ERROR;
-    switch (resp->data[MODBUS_FUNCTION_CODE_IDX])
+    modbus_fun_code_t resp_fun_code = resp->data[MODBUS_FUNCTION_CODE_IDX];
+    if ((MODBUS_WRITE_SINGLE_COIL_FUNC_CODE == resp_fun_code) || (MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE == resp_fun_code))
     {
-    case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
-    case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
         if (read_u16_from_buf(&resp->data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]) == read_u16_from_buf(&req->data[MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX]))
             status = RET_OK;
         else
             status = RET_ERROR_WRITE_SINGLE_OUT_VAL;
-        break;
-    case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
-    case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
+    }
+    else // MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE or MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE
+    {
         if (read_u16_from_buf(&resp->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]) == read_u16_from_buf(&req->data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX]))
             status = RET_OK;
         else
             status = RET_ERROR_WRITE_MULTI_OUT_QTY;
-        break;
-    default:
-        status = RET_ERROR;
-        break;
     }
     return status;
 }
