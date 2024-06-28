@@ -39,7 +39,7 @@ TEST_GROUP_RUNNER(Master_PDU_req)
     RUN_TEST_CASE(Master_PDU_req, WriteMultipleRegistersMaxQtyPlus1);
     RUN_TEST_CASE(Master_PDU_req, WriteZeroMultipleRegisters);
 
-    // RUN_TEST_CASE(Master_PDU_req, Write5MultipleCoilsRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, Write5MultipleCoilsRequestWithNullPtrModbusMasgPassed);
     RUN_TEST_CASE(Master_PDU_req, Write5MultipleCoils);
     RUN_TEST_CASE(Master_PDU_req, WriteMaxQtyMultipleCoils);
     RUN_TEST_CASE(Master_PDU_req, WriteMultipleCoilsMaxQtyPlus1);
