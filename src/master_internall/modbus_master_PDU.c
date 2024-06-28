@@ -276,25 +276,18 @@ static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_co
 
 static modbus_ret_t write_single_reg_coil_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr)
 {
-    if (NULL != req)
+    req->data[MODBUS_FUNCTION_CODE_IDX] = req_code;
+    write_u16_to_buf(req->data + MODBUS_REQUEST_ADR_IDX, adr);
+    if (MODBUS_WRITE_SINGLE_COIL_FUNC_CODE == req_code)
     {
-        req->data[MODBUS_FUNCTION_CODE_IDX] = req_code;
-        write_u16_to_buf(req->data + MODBUS_REQUEST_ADR_IDX, adr);
-        if (MODBUS_WRITE_SINGLE_COIL_FUNC_CODE == req_code)
-        {
-            write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, (get_coil_din_state(Master_Coils, adr) * COIL_ON));
-        }
-        else
-        {
-            write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, get_register_state(Master_Holding_Registers, adr));
-        }
-        req->len = MODBUS_WRITE_SINGLE_REQUEST_LEN;
-        return RET_OK;
+        write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, (get_coil_din_state(Master_Coils, adr) * COIL_ON));
     }
     else
     {
-        return RET_NULL_PTR_ERROR;
+        write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, get_register_state(Master_Holding_Registers, adr));
     }
+    req->len = MODBUS_WRITE_SINGLE_REQUEST_LEN;
+    return RET_OK;
 }
 
 static modbus_data_t modbus_get_max_len(modbus_req_t req_code)
