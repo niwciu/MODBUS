@@ -53,7 +53,9 @@ set(TEST_INCLUDE_DIRS
 
 set(SRCS
 	../../src/master_internall/modbus_master_PDU.c
+	../../src/master_internall/modbus_master_RTU.c
 	../../src/slave_internall/modbus_slave_PDU.c
+	../../src/slave_internall/modbus_slave_RTU.c
 	../../src/common/buf_rw.c
 	../../src/common/modbus_data.c
 	../../src/common/modbus_crc.c
@@ -64,10 +66,10 @@ set(SRCS
 
 set(TEST_SRCS
     master_integration_test_main.c
-    master_RTU_init_test_runner.c
-    master_RTU_init_test.c
-	master_RTU_test_runner.c
-	master_RTU_test.c
+    ../modbus/master_RTU_init_test_runner.c
+    ../modbus/master_RTU_init_test.c
+	../modbus/master_RTU_test_runner.c
+	../modbus/master_RTU_test.c
 	../modbus/mock_slave_driver_interface.c
 	../modbus/mock_slave_app_data.c
 	../modbus/mock_master_app_data.c
