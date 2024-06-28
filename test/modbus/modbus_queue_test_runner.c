@@ -11,6 +11,7 @@ TEST_GROUP_RUNNER(Modbus_Queue_test)
    RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenModbusMsgPopFromQueueThenPopMsgPtrisEqualToMsgBufferAddresPopedFromQueue);
    RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitAndEmptyAndPopMsgPtrEqualNullWhenModbusMsgPopFromQueueToPopMsgThenPopMsgEqualNull);
    // test na zawijanie kolejki przy wrzucaniu
+   RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMsgPopAndModbusMsgPushThenTailisEqualTo1AndHeadIsEqualTo0);
    // test jak zawijam kolejkę przy zdejmowaniu
 
    // RUN_TEST_CASE(Modbus_Queue_test, );
