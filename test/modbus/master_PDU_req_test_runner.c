@@ -3,6 +3,7 @@
 TEST_GROUP_RUNNER(Master_PDU_req)
 {
     /* Test cases to run */
+    RUN_TEST_CASE(Master_PDU_req, ReadSingleHoldingRegisterRequestWithNullPtrModbusMasgPassed);
     RUN_TEST_CASE(Master_PDU_req, ReadSingleHoldingRegisterRequest);
     RUN_TEST_CASE(Master_PDU_req, ReadMaxQtyHoldingRegisterRequest);
     RUN_TEST_CASE(Master_PDU_req, ReadHoldingRegisterMaxQtyPlus1Request);
