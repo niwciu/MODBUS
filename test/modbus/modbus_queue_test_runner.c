@@ -8,6 +8,7 @@ TEST_GROUP_RUNNER(Modbus_Queue_test)
    RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenTailQueueMsgPtrIsEqualToPushedModbusMsgAdress);
    RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMasgPushToModbusQueueThenMsgNotPlacedInQueue);
    RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenModbusMsgPopFromQueueThenTailisEqualToHead);
+   RUN_TEST_CASE(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenModbusMsgPopFromQueueThenPopMsgPtrisEqualToMsgBufferAddresPopedFromQueue);
    // test na zrzucenie z kolejki 
    // test na zrzucenie z pustej kolejki
    // test na zawijanie kolejki przy wrzucaniu

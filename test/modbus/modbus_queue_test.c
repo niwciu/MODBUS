@@ -76,6 +76,14 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenMo
     TEST_ASSERT_EQUAL(1,q->tail);
 }
 
+TEST(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenModbusMsgPopFromQueueThenPopMsgPtrisEqualToMsgBufferAddresPopedFromQueue)
+{
+    modbus_queue_init(q);
+    modbus_queue_push(q,&msg_buf[0]);
+    pop_msg=modbus_queue_pop(q);
+    TEST_ASSERT_EQUAL(&msg_buf[0],pop_msg);
+}
+
 // TEST(Modbus_Queue_test, )
 // {
 //     TEST_FAIL_MESSAGE("Implement your test!");
