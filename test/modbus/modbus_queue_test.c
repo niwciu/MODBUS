@@ -84,10 +84,13 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenMo
     TEST_ASSERT_EQUAL(&msg_buf[0],pop_msg);
 }
 
-// TEST(Modbus_Queue_test, )
-// {
-//     TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(Modbus_Queue_test, GivenModbusQueueInitAndEmptyAndPopMsgPtrEqualNullWhenModbusMsgPopFromQueueToPopMsgThenPopMsgEqualNull)
+{
+    modbus_queue_init(q);
+    pop_msg=NULL;
+    pop_msg=modbus_queue_pop(q);
+    TEST_ASSERT_NULL(pop_msg);
+}
 
 // TEST(Modbus_Queue_test, )
 // {
