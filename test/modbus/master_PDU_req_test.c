@@ -129,6 +129,13 @@ TEST(Master_PDU_req, ReadZeroInputRegisterRequest)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR, status);
 }
 
+TEST (Master_PDU_req ,ReadDiscreteInputsRequestWithNullPtrModbusMasgPassed)
+{
+    static modbus_adr_t adr = 0x0001;
+    static modbus_data_qty_t len = 1;
+    TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, modbus_master_read_discrete_inputs_req(null_ptr_msg, adr, len));
+}
+
 TEST(Master_PDU_req, ReadDiscreteInputsRequest)
 {
     static modbus_adr_t adr = 0x0003;
