@@ -48,6 +48,12 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegis
     TEST_ASSERT_NOT_NULL(slave_RTU_driver);
 }
 
+TEST(Slave_RTU_init_test, WhenModbusSlaveInitInUnknownOrNotDefinedModeThenDriverInterfaceIsNotRegisteredAndEqualNull)
+{
+    modbus_slave_init(UNKNOWN, 0, 0, 0);
+    TEST_ASSERT_NULL(slave_RTU_driver);
+}
+
 TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity)
 {
     baud_t baud = 38400;
