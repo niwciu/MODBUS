@@ -55,10 +55,10 @@ TEST(Master_PDU_read, MasterReadCoilsRespWithNullPtrPassedAsArgument)
     TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, modbus_master_read_coils_resp(null_ptr_msg));
 }
 
-// TEST(Master_PDU_read, )
-// {
-// TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, (null_ptr_msg));
-// }
+TEST(Master_PDU_read, MasterReadDiscreteInputsRespWithNullPtrPassedAsArgument)
+{
+TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, modbus_master_read_discrete_inputs_resp(null_ptr_msg));
+}
 
 // TEST(Master_PDU_read, )
 // {

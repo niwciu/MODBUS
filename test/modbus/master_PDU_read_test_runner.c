@@ -5,7 +5,7 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     /* Test cases to run */
     // master read write respond parse with null ptr passed tests
     RUN_TEST_CASE(Master_PDU_read, MasterReadCoilsRespWithNullPtrPassedAsArgument);
-    // RUN_TEST_CASE(Master_PDU_read, MasterReadDiscreteInputsRespWithNullPtrPassedAsArgument);
+    RUN_TEST_CASE(Master_PDU_read, MasterReadDiscreteInputsRespWithNullPtrPassedAsArgument);
     // RUN_TEST_CASE(Master_PDU_read, MasterReadInputRegRespWithNullPtrPassedAsArgument);
     // RUN_TEST_CASE(Master_PDU_read, MasterReadHoldingRegRespWithNullPtrPassedAsArgument);
     // RUN_TEST_CASE(Master_PDU_read, MasterWriteSingleCoilsRespWithNullPtrPassedAsArgument);
