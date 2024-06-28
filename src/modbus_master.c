@@ -107,36 +107,36 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 
     // ToDo rcv_callback ?? do we need this
 }
-void check_modbus_master_manager(void)
-{
-    // switch (master_manager_state_machine)
-    // {
-    // case MODBUS_MASTER_IDLE:
-    //     if (tx_rx_q->head != tx_rx_q->tail)
-    //     {
-    //         msg_buf = modbus_queue_pop(tx_rx_q);
-    //         RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
-    //         RTU_driver->enable_rcev(msg_buf->resp.data);
-    //         master_manager_state_machine = MODBUS_MASTER_TRANSMISION;
-    //     }
-    //     break;
-    // case MODBUS_MASTER_TRANSMISION:
-    //     // sprawdz czy driver przestal wysylac i jesli tak to przejdz do odbioru
-    //     break;
-    // case MODBUS_MASTER_RECEIVING:
-    //     break;
-    //     // pytanie czy tu nie powinno być stanu przejściowego na oczekiwania poprawności zależności czasowej
-    //     // case MODBUS_WAIT_3_5_CHAR:
+// void check_modbus_master_manager(void)
+// {
+//     // switch (master_manager_state_machine)
+//     // {
+//     // case MODBUS_MASTER_IDLE:
+//     //     if (tx_rx_q->head != tx_rx_q->tail)
+//     //     {
+//     //         msg_buf = modbus_queue_pop(tx_rx_q);
+//     //         RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
+//     //         RTU_driver->enable_rcev(msg_buf->resp.data);
+//     //         master_manager_state_machine = MODBUS_MASTER_TRANSMISION;
+//     //     }
+//     //     break;
+//     // case MODBUS_MASTER_TRANSMISION:
+//     //     // sprawdz czy driver przestal wysylac i jesli tak to przejdz do odbioru
+//     //     break;
+//     // case MODBUS_MASTER_RECEIVING:
+//     //     break;
+//     //     // pytanie czy tu nie powinno być stanu przejściowego na oczekiwania poprawności zależności czasowej
+//     //     // case MODBUS_WAIT_3_5_CHAR:
 
-    // case MODBUS_MASTER_RESP_ANALYSE:
-    //     // analizuje ramkę i wykonuje zadanie
-    //     // jesli dostałem error lub jest coś nie tak idę do error service
-    //     break;
-    // case MODBUS_MASTER_ERROR_SERVICE:
-    //     // W zależności od tego co było błędem wykonuję jego obsługę
-    //     break;
-    // }
-}
+//     // case MODBUS_MASTER_RESP_ANALYSE:
+//     //     // analizuje ramkę i wykonuje zadanie
+//     //     // jesli dostałem error lub jest coś nie tak idę do error service
+//     //     break;
+//     // case MODBUS_MASTER_ERROR_SERVICE:
+//     //     // W zależności od tego co było błędem wykonuję jego obsługę
+//     //     break;
+//     // }
+// }
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 {
@@ -146,6 +146,15 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
         {
             modbus_msg[i].req.data = &master_RTU_req_buf[i][0];
             modbus_msg[i].resp.data = &master_RTU_resp_buf[i][0];
+        }
+    }
+    //else if( OTHER_MODE == mode)
+    else
+    {
+        for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+        {
+            modbus_msg[i].req.data = NULL;
+            modbus_msg[i].resp.data = NULL;
         }
     }
 }
