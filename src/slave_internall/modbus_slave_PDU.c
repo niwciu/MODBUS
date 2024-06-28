@@ -95,19 +95,14 @@ modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
-    if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
+
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
+    status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_COILS_QTY, MAIN_APP_COILS_QTY);
+    if (RET_ERROR != status)
     {
-        status = RET_NULL_PTR_ERROR;
+        status = handle_slave_read_coil_service(modbus_msg);
     }
-    else
-    {
-        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
-        status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_COILS_QTY, MAIN_APP_COILS_QTY);
-        if (RET_ERROR != status)
-        {
-            status = handle_slave_read_coil_service(modbus_msg);
-        }
-    }
+
     return status;
 }
 static modbus_ret_t handle_slave_read_coil_service(modbus_msg_t *modbus_msg)
@@ -138,19 +133,14 @@ static modbus_ret_t handle_slave_read_coil_service(modbus_msg_t *modbus_msg)
 static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
-    if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
+
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
+    status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_DISCRETE_INPUTS_QTY, MAIN_APP_DISCRET_INPUTS_QTY);
+    if (RET_OK == status)
     {
-        status = RET_NULL_PTR_ERROR;
+        status = handle_slave_read_discrete_inputs_service(modbus_msg);
     }
-    else
-    {
-        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
-        status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_DISCRETE_INPUTS_QTY, MAIN_APP_DISCRET_INPUTS_QTY);
-        if (RET_OK == status)
-        {
-            status = handle_slave_read_discrete_inputs_service(modbus_msg);
-        }
-    }
+
     return status;
 }
 static modbus_ret_t handle_slave_read_discrete_inputs_service(modbus_msg_t *modbus_msg)
@@ -181,19 +171,14 @@ static modbus_ret_t handle_slave_read_discrete_inputs_service(modbus_msg_t *modb
 static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
-    if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
+
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
+    status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_REG_QTY, MAIN_APP_HOLDING_REG_QTY);
+    if (RET_OK == status)
     {
-        status = RET_NULL_PTR_ERROR;
+        status = handle_slave_read_holding_reg_service(modbus_msg);
     }
-    else
-    {
-        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
-        status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_REG_QTY, MAIN_APP_HOLDING_REG_QTY);
-        if (RET_OK == status)
-        {
-            status = handle_slave_read_holding_reg_service(modbus_msg);
-        }
-    }
+    
     return status;
 }
 
@@ -224,19 +209,14 @@ static modbus_ret_t handle_slave_read_holding_reg_service(modbus_msg_t *modbus_m
 static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
-    if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
+
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_INPUT_REGISTERS_FUNC_CODE;
+    status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_REG_QTY, MAIN_APP_INPUT_REG_QTY);
+    if (RET_OK == status)
     {
-        return RET_NULL_PTR_ERROR;
+        status = handle_slave_read_input_reg_service(modbus_msg);
     }
-    else
-    {
-        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_INPUT_REGISTERS_FUNC_CODE;
-        status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_REG_QTY, MAIN_APP_INPUT_REG_QTY);
-        if (RET_OK == status)
-        {
-            status = handle_slave_read_input_reg_service(modbus_msg);
-        }
-    }
+
     return status;
 }
 
@@ -266,21 +246,16 @@ static modbus_ret_t handle_slave_read_input_reg_service(modbus_msg_t *modbus_msg
 static modbus_ret_t modbus_slave_write_single_coil(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
-    if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
+
+    modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+    modbus_w_coil_t coil_state = read_u16_from_buf(&modbus_msg->req.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]);
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_COIL_FUNC_CODE;
+    status = check_write_single_coil_req_data_correctness(modbus_msg, adr, coil_state);
+    if (status == RET_OK)
     {
-        status = RET_NULL_PTR_ERROR;
+        status = handle_slave_write_single_coil_service(modbus_msg, adr, coil_state);
     }
-    else
-    {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_w_coil_t coil_state = read_u16_from_buf(&modbus_msg->req.data[MODBUS_RESP_WRITE_SINGLE_DATA_IDX]);
-        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_COIL_FUNC_CODE;
-        status = check_write_single_coil_req_data_correctness(modbus_msg, adr, coil_state);
-        if (status == RET_OK)
-        {
-            status = handle_slave_write_single_coil_service(modbus_msg, adr, coil_state);
-        }
-    }
+
     return status;
 }
 
@@ -320,30 +295,24 @@ static modbus_ret_t handle_slave_write_single_coil_service(modbus_msg_t *modbus_
 static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status = RET_OK;
-    if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
+
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
+    status = check_write_req_data_correctness(modbus_msg, MODBUS_MAX_WRITE_COILS_QTY, MAIN_APP_COILS_QTY);
+    if (RET_OK == status)
     {
-        status = RET_NULL_PTR_ERROR;
-    }
-    else
-    {
-        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE;
-        status = check_write_req_data_correctness(modbus_msg, MODBUS_MAX_WRITE_COILS_QTY, MAIN_APP_COILS_QTY);
+        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+        modbus_data_qty_t coils_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+
+        status = set_coil_din_value_from_modbus_msg(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], adr, coils_qty, Slave_Coils);
         if (RET_OK == status)
         {
-            modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-            modbus_data_qty_t coils_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-
-            status = set_coil_din_value_from_modbus_msg(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_MULTI_DATA_IDX], adr, coils_qty, Slave_Coils);
-            if (RET_OK == status)
-            {
-                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
-                write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], coils_qty);
-                modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
-            }
-            else
-            {
-                set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
-            }
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_ADR_IDX], adr);
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX], coils_qty);
+            modbus_msg->resp.len = MODBUS_WRITE_MULTI_RESP_LEN;
+        }
+        else
+        {
+            set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
         }
     }
     return status;
@@ -352,23 +321,17 @@ static modbus_ret_t modbus_slave_write_multiple_coils(modbus_msg_t *modbus_msg)
 static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
-    if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
+
+    modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE;
+    if (MAIN_APP_HOLDING_REG_QTY <= adr)
     {
-        status = RET_NULL_PTR_ERROR;
+        set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
+        status = RET_ERROR;
     }
     else
     {
-        modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE;
-        if (MAIN_APP_HOLDING_REG_QTY <= adr)
-        {
-            set_exception_code_resp(modbus_msg, MODBUS_ILLEGAL_DATA_ADDRESS_ERROR);
-            status = RET_ERROR;
-        }
-        else
-        {
-            status = handle_slave_write_single_reg_service(modbus_msg);
-        }
+        status = handle_slave_write_single_reg_service(modbus_msg);
     }
     return status;
 }
@@ -394,18 +357,12 @@ static modbus_ret_t handle_slave_write_single_reg_service(modbus_msg_t *modbus_m
 static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
-    if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
+    
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
+    status = check_write_req_data_correctness(modbus_msg, MODBUS_MAX_WRITE_REG_QTY, MAIN_APP_HOLDING_REG_QTY);
+    if (RET_OK == status)
     {
-        status = RET_NULL_PTR_ERROR;
-    }
-    else
-    {
-        modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
-        status = check_write_req_data_correctness(modbus_msg, MODBUS_MAX_WRITE_REG_QTY, MAIN_APP_HOLDING_REG_QTY);
-        if (RET_OK == status)
-        {
-            status = handle_slave_write_multiple_reg_service(modbus_msg);
-        }
+        status = handle_slave_write_multiple_reg_service(modbus_msg);
     }
     return status;
 }
