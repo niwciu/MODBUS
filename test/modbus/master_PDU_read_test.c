@@ -75,10 +75,10 @@ TEST(Master_PDU_read, MasterWriteSingleCoilsRespWithNullPtrPassedAsArgument)
 TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR,modbus_master_write_single_coil_resp (null_ptr_msg));
 }
 
-// TEST(Master_PDU_read, MasterWriteSingleRegRespWithNullPtrPassedAsArgument)
-// {
-// TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, (null_ptr_msg));
-// }
+TEST(Master_PDU_read, MasterWriteSingleRegRespWithNullPtrPassedAsArgument)
+{
+TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, modbus_master_write_single_reg_resp(null_ptr_msg));
+}
 
 // TEST(Master_PDU_read, MasterWriteMultipleCoilsRespWithNullPtrPassedAsArgument)
 // {
