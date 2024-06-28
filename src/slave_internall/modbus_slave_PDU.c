@@ -357,7 +357,7 @@ static modbus_ret_t handle_slave_write_single_reg_service(modbus_msg_t *modbus_m
 static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
-    
+
     modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE;
     status = check_write_req_data_correctness(modbus_msg, MODBUS_MAX_WRITE_REG_QTY, MAIN_APP_HOLDING_REG_QTY);
     if (RET_OK == status)
@@ -477,13 +477,9 @@ static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg, m
         {
             status = check_write_req_byte_count_correctenss(modbus_msg);
         }
-        else if (MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE == func_code)
-        {
-            status = check_write_req_reg_byte_count_correctenss(modbus_msg);
-        }
         else
         {
-            status = RET_ERROR;
+            status = check_write_req_reg_byte_count_correctenss(modbus_msg);
         }
     }
     return status;
