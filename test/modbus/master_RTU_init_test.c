@@ -27,6 +27,16 @@ TEST_TEAR_DOWN(master_RTU_init_test)
     /* Cleanup after every test */
 }
 
+TEST(master_RTU_init_test, WhenModbusMasterInitInUnknownModeThenRtuReqAndRespBuffersAreNotRegistered)
+{
+    modbus_master_init(UNKNOWN_MODE, 0, 0);
+    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    {
+        TEST_ASSERT_NULL(modbus_msg[i].req.data);
+        TEST_ASSERT_NULL(modbus_msg[i].resp.data);
+    }
+}
+
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
 {
     modbus_master_init(RTU, 0, 0);
