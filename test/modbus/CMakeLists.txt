@@ -53,6 +53,7 @@ set(TEST_INCLUDE_DIRS
 set(SRCS
 	../../src/master_internall/modbus_master_PDU.c
 	../../src/slave_internall/modbus_slave_PDU.c
+	../../src/slave_internall/modbus_slave_RTU.c
 	../../src/common/buf_rw.c
 	../../src/common/modbus_data.c
 	../../src/common/modbus_crc.c

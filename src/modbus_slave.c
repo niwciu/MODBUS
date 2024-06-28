@@ -9,7 +9,7 @@
  */
 #include "modbus_slave.h"
 #include "modbus_slave_PDU.h"
-// #include "modbus_queue.h"
+#include "modbus_slave_RTU.h"
 #include "modbus_RTU.h"
 #include "modbus_type.h"
 #include "modbus_driver_interface.h"
@@ -152,14 +152,14 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 {
     if (RTU == mode)
     {
-        slave_msg.req.data = &RTU_req_buf[0][0];
-        slave_msg.resp.data = &RTU_resp_buf[0][0];
+        slave_msg.req.data = slave_RTU_req_buf;
+        slave_msg.resp.data = slave_RTU_resp_buf;
     }
 }
 
 static void init_modbus_driver(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
-    if (RTU == mode)
+    if(RTU == mode)
     {
         slave_RTU_driver = get_slave_RTU_driver_interface();
         slave_RTU_driver->init(baud_rate, parity);
@@ -169,6 +169,7 @@ static void init_modbus_driver(modbus_mode_t mode, baud_t baud_rate, parity_t pa
         slave_RTU_driver->subscribe_t_3_5_char_expired_cb(modbus_T_3_5_char_expired_callback);
         slave_RTU_driver->subscribe_modbus_frame_error_cb(modbus_frame_error_callback);
     }
+    // else if (OTHER_MODE == mode)
     else
     {
         slave_RTU_driver = NULL;

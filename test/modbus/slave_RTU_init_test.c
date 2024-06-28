@@ -1,6 +1,7 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_slave.h"
 #include "modbus_RTU.h"
+#include "modbus_slave_RTU.h"
 #include "modbus_type.h"
 #include "modbus_driver_interface.h"
 #include "mock_slave_driver_interface.h"
@@ -37,8 +38,8 @@ TEST_TEAR_DOWN(Slave_RTU_init_test)
 TEST(Slave_RTU_init_test, WhenModbusSlavenitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
 {
     modbus_slave_init(RTU, 0, 0, 0);
-    TEST_ASSERT_EQUAL(&RTU_req_buf[0][0], slave_msg->req.data);
-    TEST_ASSERT_EQUAL(&RTU_resp_buf[0][0], slave_msg->resp.data);
+    TEST_ASSERT_EQUAL(slave_RTU_req_buf, slave_msg->req.data);
+    TEST_ASSERT_EQUAL(slave_RTU_resp_buf, slave_msg->resp.data);
 }
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegistered)
