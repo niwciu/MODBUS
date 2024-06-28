@@ -60,7 +60,7 @@ set(SRCS
 	../../src/common/modbus_crc.c
 	../../src/common/modbus_RTU.c
 	../../src/common/modbus_queue.c
-	../../src/common/modbus_PDU_common.c
+	../../src/common/modbus_PDU.c
 	../../src/modbus_master.c
 	../../src/modbus_slave.c
 )

@@ -9,7 +9,7 @@
  */
 
 #include "modbus_master_PDU.h"
-#include "modbus_PDU_common.h"
+#include "modbus_PDU.h"
 #include "buf_rw.h"
 #include <stdio.h>
 
