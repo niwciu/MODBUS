@@ -47,6 +47,7 @@ void modbus_queue_push(modbus_queue_t *q, modbus_msg_t *data)
 
 modbus_msg_t *modbus_queue_pop(modbus_queue_t *q)
 {
+    modbus_msg_t *ret;
     if (q->head == q->tail)
     {
         // queue empty
@@ -57,9 +58,14 @@ modbus_msg_t *modbus_queue_pop(modbus_queue_t *q)
         else 
         {
             q->last_queue_pos_status = LAST_QUEUE_POS_EMPTY;
+            ret = q->modbus_msg[q->tail];
         }
     }
-    modbus_msg_t *ret = q->modbus_msg[q->tail];
+    else
+    {
+    ret = q->modbus_msg[q->tail];
     q->tail = (q->tail + 1) % MAX_MODBUS_MSG_QUEUE_ITEMS;
+    }
+
     return ret;
 }
