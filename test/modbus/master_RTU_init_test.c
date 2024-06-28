@@ -1,6 +1,7 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_master.h"
 #include "modbus_RTU.h"
+#include "modbus_master_RTU.h"
 #include "modbus_type.h"
 #include "modbus_queue.h"
 #include "mock_master_driver_interface.h"
@@ -31,8 +32,8 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffers
     modbus_master_init(RTU, 0, 0);
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_req_buf[i][0], modbus_msg[i].req.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_resp_buf[i][0], modbus_msg[i].resp.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
+        TEST_ASSERT_EQUAL_UINT32_ARRAY(&master_RTU_req_buf[i][0], modbus_msg[i].req.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
+        TEST_ASSERT_EQUAL_UINT32_ARRAY(&master_RTU_resp_buf[i][0], modbus_msg[i].resp.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
     }
 }
 

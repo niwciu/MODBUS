@@ -5,12 +5,12 @@
 
 #define MAX_HEAD_INDEX (MAX_MODBUS_MSG_QUEUE_ITEMS-1)
 TEST_GROUP(Modbus_Queue_test);
-modbus_queue_t test_queue;
-modbus_queue_t *q;
-modbus_buf_t req_buf[MAX_MODBUS_MSG_QUEUE_ITEMS+3];
-modbus_buf_t resp_buf[MAX_MODBUS_MSG_QUEUE_ITEMS+3];
-modbus_msg_t msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS+3];
-modbus_msg_t *pop_msg;
+static modbus_queue_t test_queue;
+static modbus_queue_t *q;
+static modbus_buf_t req_buf[MAX_MODBUS_MSG_QUEUE_ITEMS+3];
+static modbus_buf_t resp_buf[MAX_MODBUS_MSG_QUEUE_ITEMS+3];
+static modbus_msg_t msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS+3];
+static modbus_msg_t *pop_msg;
 
 TEST_SETUP(Modbus_Queue_test)
 {

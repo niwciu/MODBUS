@@ -11,6 +11,7 @@
 
 #include "modbus_master.h"
 #include "modbus_master_PDU.h"
+#include "modbus_master_RTU.h"
 #include "modbus_queue.h"
 #include "modbus_RTU.h"
 #include "modbus_type.h"
@@ -143,8 +144,8 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
     {
         for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
         {
-            modbus_msg[i].req.data = &RTU_req_buf[i][0];
-            modbus_msg[i].resp.data = &RTU_resp_buf[i][0];
+            modbus_msg[i].req.data = &master_RTU_req_buf[i][0];
+            modbus_msg[i].resp.data = &master_RTU_resp_buf[i][0];
         }
     }
 }
