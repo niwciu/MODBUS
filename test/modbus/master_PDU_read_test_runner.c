@@ -3,6 +3,15 @@
 TEST_GROUP_RUNNER(Master_PDU_read)
 {
     /* Test cases to run */
+    // master read write respond parse with null ptr passed tests
+    RUN_TEST_CASE(Master_PDU_read, MasterReadCoilsRespWithNullPtrPassedAsArgument);
+    // RUN_TEST_CASE(Master_PDU_read, MasterReadDiscreteInputsRespWithNullPtrPassedAsArgument);
+    // RUN_TEST_CASE(Master_PDU_read, MasterReadInputRegRespWithNullPtrPassedAsArgument);
+    // RUN_TEST_CASE(Master_PDU_read, MasterReadHoldingRegRespWithNullPtrPassedAsArgument);
+    // RUN_TEST_CASE(Master_PDU_read, MasterWriteSingleCoilsRespWithNullPtrPassedAsArgument);
+    // RUN_TEST_CASE(Master_PDU_read, MasterWriteSingleRegRespWithNullPtrPassedAsArgument);
+    // RUN_TEST_CASE(Master_PDU_read, MasterWriteMultipleCoilsRespWithNullPtrPassedAsArgument);
+    // RUN_TEST_CASE(Master_PDU_read, MasterWriteMultipleRegRespWithNullPtrPassedAsArgument);
 
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadCoilRespThenMasterCoilsUpdateToSlaveCoilsValue);
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadCoilRespThenMasterCoilsStayUnchanged);
@@ -40,7 +49,6 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutAdrError);
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartAdrAndIncorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutQtyError);
 
-    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterRead); // tego nie odpalaj tak było do zdabania po refactoringu
     // RUN_TEST_CASE(Master_PDU_read, );
     // RUN_TEST_CASE(Master_PDU_read, );
     // RUN_TEST_CASE(Master_PDU_read, );

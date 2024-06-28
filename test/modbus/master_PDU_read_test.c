@@ -12,6 +12,7 @@ static modbus_buf_t resp_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 
 static modbus_msg_t modbus_msg;
 static modbus_msg_t *RTU_msg = &modbus_msg;
+static modbus_msg_t *null_ptr_msg;
 
 // modbus_ret_t status;
 
@@ -48,6 +49,41 @@ TEST_TEAR_DOWN(Master_PDU_read)
 {
     /* Cleanup after every test */
 }
+
+TEST(Master_PDU_read, MasterReadCoilsRespWithNullPtrPassedAsArgument)
+{
+    TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, modbus_master_read_coils_resp(null_ptr_msg));
+}
+
+// TEST(Master_PDU_read, )
+// {
+// TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, (null_ptr_msg));
+// }
+
+// TEST(Master_PDU_read, )
+// {
+// TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, (null_ptr_msg));
+// }
+
+// TEST(Master_PDU_read, )
+// {
+// TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, (null_ptr_msg));
+// }
+
+// TEST(Master_PDU_read, )
+// {
+// TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, (null_ptr_msg));
+// }
+
+// TEST(Master_PDU_read, )
+// {
+// TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, (null_ptr_msg));
+// }
+
+// TEST(Master_PDU_read, )
+// {
+// TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, (null_ptr_msg));
+// }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadCoilRespThenMasterCoilsUpdateToSlaveCoilsValue)
 {
