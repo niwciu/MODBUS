@@ -1,11 +1,11 @@
 /**
- * @file modbus_PDU.c
+ * @file modbus_master_PDU.c
  * @author niwciu (niwciu@gmail.com)
- * @brief
- * @date 2024-05-30
- *
+ * @brief 
+ * @date 2024-06-28
+ * 
  * @copyright Copyright (c) 2024
- *
+ * 
  */
 
 #include "modbus_master_PDU.h"
@@ -381,13 +381,8 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
     {
         if (slave_resp_byte_cnt == expected_byte_cnt)
         {
-            if (NULL != data_tab)
-            {
-                update_master_specific_data_type_from_modbus_msg(resp->data, req->data, fun_code, data_tab);
-                status = RET_OK;
-            }
-            else
-                status = RET_ERROR_DATA_TAB_NULL_PTR;
+            update_master_specific_data_type_from_modbus_msg(resp->data, req->data, fun_code, data_tab);
+            status = RET_OK;
         }
         else
         {
