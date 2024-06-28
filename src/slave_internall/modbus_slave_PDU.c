@@ -15,7 +15,7 @@
 #include <stdio.h>
 
 typedef modbus_ret_t (*modbus_fun_code_handler_t)(modbus_msg_t *modbus_msg);
-struct modbus_functions
+struct modbus_slave_functions_mapper
 {
     modbus_fun_code_t fun_code;
     modbus_fun_code_handler_t fun_code_action;
@@ -50,7 +50,7 @@ static modbus_ret_t check_write_req_byte_count_correctenss(modbus_msg_t *modbus_
 static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *modbus_msg);
 static modbus_ret_t check_write_single_coil_req_data_correctness(modbus_msg_t *modbus_msg, modbus_adr_t coil_adr, modbus_w_coil_t coil_state);
 
-const struct modbus_functions modbus_functions_mapper[] = {
+const struct modbus_slave_functions_mapper modbus_functions_mapper[] = {
     {MODBUS_READ_COILS_FUNC_CODE, modbus_slave_read_coils},
     {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_slave_read_discrete_inputs},
     {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_slave_read_holding_reg},

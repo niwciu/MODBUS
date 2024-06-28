@@ -26,7 +26,6 @@
 #endif
 
 PRIVATE modbus_master_state_t master_manager_state_machine = MODBUS_MASTER_IDLE;
-
 PRIVATE const modbus_RTU_driver_struct_t *RTU_driver = NULL;
 
 static modbus_queue_t master_free_queue;
@@ -35,13 +34,33 @@ static modbus_queue_t master_tx_rx_queue;
 PRIVATE modbus_queue_t *free_q = &master_free_queue;
 PRIVATE modbus_queue_t *tx_rx_q = &master_tx_rx_queue;
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
-
 PRIVATE modbus_msg_t *msg_buf = NULL;
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static modbus_master_error_t generate_request(modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty, modbus_device_ID_t slave_ID);
 static modbus_ret_t add_PDU_request_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty);
+static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
+static modbus_ret_t modbus_master_write_single_reg_req_wrapper (modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
+
+typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
+struct modbus_master_functions_mapper
+{
+    modbus_fun_code_t fun_code;
+    modbus_master_fun_code_handler_t fun_code_action;
+};
+const struct modbus_master_functions_mapper master_functions_mapper[] = {
+    {MODBUS_READ_COILS_FUNC_CODE, modbus_master_read_coils_req},
+    {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_master_read_discrete_inputs_req},
+    {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_master_read_holding_reg_req},
+    {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, modbus_master_read_input_reg_req},
+    {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, modbus_master_write_single_coil_req_wrapper},
+    {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE,modbus_master_write_single_reg_req_wrapper},
+    {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, modbus_master_write_multiple_coils_req},
+    {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_master_write_multiple_reg_req },
+};
+
+#define MODBUS_MASTER_FUNCTIONS_MAPPER_SIZE (sizeof(master_functions_mapper) / sizeof(master_functions_mapper[0]));
 
 void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
 {
@@ -193,34 +212,24 @@ static modbus_master_error_t generate_request(modbus_fun_code_t fun_code, modbus
 static modbus_ret_t add_PDU_request_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty)
 {
     modbus_ret_t PDU_ret_status;
-    switch (fun_code)
+    uint32_t master_mapper_size = MODBUS_MASTER_FUNCTIONS_MAPPER_SIZE;
+    for (uint32_t i = 0; i< master_mapper_size; i++)
     {
-    case MODBUS_READ_COILS_FUNC_CODE:
-        PDU_ret_status = modbus_master_read_coils_req(msg_buf, adr, obj_qty);
-        break;
-    case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
-        PDU_ret_status = modbus_master_read_discrete_inputs_req(msg_buf, adr, obj_qty);
-        break;
-    case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
-        PDU_ret_status = modbus_master_read_holding_reg_req(msg_buf, adr, obj_qty);
-        break;
-    case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
-        PDU_ret_status = modbus_master_read_input_reg_req(msg_buf, adr, obj_qty);
-        break;
-    case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
-        PDU_ret_status = modbus_master_write_single_coil_req(msg_buf, adr);
-        break;
-    case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
-        PDU_ret_status = modbus_master_write_single_reg_req(msg_buf, adr);
-        break;
-    case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
-        PDU_ret_status = modbus_master_write_multiple_coils_req(msg_buf, adr, obj_qty);
-        break;
-    case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
-        PDU_ret_status = modbus_master_write_multiple_reg_req(msg_buf, adr, obj_qty);
-        break;
-    default:
-        break;
+        if(master_functions_mapper[i].fun_code==fun_code)
+        {
+           PDU_ret_status= master_functions_mapper[i].fun_code_action(msg_buf, adr, obj_qty);
+        }
     }
     return PDU_ret_status;
+}
+
+static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
+{
+    (void)(coils_qty);
+    return modbus_master_write_single_coil_req(modbus_msg, adr);
+}
+static modbus_ret_t modbus_master_write_single_reg_req_wrapper (modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
+{
+    (void)(coils_qty);
+    return modbus_master_write_single_reg_req(modbus_msg, adr);
 }
