@@ -19,7 +19,7 @@ extern "C"
     typedef enum
     {
         RTU,
-        UNKNOWN
+        UNKNOWN_MODE
     } modbus_mode_t;
 
     typedef enum

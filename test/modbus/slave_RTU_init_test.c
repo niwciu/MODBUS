@@ -50,7 +50,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegis
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInUnknownOrNotDefinedModeThenDriverInterfaceIsNotRegisteredAndEqualNull)
 {
-    modbus_slave_init(UNKNOWN, 0, 0, 0);
+    modbus_slave_init(UNKNOWN_MODE, 0, 0, 0);
     TEST_ASSERT_NULL(slave_RTU_driver);
 }
 
