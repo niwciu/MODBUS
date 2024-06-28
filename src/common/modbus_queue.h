@@ -23,6 +23,7 @@ extern "C"
     {
         uint8_t head;
         uint8_t tail;
+        last_q_pos_status_t last_queue_pos_status;
 
         modbus_msg_t *modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
     } modbus_queue_t;

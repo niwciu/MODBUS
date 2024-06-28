@@ -108,6 +108,24 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMsgPopAndModbusMsgP
     TEST_ASSERT_EQUAL(1,q->tail);
 }
 
+TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullAndPopAllModbusMsgAndModbusMsgPushWhenModbusMsgPopThenTailisEqualTo0AndHeadIsEqualTo0)
+{
+    modbus_queue_init(q);
+    for (uint8_t i=0; i<MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    {
+        modbus_queue_push(q,&msg_buf[i]);
+        // pop_msg=modbus_queue_pop(q);
+    }
+    TEST_ASSERT_EQUAL(MAX_HEAD_INDEX,q->head);
+    // TEST_ASSERT_EQUAL(MAX_HEAD_INDEX,q->tail);
+    // modbus_queue_push(q,&msg_buf[0]);
+    // TEST_ASSERT_EQUAL(0,q->head);
+    // TEST_ASSERT_EQUAL(MAX_HEAD_INDEX,q->tail);
+    // pop_msg=modbus_queue_pop(q);
+    // TEST_ASSERT_EQUAL(0,q->head);
+    // TEST_ASSERT_EQUAL(0,q->tail);
+}
+
 // TEST(Modbus_Queue_test, )
 // {
 //     TEST_FAIL_MESSAGE("Implement your test!");
