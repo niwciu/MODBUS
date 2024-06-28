@@ -11,7 +11,7 @@
 #ifndef _MODBUS_SLAVE_RTU_H_
 #define _MODBUS_SLAVE_RTU_H_
 
-#ifdef __cplusplusr
+#ifdef __cplusplus
 extern "C"
 {
 #endif /* __cplusplus */
