@@ -11,7 +11,7 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     RUN_TEST_CASE(Master_PDU_read, MasterWriteSingleCoilsRespWithNullPtrPassedAsArgument);
     RUN_TEST_CASE(Master_PDU_read, MasterWriteSingleRegRespWithNullPtrPassedAsArgument);
     RUN_TEST_CASE(Master_PDU_read, MasterWriteMultipleCoilsRespWithNullPtrPassedAsArgument);
-    // RUN_TEST_CASE(Master_PDU_read, MasterWriteMultipleRegRespWithNullPtrPassedAsArgument);
+    RUN_TEST_CASE(Master_PDU_read, MasterWriteMultipleRegRespWithNullPtrPassedAsArgument);
 
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadCoilRespThenMasterCoilsUpdateToSlaveCoilsValue);
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadCoilRespThenMasterCoilsStayUnchanged);

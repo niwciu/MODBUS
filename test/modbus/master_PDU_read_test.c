@@ -85,10 +85,10 @@ TEST(Master_PDU_read, MasterWriteMultipleCoilsRespWithNullPtrPassedAsArgument)
 TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, modbus_master_write_multiple_coils_resp(null_ptr_msg));
 }
 
-// TEST(Master_PDU_read, MasterWriteMultipleRegRespWithNullPtrPassedAsArgument)
-// {
-// TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, modbus_master_write_multiple_reg_resp(null_ptr_msg));
-// }
+TEST(Master_PDU_read, MasterWriteMultipleRegRespWithNullPtrPassedAsArgument)
+{
+TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, modbus_master_write_multiple_reg_resp(null_ptr_msg));
+}
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadCoilRespThenMasterCoilsUpdateToSlaveCoilsValue)
 {
