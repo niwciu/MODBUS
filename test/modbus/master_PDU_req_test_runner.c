@@ -30,7 +30,7 @@ TEST_GROUP_RUNNER(Master_PDU_req)
     RUN_TEST_CASE(Master_PDU_req, WriteSingleRegisterRequestWithNullPtrModbusMasgPassed);
     RUN_TEST_CASE(Master_PDU_req, WriteSingleRegister);
 
-    // RUN_TEST_CASE(Master_PDU_req, WriteSingleCoilRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, WriteSingleCoilRequestWithNullPtrModbusMasgPassed);
     RUN_TEST_CASE(Master_PDU_req, WriteSingleCoilOn);
 
     // RUN_TEST_CASE(Master_PDU_req, WriteMultipleRegistersRequestWithNullPtrModbusMasgPassed);

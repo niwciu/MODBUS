@@ -253,13 +253,13 @@ TEST(Master_PDU_req, WriteSingleRegister)
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
-// TEST(Master_PDU_req, WriteSingleRegisterRequestWithNullPtrModbusMasgPassed)
-// {
-//     static modbus_adr_t adr = 0x0003;
-//     modbus_ret_t status = modbus_master_write_single_reg_req(null_ptr_msg, adr);
+TEST(Master_PDU_req, WriteSingleCoilRequestWithNullPtrModbusMasgPassed)
+{
+    static modbus_adr_t adr = 0x0003;
+    modbus_ret_t status = modbus_master_write_single_coil_req(null_ptr_msg, adr);
 
-//     TEST_ASSERT_EQUAL_INT16(RET_NULL_PTR_ERROR, status);
-// }
+    TEST_ASSERT_EQUAL_INT16(RET_NULL_PTR_ERROR, status);
+}
 
 TEST(Master_PDU_req, WriteSingleCoilOn)
 {
