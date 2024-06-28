@@ -27,7 +27,7 @@ TEST_GROUP_RUNNER(Master_PDU_req)
     RUN_TEST_CASE(Master_PDU_req, ReadCoilsMaxQtyPlus1Request);
     RUN_TEST_CASE(Master_PDU_req, ReadZeroCoilsRequest);
 
-    // RUN_TEST_CASE(Master_PDU_req, WriteSingleRegisterRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, WriteSingleRegisterRequestWithNullPtrModbusMasgPassed);
     RUN_TEST_CASE(Master_PDU_req, WriteSingleRegister);
 
     // RUN_TEST_CASE(Master_PDU_req, WriteSingleCoilRequestWithNullPtrModbusMasgPassed);
