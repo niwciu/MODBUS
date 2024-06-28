@@ -5,8 +5,8 @@ TEST_GROUP_RUNNER(Slave_PDU_resp)
 {
 /* Test cases to run */
 // Slave Read Slave_Coils request tests
+RUN_TEST_CASE(Slave_PDU_resp, SlaveParseMsgWhenNullPtrPassAsRtuMsgArgumentToParse);
 #if 5 <= COILS_QTY
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead5CoilsWhenNullPtrPassAsRtuMsg);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead5Coils);
 #endif
 #if 8 <= COILS_QTY

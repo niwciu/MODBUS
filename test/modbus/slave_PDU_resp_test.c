@@ -35,7 +35,7 @@ TEST_TEAR_DOWN(Slave_PDU_resp)
     /* Cleanup after every test */
 }
 
-TEST(Slave_PDU_resp, SlaveRead5CoilsWhenNullPtrPassAsRtuMsg)
+TEST(Slave_PDU_resp, SlaveParseMsgWhenNullPtrPassAsRtuMsgArgumentToParse)
 {
     static modbus_msg_t *RTU_NULL_msg;
     modbus_ret_t status= parse_master_request_and_prepare_resp(RTU_NULL_msg);
