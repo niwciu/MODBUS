@@ -9,6 +9,7 @@ TEST_GROUP_RUNNER(Master_PDU_req)
     RUN_TEST_CASE(Master_PDU_req, ReadHoldingRegisterMaxQtyPlus1Request);
     RUN_TEST_CASE(Master_PDU_req, Read0QtyHoldingRegisterRequest);
 
+    RUN_TEST_CASE(Master_PDU_req, ReadSingleInputRegisterRequestWithNullPtrModbusMasgPassed);
     RUN_TEST_CASE(Master_PDU_req, ReadSingleInputRegisterRequest);
     RUN_TEST_CASE(Master_PDU_req, ReadMaxQtyInputRegisterRequest);
     RUN_TEST_CASE(Master_PDU_req, ReadInputRegisterMaxQtyPlus1Request);

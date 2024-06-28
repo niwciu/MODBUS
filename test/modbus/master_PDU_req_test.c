@@ -80,6 +80,13 @@ TEST(Master_PDU_req, Read0QtyHoldingRegisterRequest)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR, status);
 }
 
+TEST (Master_PDU_req ,ReadSingleInputRegisterRequestWithNullPtrModbusMasgPassed)
+{
+    static modbus_adr_t adr = 0x0001;
+    static modbus_data_qty_t len = 1;
+    TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, modbus_master_read_input_reg_req(null_ptr_msg, adr, len));
+}
+
 TEST(Master_PDU_req, ReadSingleInputRegisterRequest)
 {
     static modbus_adr_t adr = 0x0005;
