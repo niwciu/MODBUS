@@ -9,15 +9,13 @@
  */
 
 #include "modbus_master_PDU.h"
+#include "modbus_PDU_common.h"
 #include "buf_rw.h"
 #include <stdio.h>
 
 static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_qty_t data_len);
 static modbus_ret_t write_single_reg_coil_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr);
 static modbus_data_t modbus_get_max_len_2_read(modbus_req_t req_code);
-static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty);
-static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty);
-static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab);
 static void set_inreg_hreg_value_from_modbus_msg(const modbus_buf_t *msg_data_ptr, modbus_adr_t start_adr, modbus_data_qty_t reg_qty, modbus_reg_t **data_tab);
 static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *resp, const modbus_req_resp_t *req, modbus_fun_code_t fun_code, void **data_tab);
 static void update_master_specific_data_type_from_modbus_msg(const modbus_buf_t *resp, const modbus_buf_t *req, modbus_fun_code_t fun_code, void **data_tab);
@@ -26,7 +24,7 @@ static modbus_ret_t check_write_slave_resp_vs_req(const modbus_req_resp_t *resp,
 static modbus_ret_t check_out_val_or_out_qty_correctnes(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
 static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg);
 
-// Master API functions
+// Master PDU API functions
 
 modbus_ret_t modbus_master_read_holding_reg_req(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
 {
@@ -307,41 +305,6 @@ static modbus_data_t modbus_get_max_len_2_read(modbus_req_t req_code)
         max_len = MODBUS_MAX_READ_REG_QTY;
     }
     return max_len;
-}
-
-static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty)
-{
-    modbus_byte_count_t byte_count;
-
-    byte_count = (coil_qty / 8);
-    if (coil_qty % 8)
-    {
-        byte_count++;
-    }
-    return byte_count;
-}
-
-static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty)
-{
-    for (uint8_t i = 0; i < qty; i++)
-    {
-        *(buf + i) = 0;
-    }
-}
-
-static void set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab)
-{
-    for (modbus_data_qty_t i = 0; i < coil_din_qty; i++)
-    {
-        if (0 != (*(data_state_ptr + (i / 8)) & (1 << (i % 8))))
-        {
-            set_coil_state(data_tab, (start_adr + i), 1);
-        }
-        else
-        {
-            set_coil_state(data_tab, (start_adr + i), 0);
-        }
-    }
 }
 static void set_inreg_hreg_value_from_modbus_msg(const modbus_buf_t *msg_data_ptr, modbus_adr_t start_adr, modbus_data_qty_t reg_qty, modbus_reg_t **data_tab)
 {

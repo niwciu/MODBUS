@@ -9,6 +9,7 @@
  */
 
 #include "modbus_slave_PDU.h"
+#include "modbus_PDU_common.h"
 #include "modbus_data.h"
 #include "buf_rw.h"
 // #include "modbus_type.h"
@@ -37,10 +38,6 @@ static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg);
 static modbus_ret_t handle_slave_write_single_reg_service(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_write_multiple_reg(modbus_msg_t *modbus_msg);
 static modbus_ret_t handle_slave_write_multiple_reg_service(modbus_msg_t *modbus_msg);
-
-static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty);
-static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty);
-static modbus_ret_t set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab);
 
 static void set_exception_code_resp(modbus_msg_t *modbus_msg, modbus_exception_code_t exception_code);
 static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modbus_ret_t last_ret_val, modbus_byte_count_t byte_cnt);
@@ -388,45 +385,6 @@ static modbus_ret_t handle_slave_write_multiple_reg_service(modbus_msg_t *modbus
     else
     {
         set_exception_code_resp(modbus_msg, MODBUS_SERVER_DEVICE_FAILURE_ERROR);
-    }
-    return status;
-}
-
-static modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty)
-{
-    modbus_byte_count_t byte_count;
-
-    byte_count = (coil_qty / 8);
-    if (coil_qty % 8)
-    {
-        byte_count++;
-    }
-    return byte_count;
-}
-
-static void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty)
-{
-    for (uint8_t i = 0; i < qty; i++)
-    {
-        *(buf + i) = 0;
-    }
-}
-
-static modbus_ret_t set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab)
-{
-    modbus_ret_t status = RET_OK;
-    for (modbus_data_qty_t i = 0; i < coil_din_qty; i++)
-    {
-        if (0 != (*(data_state_ptr + (i / 8)) & (1 << (i % 8))))
-        {
-            status = set_coil_state(data_tab, (start_adr + i), 1);
-        }
-        else
-        {
-            status = set_coil_state(data_tab, (start_adr + i), 0);
-        }
-        if (status == RET_ERROR)
-            break;
     }
     return status;
 }
