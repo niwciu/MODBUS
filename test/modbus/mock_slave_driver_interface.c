@@ -22,7 +22,7 @@ driver_init_status_t mock_slave_USART = {0, NONE, INIT_UNKNOWN, IRQ_DISABLED, IR
 timer_state_t mock_1_5_char_timer = TIMER_INACTIVE;
 timer_state_t mock_3_5_char_timer = TIMER_INACTIVE;
 
-modbus_req_resp_t *rx_buf = NULL;
+modbus_req_resp_t *rx_msg = NULL;
 
 USART_Tx_status_t slave_USART_Tx_status = USART_IDLE;
 modbus_buf_t mock_slave_tx_buffer[MODBUS_RTU_BUFFER_SIZE];
@@ -69,7 +69,7 @@ static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 }
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 {
-    rx_buf = recv_buf;
+    rx_msg = recv_buf;
     mock_slave_USART.Rx_IRQ = IRQ_ENABLED;
 }
 
