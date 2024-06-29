@@ -155,8 +155,8 @@ void check_modbus_master_manager(void)
         // realizacja przez zdefiniowanie flai i callbacka który ustawia tą flagę przez driver który skończył wysyłać.
         // jak flaga zmieni status to przechodzę do następnego stanu
         break;
-        // case MODBUS_MASTER_RECEIVING:
-        //     break;
+    case MODBUS_MASTER_RECEIVING_RESP:
+        break;
         //     // pytanie czy tu nie powinno być stanu przejściowego na oczekiwania poprawności zależności czasowej
         //     // case MODBUS_WAIT_3_5_CHAR:
 

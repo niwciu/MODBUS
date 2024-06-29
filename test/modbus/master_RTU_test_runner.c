@@ -41,16 +41,18 @@ TEST_GROUP_RUNNER(master_RTU_test)
 
     // RUN_TEST_CASE(master_RTU_test, );
 
-    // Modbus Master Manager tests IDLE STATE TESTS
+    // Modbus Master Manager tests 
+    // IDLE state tests
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSendingAndMasterUsartTxBufPtrIsEqualToMsgPtr);
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartRxAndTxIrqEnabled);
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenGivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterRxBufferPtrSetToMsgRespBufData);
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterManagerStateMachineSetToModbusMasterTransmittingReqAndSetMODBUS_MASTER_REQ_TRANSMITION_FLAG);
     // RUN_TEST_CASE(master_RTU_test, );
 
-    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
-    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
-    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
+    // MODBUS_MASTER_TRANSMITTING_REQ state tests,
+    RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenTxIrqDisabledAndMasterManagerStateMachineSetToWaitingForReply);
+    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMasterManagerStateMachineSetToWaitingForReply);
+    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenResponseTimeoutIsEnabled);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
 

@@ -16,8 +16,8 @@ extern modbus_msg_t *msg_buf;
 
 extern modbus_master_state_t master_manager_state_machine;
 
-    static void
-    reset_all_RTU_buffers(void);
+static void
+reset_all_RTU_buffers(void);
 
 TEST_SETUP(master_RTU_test)
 {
@@ -481,8 +481,8 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoils
     TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
 }
 
-//Modbus Manager integration Tests
-
+//  Modbus Master Manager tests
+//  IDLE state tests
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSendingAndMasterUsartTxBufPtrIsEqualToMsgPtr)
 {
     modbus_adr_t coil_adr = 0x0002;
@@ -492,11 +492,10 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(USART_SENDING_DATA, master_USART_Tx_status);
-    TEST_ASSERT_EQUAL(msg_buf->req.data,mock_master_tx_buf_ptr);
+    TEST_ASSERT_EQUAL(msg_buf->req.data, mock_master_tx_buf_ptr);
 }
 
-
-TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartRxAndTxIrqEnabled)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartRxAndTxIrqEnabled)
 {
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
@@ -508,7 +507,7 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhe
     TEST_ASSERT_EQUAL(IRQ_ENABLED, mock_master_USART.Tx_IRQ);
 }
 
-TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenGivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterRxBufferPtrSetToMsgRespBufData)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenGivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterRxBufferPtrSetToMsgRespBufData)
 {
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
@@ -519,7 +518,7 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenGivenModbusMasterInRTUmod
     TEST_ASSERT_EQUAL(&msg_buf->resp, mock_master_rx_msg_ptr);
 }
 
-TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterManagerStateMachineSetToModbusMasterTransmittingReqAndSetMODBUS_MASTER_REQ_TRANSMITION_FLAG)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterManagerStateMachineSetToModbusMasterTransmittingReqAndSetMODBUS_MASTER_REQ_TRANSMITION_FLAG)
 {
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
@@ -527,14 +526,24 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhe
 
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     check_modbus_master_manager();
-    TEST_ASSERT_EQUAL(MODBUS_FLAG_SET,MODBUS_MASTER_TRANSMITTING_REQ);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_SET, MODBUS_MASTER_TRANSMITTING_REQ);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_TRANSMITTING_REQ, master_manager_state_machine);
 }
 
-// TEST(master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+//  MODBUS_MASTER_TRANSMITTING_REQ state tests,
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenTxIrqDisabledAndMasterManagerStateMachineSetToWaitingForReply)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    check_modbus_master_manager();
+
+    mock_USART_req_msg_sended_EVENT();
+    TEST_ASSERT_EQUAL(IRQ_DISABLED, mock_master_USART.Tx_IRQ);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RECEIVING_RESP, master_manager_state_machine);
+}
 
 // TEST(master_RTU_test,)
 // {

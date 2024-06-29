@@ -23,3 +23,5 @@ extern driver_subscr_cb_t mock_master_msg_tx_done_cb;
 extern modbus_buf_t *mock_master_tx_buf_ptr;
 extern modbus_req_resp_t *mock_master_rx_msg_ptr;
 extern USART_Tx_status_t master_USART_Tx_status;
+
+void mock_USART_req_msg_sended_EVENT(void);
