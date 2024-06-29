@@ -36,7 +36,7 @@ PRIVATE modbus_queue_t *tx_rx_q = &master_tx_rx_queue;
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *msg_buf = NULL;
 
-// PRIVATE modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 // PRIVATE modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 // PRIVATE modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
@@ -49,6 +49,7 @@ static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *mo
 static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 
 static void modbus_master_req_sended_callback(void);
+// static void modbus_T_1_5_char_expired_callback(void);
 
 typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 struct modbus_master_functions_mapper
@@ -133,8 +134,9 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 
     // ToDo registration of all callbacks
     RTU_driver->subscribe_msg_tx_done_cb(modbus_master_req_sended_callback);
-    // ToDo setting up all flags ans modus_master_stateMachine
-    MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
+    // RTU_driver->subscribe_t_1_5_char_expired_cb(modbus_T_1_5_char_expired_callback);
+        // ToDo setting up all flags ans modus_master_stateMachine
+        MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
     // set all internall variable to its default values
     master_manager_state_machine = MODBUS_MASTER_IDLE;
 }
@@ -156,9 +158,22 @@ void check_modbus_master_manager(void)
         if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
         {
             master_manager_state_machine = MODBUS_MASTER_RECEIVING_RESP;
+            
         }
         break;
     case MODBUS_MASTER_RECEIVING_RESP:
+        // ToDo Respons time out need to be added
+        // if (MODBUS_MASTER_TIMER_1_5_CHAR_FLAG == MODBUS_FLAG_SET)
+        // {
+        //     modbus_ret_t RTU_status;
+        //     MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+        //     RTU_status = modbus_RTU_recv(slave_msg_ptr->req.data, slave_msg_ptr->req.len, modbus_slave_ID);
+        //     if (RTU_status != RET_OK)
+        //     {
+        //         FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
+        //     }
+        //     slave_manager_state_machine = MODBUS_SLAVE_MSG_RECIVED;
+        // }
         break;
         //     // pytanie czy tu nie powinno być stanu przejściowego na oczekiwania poprawności zależności czasowej
         //     // case MODBUS_WAIT_3_5_CHAR:
@@ -257,7 +272,7 @@ static void modbus_master_req_sended_callback(void)
 
 // static void modbus_T_1_5_char_expired_callback(void)
 // {
-//     TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_SET;
+//     MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_SET;
 // }
 
 // static void modbus_T_3_5_char_expired_callback(void)

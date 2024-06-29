@@ -17,6 +17,7 @@ extern modbus_master_state_t master_manager_state_machine;
 extern modbus_queue_t *free_q;
 extern modbus_queue_t *tx_rx_q;
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
+extern modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG;
 
 TEST_SETUP(master_RTU_init_test)
 {
@@ -89,13 +90,19 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerS
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, master_manager_state_machine);
 }
 
-TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenMOdbusSendingRequestFlagIsCleared)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenMOdbusSendingRequestFlagIsCleared)
 {
     modbus_master_init(RTU, 0, 0);
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
 }
 
-TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenRequestTransmiscionCompleateCallbackRegistered)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenTimer1_5Char_FlagIsCleared)
+{
+    modbus_master_init(RTU, 0, 0);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_TIMER_1_5_CHAR_FLAG);
+}
+
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRequestTransmiscionCompleateCallbackRegistered)
 {
     modbus_master_init(RTU, 0, 0);
     TEST_ASSERT_NOT_NULL(mock_master_msg_tx_done_cb);
