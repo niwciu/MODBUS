@@ -14,7 +14,7 @@
 
 driver_subscr_cb_t mock_master_msg_tx_done_cb = NULL;
 driver_subscr_cb_t mock_master_1_5_char_break_cb = NULL;
-// driver_subscr_cb_t mock_master_3_5_char_break_cb = NULL;
+driver_subscr_cb_t mock_master_3_5_char_break_cb = NULL;
 // driver_subscr_cb_t mock_master_frame_error_cb = NULL;
 
 modbus_buf_t mock_master_tx_buf[MODBUS_RTU_BUFFER_SIZE];
@@ -30,6 +30,7 @@ static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
 static void master_disable_usart_rx_interrupt(void);
 static void master_uasrt_subscribe_t_1_5_char_expired_cb(driver_subscr_cb_t callback);
 static void master_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback);
+static void master_uasrt_subscribe_t_3_5_char_expired_cb(driver_subscr_cb_t callback);
 
 static const modbus_RTU_driver_struct_t master_RTU_driver_interface = {
     master_usart_init,
@@ -38,7 +39,7 @@ static const modbus_RTU_driver_struct_t master_RTU_driver_interface = {
     master_disable_usart_rx_interrupt,
     master_uasrt_subscribe_t_1_5_char_expired_cb,
     master_uasrt_subscribe_msg_tx_done_callback,
-    NULL, // subscribed_func_ptr_t subscribe_t_3_5_char_expired_cb;
+    master_uasrt_subscribe_t_3_5_char_expired_cb,
     NULL, // subscribed_func_ptr_t subscribe_modbus_frame_error_cb;
 };
 // fOR REFERANCE DELETA AFTER IMPLEMENTING WHOLE INTERFACE
@@ -86,6 +87,12 @@ static void master_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callb
 {
     mock_master_msg_tx_done_cb = callback;
 }
+
+static void master_uasrt_subscribe_t_3_5_char_expired_cb(driver_subscr_cb_t callback)
+{
+    mock_master_3_5_char_break_cb = callback;
+}
+
 // mock functionality neede only for tests
 void mock_USART_req_msg_sended_EVENT(void)
 {
