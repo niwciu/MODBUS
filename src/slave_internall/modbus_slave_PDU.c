@@ -62,7 +62,7 @@ const struct modbus_slave_functions_mapper modbus_functions_mapper[] = {
 
 modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 {
-    modbus_ret_t msg_parse_status;
+    modbus_ret_t msg_parse_status = RET_ERROR;
     if ((NULL == rx_msg) || (NULL == rx_msg->req.data) || (NULL == rx_msg->resp.data))
     {
         msg_parse_status = RET_NULL_PTR_ERROR;

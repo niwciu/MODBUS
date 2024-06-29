@@ -8,7 +8,7 @@
  *
  */
 
-#include "modbus_slave_RTU.h"
+#include "modbus_master_RTU.h"
 
 modbus_buf_t master_RTU_req_buf[MAX_MODBUS_MSG_QUEUE_ITEMS][MODBUS_RTU_BUFFER_SIZE] = {0};
 modbus_buf_t master_RTU_resp_buf[MAX_MODBUS_MSG_QUEUE_ITEMS][MODBUS_RTU_BUFFER_SIZE] = {0};
