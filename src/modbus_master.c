@@ -51,8 +51,9 @@ static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *mod
 static void modbus_master_req_sended_callback(void);
 static void modbus_master_T_1_5_char_expired_callback(void);
 static void modbus_master_T_3_5_char_expired_callback(void);
+static void modbus_master_frame_error_callback(void);
 
-typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
+    typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 struct modbus_master_functions_mapper
 {
     modbus_fun_code_t fun_code;
@@ -137,7 +138,7 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     RTU_driver->subscribe_msg_tx_done_cb(modbus_master_req_sended_callback);
     RTU_driver->subscribe_t_1_5_char_expired_cb(modbus_master_T_1_5_char_expired_callback);
     RTU_driver->subscribe_t_3_5_char_expired_cb(modbus_master_T_3_5_char_expired_callback);
-    // RTU_driver->subscribe_t_1_5_char_expired_cb(modbus_T_1_5_char_expired_callback);
+    RTU_driver->subscribe_modbus_frame_error_cb(modbus_master_frame_error_callback);
     // ToDo setting up all flags ans modus_master_stateMachine
     MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
     MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
@@ -286,7 +287,7 @@ static void modbus_master_T_3_5_char_expired_callback(void)
     MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_SET;
 }
 
-// static void modbus_frame_error_callback(void)
-// {
-//     FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
-// }
+static void modbus_master_frame_error_callback(void)
+{
+    MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
+}

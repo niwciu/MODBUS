@@ -31,6 +31,7 @@ static void master_disable_usart_rx_interrupt(void);
 static void master_uasrt_subscribe_t_1_5_char_expired_cb(driver_subscr_cb_t callback);
 static void master_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback);
 static void master_uasrt_subscribe_t_3_5_char_expired_cb(driver_subscr_cb_t callback);
+static void master_uasrt_subscribe_modbus_frame_error_cb(driver_subscr_cb_t callback);
 
 static const modbus_RTU_driver_struct_t master_RTU_driver_interface = {
     master_usart_init,
@@ -40,17 +41,8 @@ static const modbus_RTU_driver_struct_t master_RTU_driver_interface = {
     master_uasrt_subscribe_t_1_5_char_expired_cb,
     master_uasrt_subscribe_msg_tx_done_callback,
     master_uasrt_subscribe_t_3_5_char_expired_cb,
-    NULL, // subscribed_func_ptr_t subscribe_modbus_frame_error_cb;
-};
-// fOR REFERANCE DELETA AFTER IMPLEMENTING WHOLE INTERFACE
-// init_func_ptr_t init; OK
-// send_func_ptr_t send; OK
-// enable_rx_func_ptr_t enable_rcev; OK
-// driver_func_ptr_t disable_rcev; OK
-// subscribed_func_ptr_t ; OK
-// subscribed_func_ptr_t subscribe_msg_tx_done_cb; OK
-
-
+    master_uasrt_subscribe_modbus_frame_error_cb,
+    };
 
 const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void)
 {
@@ -91,6 +83,11 @@ static void master_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callb
 static void master_uasrt_subscribe_t_3_5_char_expired_cb(driver_subscr_cb_t callback)
 {
     mock_master_3_5_char_break_cb = callback;
+}
+
+static void master_uasrt_subscribe_modbus_frame_error_cb(driver_subscr_cb_t callback)
+{
+    mock_master_frame_error_cb = callback;
 }
 
 // mock functionality neede only for tests
