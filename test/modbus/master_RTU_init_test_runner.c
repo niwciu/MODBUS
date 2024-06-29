@@ -17,7 +17,7 @@ TEST_GROUP_RUNNER(master_RTU_init_test)
  
 
     RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRequestTransmiscionCompleateCallbackRegistered);
-    // RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenT1_5CharTimeExpiredCallbackRegistered);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenT1_5CharTimeExpiredCallbackRegistered);
     // RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenT3_5CharTimeExpiredCallbackRegistered);
     // RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThen);
     // RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThen);

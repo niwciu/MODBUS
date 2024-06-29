@@ -122,10 +122,11 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRequestTransmiscionC
     TEST_ASSERT_NOT_NULL(mock_master_msg_tx_done_cb);
 }
 
-// TEST(master_RTU_init_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenT1_5CharTimeExpiredCallbackRegistered)
+{
+    modbus_master_init(RTU, 0, 0);
+    TEST_ASSERT_NOT_NULL(mock_master_1_5_char_break_cb);
+}
 
 // TEST(master_RTU_init_test,)
 // {
