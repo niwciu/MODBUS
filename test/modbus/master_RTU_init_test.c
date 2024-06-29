@@ -134,10 +134,11 @@ TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenT3_5CharTimeExpiredCa
     TEST_ASSERT_NOT_NULL(mock_master_3_5_char_break_cb);
 }
 
-// TEST(master_RTU_init_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenFrameErrorFlagCallbackRegistered)
+{
+    modbus_master_init(RTU, 0, 0);
+    TEST_ASSERT_NOT_NULL(mock_master_frame_error_cb);
+}
 
 // TEST(master_RTU_init_test,)
 // {

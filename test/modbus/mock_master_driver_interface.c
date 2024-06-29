@@ -15,7 +15,7 @@
 driver_subscr_cb_t mock_master_msg_tx_done_cb = NULL;
 driver_subscr_cb_t mock_master_1_5_char_break_cb = NULL;
 driver_subscr_cb_t mock_master_3_5_char_break_cb = NULL;
-// driver_subscr_cb_t mock_master_frame_error_cb = NULL;
+driver_subscr_cb_t mock_master_frame_error_cb = NULL;
 
 modbus_buf_t mock_master_tx_buf[MODBUS_RTU_BUFFER_SIZE];
 modbus_buf_t *mock_master_tx_buf_ptr = mock_master_tx_buf;
