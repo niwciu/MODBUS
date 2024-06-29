@@ -18,6 +18,7 @@ extern modbus_queue_t *free_q;
 extern modbus_queue_t *tx_rx_q;
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 extern modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG;
+extern modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG;
 
 TEST_SETUP(master_RTU_init_test)
 {
