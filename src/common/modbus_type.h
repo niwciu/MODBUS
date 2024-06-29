@@ -92,6 +92,7 @@ extern "C"
 
     typedef enum
     {
+        RET_ERROR_UNKNOWN_MAPPER_FUN_CODE = -11,
         RET_NULL_PTR_ERROR = -10,
         RET_ERROR_WRITE_MULTI_OUT_QTY = -9,
         RET_ERROR_WRITE_SINGLE_OUT_VAL = -8,
