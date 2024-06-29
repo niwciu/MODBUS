@@ -135,6 +135,8 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     RTU_driver->subscribe_msg_tx_done_cb(modbus_master_req_sended_callback);
     // ToDo setting up all flags ans modus_master_stateMachine
     MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
+    // set all internall variable to its default values
+    master_manager_state_machine = MODBUS_MASTER_IDLE;
 }
 void check_modbus_master_manager(void)
 {
