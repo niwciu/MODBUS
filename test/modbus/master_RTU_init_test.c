@@ -16,6 +16,7 @@ extern struct modbus_RTU_driver_struct *RTU_driver;
 extern modbus_master_state_t master_manager_state_machine;
 extern modbus_queue_t *free_q;
 extern modbus_queue_t *tx_rx_q;
+extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 
 TEST_SETUP(master_RTU_init_test)
 {
@@ -87,6 +88,37 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerS
 
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, master_manager_state_machine);
 }
+
+TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenMOdbusSendingRequestFlagIsCleared)
+{
+    modbus_master_init(RTU, 0, 0);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
+}
+
+// TEST(master_RTU_init_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_init_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_init_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_init_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_init_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
 
 // TEST(master_RTU_init_test,)
 // {

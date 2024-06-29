@@ -109,8 +109,8 @@ extern "C"
     typedef enum
     {
         MODBUS_MASTER_IDLE,
-        MODBUS_MASTER_TRANSMISION,
-        MODBUS_MASTER_RECEIVING,
+        MODBUS_MASTER_TRANSMITTING_REQ,
+        MODBUS_MASTER_RECEIVING_RESP,
         MODBUS_MASTER_RESP_ANALYSE,
         MODBUS_MASTER_ERROR_SERVICE,
     } modbus_master_state_t;

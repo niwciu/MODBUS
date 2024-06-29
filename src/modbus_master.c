@@ -36,6 +36,11 @@ PRIVATE modbus_queue_t *tx_rx_q = &master_tx_rx_queue;
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *msg_buf = NULL;
 
+// PRIVATE modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
+// PRIVATE modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
+// PRIVATE modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
+
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static modbus_master_error_t generate_request(modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty, modbus_device_ID_t slave_ID);
@@ -124,38 +129,43 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     RTU_driver = get_master_RTU_driver_interface();
     RTU_driver->init(baud_rate, parity);
 
-    // ToDo rcv_callback ?? do we need this
+    // ToDo registration of all callbacks
+    // ToDo setting up all flags ans modus_master_stateMachine
+    MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
 }
-// void check_modbus_master_manager(void)
-// {
-//     // switch (master_manager_state_machine)
-//     // {
-//     // case MODBUS_MASTER_IDLE:
-//     //     if (tx_rx_q->head != tx_rx_q->tail)
-//     //     {
-//     //         msg_buf = modbus_queue_pop(tx_rx_q);
-//     //         RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
-//     //         RTU_driver->enable_rcev(msg_buf->resp.data);
-//     //         master_manager_state_machine = MODBUS_MASTER_TRANSMISION;
-//     //     }
-//     //     break;
-//     // case MODBUS_MASTER_TRANSMISION:
-//     //     // sprawdz czy driver przestal wysylac i jesli tak to przejdz do odbioru
-//     //     break;
-//     // case MODBUS_MASTER_RECEIVING:
-//     //     break;
-//     //     // pytanie czy tu nie powinno być stanu przejściowego na oczekiwania poprawności zależności czasowej
-//     //     // case MODBUS_WAIT_3_5_CHAR:
+void check_modbus_master_manager(void)
+{
+    switch (master_manager_state_machine)
+    {
+    case MODBUS_MASTER_IDLE:
+        if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status))
+        {
+            msg_buf = modbus_queue_pop(tx_rx_q);
+            RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
+            RTU_driver->enable_rcev(&msg_buf->resp);
+            MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_SET;
+            master_manager_state_machine = MODBUS_MASTER_TRANSMITTING_REQ;
+        }
+        break;
+    case MODBUS_MASTER_TRANSMITTING_REQ:
+        // sprawdz czy driver przestal wysylac i jesli tak to przejdz do odbioru
+        // realizacja przez zdefiniowanie flai i callbacka który ustawia tą flagę przez driver który skończył wysyłać. 
+        // jak flaga zmieni status to przechodzę do następnego stanu
+        break;
+    // case MODBUS_MASTER_RECEIVING:
+    //     break;
+    //     // pytanie czy tu nie powinno być stanu przejściowego na oczekiwania poprawności zależności czasowej
+    //     // case MODBUS_WAIT_3_5_CHAR:
 
-//     // case MODBUS_MASTER_RESP_ANALYSE:
-//     //     // analizuje ramkę i wykonuje zadanie
-//     //     // jesli dostałem error lub jest coś nie tak idę do error service
-//     //     break;
-//     // case MODBUS_MASTER_ERROR_SERVICE:
-//     //     // W zależności od tego co było błędem wykonuję jego obsługę
-//     //     break;
-//     // }
-// }
+    // case MODBUS_MASTER_RESP_ANALYSE:
+    //     // analizuje ramkę i wykonuje zadanie
+    //     // jesli dostałem error lub jest coś nie tak idę do error service
+    //     break;
+    // case MODBUS_MASTER_ERROR_SERVICE:
+    //     // W zależności od tego co było błędem wykonuję jego obsługę
+    //     break;
+    }
+}
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 {
