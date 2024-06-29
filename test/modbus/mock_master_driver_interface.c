@@ -19,9 +19,9 @@ driver_subscr_cb_t mock_master_msg_tx_done_cb = NULL;
 
 modbus_buf_t mock_master_tx_buf[MODBUS_RTU_BUFFER_SIZE];
 modbus_buf_t *mock_master_tx_buf_ptr = mock_master_tx_buf;
-modbus_buf_t *mock_master_rx_buf_ptr = NULL;
+modbus_req_resp_t *mock_master_rx_msg_ptr = NULL;
 
-    driver_init_status_t mock_master_USART = {0, NONE, INIT_UNKNOWN, IRQ_DISABLED, IRQ_DISABLED};
+driver_init_status_t mock_master_USART = {0, NONE, INIT_UNKNOWN, IRQ_DISABLED, IRQ_DISABLED};
 USART_Tx_status_t master_USART_Tx_status = USART_IDLE;
 
 static void master_usart_init(baud_t baud, parity_t parity);
@@ -69,9 +69,9 @@ static void master_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
     master_USART_Tx_status = USART_SENDING_DATA;
     mock_master_USART.Tx_IRQ = IRQ_ENABLED;
 }
-static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
+static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf) 
 {
-    // mock_master_rx_buf_ptr = recv_buf;
+    mock_master_rx_msg_ptr = recv_buf;
     mock_master_USART.Rx_IRQ = IRQ_ENABLED;
 }
 static void master_disable_usart_rx_interrupt(void)

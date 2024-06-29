@@ -513,7 +513,7 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenGivenModbusMasterInRTUmod
 
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     check_modbus_master_manager();
-    TEST_ASSERT_EQUAL(msg_buf->resp.data, mock_master_tx_buf_ptr);
+    TEST_ASSERT_EQUAL(&msg_buf->resp, mock_master_rx_msg_ptr);
 }
 
 // TEST(master_RTU_test,)
