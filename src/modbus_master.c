@@ -145,7 +145,7 @@ void check_modbus_master_manager(void)
         {
             msg_buf = modbus_queue_pop(tx_rx_q);
             RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
-            // RTU_driver->enable_rcev(&msg_buf->resp);
+            RTU_driver->enable_rcev(&msg_buf->resp);
             // MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_SET;
             // master_manager_state_machine = MODBUS_MASTER_TRANSMITTING_REQ;
         }
