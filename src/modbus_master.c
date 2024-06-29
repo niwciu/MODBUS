@@ -143,8 +143,8 @@ void check_modbus_master_manager(void)
     case MODBUS_MASTER_IDLE:
         if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status)) //ToDo refacotr for check condition function
         {
-            // msg_buf = modbus_queue_pop(tx_rx_q);
-            // RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
+            msg_buf = modbus_queue_pop(tx_rx_q);
+            RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
             // RTU_driver->enable_rcev(&msg_buf->resp);
             // MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_SET;
             // master_manager_state_machine = MODBUS_MASTER_TRANSMITTING_REQ;
