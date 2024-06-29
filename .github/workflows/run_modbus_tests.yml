@@ -1,10 +1,10 @@
 name: Run ModBus Unit Tests
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [main, develop]
-  # pull_request:
-  #   branches: [main, develop]
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 jobs:
   template_test_running:
     name: ModBus Test RUN on Win
