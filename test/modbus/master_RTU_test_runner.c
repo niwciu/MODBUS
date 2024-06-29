@@ -3,6 +3,7 @@
 TEST_GROUP_RUNNER(master_RTU_test)
 {
     /* Test cases to run */
+    // Master Request Generation and placing to queue tests
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterCoilPtrTableThenCoilPtrIsEqualToRegisteredDataAdr);
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterDisInPtrTableThenDisInPtrIsEqualToRegisteredDataAdr);
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterInRegPtrTableThenInRegPtrIsEqualToRegisteredDataAdr);
@@ -39,8 +40,10 @@ TEST_GROUP_RUNNER(master_RTU_test)
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
 
     // RUN_TEST_CASE(master_RTU_test, );
-    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
-    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
+
+    // Modbus Master Manager tests
+    RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSending);
+    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxBufPtrIsEqualToMsgPtr);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);

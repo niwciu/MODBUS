@@ -7,12 +7,11 @@
  * @copyright Copyright (c) 2024
  *
  */
-#define N_USART_SEND_BITS_DELAY  17 // 11bit* 1,5char
+#define N_USART_SEND_BITS_DELAY 17 // 11bit* 1,5char
 
 #include "modbus_driver_interface.h"
 #include "modbus_driver_config.h"
 #include <stddef.h>
-
 
 typedef struct
 {
@@ -23,7 +22,7 @@ typedef enum
 {
     WAITING_FOR_FRAME,
     FRAME_RECEIVED,
-}driver_timer_status_t;
+} driver_timer_status_t;
 
 driver_subscr_cb_t msg_tx_done_cb = NULL;
 driver_subscr_cb_t t_1_5_char_break_cb = NULL;
@@ -35,7 +34,7 @@ driver_timer_status_t FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
 modbus_req_resp_t *rx_buf = NULL;
 tx_buf_t tx_buf;
 
-modbus_buf_t mock_rx_buffer[MODBUS_RTU_BUFFER_SIZE];
+modbus_buf_t mock_slave_tx_buffer[MODBUS_RTU_BUFFER_SIZE];
 
 static void slave_usart_init(baud_t baud, parity_t parity);
 static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
@@ -116,7 +115,7 @@ void MODBUS_USART_IRQHandler(void)
     // ToDo check in documentation which interrupt need to be also take cared -> errors overrun etc
     if ((MODBUS_USART->ISR) & USART_ISR_RXNE_RXFNE)
     {
-        
+
         rx_buf->data[rx_buf->len] = MODBUS_USART->RDR;
         rx_buf->len++;
 
@@ -126,7 +125,6 @@ void MODBUS_USART_IRQHandler(void)
         }
         MODBUS_TIMER->EGR |= TIM_EGR_UG;
         MODBUS_TIMER->CR1 |= TIM_CR1_CEN;
-
     }
     if ((MODBUS_USART->ISR) & USART_ISR_TXE_TXFNF)
     {
@@ -157,7 +155,7 @@ void MODBUS_TIMER_IRQHandler(void)
 {
     if (MODBUS_TIMER->SR & TIM_SR_UIF)
     {
-        t_3_5_char_break_cb(); 
+        t_3_5_char_break_cb();
         FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
         MODBUS_USART->ICR |= USART_ICR_RTOCF; // dopiero tutaj odblokowuje przerwanie od t1,5char
         MODBUS_TIMER->SR &= ~TIM_SR_UIF;
@@ -246,14 +244,12 @@ static uint32_t get_ARR_value(baud_t baud)
     uint32_t q;
     if (baud <= 19200)
     {
-        q=baud/2400;
-        q=16042/q;
+        q = baud / 2400;
+        q = 16042 / q;
     }
     else
     {
-    q= 1750; // value in ms 
+        q = 1750; // value in ms
     }
     return q;
 }
-
-

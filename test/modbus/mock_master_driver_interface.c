@@ -17,10 +17,11 @@ driver_subscr_cb_t mock_master_msg_tx_done_cb = NULL;
 // driver_subscr_cb_t mock_master_3_5_char_break_cb = NULL;
 // driver_subscr_cb_t mock_master_frame_error_cb = NULL;
 
-modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
-modbus_buf_t *slave_rx_buf_ptr = slave_rx_buf;
+modbus_buf_t mock_master_tx_buf[MODBUS_RTU_BUFFER_SIZE];
+modbus_buf_t *mock_master_tx_buf_ptr = mock_master_tx_buf;
 
-driver_init_status_t mock_USART = {0, NONE, INIT_UNKNOWN};
+driver_init_status_t mock_master_USART = {0, NONE, INIT_UNKNOWN};
+USART_Tx_status_t master_USART_Tx_status = USART_IDLE;
 
 static void master_usart_init(baud_t baud, parity_t parity);
 static void master_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
@@ -39,6 +40,15 @@ static const modbus_RTU_driver_struct_t master_RTU_driver_interface = {
     NULL,
     NULL,
 };
+// fOR REFERANCE DELETA AFTER IMPLEMENTING WHOLE INTERFACE
+// init_func_ptr_t init; OK
+// send_func_ptr_t send; OK
+// enable_rx_func_ptr_t enable_rcev; OK
+// driver_func_ptr_t disable_rcev; OK
+// subscribed_func_ptr_t subscribe_t_1_5_char_expired_cb; OK
+// subscribed_func_ptr_t subscribe_msg_tx_done_cb; OK
+// subscribed_func_ptr_t subscribe_t_3_5_char_expired_cb;
+// subscribed_func_ptr_t subscribe_modbus_frame_error_cb;
 
 const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void)
 {
@@ -47,13 +57,18 @@ const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void)
 
 static void master_usart_init(baud_t baud, parity_t parity)
 {
-    mock_USART.baud_rate = baud;
-    mock_USART.parity = parity;
-    mock_USART.init_status = DRIVER_INITIALIZED;
+    mock_master_USART.baud_rate = baud;
+    mock_master_USART.parity = parity;
+    mock_master_USART.init_status = DRIVER_INITIALIZED;
 }
 static void master_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 {
-    slave_rx_buf_ptr = tx_msg;
+    for (uint8_t i = 0; i < msg_len; i++)
+    {
+        mock_master_tx_buf[i] = tx_msg[i];
+    }
+    mock_master_tx_buf_ptr = tx_msg;
+    master_USART_Tx_status = USART_SENDING_DATA;
 }
 static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 {
@@ -66,5 +81,5 @@ static void master_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callb
 }
 static void master_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback)
 {
-    mock_master_msg_tx_done_cb= callback;
+    mock_master_msg_tx_done_cb = callback;
 }

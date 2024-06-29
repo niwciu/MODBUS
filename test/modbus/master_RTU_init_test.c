@@ -77,9 +77,9 @@ TEST(master_RTU_init_test, GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThe
 
     modbus_master_init(RTU, baud, parity);
 
-    TEST_ASSERT_EQUAL(baud, mock_USART.baud_rate);
-    TEST_ASSERT_EQUAL(parity, mock_USART.parity);
-    TEST_ASSERT_EQUAL(DRIVER_INITIALIZED, mock_USART.init_status);
+    TEST_ASSERT_EQUAL(baud, mock_master_USART.baud_rate);
+    TEST_ASSERT_EQUAL(parity, mock_master_USART.parity);
+    TEST_ASSERT_EQUAL(DRIVER_INITIALIZED, mock_master_USART.init_status);
 }
 
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachineIsSetToIdle)

@@ -477,10 +477,20 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoils
     TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
 }
 
-// TEST(master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+//Modbus Manager integration Tests
+
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSending)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(USART_SENDING_DATA, master_USART_Tx_status);
+    // TEST_FAIL_MESSAGE("Implement your test!");
+}
+// test na to czy manager wysle jak head bedzie rowny tail ale beda dostepne dane do wyslania
 
 // TEST(master_RTU_test,)
 // {

@@ -13,7 +13,6 @@
 
 #include "mem.h"
 
-
 driver_subscr_cb_t mock_msg_tx_done_cb = NULL;
 driver_subscr_cb_t mock_1_5_char_break_cb = NULL;
 driver_subscr_cb_t mock_3_5_char_break_cb = NULL;
@@ -25,9 +24,9 @@ timer_state_t mock_3_5_char_timer = TIMER_INACTIVE;
 
 modbus_req_resp_t *rx_buf = NULL;
 
-USART_Rx_status_t USART_Tx_status = USART_IDLE;
-modbus_buf_t mock_rx_buffer[MODBUS_RTU_BUFFER_SIZE];
-modbus_buf_t *mock_rx_buffer_ptr;
+USART_Tx_status_t slave_USART_Tx_status = USART_IDLE;
+modbus_buf_t mock_slave_tx_buffer[MODBUS_RTU_BUFFER_SIZE];
+modbus_buf_t *mock_slave_tx_buffer_ptr;
 
 static void slave_usart_init(baud_t baud, parity_t parity);
 static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
@@ -63,10 +62,10 @@ static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 {
     for (uint8_t i = 0; i < msg_len; i++)
     {
-        mock_rx_buffer[i] = tx_msg[i];
+        mock_slave_tx_buffer[i] = tx_msg[i];
     }
-    mock_rx_buffer_ptr = tx_msg;
-    USART_Tx_status = USART_SENDING_DATA;
+    mock_slave_tx_buffer_ptr = tx_msg;
+    slave_USART_Tx_status = USART_SENDING_DATA;
 }
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 {
