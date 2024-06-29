@@ -43,13 +43,15 @@ TEST_GROUP_RUNNER(master_RTU_test)
 
     // Modbus Master Manager tests
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSendingAndMasterUsartTxBufPtrIsEqualToMsgPtr);
-    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxBufPtrIsEqualToMsgPtr);
+    RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartRxAndTxIrqEnabled);
+    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterManagerStateMachineSetToModbusMasterTransmittingReq);
+    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMODBUS_MASTER_REQ_TRANSMITION_FLAG_Set);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
-    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
-    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
+
+    // test na to czy manager wysle jak head bedzie rowny tail ale beda dostepne dane do wyslania
 }
