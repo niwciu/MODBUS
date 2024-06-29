@@ -1,12 +1,12 @@
 /**
  * @file modbus_PDU_common.c
  * @author niwciu (niwciu@gmail.com)
- * @brief 
+ * @brief
  * @version 0.0.1
  * @date 2024-06-28
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #include "modbus_PDU.h"
 #include "modbus_data.h"

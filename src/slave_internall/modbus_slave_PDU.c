@@ -61,14 +61,14 @@ const struct modbus_slave_functions_mapper modbus_functions_mapper[] = {
 #define MODBUS_FUNCTIONS_MAPPER_SIZE (sizeof(modbus_functions_mapper) / sizeof(modbus_functions_mapper[0]));
 
 modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
-{	 
-    modbus_ret_t msg_parse_status;   
+{
+    modbus_ret_t msg_parse_status;
     if ((NULL == rx_msg) || (NULL == rx_msg->req.data) || (NULL == rx_msg->resp.data))
-	{
-	    msg_parse_status = RET_NULL_PTR_ERROR;
+    {
+        msg_parse_status = RET_NULL_PTR_ERROR;
     }
-	else
-	{
+    else
+    {
         modbus_fun_code_t req_fun_code = rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
         uint32_t mapper_size = MODBUS_FUNCTIONS_MAPPER_SIZE;
         bool UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_SET;
@@ -76,7 +76,7 @@ modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
         {
             if (req_fun_code == modbus_functions_mapper[i].fun_code)
             {
-                msg_parse_status= modbus_functions_mapper[i].fun_code_action(rx_msg);
+                msg_parse_status = modbus_functions_mapper[i].fun_code_action(rx_msg);
                 UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_CLEARED;
             }
         }
@@ -175,7 +175,7 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
     {
         status = handle_slave_read_holding_reg_service(modbus_msg);
     }
-    
+
     return status;
 }
 

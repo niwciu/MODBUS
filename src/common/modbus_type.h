@@ -129,11 +129,11 @@ extern "C"
 
     } modbus_status_flag_t;
 
-    typedef enum 
+    typedef enum
     {
         LAST_QUEUE_POS_EMPTY,
         LAST_QUEUE_POS_STORE_DATA,
-    }last_q_pos_status_t;
+    } last_q_pos_status_t;
 
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;

@@ -31,7 +31,7 @@ TEST_TEAR_DOWN(Master_PDU_req)
     /* Cleanup after every test */
 }
 
-TEST (Master_PDU_req ,ReadSingleHoldingRegisterRequestWithNullPtrModbusMasgPassed)
+TEST(Master_PDU_req, ReadSingleHoldingRegisterRequestWithNullPtrModbusMasgPassed)
 {
     static modbus_adr_t adr = 0x0001;
     static modbus_data_qty_t len = 1;
@@ -80,7 +80,7 @@ TEST(Master_PDU_req, Read0QtyHoldingRegisterRequest)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR, status);
 }
 
-TEST (Master_PDU_req ,ReadSingleInputRegisterRequestWithNullPtrModbusMasgPassed)
+TEST(Master_PDU_req, ReadSingleInputRegisterRequestWithNullPtrModbusMasgPassed)
 {
     static modbus_adr_t adr = 0x0001;
     static modbus_data_qty_t len = 1;
@@ -129,7 +129,7 @@ TEST(Master_PDU_req, ReadZeroInputRegisterRequest)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR, status);
 }
 
-TEST (Master_PDU_req ,ReadDiscreteInputsRequestWithNullPtrModbusMasgPassed)
+TEST(Master_PDU_req, ReadDiscreteInputsRequestWithNullPtrModbusMasgPassed)
 {
     static modbus_adr_t adr = 0x0001;
     static modbus_data_qty_t len = 1;
@@ -182,7 +182,7 @@ TEST(Master_PDU_req, ReadZeroDiscreteInputsRequest)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR, status);
 }
 
-TEST (Master_PDU_req ,ReadCoilsRequestWithNullPtrModbusMasgPassed)
+TEST(Master_PDU_req, ReadCoilsRequestWithNullPtrModbusMasgPassed)
 {
     static modbus_adr_t adr = 0x0001;
     static modbus_data_qty_t len = 1;
@@ -276,8 +276,7 @@ TEST(Master_PDU_req, WriteSingleCoilOn)
     TEST_ASSERT_EQUAL_INT16(RET_OK, status);
 }
 
-
-TEST (Master_PDU_req ,WriteMultipleRegistersRequestWithNullPtrModbusMasgPassed)
+TEST(Master_PDU_req, WriteMultipleRegistersRequestWithNullPtrModbusMasgPassed)
 {
     static modbus_adr_t adr = 0x0001;
     static modbus_data_qty_t len = 1;
@@ -337,7 +336,7 @@ TEST(Master_PDU_req, WriteZeroMultipleRegisters)
     TEST_ASSERT_EQUAL_INT16(RET_ERROR, status);
 }
 
-TEST (Master_PDU_req ,Write5MultipleCoilsRequestWithNullPtrModbusMasgPassed)
+TEST(Master_PDU_req, Write5MultipleCoilsRequestWithNullPtrModbusMasgPassed)
 {
     static modbus_adr_t adr = 0x0001;
     static modbus_data_qty_t len = 1;

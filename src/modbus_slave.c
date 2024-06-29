@@ -159,7 +159,7 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 
 static void init_modbus_driver(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
-    if(RTU == mode)
+    if (RTU == mode)
     {
         slave_RTU_driver = get_slave_RTU_driver_interface();
         slave_RTU_driver->init(baud_rate, parity);

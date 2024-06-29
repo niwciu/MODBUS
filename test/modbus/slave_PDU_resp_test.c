@@ -47,7 +47,7 @@ TEST(Slave_PDU_resp, SlaveParseMsgWhenReqDataBufferPassAsNullPtrArgumentToParse)
     modbus_data_qty_t coil_qty = 5;
 
     modbus_master_read_coils_req(RTU_msg, adr, coil_qty);
-    RTU_msg->req.data=NULL;
+    RTU_msg->req.data = NULL;
     TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, parse_master_request_and_prepare_resp(RTU_msg));
 }
 TEST(Slave_PDU_resp, SlaveParseMsgWhenRespDataBufferPassAsNullPtrArgumentToParse)
@@ -56,10 +56,9 @@ TEST(Slave_PDU_resp, SlaveParseMsgWhenRespDataBufferPassAsNullPtrArgumentToParse
     modbus_data_qty_t coil_qty = 5;
 
     modbus_master_read_coils_req(RTU_msg, adr, coil_qty);
-    RTU_msg->resp.data=NULL;
+    RTU_msg->resp.data = NULL;
     TEST_ASSERT_EQUAL(RET_NULL_PTR_ERROR, parse_master_request_and_prepare_resp(RTU_msg));
 }
-    
 
 TEST(Slave_PDU_resp, SlaveRead5Coils)
 {

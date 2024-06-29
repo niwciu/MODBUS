@@ -1,11 +1,11 @@
 /**
  * @file modbus_slave_RTU.c
  * @author niwciu (niwciu@gmail.com)
- * @brief 
+ * @brief
  * @date 2024-06-28
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #include "modbus_slave_RTU.h"
 
