@@ -6,11 +6,11 @@
 #        For build using Unix Makefiles:
 #          	1. cmake -S./ -B out -G"Unix Makefiles"
 #			2. enter the "out" folder
-#          	3. make all -o modbus_test.o (-jXX additionaly to speed up)
+#          	3. make all -o lcd_hd44780_test.o (-jXX additionaly to speed up)
 #        For build using Ninja:
 #          	1. cmake -S./ -B out -G"Ninja"
 # 			2. enter the "out" folder
-#         	3. ninja -C out -o modbus_test.o (optional with -V  and -jxx ->xx numnber of cores)
+#         	3. ninja -C out -o lcd_hd44780_test.o (optional with -V  and -jxx ->xx numnber of cores)
 # additional custom targets for this project:
 # 		If lizard is installed and you are in the out folder:
 # 			1. make ccm -> code complexity metrix print in console
@@ -24,7 +24,7 @@
 #############################################################################################################################
 cmake_minimum_required(VERSION 3.10)
 
-project(modbus_test C)
+project(modbus_slave_integration)
 
 add_subdirectory(../unity unity)
 
@@ -39,15 +39,16 @@ endif()
 
 set(INCLUDE_DIRS
 	../../src
+	../../src/master_internall
+	../../src/slave_internall
+	../../src/common
+	../modbus
 )
 
 set(TEST_INCLUDE_DIRS
-	../../src
-	../../src/common
-	../../src/master_internall
-	../../src/slave_internall
 	..
 	.
+	
 )
 
 set(SRCS
@@ -59,44 +60,17 @@ set(SRCS
 	../../src/common/modbus_data.c
 	../../src/common/modbus_crc.c
 	../../src/common/modbus_RTU.c
-	../../src/common/modbus_queue.c
-	../../src/common/modbus_PDU.c
-	../../src/modbus_master.c
+	# ../../src/common/modbus_queue.c
 	../../src/modbus_slave.c
 )
 
 set(TEST_SRCS
-    modbus_test_main.c
-    master_PDU_req_test_runner.c
-    master_PDU_req_test.c
-	master_PDU_read_test_runner.c
-	master_PDU_read_test.c
-	slave_PDU_resp_test_runner.c
-	slave_PDU_resp_test.c
-	slave_PDU_exception_code_test_runner.c
-	slave_PDU_exception_code_test.c
-	modbus_data_test.c
-	modbus_data_test_runner.c
-	modbus_CRC_test.c
-	modbus_CRC_test_runner.c
-	modbus_RTU_test.c
-	modbus_RTU_test_runner.c
-	modbus_queue_test.c
-	modbus_queue_test_runner.c
-	mock_slave_app_data.c
-	mock_master_app_data.c
-	mock_master_driver_interface.c
-	mock_slave_driver_interface.c
-
-	master_RTU_init_test_runner.c
-    master_RTU_init_test.c
-	master_RTU_test_runner.c
-	master_RTU_test.c
-	slave_RTU_init_test_runner.c
-    slave_RTU_init_test.c
-	slave_RTU_test_runner.c
-	slave_RTU_test.c
-	
+    slave_integration_test_main.c
+    ../modbus/slave_RTU_init_test_runner.c
+    ../modbus/slave_RTU_init_test.c
+	../modbus/slave_RTU_test_runner.c
+	../modbus/slave_RTU_test.c
+	../modbus/mock_slave_driver_interface.c
 
 	#mock_module.c
 )
@@ -104,9 +78,6 @@ set(TEST_SRCS
 set(GLOBAL_DEFINES
 	-DUNIT_TEST
 )
-# set -g3 flag for enabling debug on developing maching
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3")
-
 
 include(${CUSTOM_TARGETS_FILE_DIR})
 

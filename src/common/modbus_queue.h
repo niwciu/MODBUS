@@ -1,5 +1,5 @@
 /**
- * @file modbus_manager.h
+ * @file modbus_queue.h
  * @author niwciu (niwciu@gmail.com)
  * @brief
  * @date 2024-05-27
@@ -8,8 +8,8 @@
  *
  */
 
-#ifndef _MODBUS_MANAGER_H_
-#define _MODBUS_MANAGER_H_
+#ifndef _MODBUS_QUEUE_H_
+#define _MODBUS_QUEUE_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -23,6 +23,7 @@ extern "C"
     {
         uint8_t head;
         uint8_t tail;
+        last_q_pos_status_t last_queue_pos_status;
 
         modbus_msg_t *modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
     } modbus_queue_t;
@@ -33,4 +34,4 @@ extern "C"
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
-#endif /* _MODBUS_MANAGER_H_ */
+#endif /* _MODBUS_QUEUE_H_ */

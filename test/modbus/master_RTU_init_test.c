@@ -1,6 +1,7 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_master.h"
 #include "modbus_RTU.h"
+#include "modbus_master_RTU.h"
 #include "modbus_type.h"
 #include "modbus_queue.h"
 #include "mock_master_driver_interface.h"
@@ -26,13 +27,23 @@ TEST_TEAR_DOWN(master_RTU_init_test)
     /* Cleanup after every test */
 }
 
+TEST(master_RTU_init_test, WhenModbusMasterInitInUnknownModeThenRtuReqAndRespBuffersAreNotRegistered)
+{
+    modbus_master_init(UNKNOWN_MODE, 0, 0);
+    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    {
+        TEST_ASSERT_NULL(modbus_msg[i].req.data);
+        TEST_ASSERT_NULL(modbus_msg[i].resp.data);
+    }
+}
+
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
 {
     modbus_master_init(RTU, 0, 0);
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_req_buf[i][0], modbus_msg[i].req.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
-        TEST_ASSERT_EQUAL_UINT32_ARRAY(&RTU_resp_buf[i][0], modbus_msg[i].resp.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
+        TEST_ASSERT_EQUAL_UINT32_ARRAY(&master_RTU_req_buf[i][0], modbus_msg[i].req.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
+        TEST_ASSERT_EQUAL_UINT32_ARRAY(&master_RTU_resp_buf[i][0], modbus_msg[i].resp.data, MAX_MODBUS_MSG_QUEUE_ITEMS);
     }
 }
 
@@ -40,16 +51,16 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenTxRxRTUmsgQueueIniti
 {
     modbus_master_init(RTU, 0, 0);
 
-    TEST_ASSERT_EQUAL(0,tx_rx_q->head);
-    TEST_ASSERT_EQUAL(0,tx_rx_q->tail);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->head);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->tail);
 }
 
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFull)
 {
     modbus_master_init(RTU, 0, 0);
 
-    TEST_ASSERT_EQUAL(0,free_q->tail);
-    TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1),free_q->head);
+    TEST_ASSERT_EQUAL(0, free_q->tail);
+    TEST_ASSERT_EQUAL((MAX_MODBUS_MSG_QUEUE_ITEMS - 1), free_q->head);
 }
 
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)
@@ -76,17 +87,6 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerS
 
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, master_manager_state_machine);
 }
-
-
-// TEST(master_RTU_init_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
-
-// TEST(master_RTU_init_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
 
 // TEST(master_RTU_init_test,)
 // {

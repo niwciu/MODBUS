@@ -37,7 +37,7 @@ extern "C"
     #define MODBUS_PDU_BUF_OFFSET                   MODBUS_SLAVE_ADR_BYTE_LEN
     #define MODBUS_FUNCTION_CODE_IDX                MODBUS_PDU_BUF_OFFSET
     #define MODBUS_REQUEST_ADR_IDX                  (MODBUS_PDU_BUF_OFFSET + 1)
-    #define MODBUS_REQUEST_LEN_IDX                  (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_REQUEST_QTY_IDX                  (MODBUS_PDU_BUF_OFFSET + 3)
     #define MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX    (MODBUS_PDU_BUF_OFFSET + 3)
     #define MODBUS_REQUEST_BYTE_CNT_IDX             (MODBUS_PDU_BUF_OFFSET + 5)
     #define MODBUS_REQUEST_WRITE_MULTI_DATA_IDX     (MODBUS_PDU_BUF_OFFSET + 6)
@@ -45,9 +45,10 @@ extern "C"
     #define MODBUS_RESP_READ_BYTE_CNT_IDX           (MODBUS_PDU_BUF_OFFSET + 1)
     #define MODBUS_RESP_READ_DATA_IDX               (MODBUS_PDU_BUF_OFFSET + 2)
     
-    #define MODBUS_RESP_WRITE_ADR_IDX                   (MODBUS_PDU_BUF_OFFSET + 1)
-    #define MODBUS_RESP_WRITE_SINGLE_DATA_IDX           (MODBUS_PDU_BUF_OFFSET + 3)
-    #define MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX     (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_RESP_WRITE_ADR_IDX               (MODBUS_PDU_BUF_OFFSET + 1)
+    #define MODBUS_RESP_WRITE_SINGLE_DATA_IDX       (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX (MODBUS_PDU_BUF_OFFSET + 3)
+    #define MODBUS_RESP_ERROR_CODE_IDX              (MODBUS_PDU_BUF_OFFSET + 1)
     // #define MODBUS_WRITE_MULTI_DATA_IDX    
 
     #define MODBUS_READ_REQUEST_LEN            6
@@ -58,6 +59,8 @@ extern "C"
     #define MODBUS_WRITE_SINGLE_RESP_LEN  6
     #define MODBUS_WRITE_MULTI_RESP_LEN   6
     #define MODBUS_ERROR_CODE_RESP_LEN    3
+    #define MODBUS_PDU_EXCEPTION_CODE_LEN 3
+
     // clang-format on
     typedef enum
     {
@@ -70,8 +73,16 @@ extern "C"
         MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE = 0x0FU,
         MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE = 0x10U,
 
-        MODBUS_ERROR_CODE_MASK = 0x80U,
+        MODBUS_ERROR_CODE_MASK = 0x80U
     } modbus_fun_code_t;
+
+    typedef enum
+    {
+        MODBUS_ILLEGAL_FUNCTION_ERROR = 0x01U,
+        MODBUS_ILLEGAL_DATA_ADDRESS_ERROR = 0x02U,
+        MODBUS_ILLEGAL_DATA_VALUE_ERROR = 0x03U,
+        MODBUS_SERVER_DEVICE_FAILURE_ERROR = 0x04U,
+    } modbus_exception_code_t;
 
     typedef enum
     {
@@ -101,7 +112,7 @@ extern "C"
         MODBUS_MASTER_RECEIVING,
         MODBUS_MASTER_RESP_ANALYSE,
         MODBUS_MASTER_ERROR_SERVICE,
-    }modbus_master_state_t;
+    } modbus_master_state_t;
 
     typedef enum
     {
@@ -109,24 +120,29 @@ extern "C"
         MODBUS_SLAVE_MSG_RECIVED,
         MODBUS_SLAVE_TRANSMITING_RESP,
         MODBUS_SLAVE_UNKNOWN,
-    }modbus_slave_state_t;
+    } modbus_slave_state_t;
     typedef enum
     {
         MODBUS_FLAG_CLEARED,
         MODBUS_FLAG_SET,
         MODBUS_FLAG_UNKNOWN,
 
-    }modbus_status_flag_t;
-    
+    } modbus_status_flag_t;
+
+    typedef enum
+    {
+        LAST_QUEUE_POS_EMPTY,
+        LAST_QUEUE_POS_STORE_DATA,
+    } last_q_pos_status_t;
+
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
     typedef uint8_t modbus_buf_t;
     typedef uint8_t modbus_buf_size_t;
-    
+
     typedef uint16_t modbus_CRC_t;
-    
-    
+
     typedef struct
     {
         modbus_buf_t *data;
@@ -139,8 +155,6 @@ extern "C"
         modbus_req_resp_t resp;
         // modbus_device_ID_t slave_id;
     } modbus_msg_t;
-
-
 
 #ifdef __cplusplus
 }

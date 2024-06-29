@@ -8,7 +8,7 @@
 
 
 #TARGETS FOR RUNNING UNIT TESTS
-add_custom_target(run modbus_master_integration)
+add_custom_target(run modbus_slave_integration)
 
 # TARGET FOR CHECKING CODE COMPLEXITY METRICS"
 # check if lizard software is available 
@@ -34,7 +34,7 @@ endif()
 # Prints static analize output for src folder in the console
 add_custom_target(cppcheck_src cppcheck ../../../src --enable=all --inconclusive --force --inline-suppr --platform=win64 --suppress=missingInclude --suppress=missingIncludeSystem --suppress=unusedFunction)
 # Prints static analize output for specific test_module folder in the console
-add_custom_target(cppcheck_test cppcheck ../../../test/lcd_hd44780 -itest/lcd_hd44780/out -itest/lcd_hd44780/out_avr --enable=all --inconclusive --force --inline-suppr --platform=win64 --suppress=missingInclude --suppress=missingIncludeSystem || echo "test")
+add_custom_target(cppcheck_test cppcheck ../../../test/slave_integration -itest/slave_integration/out --enable=all --inconclusive --force --inline-suppr --platform=win64 --suppress=missingInclude)# --suppress=missingIncludeSystem)
 
 # TARGET FOR CREATING CODE COVERAGE REPORTS
 # check if python 3 and gcovr are available 
@@ -53,4 +53,4 @@ else()
 		message(STATUS "python3 and gcovr were not found. \r\n\tInstall python 3 and gcovr to get predefined targets for uint tests code coverage report generation")
 	endif()
 endif()
-add_custom_target(ccr python3 -m gcovr CMakeFiles/modbus_master_integration.dir/D_/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src -r ../../.. --html-details ../../../reports/Code_Coverage/master_integration_gcov_report.html)
+add_custom_target(ccr python3 -m gcovr CMakeFiles/modbus_slave_integration.dir/D_/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src -r ../../.. --html-details ../../../reports/Code_Coverage/slave_integration_gcov_report.html)
