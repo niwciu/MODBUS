@@ -170,8 +170,7 @@ void check_modbus_master_manager(void)
         }
         break;
     case MODBUS_MASTER_RESP_WAITING:
-        // ToDo Respons time out need to be added
-        if (MODBUS_MASTER_TIMER_1_5_CHAR_FLAG == MODBUS_FLAG_SET)
+        if (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_1_5_CHAR_FLAG)
         {
             modbus_ret_t RTU_status;
             modbus_device_ID_t modbus_req_slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
@@ -206,6 +205,10 @@ void check_modbus_master_manager(void)
                 master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
             }
             
+        }
+        else if (0 == modbus_master_resp_timeout)
+        {
+
         }
         break;
     case MODBUS_MASTER_RESP_RECIVED:
