@@ -211,7 +211,7 @@ static modbus_master_error_t generate_request(modbus_fun_code_t fun_code, modbus
 
 static modbus_ret_t add_PDU_request_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty)
 {
-    modbus_ret_t PDU_ret_status;
+    modbus_ret_t PDU_ret_status = RET_ERROR_UNKNOWN_MAPPER_FUN_CODE;
     uint32_t master_mapper_size = MODBUS_MASTER_FUNCTIONS_MAPPER_SIZE;
     for (uint32_t i = 0; i < master_mapper_size; i++)
     {
