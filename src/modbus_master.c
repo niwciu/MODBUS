@@ -249,7 +249,7 @@ static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *mod
 
 static void modbus_master_req_sended_callback(void)
 {
-    // MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
+    MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
 }
 
 // static void modbus_T_1_5_char_expired_callback(void)

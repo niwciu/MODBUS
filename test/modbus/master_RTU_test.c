@@ -14,10 +14,10 @@ extern modbus_queue_t *tx_rx_q;
 extern modbus_queue_t *free_q;
 extern modbus_msg_t *msg_buf;
 
-extern modbus_master_state_t master_manager_state_machine;
+extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 
-static void
-reset_all_RTU_buffers(void);
+    static void
+    reset_all_RTU_buffers(void);
 
 TEST_SETUP(master_RTU_test)
 {
@@ -518,7 +518,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenGivenModbusMasterInRTUmo
     TEST_ASSERT_EQUAL(&msg_buf->resp, mock_master_rx_msg_ptr);
 }
 
-TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterManagerStateMachineSetToModbusMasterTransmittingReqAndSetMODBUS_MASTER_REQ_TRANSMITION_FLAG)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenSetMODBUS_MASTER_REQ_TRANSMITION_FLAG)
 {
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
@@ -527,11 +527,10 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(MODBUS_FLAG_SET, MODBUS_MASTER_TRANSMITTING_REQ);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_TRANSMITTING_REQ, master_manager_state_machine);
 }
 
 //  MODBUS_MASTER_TRANSMITTING_REQ state tests,
-TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenTxIrqDisabledAndMasterManagerStateMachineSetToWaitingForReply)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenTxIrqDisabledAndMODBUS_MASTER_REQ_TRANSMITION_FLAG_Cleared)
 {
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
@@ -542,7 +541,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
 
     mock_USART_req_msg_sended_EVENT();
     TEST_ASSERT_EQUAL(IRQ_DISABLED, mock_master_USART.Tx_IRQ);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_RECEIVING_RESP, master_manager_state_machine);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
 }
 
 // TEST(master_RTU_test,)
