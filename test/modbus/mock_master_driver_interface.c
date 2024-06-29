@@ -96,5 +96,4 @@ void mock_USART_req_msg_sended_EVENT(void)
     // operations deone when USART dirver send last data from request msg
     mock_master_USART.Tx_IRQ=IRQ_DISABLED;
     mock_master_msg_tx_done_cb();
-    //enable respone time out timer
 }

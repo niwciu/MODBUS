@@ -16,6 +16,7 @@ extern modbus_msg_t *msg_buf;
 
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 extern modbus_master_state_t master_manager_state_machine;
+extern modbus_timer_t modbus_master_resp_timeout;
 
     static void
     reset_all_RTU_buffers(void);
@@ -545,17 +546,55 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
 }
 
-// TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMasterManagerStateMachineSetToWaitingForReply)
-// {
-//     modbus_adr_t coil_adr = 0x0002;
-//     modbus_device_ID_t slave_ID = 0x09;
-//     modbus_data_qty_t coils_qty = 2;
+TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenResponseTimeoutIsEnabled)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
 
-//     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
-//     check_modbus_master_manager();
-//     mock_USART_req_msg_sended_EVENT();
-//     check_modbus_master_manager();
-//     TEST_ASSERT_EQUAL(MODBUS_MASTER_RECEIVING_RESP, master_manager_state_machine);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+
+    mock_USART_req_msg_sended_EVENT();
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_TIME_OUT_MS, modbus_master_resp_timeout);
+}
+
+// TEST(master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
 // }
 
 // TEST(master_RTU_test,)

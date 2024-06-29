@@ -35,6 +35,7 @@ PRIVATE modbus_queue_t *free_q = &master_free_queue;
 PRIVATE modbus_queue_t *tx_rx_q = &master_tx_rx_queue;
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *msg_buf = NULL;
+PRIVATE modbus_timer_t modbus_master_resp_timeout = 0;
 
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;

@@ -17,6 +17,7 @@ extern "C"
     // clang-format off
 
 #define MAX_MODBUS_MSG_QUEUE_ITEMS  2
+#define MODBUS_MASTER_RESP_TIME_OUT_MS 1000
 
 #ifdef  UNIT_TEST
 // belo values cavering conditions to run all tests

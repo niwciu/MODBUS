@@ -143,7 +143,7 @@ extern "C"
     typedef uint8_t modbus_byte_count_t;
     typedef uint8_t modbus_buf_t;
     typedef uint8_t modbus_buf_size_t;
-
+    typedef uint32_t modbus_timer_t;
     typedef uint16_t modbus_CRC_t;
 
     typedef struct
