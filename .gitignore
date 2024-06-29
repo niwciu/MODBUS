@@ -2,5 +2,9 @@ out/
 Release/
 Debug/
 Build/
+reports/
+
+/ToDo.txt
+
 
 
