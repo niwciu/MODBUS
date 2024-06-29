@@ -153,9 +153,10 @@ void check_modbus_master_manager(void)
         }
         break;
     case MODBUS_MASTER_TRANSMITTING_REQ:
-        // sprawdz czy driver przestal wysylac i jesli tak to przejdz do odbioru
-        // realizacja przez zdefiniowanie flai i callbacka który ustawia tą flagę przez driver który skończył wysyłać.
-        // jak flaga zmieni status to przechodzę do następnego stanu
+        if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
+        {
+            master_manager_state_machine = MODBUS_MASTER_RECEIVING_RESP;
+        }
         break;
     case MODBUS_MASTER_RECEIVING_RESP:
         break;
