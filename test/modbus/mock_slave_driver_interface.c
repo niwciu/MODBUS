@@ -13,21 +13,11 @@
 
 #include "mem.h"
 
-// typedef struct
-// {
-//     modbus_buf_t *cur_byte_ptr;
-//     modbus_buf_t *last_byte_ptr;
-// } tx_buf_t;
-// tx_buf_t tx_buf;
 
-// modbus_buf_t *rx_data = NULL;
-// rx_cb_t rx_callback = NULL;
 driver_subscr_cb_t mock_msg_tx_done_cb = NULL;
 driver_subscr_cb_t mock_1_5_char_break_cb = NULL;
 driver_subscr_cb_t mock_3_5_char_break_cb = NULL;
 driver_subscr_cb_t mock_frame_error_cb = NULL;
-
-// modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
 
 driver_init_status_t mock_slave_USART = {0, NONE, INIT_UNKNOWN, IRQ_DISABLED, IRQ_DISABLED};
 timer_state_t mock_1_5_char_timer = TIMER_INACTIVE;
