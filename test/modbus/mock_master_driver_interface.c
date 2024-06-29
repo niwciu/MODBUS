@@ -12,15 +12,10 @@
 
 #include "mem.h"
 
-// typedef struct
-// {
-//     modbus_buf_t *cur_byte_ptr;
-//     modbus_buf_t *last_byte_ptr;
-// } tx_buf_t;
-// tx_buf_t tx_buf;
-
-// modbus_buf_t *rx_data = NULL;
-// rx_cb_t rx_callback = NULL;
+driver_subscr_cb_t mock_master_msg_tx_done_cb = NULL;
+// driver_subscr_cb_t mock_master_1_5_char_break_cb = NULL;
+// driver_subscr_cb_t mock_master_3_5_char_break_cb = NULL;
+// driver_subscr_cb_t mock_master_frame_error_cb = NULL;
 
 modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
 modbus_buf_t *slave_rx_buf_ptr = slave_rx_buf;
@@ -71,4 +66,5 @@ static void master_uasrt_subscribe_msg_rx_done_callback(driver_subscr_cb_t callb
 }
 static void master_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback)
 {
+    mock_master_msg_tx_done_cb= callback;
 }

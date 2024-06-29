@@ -25,3 +25,8 @@ typedef struct
 } driver_init_status_t;
 
 extern driver_init_status_t mock_USART;
+
+extern driver_subscr_cb_t mock_master_msg_tx_done_cb;
+// extern driver_subscr_cb_t mock_1_5_char_break_cb;
+// extern driver_subscr_cb_t mock_3_5_char_break_cb;
+// extern driver_subscr_cb_t mock_frame_error_cb;

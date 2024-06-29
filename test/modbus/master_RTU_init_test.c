@@ -95,10 +95,11 @@ TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenMOdbusSendingRequestF
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
 }
 
-// TEST(master_RTU_init_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenRequestTransmiscionCompleateCallbackRegistered)
+{
+    modbus_master_init(RTU, 0, 0);
+    TEST_ASSERT_NOT_NULL(mock_master_msg_tx_done_cb);
+}
 
 // TEST(master_RTU_init_test,)
 // {
