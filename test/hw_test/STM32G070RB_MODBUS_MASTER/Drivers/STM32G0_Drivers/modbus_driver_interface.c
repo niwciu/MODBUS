@@ -60,7 +60,6 @@ static const modbus_RTU_driver_struct_t master_RTU_driver = {
     master_uasrt_subscribe_msg_tx_done_callback,
     master_t_3_5_char_expired_callback_subscribe,
     master_msg_frame_erroro_callback_subscribe,
-
 };
 
 const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void)
@@ -70,13 +69,8 @@ const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void)
 
 static void master_usart_init(baud_t Baud, parity_t parity) // parameters for init -> baud, pariti, stop bits
 {
-    // USART_GPIO_init();
-    // USART_module_config(Baud, parity);
-    // // USART_data_init();
-    // USART_set_and_enable_global_interrupts();
     USART_GPIO_init();
     USART_module_config(Baud, parity);
-    // USART_data_init();
     USART_set_and_enable_global_interrupts();
     TIMER7_init(Baud);
     FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
@@ -91,6 +85,10 @@ static void master_usart_send(modbus_buf_t *tx_msg, uint8_t msg_len)
         MODBUS_USART->TDR = *tx_msg;
         MODBUS_USART->CR1 |= (USART_CR1_TXEIE_TXFNFIE);
     }
+    // disable timer and clear all flags -> needed for repeat request handle
+    FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
+    MODBUS_TIMER->CR1 &= ~TIM_CR1_CEN;
+    MODBUS_USART->ICR |= USART_ICR_RTOCF; // enable T1,5 char timer interrupt
 }
 static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 {
@@ -127,7 +125,7 @@ void MODBUS_USART_IRQHandler(void)
         rx_msg->data[rx_msg->len] = MODBUS_USART->RDR;
         rx_msg->len++;
 
-        if ((FRAME_RECEIVED == FRAME_DETECTION_FLAG)) // timer 3,5 odliczyl
+        if ((FRAME_RECEIVED == FRAME_DETECTION_FLAG)) // timer 3,5 nie odliczyl 
         {
             master_frame_error_cb();
         }
@@ -143,7 +141,7 @@ void MODBUS_USART_IRQHandler(void)
         }
         else
         {
-            // koniec nadawania
+            // koniec nadawania wyłącz przerwanie TXE i włącz RX
             MODBUS_USART->CR1 &= ~(USART_CR1_TXEIE_TXFNFIE);
             master_msg_tx_complete_cb();
         }
@@ -155,7 +153,7 @@ void MODBUS_USART_IRQHandler(void)
             master_t_1_5_char_break_cb();
         }
         FRAME_DETECTION_FLAG = FRAME_RECEIVED;
-        // MODBUS_USART->ICR |= USART_ICR_RTOCF; // jakby to przerwanie kasować dopiero w timerze 7
+        MODBUS_USART->ICR |= USART_ICR_RTOCF; // jakby to przerwanie kasować dopiero w timerze 7
     }
 }
 
@@ -165,7 +163,7 @@ void MODBUS_TIMER_IRQHandler(void)
     {
         master_t_3_5_char_break_cb();
         FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
-        MODBUS_USART->ICR |= USART_ICR_RTOCF; // dopiero tutaj odblokowuje przerwanie od t1,5char
+        // MODBUS_USART->ICR |= USART_ICR_RTOCF; // dopiero tutaj odblokowuje przerwanie od t1,5char
         MODBUS_TIMER->SR &= ~TIM_SR_UIF;
     }
 }

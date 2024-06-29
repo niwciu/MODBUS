@@ -164,34 +164,70 @@ void check_modbus_master_manager(void)
     case MODBUS_MASTER_TRANSMITTING_REQ:
         if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
         {
-            master_manager_state_machine = MODBUS_MASTER_RECEIVING_RESP;
+            master_manager_state_machine = MODBUS_MASTER_RESP_WAITING;
+            // enable response time-out timer
+        }
+        break;
+    case MODBUS_MASTER_RESP_WAITING:
+        // ToDo Respons time out need to be added
+        if (MODBUS_MASTER_TIMER_1_5_CHAR_FLAG == MODBUS_FLAG_SET)
+        {
+            modbus_ret_t RTU_status;
+            modbus_device_ID_t modbus_req_slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
+            MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+            MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+            RTU_status = modbus_RTU_recv(msg_buf->req.data, msg_buf->req.len, modbus_req_slave_ID);
+            if (RET_ERROR_CRC == RTU_status)
+            {
+                // set error flag and repeat from idle where with error flag msg is not poped from queue
+                // repetition counter should be implemented and checked here if repetion was done for example 3 times msg should be skiped?
+                // when sending msg T3,5 timer is disabled, need to clean here all app flags when sending T15 int is enabled
+                // master_manager_state_machine = MODBUS_MASTER_IDLE
+                // stop response time out timer
+
+                /****  for happy path we are setting error flag and going to next state*/
+                MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
+                master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
+                /**** happy path do not write test for this scenario **/
+            }
+            else if (RET_ERROR_SLAVE_ID)
+            {
+                // if slave id is wrong device stay in this state and wait for proper resp or resp timeout
+                // stay in MODBUS_MASTER_RECEIVING_RESP
+                
+
+                // RTU_driver->disable_T3,5_timer ->  for now T_3_5_Timer_Flag is cleared when T 1_5Flag is seted in this state -> 
+                msg_buf->resp.len=0; //set resp data buf ptr to first char
+            }
+            else //RET_OK
+            {
+                // stop respons time out timer
+                master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
+            }
             
         }
         break;
-    case MODBUS_MASTER_RECEIVING_RESP:
-        // ToDo Respons time out need to be added
-        // if (MODBUS_MASTER_TIMER_1_5_CHAR_FLAG == MODBUS_FLAG_SET)
-        // {
-        //     modbus_ret_t RTU_status;
-        //     MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
-        //     RTU_status = modbus_RTU_recv(slave_msg_ptr->req.data, slave_msg_ptr->req.len, modbus_slave_ID);
-        //     if (RTU_status != RET_OK)
-        //     {
-        //         FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
-        //     }
-        //     slave_manager_state_machine = MODBUS_SLAVE_MSG_RECIVED;
-        // }
+    case MODBUS_MASTER_RESP_RECIVED:
+    // mainly here we are waiting for T 3,5 Flag to confirm correctnes of the response
+    if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
+    {
+        //frame error
+    }
+    else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
+    {
+        // frame is correct ad can be processed
+    }
+    else
+    {
+        // do nothing untill 3_5TFlag is not set
+    }
         break;
-        //     // pytanie czy tu nie powinno być stanu przejściowego na oczekiwania poprawności zależności czasowej
-        //     // case MODBUS_WAIT_3_5_CHAR:
+    // case MODBUS_MASTER_RESP_PROCESING:
+    //     break;
 
-        // case MODBUS_MASTER_RESP_ANALYSE:
-        //     // analizuje ramkę i wykonuje zadanie
-        //     // jesli dostałem error lub jest coś nie tak idę do error service
-        //     break;
-        // case MODBUS_MASTER_ERROR_SERVICE:
-        //     // W zależności od tego co było błędem wykonuję jego obsługę
-        //     break;
+    // case MODBUS_MASTER_ERROR_SERVICE:
+    //     // W zależności od tego co było błędem wykonuję jego obsługę
+    //     break;
     }
 }
 
