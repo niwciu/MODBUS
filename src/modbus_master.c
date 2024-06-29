@@ -166,7 +166,7 @@ void check_modbus_master_manager(void)
         if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
         {
             master_manager_state_machine = MODBUS_MASTER_RESP_WAITING;
-            // enable response time-out timer
+            modbus_master_resp_timeout = MODBUS_MASTER_RESP_TIME_OUT_MS;
         }
         break;
     case MODBUS_MASTER_RESP_WAITING:
