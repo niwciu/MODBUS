@@ -14,7 +14,10 @@ extern modbus_queue_t *tx_rx_q;
 extern modbus_queue_t *free_q;
 extern modbus_msg_t *msg_buf;
 
-static void reset_all_RTU_buffers(void);
+extern modbus_master_state_t master_manager_state_machine;
+
+    static void
+    reset_all_RTU_buffers(void);
 
 TEST_SETUP(master_RTU_test)
 {
@@ -516,10 +519,17 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenGivenModbusMasterInRTUmod
     TEST_ASSERT_EQUAL(&msg_buf->resp, mock_master_rx_msg_ptr);
 }
 
-// TEST(master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterManagerStateMachineSetToModbusMasterTransmittingReqAndSetMODBUS_MASTER_REQ_TRANSMITION_FLAG)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_SET,MODBUS_MASTER_TRANSMITTING_REQ);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_TRANSMITTING_REQ, master_manager_state_machine);
+}
 
 // TEST(master_RTU_test,)
 // {
