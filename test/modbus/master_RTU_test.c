@@ -12,6 +12,7 @@
 TEST_GROUP(master_RTU_test);
 extern modbus_queue_t *tx_rx_q;
 extern modbus_queue_t *free_q;
+extern modbus_msg_t *msg_buf;
 
 static void reset_all_RTU_buffers(void);
 
@@ -479,7 +480,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoils
 
 //Modbus Manager integration Tests
 
-TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSending)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSendingAndMasterUsartTxBufPtrIsEqualToMsgPtr)
 {
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
@@ -488,7 +489,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(USART_SENDING_DATA, master_USART_Tx_status);
-    // TEST_FAIL_MESSAGE("Implement your test!");
+    TEST_ASSERT_EQUAL(msg_buf->req.data,mock_master_tx_buf_ptr);
 }
 // test na to czy manager wysle jak head bedzie rowny tail ale beda dostepne dane do wyslania
 
