@@ -48,6 +48,8 @@ static modbus_ret_t add_PDU_request_data(modbus_msg_t *msg_buf, modbus_fun_code_
 static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 
+static void modbus_master_req_sended_callback(void);
+
 typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 struct modbus_master_functions_mapper
 {
@@ -130,6 +132,7 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     RTU_driver->init(baud_rate, parity);
 
     // ToDo registration of all callbacks
+    RTU_driver->subscribe_msg_tx_done_cb(modbus_master_req_sended_callback);
     // ToDo setting up all flags ans modus_master_stateMachine
     MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
 }
@@ -138,7 +141,7 @@ void check_modbus_master_manager(void)
     switch (master_manager_state_machine)
     {
     case MODBUS_MASTER_IDLE:
-        if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status))
+        if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status)) //ToDo refacotr for check condition function
         {
             msg_buf = modbus_queue_pop(tx_rx_q);
             RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
@@ -149,21 +152,21 @@ void check_modbus_master_manager(void)
         break;
     case MODBUS_MASTER_TRANSMITTING_REQ:
         // sprawdz czy driver przestal wysylac i jesli tak to przejdz do odbioru
-        // realizacja przez zdefiniowanie flai i callbacka który ustawia tą flagę przez driver który skończył wysyłać. 
+        // realizacja przez zdefiniowanie flai i callbacka który ustawia tą flagę przez driver który skończył wysyłać.
         // jak flaga zmieni status to przechodzę do następnego stanu
         break;
-    // case MODBUS_MASTER_RECEIVING:
-    //     break;
-    //     // pytanie czy tu nie powinno być stanu przejściowego na oczekiwania poprawności zależności czasowej
-    //     // case MODBUS_WAIT_3_5_CHAR:
+        // case MODBUS_MASTER_RECEIVING:
+        //     break;
+        //     // pytanie czy tu nie powinno być stanu przejściowego na oczekiwania poprawności zależności czasowej
+        //     // case MODBUS_WAIT_3_5_CHAR:
 
-    // case MODBUS_MASTER_RESP_ANALYSE:
-    //     // analizuje ramkę i wykonuje zadanie
-    //     // jesli dostałem error lub jest coś nie tak idę do error service
-    //     break;
-    // case MODBUS_MASTER_ERROR_SERVICE:
-    //     // W zależności od tego co było błędem wykonuję jego obsługę
-    //     break;
+        // case MODBUS_MASTER_RESP_ANALYSE:
+        //     // analizuje ramkę i wykonuje zadanie
+        //     // jesli dostałem error lub jest coś nie tak idę do error service
+        //     break;
+        // case MODBUS_MASTER_ERROR_SERVICE:
+        //     // W zależności od tego co było błędem wykonuję jego obsługę
+        //     break;
     }
 }
 
@@ -243,3 +246,23 @@ static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *mod
     (void)(coils_qty);
     return modbus_master_write_single_reg_req(modbus_msg, adr);
 }
+
+static void modbus_master_req_sended_callback(void)
+{
+    // MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
+}
+
+// static void modbus_T_1_5_char_expired_callback(void)
+// {
+//     TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_SET;
+// }
+
+// static void modbus_T_3_5_char_expired_callback(void)
+// {
+//     TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_SET;
+// }
+
+// static void modbus_frame_error_callback(void)
+// {
+//     FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
+// }
