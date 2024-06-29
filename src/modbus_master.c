@@ -38,7 +38,7 @@ PRIVATE modbus_msg_t *msg_buf = NULL;
 
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
-// PRIVATE modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
