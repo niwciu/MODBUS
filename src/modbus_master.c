@@ -135,8 +135,9 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     // ToDo registration of all callbacks
     RTU_driver->subscribe_msg_tx_done_cb(modbus_master_req_sended_callback);
     // RTU_driver->subscribe_t_1_5_char_expired_cb(modbus_T_1_5_char_expired_callback);
-        // ToDo setting up all flags ans modus_master_stateMachine
-        MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
+    // ToDo setting up all flags ans modus_master_stateMachine
+    MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
+    MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
     // set all internall variable to its default values
     master_manager_state_machine = MODBUS_MASTER_IDLE;
 }
