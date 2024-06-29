@@ -102,6 +102,12 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenTimer1_5Char_FlagIsC
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_TIMER_1_5_CHAR_FLAG);
 }
 
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenTimer3_5Char_FlagIsCleared)
+{
+    modbus_master_init(RTU, 0, 0);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_TIMER_3_5_CHAR_FLAG);
+}
+
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRequestTransmiscionCompleateCallbackRegistered)
 {
     modbus_master_init(RTU, 0, 0);
