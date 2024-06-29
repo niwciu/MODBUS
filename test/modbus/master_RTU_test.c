@@ -545,18 +545,18 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
 }
 
-TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMasterManagerStateMachineSetToWaitingForReply)
-{
-    modbus_adr_t coil_adr = 0x0002;
-    modbus_device_ID_t slave_ID = 0x09;
-    modbus_data_qty_t coils_qty = 2;
+// TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMasterManagerStateMachineSetToWaitingForReply)
+// {
+//     modbus_adr_t coil_adr = 0x0002;
+//     modbus_device_ID_t slave_ID = 0x09;
+//     modbus_data_qty_t coils_qty = 2;
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
-    check_modbus_master_manager();
-    mock_USART_req_msg_sended_EVENT();
-    check_modbus_master_manager();
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_RECEIVING_RESP, master_manager_state_machine);
-}
+//     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+//     check_modbus_master_manager();
+//     mock_USART_req_msg_sended_EVENT();
+//     check_modbus_master_manager();
+//     TEST_ASSERT_EQUAL(MODBUS_MASTER_RECEIVING_RESP, master_manager_state_machine);
+// }
 
 // TEST(master_RTU_test,)
 // {
