@@ -51,7 +51,7 @@ TEST_GROUP_RUNNER(master_RTU_test)
 
     // MODBUS_MASTER_TRANSMITTING_REQ state tests,
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenTxIrqDisabledAndMODBUS_MASTER_REQ_TRANSMITION_FLAG_Cleared);
-    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMasterManagerStateMachineSetToWaitingForReply);
+    RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMasterManagerStateMachineSetToWaitingForReply);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenResponseTimeoutIsEnabled);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);
     // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhen);

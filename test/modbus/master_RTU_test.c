@@ -15,6 +15,7 @@ extern modbus_queue_t *free_q;
 extern modbus_msg_t *msg_buf;
 
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
+extern modbus_master_state_t master_manager_state_machine;
 
     static void
     reset_all_RTU_buffers(void);
@@ -526,7 +527,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
 
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     check_modbus_master_manager();
-    TEST_ASSERT_EQUAL(MODBUS_FLAG_SET, MODBUS_MASTER_TRANSMITTING_REQ);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_SET, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
 }
 
 //  MODBUS_MASTER_TRANSMITTING_REQ state tests,
@@ -544,10 +545,18 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
 }
 
-// TEST(master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMasterManagerStateMachineSetToWaitingForReply)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    check_modbus_master_manager();
+    mock_USART_req_msg_sended_EVENT();
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RECEIVING_RESP, master_manager_state_machine);
+}
 
 // TEST(master_RTU_test,)
 // {
