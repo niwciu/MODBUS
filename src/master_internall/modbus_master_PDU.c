@@ -34,6 +34,19 @@ static modbus_ret_t check_write_slave_resp_vs_req(const modbus_req_resp_t *resp,
 static modbus_ret_t check_out_val_or_out_qty_correctnes(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
 static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg);
 
+static const modbus_function_mapper_t modbus_master_function_mapper[] = {
+    {MODBUS_READ_COILS_FUNC_CODE, modbus_master_read_coils_resp},
+    {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_master_read_discrete_inputs_resp},
+    {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_master_read_holding_reg_resp},
+    {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, modbus_master_read_input_reg_resp},
+    {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, modbus_master_write_single_coil_resp},
+    {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, modbus_master_write_single_reg_resp},
+    {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, modbus_master_write_multiple_coils_resp},
+    {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_master_write_multiple_reg_resp},
+};
+
+#define MODBUS_MASTER_FUNCTION_MAPPER_SIZE (sizeof(modbus_master_function_mapper) / sizeof(modbus_master_function_mapper[0]));
+
 // Master PDU API functions
 
 modbus_ret_t modbus_master_read_holding_reg_req(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t hreg_qty)
@@ -174,33 +187,15 @@ modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
     modbus_ret_t resp_processing_status;
     if (RET_OK == check_null_ptr_correctness(modbus_msg))
     {
+        uint32_t mapper_size = MODBUS_MASTER_FUNCTION_MAPPER_SIZE;
         modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-        switch (req_fun_code)
+        for (uint32_t i=0; i<mapper_size; i++)
         {
-        case MODBUS_READ_COILS_FUNC_CODE:
-            resp_processing_status = modbus_master_read_coils_resp(modbus_msg);
-            break;
-        case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
-            resp_processing_status = modbus_master_read_discrete_inputs_resp(modbus_msg);
-            break;
-        case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
-            resp_processing_status = modbus_master_read_holding_reg_resp(modbus_msg);
-            break;
-        case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
-            resp_processing_status = modbus_master_read_input_reg_resp(modbus_msg);
-            break;
-        case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
-            resp_processing_status = modbus_master_write_single_coil_resp(modbus_msg);
-            break;
-        case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
-            resp_processing_status = modbus_master_write_single_reg_resp(modbus_msg);
-            break;
-        case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
-            resp_processing_status = modbus_master_write_multiple_coils_resp(modbus_msg);
-            break;
-        case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
-            resp_processing_status = modbus_master_write_multiple_reg_resp(modbus_msg);
-            break;
+            if (modbus_master_function_mapper[i].fun_code == req_fun_code)
+            {
+                resp_processing_status= modbus_master_function_mapper[i].fun_code_action(modbus_msg);
+                break;
+            }
         }
     }
     else
