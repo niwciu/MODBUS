@@ -42,7 +42,7 @@ static modbus_ret_t check_write_req_byte_count_correctenss(modbus_msg_t *modbus_
 static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *modbus_msg);
 static modbus_ret_t check_write_single_coil_req_data_correctness(modbus_msg_t *modbus_msg, modbus_adr_t coil_adr, modbus_w_coil_t coil_state);
 
-const modbus_function_mapper_t modbus_slave_function_mapper[] = {
+static const modbus_function_mapper_t modbus_slave_function_mapper[] = {
     {MODBUS_READ_COILS_FUNC_CODE, modbus_slave_read_coils},
     {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_slave_read_discrete_inputs},
     {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_slave_read_holding_reg},
@@ -53,7 +53,7 @@ const modbus_function_mapper_t modbus_slave_function_mapper[] = {
     {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_slave_write_multiple_reg},
 };
 
-#define MODBUS_FUNCTIONS_MAPPER_SIZE (sizeof(modbus_slave_function_mapper) / sizeof(modbus_slave_function_mapper[0]));
+#define MODBUS_SLAVE_FUNCTION_MAPPER_SIZE (sizeof(modbus_slave_function_mapper) / sizeof(modbus_slave_function_mapper[0]));
 
 modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 {
@@ -65,7 +65,7 @@ modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
     else
     {
         modbus_fun_code_t req_fun_code = rx_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-        uint32_t mapper_size = MODBUS_FUNCTIONS_MAPPER_SIZE;
+        uint32_t mapper_size = MODBUS_SLAVE_FUNCTION_MAPPER_SIZE;
         bool UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_SET;
         for (uint32_t i = 0; i < mapper_size; i++)
         {
