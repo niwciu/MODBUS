@@ -190,7 +190,7 @@ void check_modbus_master_manager(void)
                 master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
                 /**** happy path do not write test for this scenario **/
             }
-            else if (RET_ERROR_SLAVE_ID)
+            else if (RET_ERROR_SLAVE_ID == RTU_status)
             {
                 // if slave id is wrong device stay in this state and wait for proper resp or resp timeout
                 // stay in MODBUS_MASTER_RECEIVING_RESP
@@ -217,6 +217,7 @@ void check_modbus_master_manager(void)
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
             // parse slave_resp_msg
+            modbus_master_read_slave_resp(msg_buf);
         }
         else
         {
