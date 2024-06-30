@@ -159,6 +159,13 @@ extern "C"
         // modbus_device_ID_t slave_id;
     } modbus_msg_t;
 
+    typedef modbus_ret_t (*modbus_fun_code_handler_t)(modbus_msg_t *modbus_msg);
+    typedef struct 
+    {
+        modbus_fun_code_t fun_code;
+        modbus_fun_code_handler_t fun_code_action;
+    } modbus_function_mapper_t;
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

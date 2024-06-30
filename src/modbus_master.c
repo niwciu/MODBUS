@@ -54,8 +54,6 @@ static void modbus_master_T_1_5_char_expired_callback(void);
 static void modbus_master_T_3_5_char_expired_callback(void);
 static void modbus_master_frame_error_callback(void);
 
-static modbus_ret_t modbus_master_parse_slave_resp(modbus_msg_t *modbus_msg);
-
 typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 struct modbus_master_functions_mapper
 {

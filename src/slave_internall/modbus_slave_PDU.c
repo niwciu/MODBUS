@@ -15,12 +15,7 @@
 // #include "modbus_type.h"
 #include <stdio.h>
 
-typedef modbus_ret_t (*modbus_fun_code_handler_t)(modbus_msg_t *modbus_msg);
-struct modbus_slave_functions_mapper
-{
-    modbus_fun_code_t fun_code;
-    modbus_fun_code_handler_t fun_code_action;
-};
+
 
 static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg);
 static modbus_ret_t handle_slave_read_coil_service(modbus_msg_t *modbus_msg);
@@ -47,7 +42,7 @@ static modbus_ret_t check_write_req_byte_count_correctenss(modbus_msg_t *modbus_
 static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *modbus_msg);
 static modbus_ret_t check_write_single_coil_req_data_correctness(modbus_msg_t *modbus_msg, modbus_adr_t coil_adr, modbus_w_coil_t coil_state);
 
-const struct modbus_slave_functions_mapper modbus_functions_mapper[] = {
+const modbus_function_mapper_t modbus_slave_function_mapper[] = {
     {MODBUS_READ_COILS_FUNC_CODE, modbus_slave_read_coils},
     {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_slave_read_discrete_inputs},
     {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_slave_read_holding_reg},
@@ -58,7 +53,7 @@ const struct modbus_slave_functions_mapper modbus_functions_mapper[] = {
     {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_slave_write_multiple_reg},
 };
 
-#define MODBUS_FUNCTIONS_MAPPER_SIZE (sizeof(modbus_functions_mapper) / sizeof(modbus_functions_mapper[0]));
+#define MODBUS_FUNCTIONS_MAPPER_SIZE (sizeof(modbus_slave_function_mapper) / sizeof(modbus_slave_function_mapper[0]));
 
 modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 {
@@ -74,9 +69,9 @@ modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
         bool UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_SET;
         for (uint32_t i = 0; i < mapper_size; i++)
         {
-            if (req_fun_code == modbus_functions_mapper[i].fun_code)
+            if (req_fun_code == modbus_slave_function_mapper[i].fun_code)
             {
-                msg_parse_status = modbus_functions_mapper[i].fun_code_action(rx_msg);
+                msg_parse_status = modbus_slave_function_mapper[i].fun_code_action(rx_msg);
                 UNSUPORTED_FUNC_CODE_FLAG = MODBUS_FLAG_CLEARED;
             }
         }

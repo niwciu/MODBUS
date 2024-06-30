@@ -175,7 +175,6 @@ modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
     if (RET_OK == check_null_ptr_correctness(modbus_msg))
     {
         modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-        // modbus_fun_code_t resp_fun_code = modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX];
         switch (req_fun_code)
         {
         case MODBUS_READ_COILS_FUNC_CODE:
