@@ -330,39 +330,3 @@ static void modbus_master_frame_error_callback(void)
 {
     MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
 }
-
-static modbus_ret_t modbus_master_parse_slave_resp(modbus_msg_t *modbus_msg)
-{
-    modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-    modbus_fun_code_t resp_fun_code = modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX];
-    if (req_fun_code == resp_fun_code)
-    {
-        switch (resp_fun_code)
-        {
-        case MODBUS_READ_COILS_FUNC_CODE:
-            break;
-        case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
-            break;
-        case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
-            break;
-        case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
-            break;
-        case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
-            break;
-        case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
-            break;
-        case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
-            break;
-        case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
-            break;
-        }
-    }
-    else if (req_fun_code == (resp_fun_code | MODBUS_ERROR_CODE_MASK))
-    {
-        // error code recived for requested data
-    }
-    else
-    {
-        // resp has differen data then expected
-    }
-}
