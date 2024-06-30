@@ -45,7 +45,7 @@ PRIVATE modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_UN
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static modbus_master_error_t generate_request(modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty, modbus_device_ID_t slave_ID);
-static modbus_ret_t add_PDU_request_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty);
+static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty);
 static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 
@@ -54,7 +54,9 @@ static void modbus_master_T_1_5_char_expired_callback(void);
 static void modbus_master_T_3_5_char_expired_callback(void);
 static void modbus_master_frame_error_callback(void);
 
-    typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
+static modbus_ret_t modbus_master_parse_slave_resp(modbus_msg_t *modbus_msg);
+
+typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 struct modbus_master_functions_mapper
 {
     modbus_fun_code_t fun_code;
@@ -153,7 +155,7 @@ void check_modbus_master_manager(void)
     switch (master_manager_state_machine)
     {
     case MODBUS_MASTER_IDLE:
-        if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status)) //ToDo refacotr for check condition function
+        if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status)) // ToDo refacotr for check condition function
         {
             msg_buf = modbus_queue_pop(tx_rx_q);
             RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
@@ -194,44 +196,41 @@ void check_modbus_master_manager(void)
             {
                 // if slave id is wrong device stay in this state and wait for proper resp or resp timeout
                 // stay in MODBUS_MASTER_RECEIVING_RESP
-                
 
-                // RTU_driver->disable_T3,5_timer ->  for now T_3_5_Timer_Flag is cleared when T 1_5Flag is seted in this state -> 
-                msg_buf->resp.len=0; //set resp data buf ptr to first char
+                // RTU_driver->disable_T3,5_timer ->  for now T_3_5_Timer_Flag is cleared when T 1_5Flag is seted in this state ->
+                msg_buf->resp.len = 0; // set resp data buf ptr to first char
             }
-            else //RET_OK
+            else // RET_OK
             {
                 // stop respons time out timer
                 master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
             }
-            
         }
         else if (0 == modbus_master_resp_timeout)
         {
-
         }
         break;
     case MODBUS_MASTER_RESP_RECIVED:
-    // mainly here we are waiting for T 3,5 Flag to confirm correctnes of the response
-    if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
-    {
-        //frame error
-    }
-    else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
-    {
-        // frame is correct ad can be processed
-    }
-    else
-    {
-        // do nothing untill 3_5TFlag is not set
-    }
+        // mainly here we are waiting for T 3,5 Flag to confirm correctnes of the response
+        if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
+        {
+            // frame error
+        }
+        else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
+        {
+            // parse slave_resp_msg
+        }
+        else
+        {
+            // do nothing untill 3_5TFlag is not set
+        }
         break;
-    // case MODBUS_MASTER_RESP_PROCESING:
-    //     break;
+        // case MODBUS_MASTER_RESP_PROCESING:
+        //     break;
 
-    // case MODBUS_MASTER_ERROR_SERVICE:
-    //     // W zależności od tego co było błędem wykonuję jego obsługę
-    //     break;
+        // case MODBUS_MASTER_ERROR_SERVICE:
+        //     // W zależności od tego co było błędem wykonuję jego obsługę
+        //     break;
     }
 }
 
@@ -273,7 +272,7 @@ static modbus_master_error_t generate_request(modbus_fun_code_t fun_code, modbus
     {
         return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR;
     }
-    modbus_lib_ret = add_PDU_request_data(msg_buf, fun_code, adr, obj_qty);
+    modbus_lib_ret = generate_request_PDU_data(msg_buf, fun_code, adr, obj_qty);
     if (0 > modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
@@ -287,7 +286,7 @@ static modbus_master_error_t generate_request(modbus_fun_code_t fun_code, modbus
     return MODBUS_MASTER_REQUEST_SEND;
 }
 
-static modbus_ret_t add_PDU_request_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty)
+static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty)
 {
     modbus_ret_t PDU_ret_status = RET_ERROR_UNKNOWN_MAPPER_FUN_CODE;
     uint32_t master_mapper_size = MODBUS_MASTER_FUNCTIONS_MAPPER_SIZE;
@@ -330,4 +329,40 @@ static void modbus_master_T_3_5_char_expired_callback(void)
 static void modbus_master_frame_error_callback(void)
 {
     MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
+}
+
+static modbus_ret_t modbus_master_parse_slave_resp(modbus_msg_t *modbus_msg)
+{
+    modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
+    modbus_fun_code_t resp_fun_code = modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX];
+    if (req_fun_code == resp_fun_code)
+    {
+        switch (resp_fun_code)
+        {
+        case MODBUS_READ_COILS_FUNC_CODE:
+            break;
+        case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
+            break;
+        case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
+            break;
+        case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
+            break;
+        case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
+            break;
+        case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
+            break;
+        case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
+            break;
+        case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
+            break;
+        }
+    }
+    else if (req_fun_code == (resp_fun_code | MODBUS_ERROR_CODE_MASK))
+    {
+        // error code recived for requested data
+    }
+    else
+    {
+        // resp has differen data then expected
+    }
 }
