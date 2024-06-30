@@ -9,8 +9,9 @@
  *
  */
 #include "mock_master_driver_interface.h"
-
 #include "mem.h"
+
+modbus_coil_disin_t mock_master_coils[MASTER_COILS_TABLE_SIZE] = {0};
 
 driver_subscr_cb_t mock_master_msg_tx_done_cb = NULL;
 driver_subscr_cb_t mock_master_1_5_char_break_cb = NULL;
@@ -96,4 +97,19 @@ void mock_USART_req_msg_sended_EVENT(void)
     // operations deone when USART dirver send last data from request msg
     mock_master_USART.Tx_IRQ=IRQ_DISABLED;
     mock_master_msg_tx_done_cb();
+}
+
+void mock_USART_T_1_5_timeout_EVENT(void)
+{
+    mock_master_1_5_char_break_cb();
+}
+
+void mock_USART_T_3_5_timeout_EVENT(void)
+{
+    mock_master_3_5_char_break_cb();
+}
+
+void mock_USART_frame_error_EVENT(void)
+{
+    mock_master_frame_error_cb();
 }

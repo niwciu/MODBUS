@@ -1,5 +1,7 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_master.h"
+#include "modbus_slave_PDU.h"
+#include "modbus_slave.h"
 #include "modbus_RTU.h"
 #include "modbus_type.h"
 #include "modbus_queue.h"
@@ -10,6 +12,9 @@
 #include <mem.h>
 
 TEST_GROUP(master_RTU_test);
+
+#define TEST_SLAVE_COILS_TABLE_SIZE (MASTER_COILS_TABLE_SIZE)
+
 extern modbus_queue_t *tx_rx_q;
 extern modbus_queue_t *free_q;
 extern modbus_msg_t *msg_buf;
@@ -18,14 +23,24 @@ extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 extern modbus_master_state_t master_manager_state_machine;
 extern modbus_timer_t modbus_master_resp_timeout;
 
-    static void
-    reset_all_RTU_buffers(void);
+modbus_coil_disin_t test_slave_coils[TEST_SLAVE_COILS_TABLE_SIZE] = {COIL_OFF};
+
+static void
+reset_all_RTU_buffers(void);
 
 TEST_SETUP(master_RTU_test)
 {
     /* Init before every test */
     modbus_master_init(RTU, 9600, ODD);
     reset_all_RTU_buffers();
+    for (uint8_t i = 0; i < MASTER_COILS_TABLE_SIZE; i++)
+    {
+        register_app_data_to_modbus_master_coils_table(i, &mock_master_coils[i]);
+    }
+    for (uint8_t i = 0; i < TEST_SLAVE_COILS_TABLE_SIZE; i++)
+    {
+        register_app_data_to_modbus_slave_coils_table(i, &test_slave_coils[i]);
+    }
 }
 
 TEST_TEAR_DOWN(master_RTU_test)
@@ -546,7 +561,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
 }
 
-TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenResponseTimeoutIsEnabled)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenResponseTimeoutIsEnabled)
 {
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
@@ -562,10 +577,40 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenW
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_TIME_OUT_MS, modbus_master_resp_timeout);
 }
 
-// TEST(master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+//  MODBUS_MASTER_RESP_WAITING state tests
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charExpiredThenRespProcessed)
+{
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_device_ID_t slave_ID = 0x03;
+    modbus_data_qty_t coils_qty = 2;
+
+    test_slave_coils[0] = !!COIL_ON;
+    test_slave_coils[1] = !!COIL_ON;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+    mock_USART_req_msg_sended_EVENT();
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(!!COIL_OFF, mock_master_coils[coil_adr]);
+    TEST_ASSERT_EQUAL(!!COIL_OFF, mock_master_coils[coil_adr + 1]);
+    // generate resp using slave lib
+    parse_master_request_and_prepare_resp(msg_buf);
+    modbus_RTU_send(msg_buf->resp.data, &msg_buf->resp.len, slave_ID);
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+    // msg recived
+    mock_USART_T_1_5_timeout_EVENT();
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+    // recived msg correct
+    mock_USART_T_3_5_timeout_EVENT();
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(test_slave_coils[coil_adr], mock_master_coils[coil_adr]);
+    TEST_ASSERT_EQUAL(test_slave_coils[coil_adr+1], mock_master_coils[coil_adr+1]);
+}
 
 // TEST(master_RTU_test,)
 // {

@@ -11,8 +11,9 @@
 #include "mock_master_slave_common.h"
 
 #pragma once
+#define MASTER_COILS_TABLE_SIZE 10
 
-
+extern modbus_coil_disin_t mock_master_coils[MASTER_COILS_TABLE_SIZE];
 
 extern driver_init_status_t mock_master_USART;
 
@@ -25,3 +26,6 @@ extern modbus_req_resp_t *mock_master_rx_msg_ptr;
 extern USART_Tx_status_t master_USART_Tx_status;
 
 void mock_USART_req_msg_sended_EVENT(void);
+void mock_USART_T_1_5_timeout_EVENT(void);
+void mock_USART_T_3_5_timeout_EVENT(void);
+void mock_USART_frame_error_EVENT(void);
