@@ -48,6 +48,8 @@ static modbus_master_error_t generate_request(modbus_fun_code_t fun_code, modbus
 static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty);
 static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
+static void modbus_master_enable_resp_timeout_timer(void);
+static void modbus_master_disable_resp_timeout_timer(void);
 
 static void modbus_master_req_sended_callback(void);
 static void modbus_master_T_1_5_char_expired_callback(void);
@@ -200,7 +202,7 @@ void check_modbus_master_manager(void)
             }
             else // RET_OK
             {
-                // stop respons time out timer
+                modbus_master_disable_resp_timeout_timer();
                 master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
             }
         }
@@ -308,6 +310,15 @@ static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *mod
 {
     (void)(coils_qty);
     return modbus_master_write_single_reg_req(modbus_msg, adr);
+}
+
+static void modbus_master_enable_resp_timeout_timer(void)
+{
+    modbus_master_resp_timeout=MODBUS_MASTER_RESP_TIME_OUT_MS;
+}
+static void modbus_master_disable_resp_timeout_timer(void)
+{
+    modbus_master_resp_timeout=0;
 }
 
 static void modbus_master_req_sended_callback(void)
