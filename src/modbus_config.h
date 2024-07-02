@@ -18,6 +18,7 @@ extern "C"
 
 #define MAX_MODBUS_MSG_QUEUE_ITEMS  2
 #define MODBUS_MASTER_RESP_TIME_OUT_MS 1000
+#define MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR 3
 
 #ifdef  UNIT_TEST
 // belo values cavering conditions to run all tests
