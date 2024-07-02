@@ -230,6 +230,7 @@ void check_modbus_master_manager(void)
         {
             // parse slave_resp_msg
             modbus_master_read_slave_resp(msg_buf);
+            modbus_master_msg_repeat_couter=0;
         }
         else
         {
