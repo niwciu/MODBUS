@@ -60,12 +60,16 @@ TEST_GROUP_RUNNER(master_RTU_test)
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charExpiredThenResponsTimeOutTimerDisabled);
         // resp msg with frame error
     RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndFrameErrorCatchedThenAfterT3_5CharIncMsgRepeatCounter);
+    // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedThenErrorLogStructUpdated);
     if (1 <= MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR)
     {
         RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedAndMsgRepeatCounterUpdatedWhenMsgRepeatCounterEqualOrLessForMsgRepeatOnErrorParamThenAfterT3_5CharSetRepeatMsgRequestStateAndFrameErrorFlagCleared);
         RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedLessTimeThenRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenRespProcessed);
         RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedLessTimeThenRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenResponsTimeOutTimerDisabledAndRepeatCounterEqual0);
         RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedEqualTimeThenRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenRespProcessedAndResponsTimeOutTimerDisabledAndRepeatCounterEqual0);
+        // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThenRepeatOnErrorParamThenReportError);
+        // RUN_TEST_CASE(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThenRepeatOnErrorParamAndSlaveErrorReportedThenGoToIdleState);
+        // Curr_Msg_error_catched jako tymczasowa struktura do której raportuje błędy a następnie tą strukturę przepisuję do raportu błędu na końcu
     }
     else
     {

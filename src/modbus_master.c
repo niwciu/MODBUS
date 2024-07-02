@@ -152,7 +152,7 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     // set all internall variable to its default values
     modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
     modbus_master_msg_repeat_couter = 0; // ToDo init test for this var
-    modbus_master_resp_timeout = 0;      // ToDo init test for this var
+    modbus_master_disable_resp_timeout_timer(); // ToDo init test for this var
 }
 void check_modbus_master_manager(void)
 {
@@ -185,21 +185,20 @@ void check_modbus_master_manager(void)
             RTU_status = modbus_RTU_recv(msg_buf->req.data, msg_buf->req.len, modbus_req_slave_ID);
             if (RET_ERROR_CRC == RTU_status)
             {
-                // set error flag and repeat from idle where with error flag msg is not poped from queue
-                // repetition counter should be implemented and checked here if repetion was done for example 3 times msg should be skiped?
-                // when sending msg T3,5 timer is disabled, need to clean here all app flags when sending T15 int is enabled
-                // modbus_master_manager_state_machine = MODBUS_MASTER_IDLE
+                // update repetetion anu error counter 
+                // if couter > then defined max req repetition then proced to err else repeta request
                 // stop response time out timer
 
                 /****  for happy path we are setting error flag and going to next state*/
-                MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
-                modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
+                // MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
+                // modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
                 /**** happy path do not write test for this scenario **/
             }
             else if (RET_ERROR_SLAVE_ID == RTU_status)
             {
                 // if slave id is wrong device stay in this state and wait for proper resp or resp timeout
-                // stay in MODBUS_MASTER_RECEIVING_RESP
+                // stay in MODBUS_MASTER_RECEIVING_RESP 
+                // To Do Do in the future -> log event that for specific req slave id resp was catched
 
                 // RTU_driver->disable_T3,5_timer ->  for now T_3_5_Timer_Flag is cleared when T 1_5Flag is seted in this state ->
                 msg_buf->resp.len = 0; // set resp data buf ptr to first char
@@ -218,12 +217,16 @@ void check_modbus_master_manager(void)
         // mainly here we are waiting for T 3,5 Flag to confirm correctnes of the response
         if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
-            // frame error
+            // frame error catched
             modbus_master_msg_repeat_couter++;
             if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
             {
                 modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
                 MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+            }
+            else
+            {
+                // report error, push msg to free queueue buffer and go to idle
             }
         }
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
@@ -231,6 +234,7 @@ void check_modbus_master_manager(void)
             // parse slave_resp_msg
             modbus_master_read_slave_resp(msg_buf);
             modbus_master_msg_repeat_couter=0;
+            // push msg to free queue buffer
         }
         else
         {
