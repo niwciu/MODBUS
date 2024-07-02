@@ -95,7 +95,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadCoil
     modbus_adr_t coil_adr = 0x0001;
     modbus_data_qty_t coils_qty = 4;
     modbus_coil_disin_t readed_coil_val[coils_qty];
-    RTU_msg->rw_data_ptr = readed_coil_val;
+    RTU_msg->rw_data_ptr = (void*)(readed_coil_val);
 
     mock_set_expected_slave_coils_alternately(coil_adr, coils_qty, !!COIL_ON);
     modbus_master_read_coils_req(RTU_msg, coil_adr, coils_qty);

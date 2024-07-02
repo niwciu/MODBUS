@@ -9,7 +9,6 @@
  *
  */
 #include "modbus_PDU.h"
-#include "modbus_data.h"
 
 modbus_byte_count_t get_coil_din_byte_count(modbus_data_qty_t coil_qty)
 {
