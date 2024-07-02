@@ -71,8 +71,8 @@ set(TEST_SRCS
     master_PDU_req_test.c
 	# master_PDU_read_test_runner.c
 	# master_PDU_read_test.c
-	# slave_PDU_resp_test_runner.c
-	# slave_PDU_resp_test.c
+	slave_PDU_resp_test_runner.c
+	slave_PDU_resp_test.c
 	# slave_PDU_exception_code_test_runner.c
 	# slave_PDU_exception_code_test.c
 	modbus_data_test.c
