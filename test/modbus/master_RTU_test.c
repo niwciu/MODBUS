@@ -708,10 +708,34 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
 }
 
-// TEST(master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedEqualTimeThenRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenRespProcessedAndResponsTimeOutTimerDisabledAndRepeatCounterEqual0)
+{
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_device_ID_t slave_ID = 0x03;
+    modbus_data_qty_t coils_qty = 2;
+
+    test_slave_coils[0] = !!COIL_ON;
+    test_slave_coils[1] = !!COIL_ON;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+
+    for (uint8_t i=0; i< MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR; i++)
+    {
+        generate_send_req_sequence();
+        generate_resp_using_slave_lib(slave_ID);
+        generate_msg_T_1_5_char_brake_sequence();
+        mock_USART_frame_error_EVENT();
+        generate_msg_T_3_5_char_brake_sequence();
+    }
+    generate_send_req_sequence();
+    generate_resp_using_slave_lib(slave_ID);
+    generate_msg_T_1_5_char_brake_sequence();
+    generate_msg_T_3_5_char_brake_sequence();
+    TEST_ASSERT_EQUAL(test_slave_coils[coil_adr], mock_master_coils[coil_adr]);
+    TEST_ASSERT_EQUAL(test_slave_coils[coil_adr + 1], mock_master_coils[coil_adr + 1]);
+    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout);
+    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
+}
 
 // TEST(master_RTU_test,)
 // {
