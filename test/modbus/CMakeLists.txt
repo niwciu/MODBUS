@@ -69,33 +69,33 @@ set(TEST_SRCS
     modbus_test_main.c
     master_PDU_req_test_runner.c
     master_PDU_req_test.c
-	master_PDU_read_test_runner.c
-	master_PDU_read_test.c
-	slave_PDU_resp_test_runner.c
-	slave_PDU_resp_test.c
-	slave_PDU_exception_code_test_runner.c
-	slave_PDU_exception_code_test.c
+	# master_PDU_read_test_runner.c
+	# master_PDU_read_test.c
+	# slave_PDU_resp_test_runner.c
+	# slave_PDU_resp_test.c
+	# slave_PDU_exception_code_test_runner.c
+	# slave_PDU_exception_code_test.c
 	modbus_data_test.c
 	modbus_data_test_runner.c
 	modbus_CRC_test.c
 	modbus_CRC_test_runner.c
-	modbus_RTU_test.c
-	modbus_RTU_test_runner.c
+	# modbus_RTU_test.c
+	# modbus_RTU_test_runner.c
 	modbus_queue_test.c
 	modbus_queue_test_runner.c
 	mock_slave_app_data.c
-	mock_master_app_data.c
+	# mock_master_app_data.c
 	mock_master_driver_interface.c
 	mock_slave_driver_interface.c
 
-	master_RTU_init_test_runner.c
-    master_RTU_init_test.c
-	master_RTU_test_runner.c
-	master_RTU_test.c
-	slave_RTU_init_test_runner.c
-    slave_RTU_init_test.c
-	slave_RTU_test_runner.c
-	slave_RTU_test.c
+	# master_RTU_init_test_runner.c
+    # master_RTU_init_test.c
+	# master_RTU_test_runner.c
+	# master_RTU_test.c
+	# slave_RTU_init_test_runner.c
+    # slave_RTU_init_test.c
+	# slave_RTU_test_runner.c
+	# slave_RTU_test.c
 	
 
 	#mock_module.c

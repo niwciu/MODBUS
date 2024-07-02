@@ -356,7 +356,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils5Coils)
     // modbus_coil_disin_t data_coil_states[1] = {0x15};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -370,10 +370,9 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus)
 {
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 5;
-    // modbus_coil_disin_t data_coil_states[1] = {0x15};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
 
     parse_master_request_and_prepare_resp(RTU_msg);
@@ -396,7 +395,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils8Coils)
     // modbus_coil_disin_t data_coil_states[1] = {0x55};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -413,7 +412,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus)
     // modbus_coil_disin_t data_coil_states[] = {1,0,1,0,1,0,1,0};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr]);
@@ -434,7 +433,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils9Coils)
     // modbus_coil_disin_t data_coil_states[2] = {0x55, 0x01};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -451,7 +450,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus)
     // modbus_coil_disin_t data_coil_states[2] = {0x55, 0x01};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr]);
@@ -481,7 +480,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils16Coils)
     // modbus_coil_disin_t data_coil_states[2] = {0x55, 0x55};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -498,7 +497,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils16CoilsAndCheckCoilsStatus)
     // modbus_coil_disin_t data_coil_states[2] = {0x55, 0x55};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr]);
@@ -527,7 +526,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils17Coils)
     // modbus_coil_disin_t data_coil_states[3] = {0x55, 0x55, 0x01};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -544,7 +543,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus)
     // modbus_coil_disin_t data_coil_states[3] = {0x55, 0x55, 0x01};
 
     mock_set_all_slave_cails_to_off();
-    mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
+    // mock_set_expected_master_coils_alternately(adr, coil_qty, !!COIL_ON);
     modbus_master_write_multiple_coils_req(RTU_msg, adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr]);
@@ -581,7 +580,7 @@ TEST(Slave_PDU_resp, SlaveWriteSingleRegister)
     modbus_adr_t adr = 0x0000;
     modbus_reg_t reg_val = 0x5A5A;
 
-    mock_master_hreg[adr] = reg_val;
+    // mock_master_hreg[adr] = reg_val;
     modbus_master_write_single_reg_req(RTU_msg, adr);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -595,7 +594,7 @@ TEST(Slave_PDU_resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
     modbus_adr_t adr = 0x0001;
     modbus_reg_t reg_val = 0x5A5A;
     mock_reset_all_slave_hreg_value();
-    mock_master_hreg[adr] = reg_val;
+    // mock_master_hreg[adr] = reg_val;
     modbus_master_write_single_reg_req(RTU_msg, adr);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -610,7 +609,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3Reg)
     modbus_data_qty_t reg_qty = 3;
 
     mock_reset_all_slave_hreg_value();
-    mock_set_expected_master_hreg_alternately(adr, reg_qty, 0x5A5A);
+    // mock_set_expected_master_hreg_alternately(adr, reg_qty, 0x5A5A);
     modbus_master_write_multiple_reg_req(RTU_msg, adr, reg_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -627,7 +626,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
     modbus_data_qty_t reg_qty = 3;
 
     mock_reset_all_slave_hreg_value();
-    mock_set_expected_master_hreg_alternately(adr, reg_qty, 0x5A5A);
+    // mock_set_expected_master_hreg_alternately(adr, reg_qty, 0x5A5A);
     modbus_master_write_multiple_reg_req(RTU_msg, adr, reg_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 

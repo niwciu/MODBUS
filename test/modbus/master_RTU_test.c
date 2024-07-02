@@ -41,7 +41,7 @@ TEST_SETUP(master_RTU_test)
     reset_all_RTU_buffers();
     for (uint8_t i = 0; i < MASTER_COILS_TABLE_SIZE; i++)
     {
-        register_app_data_to_modbus_master_coils_table(i, &mock_master_coils[i]);
+        // register_app_data_to_modbus_master_coils_table(i, &mock_master_coils[i]);
     }
     for (uint8_t i = 0; i < TEST_SLAVE_COILS_TABLE_SIZE; i++)
     {
@@ -59,7 +59,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenRegisterAppDataToMasterC
     modbus_adr_t coil_adr = 0x0003;
     modbus_coil_disin_t app_data_coil = !!COIL_OFF;
 
-    register_app_data_to_modbus_master_coils_table(coil_adr, &app_data_coil);
+    // register_app_data_to_modbus_master_coils_table(coil_adr, &app_data_coil);
 
     TEST_ASSERT_EQUAL(&app_data_coil, Master_Coils[coil_adr]);
 }

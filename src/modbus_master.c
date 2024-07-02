@@ -48,8 +48,8 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static modbus_master_error_t generate_request(req_input_param_struct_t *req_param);
 static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty);
-static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
-static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
+static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty, void *rw_data_ptr);
+static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty, void *rw_data_ptr);
 static void modbus_master_enable_resp_timeout_timer(void);
 static void modbus_master_disable_resp_timeout_timer(void);
 
@@ -79,22 +79,22 @@ const struct modbus_master_functions_mapper master_functions_mapper[] = {
 
 
 
-void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
-{
-    register_app_data_to_modbus_coils_din_table(Master_Coils, coil_adr, app_data_ptr);
-}
-void register_app_data_to_modbus_master_din_table(modbus_adr_t disin_adr, modbus_coil_disin_t *app_data_ptr)
-{
-    register_app_data_to_modbus_coils_din_table(Master_Discrete_Inputs, disin_adr, app_data_ptr);
-}
-void register_app_data_to_modbus_master_inreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
-{
-    register_app_data_to_modbus_reg_table(Master_Input_Registers, reg_adr, app_data_ptr);
-}
-void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
-{
-    register_app_data_to_modbus_reg_table(Master_Holding_Registers, reg_adr, app_data_ptr);
-}
+// void register_app_data_to_modbus_master_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
+// {
+//     // register_app_data_to_modbus_coils_din_table(Master_Coils, coil_adr, app_data_ptr);
+// }
+// void register_app_data_to_modbus_master_din_table(modbus_adr_t disin_adr, modbus_coil_disin_t *app_data_ptr)
+// {
+//     // register_app_data_to_modbus_coils_din_table(Master_Discrete_Inputs, disin_adr, app_data_ptr);
+// }
+// void register_app_data_to_modbus_master_inreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
+// {
+//     // register_app_data_to_modbus_reg_table(Master_Input_Registers, reg_adr, app_data_ptr);
+// }
+// void register_app_data_to_modbus_master_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
+// {
+//     // register_app_data_to_modbus_reg_table(Master_Holding_Registers, reg_adr, app_data_ptr);
+// }
 
 modbus_master_error_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, void *rw_data_ptr)
 {
@@ -335,15 +335,15 @@ static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, modbus_fun_
     return PDU_ret_status;
 }
 
-static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
+static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty, void *rw_data_ptr)
 {
     (void)(coils_qty);
-    return modbus_master_write_single_coil_req(modbus_msg, adr);
+    return modbus_master_write_single_coil_req(modbus_msg, adr, rw_data_ptr);
 }
-static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
+static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty, void *rw_data_ptr)
 {
     (void)(coils_qty);
-    return modbus_master_write_single_reg_req(modbus_msg, adr);
+    return modbus_master_write_single_reg_req(modbus_msg, adr, rw_data_ptr);
 }
 
 static void modbus_master_enable_resp_timeout_timer(void)
