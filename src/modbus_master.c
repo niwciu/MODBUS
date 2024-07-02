@@ -25,7 +25,7 @@
 #define PRIVATE static
 #endif
 
-PRIVATE modbus_master_state_t master_manager_state_machine = MODBUS_MASTER_IDLE;
+PRIVATE modbus_master_state_t modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
 PRIVATE const modbus_RTU_driver_struct_t *RTU_driver = NULL;
 
 static modbus_queue_t master_free_queue;
@@ -36,7 +36,7 @@ PRIVATE modbus_queue_t *tx_rx_q = &master_tx_rx_queue;
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *msg_buf = NULL;
 PRIVATE modbus_timer_t modbus_master_resp_timeout = 0;
-PRIVATE uint8_t msg_repeat_couter=0;
+PRIVATE uint8_t modbus_msg_repeat_couter = 0;
 
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
@@ -149,13 +149,13 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
     MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
     // set all internall variable to its default values
-    master_manager_state_machine = MODBUS_MASTER_IDLE;
-    msg_repeat_couter =0; // ToDo init test for this var
+    modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
+    modbus_msg_repeat_couter = 0;   // ToDo init test for this var
     modbus_master_resp_timeout = 0; // ToDo init test for this var
 }
 void check_modbus_master_manager(void)
 {
-    switch (master_manager_state_machine)
+    switch (modbus_master_manager_state_machine)
     {
     case MODBUS_MASTER_IDLE:
         if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status)) // ToDo refacotr for check condition function
@@ -164,14 +164,16 @@ void check_modbus_master_manager(void)
             RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
             RTU_driver->enable_rcev(&msg_buf->resp);
             MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_SET;
-            master_manager_state_machine = MODBUS_MASTER_TRANSMITTING_REQ;
+            modbus_master_manager_state_machine = MODBUS_MASTER_TRANSMITTING_REQ;
         }
+        break;
+    case MODBUS_MASTER_REPEAT_REQUEST:
         break;
     case MODBUS_MASTER_TRANSMITTING_REQ:
         if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
         {
             modbus_master_enable_resp_timeout_timer();
-            master_manager_state_machine = MODBUS_MASTER_RESP_WAITING;
+            modbus_master_manager_state_machine = MODBUS_MASTER_RESP_WAITING;
         }
         break;
     case MODBUS_MASTER_RESP_WAITING:
@@ -187,12 +189,12 @@ void check_modbus_master_manager(void)
                 // set error flag and repeat from idle where with error flag msg is not poped from queue
                 // repetition counter should be implemented and checked here if repetion was done for example 3 times msg should be skiped?
                 // when sending msg T3,5 timer is disabled, need to clean here all app flags when sending T15 int is enabled
-                // master_manager_state_machine = MODBUS_MASTER_IDLE
+                // modbus_master_manager_state_machine = MODBUS_MASTER_IDLE
                 // stop response time out timer
 
                 /****  for happy path we are setting error flag and going to next state*/
                 MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
-                master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
+                modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
                 /**** happy path do not write test for this scenario **/
             }
             else if (RET_ERROR_SLAVE_ID == RTU_status)
@@ -206,7 +208,7 @@ void check_modbus_master_manager(void)
             else // RET_OK
             {
                 modbus_master_disable_resp_timeout_timer();
-                master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
+                modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
             }
         }
         else if (0 == modbus_master_resp_timeout)
@@ -218,7 +220,8 @@ void check_modbus_master_manager(void)
         if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
             // frame error
-            
+            modbus_msg_repeat_couter++;
+            modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
         }
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
@@ -318,11 +321,11 @@ static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *mod
 
 static void modbus_master_enable_resp_timeout_timer(void)
 {
-    modbus_master_resp_timeout=MODBUS_MASTER_RESP_TIME_OUT_MS;
+    modbus_master_resp_timeout = MODBUS_MASTER_RESP_TIME_OUT_MS;
 }
 static void modbus_master_disable_resp_timeout_timer(void)
 {
-    modbus_master_resp_timeout=0;
+    modbus_master_resp_timeout = 0;
 }
 
 static void modbus_master_req_sended_callback(void)

@@ -20,9 +20,9 @@ extern modbus_queue_t *free_q;
 extern modbus_msg_t *msg_buf;
 
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
-extern modbus_master_state_t master_manager_state_machine;
+extern modbus_master_state_t modbus_master_manager_state_machine;
 extern modbus_timer_t modbus_master_resp_timeout;
-extern uint8_t msg_repeat_couter;
+extern uint8_t modbus_msg_repeat_couter;
 
 modbus_coil_disin_t test_slave_coils[TEST_SLAVE_COILS_TABLE_SIZE] = {COIL_OFF};
 
@@ -610,10 +610,10 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     check_modbus_master_manager();
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(test_slave_coils[coil_adr], mock_master_coils[coil_adr]);
-    TEST_ASSERT_EQUAL(test_slave_coils[coil_adr+1], mock_master_coils[coil_adr+1]);
+    TEST_ASSERT_EQUAL(test_slave_coils[coil_adr + 1], mock_master_coils[coil_adr + 1]);
 }
 
-TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charExpiredThenResponsTimeOutTimerDisabled)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charExpiredThenResponsTimeOutTimerDisabled)
 {
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
@@ -641,10 +641,10 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWh
     mock_USART_T_3_5_timeout_EVENT();
     check_modbus_master_manager();
     check_modbus_master_manager();
-    TEST_ASSERT_EQUAL(0,modbus_master_resp_timeout);
+    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout);
 }
 
-TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charNotExpiredAndCharRecivedThenAfterT3_5CharIncMsgRepeatCounterAndRepeatMsgRequest)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charNotExpiredAndCharRecivedThenAfterT3_5CharIncMsgRepeatCounterAndSetRepeatMsgRequestState)
 {
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
@@ -668,14 +668,14 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     mock_USART_T_1_5_timeout_EVENT();
     check_modbus_master_manager();
     check_modbus_master_manager();
-    //char recived before 3,5char timer expired
+    // char recived before 3,5char timer expired
     mock_USART_frame_error_EVENT();
     // recived msg correct
     mock_USART_T_3_5_timeout_EVENT();
     check_modbus_master_manager();
     check_modbus_master_manager();
-    TEST_ASSERT_EQUAL(1, msg_repeat_couter);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, master_manager_state_machine);
+    TEST_ASSERT_EQUAL(1, modbus_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REPEAT_REQUEST, modbus_master_manager_state_machine);
 }
 
 // TEST(master_RTU_test,)

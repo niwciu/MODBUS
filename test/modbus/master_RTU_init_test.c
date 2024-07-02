@@ -13,7 +13,7 @@ TEST_GROUP(master_RTU_init_test);
 extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 
 extern struct modbus_RTU_driver_struct *RTU_driver;
-extern modbus_master_state_t master_manager_state_machine;
+extern modbus_master_state_t modbus_master_manager_state_machine;
 extern modbus_queue_t *free_q;
 extern modbus_queue_t *tx_rx_q;
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
@@ -89,7 +89,7 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerS
 {
     modbus_master_init(RTU, 0, 0);
 
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, master_manager_state_machine);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, modbus_master_manager_state_machine);
 }
 
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenMOdbusSendingRequestFlagIsCleared)
@@ -122,19 +122,19 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRequestTransmiscionC
     TEST_ASSERT_NOT_NULL(mock_master_msg_tx_done_cb);
 }
 
-TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenT1_5CharTimeExpiredCallbackRegistered)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenT1_5CharTimeExpiredCallbackRegistered)
 {
     modbus_master_init(RTU, 0, 0);
     TEST_ASSERT_NOT_NULL(mock_master_1_5_char_break_cb);
 }
 
-TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenT3_5CharTimeExpiredCallbackRegistered)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenT3_5CharTimeExpiredCallbackRegistered)
 {
     modbus_master_init(RTU, 0, 0);
     TEST_ASSERT_NOT_NULL(mock_master_3_5_char_break_cb);
 }
 
-TEST(master_RTU_init_test,WhenModbusMasterInitInRTUmodeThenFrameErrorFlagCallbackRegistered)
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenFrameErrorFlagCallbackRegistered)
 {
     modbus_master_init(RTU, 0, 0);
     TEST_ASSERT_NOT_NULL(mock_master_frame_error_cb);

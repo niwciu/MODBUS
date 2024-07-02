@@ -12,7 +12,7 @@ TEST_GROUP(master_RTU_init_test);
 extern modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 
 extern struct modbus_RTU_driver_struct *RTU_driver;
-extern modbus_master_state_t master_manager_state_machine;
+extern modbus_master_state_t modbus_master_manager_state_machine;
 extern modbus_queue_t *free_q;
 extern modbus_queue_t *tx_rx_q;
 
@@ -74,7 +74,7 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerS
 {
     modbus_master_init(RTU, 0, 0);
 
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, master_manager_state_machine);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, modbus_master_manager_state_machine);
 }
 
 // TEST(master_RTU_init_test,)

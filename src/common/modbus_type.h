@@ -109,9 +109,11 @@ extern "C"
     typedef enum
     {
         MODBUS_MASTER_IDLE,
+        MODBUS_MASTER_REPEAT_REQUEST,
         MODBUS_MASTER_TRANSMITTING_REQ,
         MODBUS_MASTER_RESP_WAITING,
         MODBUS_MASTER_RESP_RECIVED,
+        
         // MODBUS_MASTER_RESP_PROCESING,
         // 
         // MODBUS_MASTER_ERROR_SERVICE,
