@@ -22,7 +22,7 @@ extern modbus_msg_t *msg_buf;
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 extern modbus_master_state_t modbus_master_manager_state_machine;
 extern modbus_timer_t modbus_master_resp_timeout;
-extern uint8_t modbus_msg_repeat_couter;
+extern uint8_t modbus_master_msg_repeat_couter;
 
 extern modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG;
 
@@ -34,7 +34,7 @@ static void generate_send_req_sequence(void);
 static void generate_msg_T_1_5_char_brake_sequence(void);
 static void generate_msg_T_3_5_char_brake_sequence(void);
 
-    TEST_SETUP(master_RTU_test)
+TEST_SETUP(master_RTU_test)
 {
     /* Init before every test */
     modbus_master_init(RTU, 9600, ODD);
@@ -597,7 +597,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     generate_send_req_sequence();
     TEST_ASSERT_EQUAL(!!COIL_OFF, mock_master_coils[coil_adr]);
     TEST_ASSERT_EQUAL(!!COIL_OFF, mock_master_coils[coil_adr + 1]);
-    
+
     generate_resp_using_slave_lib(slave_ID);
     generate_msg_T_1_5_char_brake_sequence();
     generate_msg_T_3_5_char_brake_sequence();
@@ -638,7 +638,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     generate_msg_T_1_5_char_brake_sequence();
     mock_USART_frame_error_EVENT();
     generate_msg_T_3_5_char_brake_sequence();
-    TEST_ASSERT_EQUAL(1, modbus_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(1, modbus_master_msg_repeat_couter);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRespWithCorrectIDandCRCRecivedAndFrameErrorCatchedAndMsgRepeatCounterUpdatedWhenMsgRepeatCounterEqualOrLessForMsgRepeatOnErrorParamThenAfterT3_5CharSetRepeatMsgRequestStateAndFrameErrorFlagCleared)
@@ -660,7 +660,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_FRAME_ERROR_FLAG);
 }
 
-TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedLessTimeThenRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenRespProcessed)
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedLessTimeThenRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenRespProcessed)
 {
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
@@ -675,7 +675,7 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAn
     generate_msg_T_1_5_char_brake_sequence();
     mock_USART_frame_error_EVENT();
     generate_msg_T_3_5_char_brake_sequence();
-    //repeat same request;
+    // repeat same request;
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
     generate_msg_T_1_5_char_brake_sequence();
@@ -684,10 +684,29 @@ TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAn
     TEST_ASSERT_EQUAL(test_slave_coils[coil_adr + 1], mock_master_coils[coil_adr + 1]);
 }
 
-// TEST(master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedLessTimeThenRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenResponsTimeOutTimerDisabledAndRepeatCounterEqual0)
+{
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_device_ID_t slave_ID = 0x03;
+    modbus_data_qty_t coils_qty = 2;
+
+    test_slave_coils[0] = !!COIL_ON;
+    test_slave_coils[1] = !!COIL_ON;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    generate_send_req_sequence();
+    generate_resp_using_slave_lib(slave_ID);
+    generate_msg_T_1_5_char_brake_sequence();
+    mock_USART_frame_error_EVENT();
+    generate_msg_T_3_5_char_brake_sequence();
+    // repeat same request;
+    generate_send_req_sequence();
+    generate_resp_using_slave_lib(slave_ID);
+    generate_msg_T_1_5_char_brake_sequence();
+    generate_msg_T_3_5_char_brake_sequence();
+    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout);
+    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
+}
 
 // TEST(master_RTU_test,)
 // {
@@ -745,4 +764,3 @@ static void generate_msg_T_3_5_char_brake_sequence(void)
     mock_USART_T_3_5_timeout_EVENT();
     check_modbus_master_manager();
 }
-

@@ -36,7 +36,7 @@ PRIVATE modbus_queue_t *tx_rx_q = &master_tx_rx_queue;
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *msg_buf = NULL;
 PRIVATE modbus_timer_t modbus_master_resp_timeout = 0;
-PRIVATE uint8_t modbus_msg_repeat_couter = 0;
+PRIVATE uint8_t modbus_master_msg_repeat_couter = 0;
 
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
@@ -151,8 +151,8 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
     // set all internall variable to its default values
     modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
-    modbus_msg_repeat_couter = 0;   // ToDo init test for this var
-    modbus_master_resp_timeout = 0; // ToDo init test for this var
+    modbus_master_msg_repeat_couter = 0; // ToDo init test for this var
+    modbus_master_resp_timeout = 0;      // ToDo init test for this var
 }
 void check_modbus_master_manager(void)
 {
@@ -219,8 +219,8 @@ void check_modbus_master_manager(void)
         if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
             // frame error
-            modbus_msg_repeat_couter++;
-            if( MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR>modbus_msg_repeat_couter)
+            modbus_master_msg_repeat_couter++;
+            if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR > modbus_master_msg_repeat_couter)
             {
                 modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
                 MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
