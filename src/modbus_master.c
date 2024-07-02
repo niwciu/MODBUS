@@ -220,7 +220,7 @@ void check_modbus_master_manager(void)
         {
             // frame error
             modbus_master_msg_repeat_couter++;
-            if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR > modbus_master_msg_repeat_couter)
+            if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
             {
                 modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
                 MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
