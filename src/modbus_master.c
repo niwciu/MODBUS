@@ -48,8 +48,8 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static modbus_master_error_t generate_request(req_input_param_struct_t *req_param);
 static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty);
-static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty, void *rw_data_ptr);
-static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty, void *rw_data_ptr);
+static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
+static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 static void modbus_master_enable_resp_timeout_timer(void);
 static void modbus_master_disable_resp_timeout_timer(void);
 
@@ -335,15 +335,15 @@ static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, modbus_fun_
     return PDU_ret_status;
 }
 
-static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty, void *rw_data_ptr)
+static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
 {
     (void)(coils_qty);
-    return modbus_master_write_single_coil_req(modbus_msg, adr, rw_data_ptr);
+    return modbus_master_write_single_coil_req(modbus_msg, adr);
 }
-static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty, void *rw_data_ptr)
+static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
 {
     (void)(coils_qty);
-    return modbus_master_write_single_reg_req(modbus_msg, adr, rw_data_ptr);
+    return modbus_master_write_single_reg_req(modbus_msg, adr);
 }
 
 static void modbus_master_enable_resp_timeout_timer(void)
