@@ -24,6 +24,8 @@ extern modbus_master_state_t modbus_master_manager_state_machine;
 extern modbus_timer_t modbus_master_resp_timeout;
 extern uint8_t modbus_msg_repeat_couter;
 
+extern modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG;
+
 modbus_coil_disin_t test_slave_coils[TEST_SLAVE_COILS_TABLE_SIZE] = {COIL_OFF};
 
 static void reset_all_RTU_buffers(void);
@@ -639,26 +641,26 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     TEST_ASSERT_EQUAL(1, modbus_msg_repeat_couter);
 }
 
-// TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRespWithCorrectIDandCRCRecivedAndFrameErrorCatchedAndMsgRepeatCounterUpdatedWhenMsgRepeatCounterEqualOrLessForMsgRepeatOnErrorParamThenAfterT3_5CharSetRepeatMsgRequestState)
-// {
-//     modbus_adr_t coil_adr = 0x0001;
-//     modbus_device_ID_t slave_ID = 0x03;
-//     modbus_data_qty_t coils_qty = 2;
+TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRespWithCorrectIDandCRCRecivedAndFrameErrorCatchedAndMsgRepeatCounterUpdatedWhenMsgRepeatCounterEqualOrLessForMsgRepeatOnErrorParamThenAfterT3_5CharSetRepeatMsgRequestStateAndFrameErrorFlagCleared)
+{
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_device_ID_t slave_ID = 0x03;
+    modbus_data_qty_t coils_qty = 2;
 
-//     test_slave_coils[0] = !!COIL_ON;
-//     test_slave_coils[1] = !!COIL_ON;
+    test_slave_coils[0] = !!COIL_ON;
+    test_slave_coils[1] = !!COIL_ON;
 
-//     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
-//     generate_send_req_sequence();
-//     generate_resp_using_slave_lib(slave_ID);
-//     generate_msg_T_1_5_char_brake_sequence();
-//     mock_USART_frame_error_EVENT();
-//     generate_msg_T_3_5_char_brake_sequence();
-//     TEST_ASSERT_EQUAL(1, modbus_msg_repeat_couter);
-//     TEST_ASSERT_EQUAL(MODBUS_MASTER_REPEAT_REQUEST, modbus_master_manager_state_machine);
-// }
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    generate_send_req_sequence();
+    generate_resp_using_slave_lib(slave_ID);
+    generate_msg_T_1_5_char_brake_sequence();
+    mock_USART_frame_error_EVENT();
+    generate_msg_T_3_5_char_brake_sequence();
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REPEAT_REQUEST, modbus_master_manager_state_machine);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_FRAME_ERROR_FLAG);
+}
 
-// TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatcheFirstTimeAndRepeatRequestTransmisionWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charExpiredThenRespProcessed)
+// TEST(master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedLessTimeThenRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenRespProcessed)
 // {
 //     modbus_adr_t coil_adr = 0x0001;
 //     modbus_device_ID_t slave_ID = 0x03;
