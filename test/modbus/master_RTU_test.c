@@ -26,10 +26,13 @@ extern uint8_t modbus_msg_repeat_couter;
 
 modbus_coil_disin_t test_slave_coils[TEST_SLAVE_COILS_TABLE_SIZE] = {COIL_OFF};
 
-static void
-reset_all_RTU_buffers(void);
+static void reset_all_RTU_buffers(void);
+static void generate_resp_using_slave_lib(modbus_device_ID_t Slave_ID);
+static void generate_send_req_sequence(void);
+static void generate_msg_T_1_5_char_brake_sequence(void);
+static void generate_msg_T_3_5_char_brake_sequence(void);
 
-TEST_SETUP(master_RTU_test)
+    TEST_SETUP(master_RTU_test)
 {
     /* Init before every test */
     modbus_master_init(RTU, 9600, ODD);
@@ -589,26 +592,13 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     test_slave_coils[1] = !!COIL_ON;
 
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    mock_USART_req_msg_sended_EVENT();
-    check_modbus_master_manager();
-    check_modbus_master_manager();
+    generate_send_req_sequence();
     TEST_ASSERT_EQUAL(!!COIL_OFF, mock_master_coils[coil_adr]);
     TEST_ASSERT_EQUAL(!!COIL_OFF, mock_master_coils[coil_adr + 1]);
-    // generate resp using slave lib
-    parse_master_request_and_prepare_resp(msg_buf);
-    modbus_RTU_send(msg_buf->resp.data, &msg_buf->resp.len, slave_ID);
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    // msg recived
-    mock_USART_T_1_5_timeout_EVENT();
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    // recived msg correct
-    mock_USART_T_3_5_timeout_EVENT();
-    check_modbus_master_manager();
-    check_modbus_master_manager();
+    
+    generate_resp_using_slave_lib(slave_ID);
+    generate_msg_T_1_5_char_brake_sequence();
+    generate_msg_T_3_5_char_brake_sequence();
     TEST_ASSERT_EQUAL(test_slave_coils[coil_adr], mock_master_coils[coil_adr]);
     TEST_ASSERT_EQUAL(test_slave_coils[coil_adr + 1], mock_master_coils[coil_adr + 1]);
 }
@@ -623,24 +613,11 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     test_slave_coils[1] = !!COIL_ON;
 
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    mock_USART_req_msg_sended_EVENT();
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    // generate resp using slave lib
-    parse_master_request_and_prepare_resp(msg_buf);
-    modbus_RTU_send(msg_buf->resp.data, &msg_buf->resp.len, slave_ID);
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    // msg recived
-    mock_USART_T_1_5_timeout_EVENT();
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    // recived msg correct
-    mock_USART_T_3_5_timeout_EVENT();
-    check_modbus_master_manager();
-    check_modbus_master_manager();
+    generate_send_req_sequence();
+
+    generate_resp_using_slave_lib(slave_ID);
+    generate_msg_T_1_5_char_brake_sequence();
+    generate_msg_T_3_5_char_brake_sequence();
     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout);
 }
 
@@ -654,26 +631,11 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     test_slave_coils[1] = !!COIL_ON;
 
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    mock_USART_req_msg_sended_EVENT();
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    // generate resp using slave lib
-    parse_master_request_and_prepare_resp(msg_buf);
-    modbus_RTU_send(msg_buf->resp.data, &msg_buf->resp.len, slave_ID);
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    // msg recived
-    mock_USART_T_1_5_timeout_EVENT();
-    check_modbus_master_manager();
-    check_modbus_master_manager();
-    // char recived before 3,5char timer expired
+    generate_send_req_sequence();
+    generate_resp_using_slave_lib(slave_ID);
+    generate_msg_T_1_5_char_brake_sequence();
     mock_USART_frame_error_EVENT();
-    // recived msg correct
-    mock_USART_T_3_5_timeout_EVENT();
-    check_modbus_master_manager();
-    check_modbus_master_manager();
+    generate_msg_T_3_5_char_brake_sequence();
     TEST_ASSERT_EQUAL(1, modbus_msg_repeat_couter);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REPEAT_REQUEST, modbus_master_manager_state_machine);
 }
@@ -716,3 +678,33 @@ static void reset_all_RTU_buffers(void)
         }
     }
 }
+static void generate_resp_using_slave_lib(modbus_device_ID_t Slave_ID)
+{
+    parse_master_request_and_prepare_resp(msg_buf);
+    modbus_RTU_send(msg_buf->resp.data, &msg_buf->resp.len, Slave_ID);
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+}
+static void generate_send_req_sequence(void)
+{
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+    mock_USART_req_msg_sended_EVENT();
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+}
+
+static void generate_msg_T_1_5_char_brake_sequence(void)
+{
+    mock_USART_T_1_5_timeout_EVENT();
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+}
+
+static void generate_msg_T_3_5_char_brake_sequence(void)
+{
+    mock_USART_T_3_5_timeout_EVENT();
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+}
+
