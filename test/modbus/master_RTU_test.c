@@ -724,6 +724,5 @@ static void generate_msg_T_3_5_char_brake_sequence(void)
 {
     mock_USART_T_3_5_timeout_EVENT();
     check_modbus_master_manager();
-    check_modbus_master_manager();
 }
 

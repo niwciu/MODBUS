@@ -43,6 +43,7 @@ PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNK
 PRIVATE modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
 
+static void modbus_master_send_req_from_msg_buf(void);
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static modbus_master_error_t generate_request(modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty, modbus_device_ID_t slave_ID);
@@ -161,13 +162,11 @@ void check_modbus_master_manager(void)
         if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status)) // ToDo refacotr for check condition function
         {
             msg_buf = modbus_queue_pop(tx_rx_q);
-            RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
-            RTU_driver->enable_rcev(&msg_buf->resp);
-            MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_SET;
-            modbus_master_manager_state_machine = MODBUS_MASTER_TRANSMITTING_REQ;
+            modbus_master_send_req_from_msg_buf();
         }
         break;
     case MODBUS_MASTER_REPEAT_REQUEST:
+        modbus_master_send_req_from_msg_buf();
         break;
     case MODBUS_MASTER_TRANSMITTING_REQ:
         if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
@@ -240,6 +239,14 @@ void check_modbus_master_manager(void)
         //     // W zależności od tego co było błędem wykonuję jego obsługę
         //     break;
     }
+}
+
+static void modbus_master_send_req_from_msg_buf(void)
+{
+    RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
+    RTU_driver->enable_rcev(&msg_buf->resp);
+    MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_SET;
+    modbus_master_manager_state_machine = MODBUS_MASTER_TRANSMITTING_REQ;
 }
 
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
