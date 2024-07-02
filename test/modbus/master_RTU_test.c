@@ -101,17 +101,19 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegiste
     modbus_data_qty_t hreg_qty = 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_reg_t readed_hreg_val = 0;
 
     modbus_buf_t expected_master_request[] = {0x05, 0x03, 0x00, 0x02, 0x00, 0x01, 0x24, 0x4E};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
 
-    ret_status = modbus_master_read_holding_reg(hreg_adr, hreg_qty, slave_ID);
+    ret_status = modbus_master_read_holding_reg(hreg_adr, hreg_qty, slave_ID, &readed_hreg_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(&readed_hreg_val, tx_rx_msg_buf->rw_data_ptr);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -121,12 +123,13 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegiste
     modbus_data_qty_t hreg_qty = 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_reg_t readed_hreg_val = 0;
 
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
-    ret_status = modbus_master_read_holding_reg(hreg_adr, hreg_qty, slave_ID);
+    ret_status = modbus_master_read_holding_reg(hreg_adr, hreg_qty, slave_ID, &readed_hreg_val);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
@@ -139,7 +142,8 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegiste
     modbus_data_qty_t hreg_qty = MODBUS_MAX_READ_REG_QTY + 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
-    ret_status = modbus_master_read_holding_reg(hreg_adr, hreg_qty, slave_ID);
+    modbus_reg_t readed_reg_val[hreg_qty];
+    ret_status = modbus_master_read_holding_reg(hreg_adr, hreg_qty, slave_ID, &readed_reg_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
@@ -153,11 +157,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegisters
     modbus_data_qty_t inreg_qty = 3;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_reg_t readed_reg_val[inreg_qty];
 
     modbus_buf_t expected_master_request[] = {0x02, 0x04, 0x00, 0x05, 0x00, 0x03, 0xA0, 0x39};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
 
-    ret_status = modbus_master_read_input_reg(inreg_adr, inreg_qty, slave_ID);
+    ret_status = modbus_master_read_input_reg(inreg_adr, inreg_qty, slave_ID, &readed_reg_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
@@ -165,6 +170,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegisters
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(readed_reg_val, tx_rx_msg_buf->rw_data_ptr);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -174,12 +180,13 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegisters
     modbus_data_qty_t inreg_qty = 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_reg_t readed_reg_val = 0;
 
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
-    ret_status = modbus_master_read_input_reg(inreg_adr, inreg_qty, slave_ID);
+    ret_status = modbus_master_read_input_reg(inreg_adr, inreg_qty, slave_ID, &readed_reg_val);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
@@ -192,7 +199,9 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegisters
     modbus_data_qty_t inreg_qty = MODBUS_MAX_READ_REG_QTY + 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
-    ret_status = modbus_master_read_input_reg(inreg_adr, inreg_qty, slave_ID);
+    modbus_reg_t readed_reg_val[inreg_qty];
+
+    ret_status = modbus_master_read_input_reg(inreg_adr, inreg_qty, slave_ID, &readed_reg_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
@@ -206,11 +215,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithPrope
     modbus_data_qty_t coil_qty = 3;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val[coil_qty];
 
     modbus_buf_t expected_master_request[] = {0x08, 0x01, 0x00, 0x05, 0x00, 0x03, 0x6c, 0x93};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
 
-    ret_status = modbus_master_read_coils(coil_adr, coil_qty, slave_ID);
+    ret_status = modbus_master_read_coils(coil_adr, coil_qty, slave_ID, &readed_coil_disin_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
@@ -218,6 +228,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithPrope
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(readed_coil_disin_val, tx_rx_msg_buf->rw_data_ptr);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -227,12 +238,13 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithPrope
     modbus_data_qty_t coil_qty = 3;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val[coil_qty];
 
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
-    ret_status = modbus_master_read_coils(coil_adr, coil_qty, slave_ID);
+    ret_status = modbus_master_read_coils(coil_adr, coil_qty, slave_ID, &readed_coil_disin_val);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
@@ -245,8 +257,9 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithWrong
     modbus_data_qty_t coil_qty = MODBUS_MAX_READ_COILS_QTY + 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val[coil_qty];
 
-    ret_status = modbus_master_read_coils(coil_adr, coil_qty, slave_ID);
+    ret_status = modbus_master_read_coils(coil_adr, coil_qty, slave_ID, &readed_coil_disin_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
@@ -260,11 +273,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithPrope
     modbus_data_qty_t disin_qty = 3;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val[disin_qty];
 
     modbus_buf_t expected_master_request[] = {0x08, 0x02, 0x00, 0x05, 0x00, 0x03, 0x28, 0x93};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
 
-    ret_status = modbus_master_read_discrete_inputs(disin_adr, disin_qty, slave_ID);
+    ret_status = modbus_master_read_discrete_inputs(disin_adr, disin_qty, slave_ID, &readed_coil_disin_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
@@ -272,6 +286,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithPrope
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(readed_coil_disin_val, tx_rx_msg_buf->rw_data_ptr);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -281,12 +296,13 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithPrope
     modbus_data_qty_t disin_qty = 3;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val[disin_qty];
 
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
-    ret_status = modbus_master_read_discrete_inputs(disin_adr, disin_qty, slave_ID);
+    ret_status = modbus_master_read_discrete_inputs(disin_adr, disin_qty, slave_ID, &readed_coil_disin_val);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
@@ -299,8 +315,9 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithWrong
     modbus_data_qty_t disin_qty = MODBUS_MAX_READ_DISCRETE_INPUTS_QTY + 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val[disin_qty];
 
-    ret_status = modbus_master_read_discrete_inputs(disin_adr, disin_qty, slave_ID);
+    ret_status = modbus_master_read_discrete_inputs(disin_adr, disin_qty, slave_ID, &readed_coil_disin_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
@@ -314,13 +331,14 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWit
     modbus_coil_disin_t coil_state = !!COIL_ON;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val;
 
     modbus_buf_t expected_master_request[] = {0x01, 0x05, 0x00, 0x05, 0xFF, 0x00, 0x9c, 0x3b};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
 
     register_app_data_to_modbus_master_coils_table(coil_adr, &coil_state);
 
-    ret_status = modbus_master_write_single_coil(coil_adr, slave_ID);
+    ret_status = modbus_master_write_single_coil(coil_adr, slave_ID, &readed_coil_disin_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
@@ -328,6 +346,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWit
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(&readed_coil_disin_val, tx_rx_msg_buf->rw_data_ptr);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -337,6 +356,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWit
     modbus_coil_disin_t coil_state = !!COIL_ON;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val;
 
     register_app_data_to_modbus_master_coils_table(coil_adr, &coil_state);
 
@@ -344,7 +364,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWit
     {
         modbus_queue_pop(free_q);
     }
-    ret_status = modbus_master_write_single_reg(coil_adr, slave_ID);
+    ret_status = modbus_master_write_single_reg(coil_adr, slave_ID, &readed_coil_disin_val);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
@@ -357,13 +377,14 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegiste
     modbus_reg_t reg_state = 0x5a5a;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val;
 
     modbus_buf_t expected_master_request[] = {0x11, 0x06, 0x00, 0x25, 0x5a, 0x5a, 0x20, 0x0a};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
 
     register_app_data_to_modbus_master_hreg_table(hreg_adr, &reg_state);
 
-    ret_status = modbus_master_write_single_reg(hreg_adr, slave_ID);
+    ret_status = modbus_master_write_single_reg(hreg_adr, slave_ID, &readed_coil_disin_val);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
 
@@ -371,6 +392,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegiste
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(&readed_coil_disin_val, tx_rx_msg_buf->rw_data_ptr);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegisterWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -380,6 +402,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegiste
     modbus_reg_t reg_state = 0x5a5a;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin_val;
 
     register_app_data_to_modbus_master_hreg_table(hreg_adr, &reg_state);
 
@@ -388,7 +411,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegiste
         modbus_queue_pop(free_q);
     }
 
-    ret_status = modbus_master_write_single_reg(hreg_adr, slave_ID);
+    ret_status = modbus_master_write_single_reg(hreg_adr, slave_ID, &readed_coil_disin_val);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
@@ -404,17 +427,19 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegis
     modbus_reg_t hreg_data[] = {0x2001, 0x2002, 0x2003, 0x2004};
     modbus_buf_t expected_master_request[] = {0x09, 0x10, 0x00, 0x02, 0x00, 0x04, 0x08, 0x20, 0x01, 0x20, 0x02, 0x20, 0x03, 0x20, 0x04, 0xc8, 0x00};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
+    modbus_ret_t readed_req[hreg_qty];
 
-    for (uint8_t i = 0; i < hreg_qty; i++)
+        for (uint8_t i = 0; i < hreg_qty; i++)
     {
         register_app_data_to_modbus_master_hreg_table(hreg_adr + i, hreg_data + i);
     }
-    ret_status = modbus_master_write_multiple_reg(hreg_adr, hreg_qty, slave_ID);
+    ret_status = modbus_master_write_multiple_reg(hreg_adr, hreg_qty, slave_ID, readed_req);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(readed_req, tx_rx_msg_buf->rw_data_ptr);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -424,12 +449,13 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegis
     modbus_data_qty_t hreg_qty = 4;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_ret_t readed_req[hreg_qty];
 
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
-    ret_status = modbus_master_write_multiple_reg(hreg_adr, hreg_qty, slave_ID);
+    ret_status = modbus_master_write_multiple_reg(hreg_adr, hreg_qty, slave_ID, readed_req);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
@@ -442,7 +468,8 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegis
     modbus_data_qty_t hreg_qty = MODBUS_MAX_WRITE_REG_QTY + 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
-    ret_status = modbus_master_write_multiple_reg(hreg_adr, hreg_qty, slave_ID);
+    modbus_ret_t readed_req[hreg_qty];
+    ret_status = modbus_master_write_multiple_reg(hreg_adr, hreg_qty, slave_ID, readed_req);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
@@ -459,17 +486,19 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoils
     modbus_coil_disin_t coils_data[] = {!!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_ON};
     modbus_buf_t expected_master_request[] = {0x09, 0x0F, 0x00, 0x02, 0x00, 0x04, 0x01, 0x0d, 0x87, 0x35};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     for (uint8_t i = 0; i < coils_qty; i++)
     {
         register_app_data_to_modbus_master_coils_table(coil_adr + i, coils_data + i);
     }
-    ret_status = modbus_master_write_multiple_coils(coil_adr, coils_qty, slave_ID);
+    ret_status = modbus_master_write_multiple_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(readed_coil_disin, tx_rx_msg_buf->rw_data_ptr);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -479,12 +508,13 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoils
     modbus_data_qty_t coils_qty = 4;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
-    ret_status = modbus_master_write_multiple_coils(coil_adr, coils_qty, slave_ID);
+    ret_status = modbus_master_write_multiple_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR, ret_status);
@@ -497,7 +527,8 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoils
     modbus_data_qty_t coils_qty = MODBUS_MAX_WRITE_COILS_QTY + 1;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_error_t ret_status;
-    ret_status = modbus_master_write_multiple_reg(coil_adr, coils_qty, slave_ID);
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
+    ret_status = modbus_master_write_multiple_reg(coil_adr, coils_qty, slave_ID, readed_coil_disin);
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
@@ -511,8 +542,9 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(USART_SENDING_DATA, master_USART_Tx_status);
     TEST_ASSERT_EQUAL(msg_buf->req.data, mock_master_tx_buf_ptr);
@@ -523,8 +555,9 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(IRQ_ENABLED, mock_master_USART.Rx_IRQ);
     TEST_ASSERT_EQUAL(IRQ_ENABLED, mock_master_USART.Tx_IRQ);
@@ -535,8 +568,9 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenGivenModbusMasterInRTUmo
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(&msg_buf->resp, mock_master_rx_msg_ptr);
 }
@@ -546,8 +580,9 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(MODBUS_FLAG_SET, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
 }
@@ -558,8 +593,9 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     check_modbus_master_manager();
 
     mock_USART_req_msg_sended_EVENT();
@@ -572,8 +608,9 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     modbus_adr_t coil_adr = 0x0002;
     modbus_device_ID_t slave_ID = 0x09;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     check_modbus_master_manager();
     check_modbus_master_manager();
     check_modbus_master_manager();
@@ -589,11 +626,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     test_slave_coils[0] = !!COIL_ON;
     test_slave_coils[1] = !!COIL_ON;
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_send_req_sequence();
     TEST_ASSERT_EQUAL(!!COIL_OFF, mock_master_coils[coil_adr]);
     TEST_ASSERT_EQUAL(!!COIL_OFF, mock_master_coils[coil_adr + 1]);
@@ -610,11 +648,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     test_slave_coils[0] = !!COIL_ON;
     test_slave_coils[1] = !!COIL_ON;
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_send_req_sequence();
 
     generate_resp_using_slave_lib(slave_ID);
@@ -628,11 +667,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     test_slave_coils[0] = !!COIL_ON;
     test_slave_coils[1] = !!COIL_ON;
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
     generate_msg_T_1_5_char_brake_sequence();
@@ -646,11 +686,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     test_slave_coils[0] = !!COIL_ON;
     test_slave_coils[1] = !!COIL_ON;
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
     generate_msg_T_1_5_char_brake_sequence();
@@ -665,11 +706,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     test_slave_coils[0] = !!COIL_ON;
     test_slave_coils[1] = !!COIL_ON;
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
     generate_msg_T_1_5_char_brake_sequence();
@@ -689,11 +731,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     test_slave_coils[0] = !!COIL_ON;
     test_slave_coils[1] = !!COIL_ON;
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
     generate_msg_T_1_5_char_brake_sequence();
@@ -713,11 +756,12 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
     modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     test_slave_coils[0] = !!COIL_ON;
     test_slave_coils[1] = !!COIL_ON;
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
 
     for (uint8_t i=0; i< MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR; i++)
     {

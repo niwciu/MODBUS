@@ -28,13 +28,14 @@
 #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
+modbus_coil_disin_t test_coils[20]={0};
 int main(void)
 {
     core_init();
     modbus_master_init(RTU, 115200, ODD);
     // __enable_irq();
 
-    modbus_master_read_coils(0x0001, 0x002, 0x03);
+    modbus_master_read_coils(0x0001, 0x002, 0x03, &test_coils[0]);
     /* Loop forever */
     while (1)
     {

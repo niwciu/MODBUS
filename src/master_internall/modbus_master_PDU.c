@@ -184,7 +184,7 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *modbus_msg, mo
 
 modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
 {
-    modbus_ret_t resp_processing_status;
+    modbus_ret_t resp_processing_status = RET_ERROR;
     if (RET_OK == check_null_ptr_correctness(modbus_msg))
     {
         uint32_t mapper_size = MODBUS_MASTER_FUNCTION_MAPPER_SIZE;
