@@ -22,12 +22,27 @@ TEST_GROUP_RUNNER(Master_PDU_read_exception_code)
     // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndExceptionCode01RecivedThen);
     // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndExceptionCode02RecivedThen);
     // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndExceptionCode03RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndExceptionCode03RecivedThen); 
-    
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndExceptionCode03RecivedThen);
 
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, );
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, );
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, );
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, );
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndExceptionCode01RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndExceptionCode03RecivedThen);
+
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleRegReqSendedAndExceptionCode01RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleRegReqSendedAndExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleRegReqSendedAndExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleRegReqSendedAndExceptionCode03RecivedThen);
+
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteMultipleCoilsReqSendedAndExceptionCode01RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteMultipleCoilsReqSendedAndExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteMultipleCoilsReqSendedAndExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteMultipleCoilsReqSendedAndExceptionCode03RecivedThen);
+
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteMultipleRegReqSendedAndExceptionCode01RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteMultipleRegReqSendedAndExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteMultipleRegReqSendedAndExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteMultipleRegReqSendedAndExceptionCode03RecivedThen);
+
     // RUN_TEST_CASE(Master_PDU_read_exception_code, );
 }

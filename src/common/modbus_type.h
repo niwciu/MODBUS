@@ -78,14 +78,6 @@ extern "C"
 
     typedef enum
     {
-        MODBUS_ILLEGAL_FUNCTION_ERROR = 0x01U,
-        MODBUS_ILLEGAL_DATA_ADDRESS_ERROR = 0x02U,
-        MODBUS_ILLEGAL_DATA_VALUE_ERROR = 0x03U,
-        MODBUS_SERVER_DEVICE_FAILURE_ERROR = 0x04U,
-    } modbus_exception_code_t;
-
-    typedef enum
-    {
         COIL_OFF = 0x0000,
         COIL_ON = 0xFF00,
     } modbus_w_coil_t;
@@ -126,13 +118,6 @@ extern "C"
         MODBUS_SLAVE_TRANSMITING_RESP,
         MODBUS_SLAVE_UNKNOWN,
     } modbus_slave_state_t;
-    typedef enum
-    {
-        MODBUS_FLAG_CLEARED,
-        MODBUS_FLAG_SET,
-        MODBUS_FLAG_UNKNOWN,
-
-    } modbus_status_flag_t;
 
     typedef enum
     {
