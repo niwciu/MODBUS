@@ -48,10 +48,8 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetErrorFuncCode);
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutAdrError);
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartAdrAndIncorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutQtyError);
-    // ToDo exceptioon code read tests
-    // RUN_TEST_CASE(Master_PDU_read, );
-    // RUN_TEST_CASE(Master_PDU_read, );
-    // RUN_TEST_CASE(Master_PDU_read, );
+
+
     // RUN_TEST_CASE(Master_PDU_read, );
     // RUN_TEST_CASE(Master_PDU_read, );
 }
