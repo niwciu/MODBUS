@@ -47,7 +47,7 @@ static void modbus_master_send_req_from_msg_buf(void);
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static modbus_master_error_t generate_request(req_input_param_struct_t *req_param);
-static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty);
+static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param);
 static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 static void modbus_master_enable_resp_timeout_timer(void);
@@ -305,8 +305,8 @@ static modbus_master_error_t generate_request(req_input_param_struct_t *req_para
     {
         return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERR;
     }
-    msg_buf->rw_data_ptr = NULL;
-    modbus_lib_ret = generate_request_PDU_data(msg_buf, req_param->fun_code, req_param->adr, req_param->obj_qty);
+    msg_buf->rw_data_ptr=NULL;
+    modbus_lib_ret = generate_request_PDU_data(msg_buf, req_param);
     if (0 > modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_REQ_ERROR;
@@ -321,15 +321,16 @@ static modbus_master_error_t generate_request(req_input_param_struct_t *req_para
     return MODBUS_MASTER_REQUEST_SEND;
 }
 
-static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, modbus_fun_code_t fun_code, modbus_adr_t adr, modbus_data_qty_t obj_qty)
+static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     modbus_ret_t PDU_ret_status = RET_ERROR_UNKNOWN_MAPPER_FUN_CODE;
     uint32_t master_mapper_size = MODBUS_MASTER_FUNCTIONS_MAPPER_SIZE;
     for (uint32_t i = 0; i < master_mapper_size; i++)
     {
-        if (master_functions_mapper[i].fun_code == fun_code)
+        if (master_functions_mapper[i].fun_code == req_param->fun_code)
         {
-            PDU_ret_status = master_functions_mapper[i].fun_code_action(msg_buf, adr, obj_qty);
+            msg_buf->rw_data_ptr = req_param->rw_data_ptr;
+            PDU_ret_status = master_functions_mapper[i].fun_code_action(msg_buf, req_param->adr, req_param->obj_qty);
         }
     }
     return PDU_ret_status;
