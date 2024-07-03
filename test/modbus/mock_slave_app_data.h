@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "modbus_data.h"
+#include "modbus_slave_data.h"
 
 extern modbus_coil_disin_t mock_slave_coil[COILS_QTY];
 extern modbus_coil_disin_t mock_slave_dis_in[DISCRET_INPUT_QTY];

@@ -3,7 +3,6 @@
 #include "modbus_slave_PDU.h"
 #include "buf_rw.h"
 #include "mock_slave_app_data.h"
-#include "mock_master_app_data.h"
 
 modbus_ret_t status;
 

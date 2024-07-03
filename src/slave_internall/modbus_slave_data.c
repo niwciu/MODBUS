@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2024
  *
  */
-#include "modbus_data.h"
+#include "modbus_slave_data.h"
 #include <stdio.h>
 
 modbus_reg_t *Slave_Holding_Registers[HOLDING_REG_QTY] = {NULL};

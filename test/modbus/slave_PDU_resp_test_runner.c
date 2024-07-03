@@ -1,5 +1,5 @@
 #include "unity/fixture/unity_fixture.h"
-#include "modbus_data.h"
+#include "modbus_slave_data.h"
 
 TEST_GROUP_RUNNER(Slave_PDU_resp)
 {
