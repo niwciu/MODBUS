@@ -96,47 +96,47 @@ const struct modbus_master_functions_mapper master_functions_mapper[] = {
 //     // register_app_data_to_modbus_reg_table(Master_Holding_Registers, reg_adr, app_data_ptr);
 // }
 
-modbus_master_error_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, void *rw_data_ptr)
+modbus_master_error_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty, slave_ID, rw_data_ptr};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty, slave_ID, (void*)(rw_data_ptr)};
     return generate_request(&req_input_param);
 }
 
-modbus_master_error_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID, void *rw_data_ptr)
+modbus_master_error_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty, slave_ID, rw_data_ptr};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty, slave_ID, (void*)(rw_data_ptr)};
     return generate_request(&req_input_param);
 }
 
-modbus_master_error_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID, void *rw_data_ptr)
+modbus_master_error_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID, modbus_reg_t *rw_data_ptr)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty, slave_ID, rw_data_ptr};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty, slave_ID, (void*)(rw_data_ptr)};
     return generate_request(&req_input_param);
 }
 
-modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty, modbus_device_ID_t slave_ID, void *rw_data_ptr)
+modbus_master_error_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty, modbus_device_ID_t slave_ID, modbus_reg_t *rw_data_ptr)
 {
-   req_input_param_struct_t req_input_param = { MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty, slave_ID, rw_data_ptr};
+   req_input_param_struct_t req_input_param = { MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty, slave_ID, (void*)(rw_data_ptr)};
     return generate_request(&req_input_param);
 }
-modbus_master_error_t modbus_master_write_single_coil(modbus_adr_t adr, modbus_device_ID_t slave_ID, void *rw_data_ptr)
+modbus_master_error_t modbus_master_write_single_coil(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_coil_disin_t coil_2_write)
 {
-   req_input_param_struct_t req_input_param = { MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr, 0, slave_ID, rw_data_ptr};
+    req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr, 0, slave_ID, (void *)(&coil_2_write)};
     return generate_request(&req_input_param);
 }
-modbus_master_error_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_device_ID_t slave_ID, void *rw_data_ptr)
+modbus_master_error_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_reg_t reg_2_write)
 {
-   req_input_param_struct_t req_input_param = { MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr, 0, slave_ID, rw_data_ptr};
+    req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr, 0, slave_ID, (void *)(&reg_2_write)};
     return generate_request(&req_input_param);
 }
-modbus_master_error_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID, void *rw_data_ptr)
+modbus_master_error_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID, modbus_reg_t *rw_data_ptr)
 {
-   req_input_param_struct_t req_input_param = { MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, adr, reg_qty, slave_ID, rw_data_ptr};
+    req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, adr, reg_qty, slave_ID, (void *)(rw_data_ptr)};
     return generate_request(&req_input_param);
 }
-modbus_master_error_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, void *rw_data_ptr)
+modbus_master_error_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
 {
-   req_input_param_struct_t req_input_param = { MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, adr, coils_qty, slave_ID, rw_data_ptr};
+    req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, adr, coils_qty, slave_ID, (void *)(rw_data_ptr)};
     return generate_request(&req_input_param);
 }
 void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
