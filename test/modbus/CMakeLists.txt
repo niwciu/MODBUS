@@ -73,8 +73,8 @@ set(TEST_SRCS
 	master_PDU_read_test.c
 	slave_PDU_resp_test_runner.c
 	slave_PDU_resp_test.c
-	# slave_PDU_exception_code_test_runner.c
-	# slave_PDU_exception_code_test.c
+	slave_PDU_exception_code_test_runner.c
+	slave_PDU_exception_code_test.c
 	modbus_data_test.c
 	modbus_data_test_runner.c
 	modbus_CRC_test.c
@@ -92,10 +92,10 @@ set(TEST_SRCS
     # master_RTU_init_test.c
 	# master_RTU_test_runner.c
 	# master_RTU_test.c
-	# slave_RTU_init_test_runner.c
-    # slave_RTU_init_test.c
-	# slave_RTU_test_runner.c
-	# slave_RTU_test.c
+	slave_RTU_init_test_runner.c
+    slave_RTU_init_test.c
+	slave_RTU_test_runner.c
+	slave_RTU_test.c
 	
 
 	#mock_module.c
