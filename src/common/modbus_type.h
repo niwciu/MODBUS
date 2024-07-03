@@ -158,7 +158,7 @@ extern "C"
     {
         modbus_req_resp_t req;
         modbus_req_resp_t resp;
-        // modbus_device_ID_t slave_id;
+        void *rw_data_ptr;
     } modbus_msg_t;
 
     typedef modbus_ret_t (*modbus_fun_code_handler_t)(modbus_msg_t *modbus_msg);
@@ -168,6 +168,14 @@ extern "C"
         modbus_fun_code_handler_t fun_code_action;
     } modbus_function_mapper_t;
 
+    typedef struct
+    {
+        modbus_fun_code_t fun_code;
+        modbus_adr_t adr;
+        modbus_data_qty_t obj_qty;
+        modbus_device_ID_t slave_ID;
+        void *rw_data_ptr;
+    } req_input_param_struct_t;
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

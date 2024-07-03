@@ -14,8 +14,8 @@
 extern "C"
 {
 #endif /* __cplusplus */
-#include "modbus_data.h"
-    // #include "modbus_public_type.h"
+
+    #include "modbus_type.h"
 
     // Master Functionality
     modbus_ret_t modbus_master_read_holding_reg_req(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t hreg_qty);

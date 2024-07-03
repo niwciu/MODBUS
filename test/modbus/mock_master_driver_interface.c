@@ -11,8 +11,6 @@
 #include "mock_master_driver_interface.h"
 #include "mem.h"
 
-modbus_coil_disin_t mock_master_coils[MASTER_COILS_TABLE_SIZE] = {0};
-
 driver_subscr_cb_t mock_master_msg_tx_done_cb = NULL;
 driver_subscr_cb_t mock_master_1_5_char_break_cb = NULL;
 driver_subscr_cb_t mock_master_3_5_char_break_cb = NULL;

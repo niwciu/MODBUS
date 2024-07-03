@@ -4,10 +4,7 @@
 #include "modbus_RTU.h"
 #include "mock_slave_driver_interface.h"
 #include "buf_rw.h"
-// #include <mem.h>
-// #include "modbus_public_type.h"
-
-// #include "tested_module.h"
+#include "modbus_slave_data.h"
 
 TEST_GROUP(Slave_RTU_test);
 

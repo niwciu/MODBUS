@@ -11,7 +11,7 @@
 #include "mock_slave_app_data.h"
 #include "modbus_master_PDU.h"
 #include "modbus_slave_PDU.h"
-#include "modbus_data.h"
+#include "modbus_slave_data.h"
 #include <stdio.h>
 
 modbus_coil_disin_t mock_slave_coil[COILS_QTY] = {0};
