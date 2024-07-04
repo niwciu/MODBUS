@@ -3,31 +3,31 @@
 TEST_GROUP_RUNNER(Master_PDU_read_exception_code)
 {
     /* Test cases to run */
-    // master read write respond parse with null ptr passed tests
-    RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndExceptionCode01RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndExceptionCode02RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndExceptionCode03RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndExceptionCode03RecivedThen);
+    RUN_TEST_CASE(Master_PDU_read_exception_code, WhenRegisterModbusErrorCbCalledThenModbusErrorCbEqualToRegisteredFunctionPointer)
+        // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode01RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
 
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadDisInReqSendedAndExceptionCode01RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadDisInReqSendedAndExceptionCode02RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadDisInReqSendedAndExceptionCode03RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadDisInReqSendedAndExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadDisInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode01RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadDisInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadDisInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadDisInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
 
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadInRegInReqSendedAndExceptionCode01RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadInRegInReqSendedAndExceptionCode02RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadInRegInReqSendedAndExceptionCode03RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadInRegInReqSendedAndExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadInRegInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode01RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadInRegInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadInRegInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadInRegInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
 
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndExceptionCode01RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndExceptionCode02RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndExceptionCode03RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode01RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadHoldingRegInReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
 
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndExceptionCode01RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndExceptionCode02RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndExceptionCode03RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode01RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
 
     // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleRegReqSendedAndExceptionCode01RecivedThen);
     // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterWriteSingleRegReqSendedAndExceptionCode02RecivedThen);

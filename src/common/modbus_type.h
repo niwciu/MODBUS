@@ -30,52 +30,39 @@ extern "C"
     #define MODBUS_MAX_READ_REG_QTY             0x7DU
     #define MODBUS_MAX_WRITE_REG_QTY            0x7BU
     #define MODBUS_MIN_REG_COIL_QTY             1U
-    #define MODBUS_SLAVE_ADR_BYTE_LEN           1
+    #define MODBUS_SLAVE_ADR_BYTE_LEN           1U
 
     // modbus_frame osffsets parameters
-    #define MODBUS_SLAVE_ADR_IDX                    0    
+    #define MODBUS_SLAVE_ADR_IDX                    0U    
     #define MODBUS_PDU_BUF_OFFSET                   MODBUS_SLAVE_ADR_BYTE_LEN
     #define MODBUS_FUNCTION_CODE_IDX                MODBUS_PDU_BUF_OFFSET
-    #define MODBUS_REQUEST_ADR_IDX                  (MODBUS_PDU_BUF_OFFSET + 1)
-    #define MODBUS_REQUEST_QTY_IDX                  (MODBUS_PDU_BUF_OFFSET + 3)
-    #define MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX    (MODBUS_PDU_BUF_OFFSET + 3)
-    #define MODBUS_REQUEST_BYTE_CNT_IDX             (MODBUS_PDU_BUF_OFFSET + 5)
-    #define MODBUS_REQUEST_WRITE_MULTI_DATA_IDX     (MODBUS_PDU_BUF_OFFSET + 6)
+    #define MODBUS_REQUEST_ADR_IDX                  (MODBUS_PDU_BUF_OFFSET + 1U)
+    #define MODBUS_REQUEST_QTY_IDX                  (MODBUS_PDU_BUF_OFFSET + 3U)
+    #define MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX    (MODBUS_PDU_BUF_OFFSET + 3U)
+    #define MODBUS_REQUEST_BYTE_CNT_IDX             (MODBUS_PDU_BUF_OFFSET + 5U)
+    #define MODBUS_REQUEST_WRITE_MULTI_DATA_IDX     (MODBUS_PDU_BUF_OFFSET + 6U)
 
-    #define MODBUS_RESP_READ_BYTE_CNT_IDX           (MODBUS_PDU_BUF_OFFSET + 1)
-    #define MODBUS_RESP_READ_DATA_IDX               (MODBUS_PDU_BUF_OFFSET + 2)
+    #define MODBUS_RESP_READ_BYTE_CNT_IDX           (MODBUS_PDU_BUF_OFFSET + 1U)
+    #define MODBUS_RESP_READ_DATA_IDX               (MODBUS_PDU_BUF_OFFSET + 2U)
     
-    #define MODBUS_RESP_WRITE_ADR_IDX               (MODBUS_PDU_BUF_OFFSET + 1)
-    #define MODBUS_RESP_WRITE_SINGLE_DATA_IDX       (MODBUS_PDU_BUF_OFFSET + 3)
-    #define MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX (MODBUS_PDU_BUF_OFFSET + 3)
-    #define MODBUS_RESP_ERROR_CODE_IDX              (MODBUS_PDU_BUF_OFFSET + 1)
+    #define MODBUS_RESP_WRITE_ADR_IDX               (MODBUS_PDU_BUF_OFFSET + 1U)
+    #define MODBUS_RESP_WRITE_SINGLE_DATA_IDX       (MODBUS_PDU_BUF_OFFSET + 3U)
+    #define MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX (MODBUS_PDU_BUF_OFFSET + 3U)
+    #define MODBUS_RESP_ERROR_CODE_IDX              (MODBUS_PDU_BUF_OFFSET + 1U)
     // #define MODBUS_WRITE_MULTI_DATA_IDX    
 
-    #define MODBUS_READ_REQUEST_LEN            6
-    #define MODBUS_WRITE_SINGLE_REQUEST_LEN    6
-    #define MODBUS_WRITE_MULTI_REQUEST_LEN     7 
+    #define MODBUS_READ_REQUEST_LEN            6U
+    #define MODBUS_WRITE_SINGLE_REQUEST_LEN    6U
+    #define MODBUS_WRITE_MULTI_REQUEST_LEN     7U 
 
-    #define MODBUS_READ_RESP_LEN    3
-    #define MODBUS_WRITE_SINGLE_RESP_LEN  6
-    #define MODBUS_WRITE_MULTI_RESP_LEN   6
-    #define MODBUS_ERROR_CODE_RESP_LEN    3
-    #define MODBUS_PDU_EXCEPTION_CODE_LEN 3
+    #define MODBUS_READ_RESP_LEN    3U
+    #define MODBUS_WRITE_SINGLE_RESP_LEN  6U
+    #define MODBUS_WRITE_MULTI_RESP_LEN   6U
+    #define MODBUS_ERROR_CODE_RESP_LEN    3U
+    #define MODBUS_PDU_EXCEPTION_CODE_LEN 3U
+    #define MODBUS_ERROR_CODE_MASK  0x80U
 
     // clang-format on
-    typedef enum
-    {
-        MODBUS_READ_COILS_FUNC_CODE = 0x01U,
-        MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE = 0x02U,
-        MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE = 0x03U,
-        MODBUS_READ_INPUT_REGISTERS_FUNC_CODE = 0x04U,
-        MODBUS_WRITE_SINGLE_COIL_FUNC_CODE = 0x05U,
-        MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE = 0x06U,
-        MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE = 0x0FU,
-        MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE = 0x10U,
-
-        MODBUS_ERROR_CODE_MASK = 0x80U
-    } modbus_fun_code_t;
-
     typedef enum
     {
         COIL_OFF = 0x0000,
@@ -105,10 +92,6 @@ extern "C"
         MODBUS_MASTER_TRANSMITTING_REQ,
         MODBUS_MASTER_RESP_WAITING,
         MODBUS_MASTER_RESP_RECIVED,
-        
-        // MODBUS_MASTER_RESP_PROCESING,
-        // 
-        // MODBUS_MASTER_ERROR_SERVICE,
     } modbus_master_state_t;
 
     typedef enum
@@ -118,7 +101,13 @@ extern "C"
         MODBUS_SLAVE_TRANSMITING_RESP,
         MODBUS_SLAVE_UNKNOWN,
     } modbus_slave_state_t;
+    typedef enum
+    {
+        MODBUS_FLAG_CLEARED,
+        MODBUS_FLAG_SET,
+        MODBUS_FLAG_UNKNOWN,
 
+    } modbus_status_flag_t;
     typedef enum
     {
         LAST_QUEUE_POS_EMPTY,

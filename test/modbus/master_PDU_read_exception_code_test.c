@@ -12,7 +12,9 @@ static modbus_buf_t resp_RTU_buf[MODBUS_RTU_BUFFER_SIZE];
 static modbus_msg_t modbus_msg;
 static modbus_msg_t *RTU_msg = &modbus_msg;
 // static modbus_msg_t *null_ptr_msg;
+extern modbus_master_error_cb_t modbus_error_callback;
 
+static void test_func(modbus_error_rep_t error_info);
 
 TEST_GROUP(Master_PDU_read_exception_code);
 
@@ -37,13 +39,15 @@ TEST_TEAR_DOWN(Master_PDU_read_exception_code)
 {
     /* Cleanup after every test */
 }
-
-TEST(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndExceptionCode01RecivedThen)
+TEST(Master_PDU_read_exception_code, WhenRegisterModbusErrorCbCalledThenModbusErrorCbEqualToRegisteredFunctionPointer)
 {
-    TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+
+    register_modbus_master_error_cb(test_func);
+
+    TEST_ASSERT_EQUAL(&test_func, modbus_error_callback);
 }
 
-// TEST(Master_PDU_read_exception_code, )
+// TEST(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode01RecivedThen)
 // {
 //     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
 // }
@@ -77,3 +81,13 @@ TEST(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndExceptionCod
 // {
 //     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
 // }
+
+// TEST(Master_PDU_read_exception_code, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+
+static void test_func(modbus_error_rep_t error_info)
+{
+    (void)(error_info);
+}
