@@ -230,10 +230,9 @@ void check_modbus_master_manager(void)
                     error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
                     modbus_error_callback(&error_rep);
                 }
-                // push msg to free queueue buffer and go to idle
-                // memset(modbus_msg,0,sizoef(modbus_msg));
+                // memset(modbus_msg,0,sizoef(modbus_msg)); // w przyszły testach wyjdzie czy trzeba to kasować
                 modbus_queue_push(free_q,&msg_buf);
-                // modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
+                modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
             }
         }
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
