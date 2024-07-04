@@ -9,7 +9,7 @@
 #include "mock_master_driver_interface.h"
 // #include "mock_master_app_data.h"
 #include "mock_slave_app_data.h"
-#include <mem.h>
+#include <memory.h>
 
 TEST_GROUP(Master_RTU_req_gen_test);
 

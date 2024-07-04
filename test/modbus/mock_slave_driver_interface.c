@@ -11,7 +11,7 @@
 
 #include "mock_slave_driver_interface.h"
 
-#include "mem.h"
+#include "memory.h"
 
 driver_subscr_cb_t mock_msg_tx_done_cb = NULL;
 driver_subscr_cb_t mock_1_5_char_break_cb = NULL;
