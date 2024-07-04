@@ -1,11 +1,17 @@
 /**
  * @file modbus_type.h
+ * @brief Header file defining types and constants for Modbus protocol implementation.
+ *
+ * This header file defines various types, constants, enums, and structures used in the
+ * implementation of the Modbus protocol. It includes definitions for Modbus RTU buffer sizes,
+ * maximum data quantities, offsets for Modbus frame parameters, error codes, communication
+ * states, flags, and data types like Modbus messages and function handlers.
+ *
  * @author niwciu (niwciu@gmail.com)
- * @brief
  * @date 2024-05-07
+ * @version 1.0.0
  *
  * @copyright Copyright (c) 2024
- *
  */
 #ifndef _MODBUS_TYPE_H_
 #define _MODBUS_TYPE_H_

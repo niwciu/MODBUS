@@ -1,11 +1,17 @@
 /**
  * @file modbus_master_PDU.h
+ * @brief Header file defining Modbus master protocol data unit (PDU) functionality.
+ *
+ * This header file provides functions for generating Modbus master protocol data unit (PDU) requests
+ * for various Modbus operations including reading holding registers, input registers, discrete inputs,
+ * and coils, as well as writing single and multiple registers and coils. It also includes a function
+ * for processing responses received from a Modbus slave.
+ *
  * @author niwciu (niwciu@gmail.com)
- * @brief
  * @date 2024-05-30
+ * @version 1.0.0
  *
  * @copyright Copyright (c) 2024
- *
  */
 #ifndef _MODBUS_PDU_H_
 #define _MODBUS_PDU_H_
