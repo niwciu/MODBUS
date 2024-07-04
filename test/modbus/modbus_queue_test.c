@@ -65,6 +65,16 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMasgPushToModbusQue
     TEST_ASSERT_EQUAL(0, q->tail);
 }
 
+TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenModbusMsgPtrToPushedModbusMsgEqualToNull)
+{
+    modbus_msg_t *msg_ptr =&msg_buf[0];
+    modbus_queue_init(q);
+
+    TEST_ASSERT_EQUAL(&msg_buf[0],msg_ptr);
+    modbus_queue_push(q,msg_ptr);
+    TEST_ASSERT_NULL(msg_ptr);
+}
+
 TEST(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenModbusMsgPopFromQueueThenTailisEqualToHead)
 {
     modbus_queue_init(q);
