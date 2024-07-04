@@ -1,14 +1,21 @@
 /**
  * @file modbus_crc.c
+ * @brief Implementation file for Modbus CRC calculation.
+ *
+ * This file contains the implementation of the CRC calculation function for Modbus protocol.
+ * It uses a precomputed lookup table for efficient CRC computation.
+ *
  * @author niwciu (niwciu@gmail.com)
- * @brief
  * @date 2024-05-11
- *
  * @copyright Copyright (c) 2024
- *
  */
 #include "modbus_crc.h"
 
+/**
+ * @brief Precomputed lookup table for CRC calculation.
+ *
+ * This table contains precomputed CRC values for all possible 8-bit data values.
+ */
 static const uint16_t CRC_loock_up_table[] =
     {
         0x0000, 0xC0C1, 0xC181, 0x0140, 0xC301, 0x03C0, 0x0280, 0xC241, 0xC601, 0x06C0, 0x0780, 0xC741, 0x0500, 0xC5C1, 0xC481, 0x0440,
@@ -28,6 +35,15 @@ static const uint16_t CRC_loock_up_table[] =
         0x8801, 0x48C0, 0x4980, 0x8941, 0x4B00, 0x8BC1, 0x8A81, 0x4A40, 0x4E00, 0x8EC1, 0x8F81, 0x4F40, 0x8D01, 0x4DC0, 0x4C80, 0x8C41,
         0x4400, 0x84C1, 0x8581, 0x4540, 0x8701, 0x47C0, 0x4680, 0x8641, 0x8201, 0x42C0, 0x4380, 0x8341, 0x4100, 0x81C1, 0x8081, 0x4040};
 
+/**
+ * @brief Calculates CRC (Cyclic Redundancy Check) for given data buffer.
+ *
+ * This function computes CRC-16 using the Modbus polynomial and a precomputed lookup table.
+ *
+ * @param data_buf Pointer to the data buffer for which CRC needs to be calculated.
+ * @param data_buf_len Length of the data buffer in bytes.
+ * @return uint16_t Computed CRC-16 value.
+ */
 uint16_t calculate_CRC(uint8_t *data_buf, uint32_t data_buf_len)
 {
     uint16_t CRC = 0xFFFF;
