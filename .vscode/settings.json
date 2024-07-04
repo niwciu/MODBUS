@@ -76,7 +76,9 @@
     "mock_master_driver_interface.h": "c",
     "modbus_queue.h": "c",
     "modbus_driver_config.h": "c",
-    "mock_slave_app_data.h": "c"
+    "mock_slave_app_data.h": "c",
+    "buf_rw.h": "c",
+    "modbus_slave_pdu.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "cmake.sourceDirectory": "D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/test/hw_test/STM32G070RB_MODBUS_MASTER"

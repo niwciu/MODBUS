@@ -14,8 +14,6 @@
 // #include "modbus_type.h"
 #include <stdio.h>
 
-
-
 static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg);
 static modbus_ret_t handle_slave_read_coil_service(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg);
@@ -41,15 +39,15 @@ static modbus_ret_t check_write_req_byte_count_correctenss(modbus_msg_t *modbus_
 static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *modbus_msg);
 static modbus_ret_t check_write_single_coil_req_data_correctness(modbus_msg_t *modbus_msg, modbus_adr_t coil_adr, modbus_w_coil_t coil_state);
 static modbus_ret_t set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab);
-    static const modbus_function_mapper_t modbus_slave_function_mapper[] = {
-        {MODBUS_READ_COILS_FUNC_CODE, modbus_slave_read_coils},
-        {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_slave_read_discrete_inputs},
-        {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_slave_read_holding_reg},
-        {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, modbus_slave_read_input_reg},
-        {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, modbus_slave_write_single_coil},
-        {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, modbus_slave_write_single_reg},
-        {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, modbus_slave_write_multiple_coils},
-        {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_slave_write_multiple_reg},
+static const modbus_function_mapper_t modbus_slave_function_mapper[] = {
+    {MODBUS_READ_COILS_FUNC_CODE, modbus_slave_read_coils},
+    {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_slave_read_discrete_inputs},
+    {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_slave_read_holding_reg},
+    {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, modbus_slave_read_input_reg},
+    {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, modbus_slave_write_single_coil},
+    {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, modbus_slave_write_single_reg},
+    {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, modbus_slave_write_multiple_coils},
+    {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_slave_write_multiple_reg},
 };
 
 #define MODBUS_SLAVE_FUNCTION_MAPPER_SIZE (sizeof(modbus_slave_function_mapper) / sizeof(modbus_slave_function_mapper[0]));
@@ -386,7 +384,7 @@ static modbus_ret_t handle_slave_write_multiple_reg_service(modbus_msg_t *modbus
 static void set_exception_code_resp(modbus_msg_t *modbus_msg, modbus_exception_code_t exception_code)
 {
     modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
-    modbus_msg->resp.data[MODBUS_RESP_ERROR_CODE_IDX] = exception_code;
+    modbus_msg->resp.data[MODBUS_RESP_EXCEPTION_CODE_IDX] = exception_code;
     modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
 }
 
