@@ -601,9 +601,67 @@ TEST(Master_PDU_read, GivenMasterReadCoilReqSendedAndWhenFunctionCodeWithExcepti
 
     TEST_ASSERT_EQUAL(RET_ERROR_EXCEPTION_CODE_RECIVED, status);
 }
-// // TEST(Master_PDU_read, )
-// // {
-// //     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
-// // }
-// //
-// //
+
+TEST(Master_PDU_read, GivenMasterReadDisInReqSendedWhenFunctionCodeWithExceptionCodeMaskRecivedThenModbusMasterReadSlaveReturnExceptionCodeRecivedStatus)
+{
+    modbus_device_ID_t Slave_ID = 0x03;
+    modbus_buf_t read_dis_in_ex_code_02_resp[] = {0x03, 0x82, 0x02, 0x60, 0xA1};
+    modbus_buf_size_t buf_len = sizeof(read_dis_in_ex_code_02_resp) / sizeof(modbus_buf_t);
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_data_qty_t coils_qty = 4;
+
+    // generating correct req RTU_msg
+    modbus_master_read_coils_req(RTU_msg, coil_adr, coils_qty);
+    modbus_RTU_send(RTU_msg->req.data, &RTU_msg->req.len, Slave_ID);
+    // generate fun code 01 resp RTU msg
+    memcpy(RTU_msg->resp.data, read_dis_in_ex_code_02_resp, buf_len);
+    RTU_msg->resp.len = buf_len;
+
+    status = modbus_master_read_slave_resp(RTU_msg);
+
+    TEST_ASSERT_EQUAL(RET_ERROR_EXCEPTION_CODE_RECIVED, status);
+}
+
+
+// TEST(Master_PDU_read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+//
+//
+// TEST(Master_PDU_read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+//
+//
+// TEST(Master_PDU_read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+//
+//
+// TEST(Master_PDU_read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+//
+//
+// TEST(Master_PDU_read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+//
+//
+// TEST(Master_PDU_read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+//
+//
+// TEST(Master_PDU_read, )
+// {
+//     TEST_FAIL_MESSAGE ("ADDED NEW TEST");
+// }
+//
+//
