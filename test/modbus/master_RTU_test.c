@@ -339,11 +339,65 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
 }
 
+TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThanRepeatOnErrorParamAndErrorReportedThenPushMsgBuferPtrToFreeQueue)
+{
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_device_ID_t slave_ID = 0x03;
+    modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
+
+    mock_slave_coil[0] = !!COIL_ON;
+    mock_slave_coil[1] = !!COIL_ON;
+
+    register_modbus_master_error_cb(error_report_test_function);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+    generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
+    generate_send_req_read_resp_msg_sequance(slave_ID);
+
+    TEST_ASSERT_NULL(msg_buf);
+}
+
 // TEST(Master_RTU_test,)
 // {
 //    TEST_FAIL_MESSAGE("Implement your test!");
 // }
-static void reset_all_RTU_buffers(void)
+
+// TEST(Master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(Master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(Master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(Master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(Master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(Master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+
+// TEST(Master_RTU_test,)
+// {
+//    TEST_FAIL_MESSAGE("Implement your test!");
+// }
+static void
+reset_all_RTU_buffers(void)
 {
     for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
