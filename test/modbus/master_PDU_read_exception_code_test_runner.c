@@ -5,7 +5,7 @@ TEST_GROUP_RUNNER(Master_PDU_read_exception_code)
     /* Test cases to run */
     RUN_TEST_CASE(Master_PDU_read_exception_code, WhenRegisterModbusErrorCbCalledThenModbusErrorCbEqualToRegisteredFunctionPointer)
     RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode01RecivedThen);
-    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode02RecivedThen);
+    // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode01RecivedThenExceptionCodeAddedToErrorReport);
     // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
     // RUN_TEST_CASE(Master_PDU_read_exception_code, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenExceptionCode03RecivedThen);
 

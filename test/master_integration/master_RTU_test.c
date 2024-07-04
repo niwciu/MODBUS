@@ -84,7 +84,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegiste
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND_TO_QUEUE, ret_status);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -137,7 +137,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegisters
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND_TO_QUEUE, ret_status);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -190,7 +190,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithPrope
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND_TO_QUEUE, ret_status);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -244,7 +244,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithPrope
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND_TO_QUEUE, ret_status);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -300,7 +300,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWit
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND_TO_QUEUE, ret_status);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -343,7 +343,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegiste
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND_TO_QUEUE, ret_status);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegisterWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -387,7 +387,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegis
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND_TO_QUEUE, ret_status);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)
@@ -442,7 +442,7 @@ TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoils
     TEST_ASSERT_NOT_NULL(tx_rx_msg_buf);
     TEST_ASSERT_EQUAL(expected_msg_len, tx_rx_msg_buf->req.len);
     TEST_ASSERT_EQUAL_HEX8_ARRAY(expected_master_request, tx_rx_msg_buf->req.data, tx_rx_msg_buf->req.len);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_REQUEST_SEND_TO_QUEUE, ret_status);
 }
 
 TEST(master_RTU_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr)

@@ -33,4 +33,6 @@ TEST_GROUP_RUNNER(Master_RTU_req_gen_test)
    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
+
+   //To Do - REQ  error report generation and callback calling when request gen fail
 }

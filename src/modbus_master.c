@@ -305,7 +305,7 @@ static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_pa
     }
     msg_buf->rw_data_ptr = req_param->rw_data_ptr;
     modbus_queue_push(tx_rx_q, msg_buf);
-    return MODBUS_MASTER_REQUEST_SEND;
+    return MODBUS_MASTER_REQUEST_SEND_TO_QUEUE;
 }
 
 static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)

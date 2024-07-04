@@ -66,5 +66,6 @@ TEST_GROUP_RUNNER(Master_RTU_test)
     // RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhen);
     // RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhen);
 
+    // ToDo Modbus RTU manager error report generation and error callbcak calling
     // test na to czy manager wysle jak head bedzie rowny tail ale beda dostepne dane do wyslania
 }
