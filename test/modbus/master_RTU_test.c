@@ -45,10 +45,6 @@ TEST_SETUP(Master_RTU_test)
     /* Init before every test */
     modbus_master_init(RTU, 9600, ODD);
     reset_all_RTU_buffers();
-    for (uint8_t i = 0; i < MASTER_COILS_TABLE_SIZE; i++)
-    {
-        // _coils_table(i, &mock_master_coils[i]);
-    }
     for (uint8_t i = 0; i < mock_slave_coil_TABLE_SIZE; i++)
     {
         register_app_data_to_modbus_slave_coils_table(i, &mock_slave_coil[i]);
@@ -357,7 +353,7 @@ static void reset_all_RTU_buffers(void)
         {
             memset(msg->req.data, 0, MODBUS_RTU_BUFFER_SIZE);
             memset(msg->resp.data, 0, MODBUS_RTU_BUFFER_SIZE);
-            modbus_queue_push(free_q, msg);
+            modbus_queue_push(free_q, &msg);
         }
     }
 }

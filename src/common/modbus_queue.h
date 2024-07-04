@@ -29,7 +29,7 @@ extern "C"
     } modbus_queue_t;
 
     void modbus_queue_init(modbus_queue_t *q);
-    void modbus_queue_push(modbus_queue_t *q, modbus_msg_t *data);
+    void modbus_queue_push(modbus_queue_t *q, modbus_msg_t **data);
     modbus_msg_t *modbus_queue_pop(modbus_queue_t *q);
 #ifdef __cplusplus
 }

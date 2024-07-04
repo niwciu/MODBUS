@@ -287,9 +287,11 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 
 static void push_all_available_msg_buffer_to_free_queue(void)
 {
+    modbus_msg_t *msg_ptr;
     for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
-        modbus_queue_push(free_q, &modbus_msg[i]);
+        msg_ptr = &modbus_msg[i];
+        modbus_queue_push(free_q, &msg_ptr);
     }
 }
 
@@ -313,7 +315,7 @@ static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_pa
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
     }
     msg_buf->rw_data_ptr = req_param->rw_data_ptr;
-    modbus_queue_push(tx_rx_q, msg_buf);
+    modbus_queue_push(tx_rx_q, &msg_buf);
     return MODBUS_MASTER_REQUEST_SEND_TO_QUEUE;
 }
 

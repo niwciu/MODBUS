@@ -19,7 +19,7 @@ void modbus_queue_init(modbus_queue_t *q)
     q->last_queue_pos_status = LAST_QUEUE_POS_EMPTY; // ToDo test na inita
 }
 
-void modbus_queue_push(modbus_queue_t *q, modbus_msg_t *data)
+void modbus_queue_push(modbus_queue_t *q, modbus_msg_t **data)
 {
     int32_t new_head = (q->head + 1) % MAX_MODBUS_MSG_QUEUE_ITEMS;
 
@@ -33,13 +33,15 @@ void modbus_queue_push(modbus_queue_t *q, modbus_msg_t *data)
         else
         {
             q->last_queue_pos_status = LAST_QUEUE_POS_STORE_DATA;
-            q->modbus_msg[q->head] = data;
+            q->modbus_msg[q->head] = *data;
+            *data=NULL;
         }
     }
     else
     {
-        q->modbus_msg[q->head] = data;
+        q->modbus_msg[q->head] = *data;
         q->head = new_head;
+        *data = NULL;
     }
 }
 

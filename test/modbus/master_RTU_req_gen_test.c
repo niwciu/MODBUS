@@ -473,7 +473,7 @@ static void reset_all_RTU_buffers(void)
         {
             memset(msg->req.data, 0, MODBUS_RTU_BUFFER_SIZE);
             memset(msg->resp.data, 0, MODBUS_RTU_BUFFER_SIZE);
-            modbus_queue_push(free_q, msg);
+            modbus_queue_push(free_q, &msg);
         }
     }
 }

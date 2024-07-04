@@ -37,30 +37,34 @@ TEST(Modbus_Queue_test, WhenModbusQueueInitThenQueueHeadAndTailIsEqualToZero)
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenHeadisEqualTo1AndTailIsEqualTo0)
 {
+    modbus_msg_t *msg_ptr=&msg_buf[0];
     modbus_queue_init(q);
-    modbus_queue_push(q, &msg_buf[0]);
+    modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_EQUAL(1, q->head);
     TEST_ASSERT_EQUAL(0, q->tail);
 }
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenTailQueueMsgPtrIsEqualToPushedModbusMsgAdress)
 {
+    modbus_msg_t *msg_ptr = &msg_buf[0];
     modbus_queue_init(q);
-    modbus_queue_push(q, &msg_buf[0]);
+    modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_EQUAL(&msg_buf[0], q->modbus_msg[q->tail]);
 }
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMasgPushToModbusQueueThenMsgNotPlacedInQueue)
 {
+    modbus_msg_t *msg_ptr;
     modbus_queue_init(q);
     for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
-        modbus_queue_push(q, &msg_buf[i]);
+        msg_ptr = &msg_buf[i];
+        modbus_queue_push(q, &msg_ptr);
     }
     TEST_ASSERT_EQUAL(MAX_HEAD_INDEX, q->head);
     TEST_ASSERT_EQUAL(0, q->tail);
-
-    modbus_queue_push(q, &msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS]);
+    msg_ptr = &msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS];
+    modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_EQUAL(MAX_HEAD_INDEX, q->head);
     TEST_ASSERT_EQUAL(0, q->tail);
 }
@@ -71,14 +75,15 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenM
     modbus_queue_init(q);
 
     TEST_ASSERT_EQUAL(&msg_buf[0],msg_ptr);
-    modbus_queue_push(q,msg_ptr);
+    modbus_queue_push(q,&msg_ptr);
     TEST_ASSERT_NULL(msg_ptr);
 }
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenModbusMsgPopFromQueueThenTailisEqualToHead)
 {
+    modbus_msg_t *msg_ptr = &msg_buf[0];
     modbus_queue_init(q);
-    modbus_queue_push(q, &msg_buf[0]);
+    modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_EQUAL(1, q->head);
     TEST_ASSERT_EQUAL(0, q->tail);
     pop_msg = modbus_queue_pop(q);
@@ -88,8 +93,9 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenMo
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenModbusMsgPopFromQueueThenPopMsgPtrisEqualToMsgBufferAddresPopedFromQueue)
 {
+    modbus_msg_t *msg_ptr = &msg_buf[0];
     modbus_queue_init(q);
-    modbus_queue_push(q, &msg_buf[0]);
+    modbus_queue_push(q, &msg_ptr);
     pop_msg = modbus_queue_pop(q);
     TEST_ASSERT_EQUAL(&msg_buf[0], pop_msg);
 }
@@ -104,26 +110,37 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndEmptyAndPopMsgPtrEqualNullWhenMod
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMsgPopAndModbusMsgPushThenTailisEqualTo1AndHeadIsEqualTo0)
 {
+    // modbus_queue_init(q);
+    // for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    // {
+    //     modbus_queue_push(q, &msg_buf[i]);
+    // }
+
+    modbus_msg_t *msg_ptr;
     modbus_queue_init(q);
     for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
-        modbus_queue_push(q, &msg_buf[i]);
+        msg_ptr = &msg_buf[i];
+        modbus_queue_push(q, &msg_ptr);
     }
     TEST_ASSERT_EQUAL(MAX_HEAD_INDEX, q->head);
     TEST_ASSERT_EQUAL(0, q->tail);
 
     pop_msg = modbus_queue_pop(q);
-    modbus_queue_push(q, &msg_buf[0]);
+    msg_ptr = &msg_buf[0];
+    modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_EQUAL(0, q->head);
     TEST_ASSERT_EQUAL(1, q->tail);
 }
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullAndNextPopAllModbusMsgAndModbusMsgPushWhenModbusMsgPopThenTailisEqualTo0AndHeadIsEqualTo0)
 {
+    modbus_msg_t *msg_ptr;
     modbus_queue_init(q);
     for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
-        modbus_queue_push(q, &msg_buf[i]);
+        msg_ptr = &msg_buf[i];
+        modbus_queue_push(q, &msg_ptr);
     }
     for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
     {
@@ -131,8 +148,8 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullAndNextPopAllModbusMsgAndModb
     }
     TEST_ASSERT_EQUAL(MAX_HEAD_INDEX, q->head);
     TEST_ASSERT_EQUAL(MAX_HEAD_INDEX, q->tail);
-
-    modbus_queue_push(q, &msg_buf[0]);
+    msg_ptr = &msg_buf[0];
+    modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_EQUAL(0, q->head);
     TEST_ASSERT_EQUAL(MAX_HEAD_INDEX, q->tail);
 
