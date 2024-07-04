@@ -84,11 +84,11 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadCoil
     modbus_adr_t coil_adr = 0x0001;
     modbus_data_qty_t coils_qty = 4;
     modbus_coil_disin_t readed_coil_val[coils_qty];
-    RTU_msg->rw_data_ptr = (void*)(readed_coil_val);
+    RTU_msg->rw_data_ptr = (void *)(readed_coil_val);
 
     mock_set_expected_slave_coils_alternately(coil_adr, coils_qty, !!COIL_ON);
     modbus_master_read_coils_req(RTU_msg, coil_adr, coils_qty);
-    
+
     parse_master_request_and_prepare_resp(RTU_msg);
     status = modbus_master_read_slave_resp(RTU_msg);
 
@@ -127,15 +127,15 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadCoi
     parse_master_request_and_prepare_resp(RTU_msg);
     RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
 
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_slave_resp(RTU_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH, modbus_master_read_slave_resp(RTU_msg));
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadDiscreteInputsRespThenMasterDisInUpdateToDisInValue)
 {
     modbus_adr_t disin_adr = 0x0001;
     modbus_data_qty_t disin_qty = 4;
-    modbus_coil_disin_t readed_disin[4]={0};
-    RTU_msg->rw_data_ptr=(void*)(readed_disin);
+    modbus_coil_disin_t readed_disin[4] = {0};
+    RTU_msg->rw_data_ptr = (void *)(readed_disin);
 
     mock_set_expected_slave_disc_in_alternately(disin_adr, disin_qty);
 
@@ -180,7 +180,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadDis
 
     RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
 
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_slave_resp(RTU_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH, modbus_master_read_slave_resp(RTU_msg));
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInputRegistersThenMasterInputRegistersUpdateToInputRegistersValue)
@@ -231,7 +231,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadInp
     parse_master_request_and_prepare_resp(RTU_msg);
     RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
 
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_slave_resp(RTU_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH, modbus_master_read_slave_resp(RTU_msg));
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInputRegistersAndByteCountIsIncorrectThenMasterInputRegistersStayUnchanged)
@@ -300,7 +300,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadHol
     RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
     modbus_master_read_slave_resp(RTU_msg);
 
-    TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_hreg_val, readed_hreg,hreg_qty);
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_hreg_val, readed_hreg, hreg_qty);
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadHoldingRegistersThenMasterReadHoldingRegistersReturnErroFuncCode)
@@ -316,7 +316,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterReadHol
     parse_master_request_and_prepare_resp(RTU_msg);
     RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
 
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_slave_resp(RTU_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH, modbus_master_read_slave_resp(RTU_msg));
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadHoldingRegistersAndByteCountIsIncorrectThenMasterHoldingRegistersStayUnchanged)
@@ -334,7 +334,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadHold
     RTU_msg->resp.data[MODBUS_RESP_READ_BYTE_CNT_IDX] = 7;
     modbus_master_read_slave_resp(RTU_msg);
 
-    TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_hreg_val, readed_hreg,hreg_qty);
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(expected_hreg_val, readed_hreg, hreg_qty);
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadHoldingRegistersAndByteCountIsIncorrectThenMasterReadHoldingRegistersReturnErrorByteCntCode)
@@ -353,11 +353,10 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadHold
     TEST_ASSERT_EQUAL_INT16(RET_ERROR_BYTE_CNT, modbus_master_read_slave_resp(RTU_msg));
 }
 
-
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWriteSingleCoilRespAndOutputAddressIsCorrectThenMasterWriteSingleCoilRespRetOk)
 {
     modbus_adr_t coil_adr = 0x0003;
-    modbus_coil_disin_t coil_2_write =!!COIL_ON;
+    modbus_coil_disin_t coil_2_write = !!COIL_ON;
     RTU_msg->rw_data_ptr = (void *)(&coil_2_write);
 
     modbus_master_write_single_coil_req(RTU_msg, coil_adr);
@@ -403,7 +402,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWriteSi
     parse_master_request_and_prepare_resp(RTU_msg);
 
     RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++;
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_slave_resp(RTU_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH, modbus_master_read_slave_resp(RTU_msg));
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWriteSingleRegisterRespAndAddresIsCorrectThenMasterWriteSingleRegisterRespRetOk)
@@ -442,7 +441,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWriteSi
 
     RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++; // its 2 byte data so im incrementing LSB
 
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_slave_resp(RTU_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH, modbus_master_read_slave_resp(RTU_msg));
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeAndCorrectOutputAdrAndIncorrectRegValueWhenMasterWriteSignleRegThenMasterWriteSingleRegRetValueError)
@@ -478,13 +477,13 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectStartA
     modbus_data_qty_t coil_qty = 10;
     modbus_coil_disin_t coils_2_write[10] = {!!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF};
     RTU_msg->rw_data_ptr = (void *)(coils_2_write);
-    
+
     modbus_master_write_multiple_coils_req(RTU_msg, coil_adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
     RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++; // change Function Code in resp
 
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_slave_resp(RTU_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH, modbus_master_read_slave_resp(RTU_msg));
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiCoilsRespThenRetOutAdrError)
@@ -493,7 +492,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStartAd
     modbus_data_qty_t coil_qty = 10;
     modbus_coil_disin_t coils_2_write[10] = {!!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF};
     RTU_msg->rw_data_ptr = (void *)(coils_2_write);
-    
+
     modbus_master_write_multiple_coils_req(RTU_msg, coil_adr, coil_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -523,7 +522,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartAdrA
     modbus_data_qty_t reg_qty = 10;
     modbus_coil_disin_t coils_2_write[10] = {!!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF};
     RTU_msg->rw_data_ptr = (void *)(coils_2_write);
-    
+
     modbus_master_write_multiple_reg_req(RTU_msg, reg_adr, reg_qty);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -542,7 +541,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithIncorrectFunctionCodeAndCorrectStartA
 
     RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]++; // change Function Code in resp
 
-    TEST_ASSERT_EQUAL_INT16(RET_ERROR_FUN_CODE, modbus_master_read_slave_resp(RTU_msg));
+    TEST_ASSERT_EQUAL_INT16(RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH, modbus_master_read_slave_resp(RTU_msg));
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndIncorrectStartAdrAndCorrectOutputQtyWhenMasterWriteMultiRegRespThenRetOutAdrError)

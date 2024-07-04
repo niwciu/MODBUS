@@ -77,7 +77,7 @@ extern "C"
         RET_ERROR_WRITE_SINGLE_OUT_VAL = -8,
         RET_ERROR_WRITE_OUT_ADR = -7,
         RET_ERROR_DATA_TAB_NULL_PTR = -6,
-        RET_ERROR_FUN_CODE = -5,
+        RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH = -5, // used in modbusread slave resp
         RET_ERROR_BYTE_CNT = -4,
         RET_ERROR_CRC = -3,
         RET_ERROR_SLAVE_ID = -2,
@@ -136,7 +136,7 @@ extern "C"
     } modbus_msg_t;
 
     typedef modbus_ret_t (*modbus_fun_code_handler_t)(modbus_msg_t *modbus_msg);
-    typedef struct 
+    typedef struct
     {
         modbus_fun_code_t fun_code;
         modbus_fun_code_handler_t fun_code_action;

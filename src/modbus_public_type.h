@@ -32,7 +32,7 @@ extern "C"
     {
         MODBUS_MASTER_REQUEST_SEND,
         MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR,
-        MODBUS_MASTER_LIB_REQ_ERROR,
+        MODBUS_MASTER_LIB_PDU_REQ_ERROR,
         MODBUS_MASTER_LIB_RTU_SEND_ERROR,
     } modbus_master_req_ret_t;
 
@@ -43,6 +43,13 @@ extern "C"
         MODBUS_ILLEGAL_DATA_VALUE_ERROR = 0x03U,
         MODBUS_SERVER_DEVICE_FAILURE_ERROR = 0x04U,
     } modbus_exception_code_t;
+
+    typedef enum
+    {
+        MODBUS_MASTER_RESP_RTU_CRC_ERR,
+        MODBUS_MASTER_RESP_TIMEOUT_ERR,
+        MODBUS_MASTER_RESP_FRAME_ERR,
+    } modbus_master_resp_read_error_t;
 
     typedef enum
     {
@@ -68,12 +75,12 @@ extern "C"
         modbus_device_ID_t slave_ID;
         modbus_fun_code_t fun_conde;
         modbus_exception_code_t exception_code;
-        //ToDo to be defined
+        modbus_master_req_ret_t req_gen_error;
+        modbus_master_resp_read_error_t resp_read_error;
 
     } modbus_error_rep_t;
 
-    typedef void (*modbus_master_error_cb_t)(modbus_error_rep_t error_report);
-
+    typedef void (*modbus_master_error_cb_t)(modbus_error_rep_t *error_report);
 
     // typedef struct
     // {

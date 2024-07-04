@@ -99,7 +99,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldin
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_PDU_REQ_ERROR, ret_status);
 }
 
 TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue)
@@ -157,7 +157,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputR
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_PDU_REQ_ERROR, ret_status);
 }
 
 TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue)
@@ -215,7 +215,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsW
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_PDU_REQ_ERROR, ret_status);
 }
 
 TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue)
@@ -273,7 +273,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInW
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_PDU_REQ_ERROR, ret_status);
 }
 
 TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue)
@@ -406,7 +406,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMulti
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_PDU_REQ_ERROR, ret_status);
 }
 
 TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue)
@@ -460,7 +460,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMulti
 
     tx_rx_msg_buf = modbus_queue_pop(tx_rx_q);
     TEST_ASSERT_NULL(tx_rx_msg_buf);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_REQ_ERROR, ret_status);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_LIB_PDU_REQ_ERROR, ret_status);
 }
 
 static void reset_all_RTU_buffers(void)

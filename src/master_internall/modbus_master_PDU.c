@@ -37,15 +37,15 @@ static modbus_ret_t set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_
 static modbus_ret_t set_master_coil_din_state(modbus_coil_disin_t *coil_din_ptr, modbus_coil_disin_t coil_state);
 static modbus_ret_t set_master_register_value(modbus_reg_t *hreg_tab_ptr, modbus_reg_t hreg_val);
 
-    static const modbus_function_mapper_t modbus_master_function_mapper[] = {
-        {MODBUS_READ_COILS_FUNC_CODE, modbus_master_read_coils_resp},
-        {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_master_read_discrete_inputs_resp},
-        {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_master_read_holding_reg_resp},
-        {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, modbus_master_read_input_reg_resp},
-        {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, modbus_master_write_single_coil_resp},
-        {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, modbus_master_write_single_reg_resp},
-        {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, modbus_master_write_multiple_coils_resp},
-        {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_master_write_multiple_reg_resp},
+static const modbus_function_mapper_t modbus_master_function_mapper[] = {
+    {MODBUS_READ_COILS_FUNC_CODE, modbus_master_read_coils_resp},
+    {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_master_read_discrete_inputs_resp},
+    {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_master_read_holding_reg_resp},
+    {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, modbus_master_read_input_reg_resp},
+    {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, modbus_master_write_single_coil_resp},
+    {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, modbus_master_write_single_reg_resp},
+    {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, modbus_master_write_multiple_coils_resp},
+    {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_master_write_multiple_reg_resp},
 };
 
 #define MODBUS_MASTER_FUNCTION_MAPPER_SIZE (sizeof(modbus_master_function_mapper) / sizeof(modbus_master_function_mapper[0]));
@@ -193,11 +193,11 @@ modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
     {
         uint32_t mapper_size = MODBUS_MASTER_FUNCTION_MAPPER_SIZE;
         modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-        for (uint32_t i=0; i<mapper_size; i++)
+        for (uint32_t i = 0; i < mapper_size; i++)
         {
             if (modbus_master_function_mapper[i].fun_code == req_fun_code)
             {
-                resp_processing_status= modbus_master_function_mapper[i].fun_code_action(modbus_msg);
+                resp_processing_status = modbus_master_function_mapper[i].fun_code_action(modbus_msg);
                 break;
             }
         }
@@ -271,11 +271,11 @@ static modbus_ret_t write_single_reg_coil_request(modbus_req_resp_t *req, modbus
     write_u16_to_buf(req->data + MODBUS_REQUEST_ADR_IDX, adr);
     if (MODBUS_WRITE_SINGLE_COIL_FUNC_CODE == req_code)
     {
-        write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, *((modbus_coil_disin_t*)(rw_data_ptr)) * COIL_ON);
+        write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, *((modbus_coil_disin_t *)(rw_data_ptr)) * COIL_ON);
     }
     else
     {
-        write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, *((modbus_reg_t*)(rw_data_ptr)));
+        write_u16_to_buf(req->data + MODBUS_REQUEST_QTY_IDX, *((modbus_reg_t *)(rw_data_ptr)));
     }
     req->len = MODBUS_WRITE_SINGLE_REQUEST_LEN;
     return RET_OK;
@@ -304,19 +304,17 @@ static void set_inreg_hreg_value_from_modbus_msg(const modbus_buf_t *msg_data_pt
     for (modbus_data_qty_t i = 0; i < reg_qty; i++)
     {
         modbus_data_t reg_data = read_u16_from_buf(msg_data_ptr + (i * 2));
-        set_master_register_value(rw_data_ptr+i, reg_data);
+        set_master_register_value(rw_data_ptr + i, reg_data);
     }
 }
 static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *resp, const modbus_req_resp_t *req, modbus_fun_code_t fun_code, void *rw_data_ptr)
 {
-
     modbus_byte_count_t slave_resp_byte_cnt = resp->data[MODBUS_RESP_READ_BYTE_CNT_IDX];
     modbus_data_qty_t requested_data_qty = read_u16_from_buf(req->data + MODBUS_REQUEST_QTY_IDX);
-    modbus_data_qty_t expected_byte_cnt;
     modbus_reg_t status;
-    expected_byte_cnt = get_expected_byte_cnt(fun_code, requested_data_qty);
     if (resp->data[MODBUS_FUNCTION_CODE_IDX] == fun_code)
     {
+        modbus_data_qty_t expected_byte_cnt = get_expected_byte_cnt(fun_code, requested_data_qty);
         if (slave_resp_byte_cnt == expected_byte_cnt)
         {
             if (NULL != rw_data_ptr)
@@ -330,9 +328,10 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
             status = RET_ERROR_BYTE_CNT;
         }
     }
+    // tutaj esle if i informuej ze otrzymałem excpetion coda?? a może coś robię z przekazanymi danymi?
     else
     {
-        status = RET_ERROR_FUN_CODE;
+        status = RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH;
     }
     return status;
 }
@@ -347,7 +346,7 @@ static void update_master_specific_data_type_from_modbus_msg(const modbus_buf_t 
         set_inreg_hreg_value_from_modbus_msg(&resp[MODBUS_RESP_READ_DATA_IDX], data_qty, (modbus_reg_t *)(rw_data_ptr));
         break;
     default:
-        set_coil_din_value_from_modbus_msg(&resp[MODBUS_RESP_READ_DATA_IDX], data_qty, (modbus_coil_disin_t*)(rw_data_ptr));
+        set_coil_din_value_from_modbus_msg(&resp[MODBUS_RESP_READ_DATA_IDX], data_qty, (modbus_coil_disin_t *)(rw_data_ptr));
         break;
     }
 }
@@ -384,7 +383,7 @@ static modbus_ret_t check_write_slave_resp_vs_req(const modbus_req_resp_t *resp,
     }
     else
     {
-        status = RET_ERROR_FUN_CODE;
+        status = RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH;
     }
     return status;
 }
@@ -423,14 +422,14 @@ static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg)
     }
 }
 
-static modbus_ret_t set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr , modbus_data_qty_t coil_din_qty, modbus_coil_disin_t *rw_data_ptr)
+static modbus_ret_t set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t *rw_data_ptr)
 {
     modbus_ret_t status = RET_OK;
     for (modbus_data_qty_t i = 0; i < coil_din_qty; i++)
     {
         if (0 != (*(data_state_ptr + (i / 8)) & (1 << (i % 8))))
         {
-            status = set_master_coil_din_state( rw_data_ptr+i, 1);
+            status = set_master_coil_din_state(rw_data_ptr + i, 1);
         }
         else
         {

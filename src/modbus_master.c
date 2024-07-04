@@ -296,7 +296,7 @@ static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_pa
     modbus_lib_ret = generate_request_PDU_data(msg_buf, req_param);
     if (0 > modbus_lib_ret)
     {
-        return MODBUS_MASTER_LIB_REQ_ERROR;
+        return MODBUS_MASTER_LIB_PDU_REQ_ERROR;
     }
     modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, req_param->slave_ID);
     if (RET_ERROR == modbus_lib_ret)
