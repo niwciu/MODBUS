@@ -58,9 +58,9 @@ extern "C"
     #define MODBUS_READ_RESP_LEN    3U
     #define MODBUS_WRITE_SINGLE_RESP_LEN  6U
     #define MODBUS_WRITE_MULTI_RESP_LEN   6U
-    #define MODBUS_ERROR_CODE_RESP_LEN    3U
+    #define MODBUS_EXCEPTION_CODE_RESP_LEN 3U
     #define MODBUS_PDU_EXCEPTION_CODE_LEN 3U
-    #define MODBUS_ERROR_CODE_MASK  0x80U
+    #define MODBUS_EXCEPTION_CODE_MASK  0x80U
 
     // clang-format on
     typedef enum

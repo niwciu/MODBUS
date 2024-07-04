@@ -383,7 +383,7 @@ static modbus_ret_t handle_slave_write_multiple_reg_service(modbus_msg_t *modbus
 
 static void set_exception_code_resp(modbus_msg_t *modbus_msg, modbus_exception_code_t exception_code)
 {
-    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_ERROR_CODE_MASK;
+    modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] |= MODBUS_EXCEPTION_CODE_MASK;
     modbus_msg->resp.data[MODBUS_RESP_EXCEPTION_CODE_IDX] = exception_code;
     modbus_msg->resp.len = MODBUS_PDU_EXCEPTION_CODE_LEN;
 }

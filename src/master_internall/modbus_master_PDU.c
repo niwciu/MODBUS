@@ -36,6 +36,8 @@ static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg);
 static modbus_ret_t set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t *rw_data_ptr);
 static modbus_ret_t set_master_coil_din_state(modbus_coil_disin_t *coil_din_ptr, modbus_coil_disin_t coil_state);
 static modbus_ret_t set_master_register_value(modbus_reg_t *hreg_tab_ptr, modbus_reg_t hreg_val);
+static bool modbus_response_contains_error(const modbus_msg_t *modbus_msg);
+static modbus_ret_t process_modbus_response(modbus_msg_t *modbus_msg);
 
 static const modbus_function_mapper_t modbus_master_function_mapper[] = {
     {MODBUS_READ_COILS_FUNC_CODE, modbus_master_read_coils_resp},
@@ -185,35 +187,71 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *modbus_msg, mo
         return RET_NULL_PTR_ERROR;
     }
 }
-
+/**
+ * @brief Processes the response received from a Modbus slave.
+ *
+ * This function processes the response message received from a Modbus slave.
+ * It first checks the correctness of the provided message pointer. If the pointer
+ * is valid, it further examines if the response contains an exception code. If an esception
+ * code is present, it sets the response processing status to RET_ERROR_EXCEPTION_CODE_RECIVED.
+ * Otherwise, it iterates through the function mapper to find and execute the appropriate
+ * function code action based on the request function code.
+ *
+ * @param[in] modbus_msg Pointer to the Modbus message structure containing the request,
+ * response data and void pointer for data to read/write.
+ *
+ * @return
+ * - RET_ERROR if there is an error in processing.
+ * - RET_ERROR_EXCEPTION_CODE_RECIVED if an exception code is received in the response.
+ * - RET_NULL_PTR_ERROR if the provided message pointer is null.
+ * - The return value of the function code action if executed successfully.
+ *
+ * RET_ERROR_BYTE_CNT;
+            RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH
+            RET_OK;
+ */
+// modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
+// {
+//     modbus_ret_t resp_processing_status = RET_ERROR;
+//     if (RET_OK == check_null_ptr_correctness(modbus_msg))
+//     {
+//         if ((modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & MODBUS_EXCEPTION_CODE_MASK) == MODBUS_EXCEPTION_CODE_MASK)
+//         {
+//             resp_processing_status = RET_ERROR_EXCEPTION_CODE_RECIVED;
+//         }
+//         else
+//         {
+//             uint32_t mapper_size = MODBUS_MASTER_FUNCTION_MAPPER_SIZE;
+//             modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
+//             for (uint32_t i = 0; i < mapper_size; i++)
+//             {
+//                 if (modbus_master_function_mapper[i].fun_code == req_fun_code)
+//                 {
+//                     resp_processing_status = modbus_master_function_mapper[i].fun_code_action(modbus_msg);
+//                     break;
+//                 }
+//             }
+//         }
+//     }
+//     else
+//     {
+//         resp_processing_status = RET_NULL_PTR_ERROR;
+//     }
+//     return resp_processing_status;
+// }
 modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
 {
-    modbus_ret_t resp_processing_status = RET_ERROR;
-    if (RET_OK == check_null_ptr_correctness(modbus_msg))
+    if (RET_OK != check_null_ptr_correctness(modbus_msg))
     {
-        if ((modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & MODBUS_ERROR_CODE_MASK) == MODBUS_ERROR_CODE_MASK)
-        {
-            resp_processing_status = RET_ERROR_EXCEPTION_CODE_RECIVED;
-        }
-        else
-        {
-            uint32_t mapper_size = MODBUS_MASTER_FUNCTION_MAPPER_SIZE;
-            modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-            for (uint32_t i = 0; i < mapper_size; i++)
-            {
-                if (modbus_master_function_mapper[i].fun_code == req_fun_code)
-                {
-                    resp_processing_status = modbus_master_function_mapper[i].fun_code_action(modbus_msg);
-                    break;
-                }
-            }
-        }
+        return RET_NULL_PTR_ERROR;
     }
-    else
+
+    if (modbus_response_contains_error(modbus_msg))
     {
-        resp_processing_status = RET_NULL_PTR_ERROR;
+        return RET_ERROR_EXCEPTION_CODE_RECIVED;
     }
-    return resp_processing_status;
+
+    return process_modbus_response(modbus_msg);
 }
 // Master internall functions
 static modbus_ret_t modbus_master_read_coils_resp(modbus_msg_t *modbus_msg)
@@ -335,7 +373,6 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
             status = RET_ERROR_BYTE_CNT;
         }
     }
-    // tutaj esle if i informuej ze otrzymałem excpetion coda?? a może coś robię z przekazanymi danymi?
     else
     {
         status = RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH;
@@ -465,4 +502,37 @@ static modbus_ret_t set_master_register_value(modbus_reg_t *hreg_tab_ptr, modbus
     }
     else
         return RET_ERROR;
+}
+
+/**
+ * @brief Checks if the Modbus response contains an error code.
+ *
+ * @param[in] modbus_msg Pointer to the Modbus message structure containing the response data.
+ * @return True if an error code is present, false otherwise.
+ */
+static bool modbus_response_contains_error(const modbus_msg_t *modbus_msg)
+{
+    return (modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & MODBUS_EXCEPTION_CODE_MASK) == MODBUS_EXCEPTION_CODE_MASK;
+}
+
+/**
+ * @brief Processes the Modbus response based on the request function code.
+ *
+ * @param[in] modbus_msg Pointer to the Modbus message structure containing the request and response data.
+ * @return The status of the response processing.
+ */
+static modbus_ret_t process_modbus_response(modbus_msg_t *modbus_msg)
+{
+    uint32_t mapper_size = MODBUS_MASTER_FUNCTION_MAPPER_SIZE;
+    modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
+
+    for (uint32_t i = 0; i < mapper_size; i++)
+    {
+        if (modbus_master_function_mapper[i].fun_code == req_fun_code)
+        {
+            return modbus_master_function_mapper[i].fun_code_action(modbus_msg);
+        }
+    }
+
+    return RET_ERROR;
 }
