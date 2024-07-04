@@ -330,7 +330,6 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
-    generate_send_req_read_resp_msg_sequance(slave_ID);
 
     TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
     TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
@@ -352,15 +351,14 @@ TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhe
     register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
-    generate_send_req_read_resp_msg_sequance(slave_ID);
 
     TEST_ASSERT_NULL(msg_buf);
 }
 
-// TEST(Master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThenRepeatOnErrorParamAndSlaveErrorReportedThenGoToIdleState)
+{
+   TEST_FAIL_MESSAGE("Implement your test!");
+}
 
 // TEST(Master_RTU_test,)
 // {
