@@ -211,10 +211,8 @@ void check_modbus_master_manager(void)
         }
         break;
     case MODBUS_MASTER_RESP_RECIVED:
-        // mainly here we are waiting for T 3,5 Flag to confirm correctnes of the response
         if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
-        {
-            // frame error catched
+        {   // frame error catched
             modbus_master_msg_repeat_couter++;
             if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
             {
@@ -223,7 +221,18 @@ void check_modbus_master_manager(void)
             }
             else
             {
-                // report error, push msg to free queueue buffer and go to idle
+                // report error, 
+                if (NULL != modbus_error_callback)
+                {
+                    static modbus_error_rep_t error_rep;
+                    error_rep.slave_ID = modbus_msg->resp.data[MODBUS_SLAVE_ADR_IDX];
+                    error_rep.fun_conde = (modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_ERROR_CODE_MASK));
+                    error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
+                    modbus_error_callback(&error_rep);
+                }
+                // push msg to free queueue buffer and go to idle
+                // memset(modbus_msg,0,sizoef(modbus_msg));
+                // modbus_queue_push(free_q,modbus_msg);
             }
         }
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))

@@ -55,6 +55,7 @@ TEST_GROUP_RUNNER(Master_RTU_test)
     // złe slave ID złe CRC złe slave id złe CRC -> czy złe złe CRC powinno się kasować? nie powtórki kasuje tylko poprawnie odebrana dana
     // test na powtórzenie jakichkolwiek błędów jednego po drugim 3 razy
     // test na zapis wystąpionych błędów po 3 krotnym wystąpieniujakiegokolwiek
+    // test na wielokrotne użycie już wykorzystaneo bufora -> odpowiedź czy trzeba go zerować przed zwolnieniem
     //
     // RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhen);
     // RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhen);
