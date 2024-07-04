@@ -51,7 +51,7 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     
     // master recive exception code tests
     // RUN_TEST_CASE(Master_PDU_read, WhenRegisterModbusErrorCbCalledThenModbusErrorCbEqualToRegisteredFunctionPointer) move to hiher layer tests
-    RUN_TEST_CASE(Master_PDU_read, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenFunctionExceptionCodeMaskRecivedThenModbusMasterReadSlaveReturnExceptionCodeRecivedStatus);
-    // RUN_TEST_CASE(Master_PDU_read, );
+    RUN_TEST_CASE(Master_PDU_read, GivenMasterReadCoilReqSendedAndWhenFunctionExceptionCodeMaskRecivedThenModbusMasterReadSlaveReturnExceptionCodeRecivedStatus);
+    // RUN_TEST_CASE(Master_PDU_read, GivenMasterReadDisInReqSendedAndWhenFunctionExceptionCodeMaskRecivedThenModbusMasterReadSlaveReturnExceptionCodeRecivedStatus);
     // RUN_TEST_CASE(Master_PDU_read, );
 }

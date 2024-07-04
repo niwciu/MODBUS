@@ -582,7 +582,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectStartAdrA
 //     TEST_ASSERT_EQUAL(&error_test_func, modbus_error_callback);
 // }
 
-TEST(Master_PDU_read, GivenMasterReadCoilReqSendedAndModbusErrorCbRegisteredWhenFunctionExceptionCodeMaskRecivedThenModbusMasterReadSlaveReturnExceptionCodeRecivedStatus)
+TEST(Master_PDU_read, GivenMasterReadCoilReqSendedAndWhenFunctionExceptionCodeMaskRecivedThenModbusMasterReadSlaveReturnExceptionCodeRecivedStatus)
 {
     modbus_device_ID_t Slave_ID = 0x03;
     modbus_buf_t read_coil_ex_code_01_resp[] = {0x03, 0x81, 0x01, 0x20, 0x50};
