@@ -191,14 +191,21 @@ modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
     modbus_ret_t resp_processing_status = RET_ERROR;
     if (RET_OK == check_null_ptr_correctness(modbus_msg))
     {
-        uint32_t mapper_size = MODBUS_MASTER_FUNCTION_MAPPER_SIZE;
-        modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-        for (uint32_t i = 0; i < mapper_size; i++)
+        if ((modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & MODBUS_ERROR_CODE_MASK) == MODBUS_ERROR_CODE_MASK)
         {
-            if (modbus_master_function_mapper[i].fun_code == req_fun_code)
+            resp_processing_status = RET_ERROR_EXCEPTION_CODE_RECIVED;
+        }
+        else
+        {
+            uint32_t mapper_size = MODBUS_MASTER_FUNCTION_MAPPER_SIZE;
+            modbus_fun_code_t req_fun_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
+            for (uint32_t i = 0; i < mapper_size; i++)
             {
-                resp_processing_status = modbus_master_function_mapper[i].fun_code_action(modbus_msg);
-                break;
+                if (modbus_master_function_mapper[i].fun_code == req_fun_code)
+                {
+                    resp_processing_status = modbus_master_function_mapper[i].fun_code_action(modbus_msg);
+                    break;
+                }
             }
         }
     }
