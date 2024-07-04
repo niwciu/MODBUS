@@ -18,6 +18,7 @@ TEST_GROUP(Master_RTU_test);
 extern modbus_queue_t *tx_rx_q;
 extern modbus_queue_t *free_q;
 extern modbus_msg_t *msg_buf;
+extern modbus_master_error_cb_t modbus_error_callback;
 
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 extern modbus_master_state_t modbus_master_manager_state_machine;
@@ -33,6 +34,7 @@ static void generate_msg_T_1_5_char_brake_sequence(void);
 static void generate_msg_T_3_5_char_brake_sequence(void);
 static void generate_read_frame_error_catch_sequance(modbus_device_ID_t slave_ID, uint8_t sequence_repeat);
 static void generate_send_req_read_resp_msg_sequance(modbus_device_ID_t slave_ID);
+static void error_report_test_function(modbus_error_rep_t *error_rep);
 
 modbus_coil_disin_t debug_readed_coil_disin[2] = {!!COIL_OFF};
 
@@ -57,6 +59,11 @@ TEST_TEAR_DOWN(Master_RTU_test)
 }
 
 // //  Modbus Master Manager tests
+TEST(Master_RTU_test, WhenTestFunctionRegisterdAsModbusErrorCallbackThenModbusErrorCallbackPtrEqualToTestFunctionAdres)
+{
+    register_modbus_master_error_cb(error_report_test_function);
+    TEST_ASSERT_EQUAL(&error_report_test_function,modbus_error_callback);
+}
 // //  IDLE state tests
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSending)
 {
@@ -312,9 +319,23 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
 }
 
-// TEST(Master_RTU_test,)
+// TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThanRepeatOnErrorParamThenReportError)
 // {
-//    TEST_FAIL_MESSAGE("Implement your test!");
+//     modbus_adr_t coil_adr = 0x0001;
+//     modbus_device_ID_t slave_ID = 0x03;
+//     modbus_data_qty_t coils_qty = 2;
+//     modbus_coil_disin_t readed_coil_disin[coils_qty];
+
+//     mock_slave_coil[0] = !!COIL_ON;
+//     mock_slave_coil[1] = !!COIL_ON;
+
+//     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+
+//     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR+1);
+//     generate_send_req_read_resp_msg_sequance(slave_ID);
+
+//     // TEST_ASSERT_EQUAL
+//     TEST_FAIL_MESSAGE("Implement your test!");
 // }
 
 // TEST(Master_RTU_test,)
@@ -382,4 +403,9 @@ static void generate_send_req_read_resp_msg_sequance(modbus_device_ID_t slave_ID
     generate_resp_using_slave_lib(slave_ID);
     generate_msg_T_1_5_char_brake_sequence();
     generate_msg_T_3_5_char_brake_sequence();
+}
+
+static void error_report_test_function(modbus_error_rep_t *error_rep)
+{
+    (void)(error_rep);
 }
