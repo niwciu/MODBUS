@@ -212,7 +212,7 @@ void check_modbus_master_manager(void)
         break;
     case MODBUS_MASTER_RESP_RECIVED:
         if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
-        {   // frame error catched
+        {  
             modbus_master_msg_repeat_couter++;
             if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
             {
@@ -221,7 +221,6 @@ void check_modbus_master_manager(void)
             }
             else
             {
-                // report error, 
                 if (NULL != modbus_error_callback)
                 {
                     static modbus_error_rep_t error_rep;
@@ -230,17 +229,17 @@ void check_modbus_master_manager(void)
                     error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
                     modbus_error_callback(&error_rep);
                 }
-                // memset(modbus_msg,0,sizoef(modbus_msg)); // w przyszły testach wyjdzie czy trzeba to kasować
+                // memset(modbus_msg,0,sizoef(modbus_msg)); // will be shown if necessary in buger reusing tests
                 modbus_queue_push(free_q,&msg_buf);
                 modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
             }
         }
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
-            // parse slave_resp_msg
             modbus_master_read_slave_resp(msg_buf);
             modbus_master_msg_repeat_couter = 0;
             modbus_queue_push(free_q, &msg_buf);
+            modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
         }
         else
         {
