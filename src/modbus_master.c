@@ -78,9 +78,9 @@ const struct modbus_master_functions_mapper master_functions_mapper[] = {
 
 #define MODBUS_MASTER_FUNCTIONS_MAPPER_SIZE (sizeof(master_functions_mapper) / sizeof(master_functions_mapper[0]));
 
-void register_modbus_master_error_cb(modbus_master_error_cb_t error_callbach)
+void register_modbus_master_error_cb(modbus_master_error_cb_t error_callback)
 {
-
+    modbus_error_callback=error_callback;
 }
 
 modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
