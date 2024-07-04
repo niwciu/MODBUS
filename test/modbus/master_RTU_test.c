@@ -21,7 +21,7 @@ extern modbus_msg_t *msg_buf;
 extern modbus_master_error_cb_t modbus_error_callback;
 
 extern modbus_master_state_t modbus_master_manager_state_machine;
-extern modbus_timer_t modbus_master_resp_timeout;
+extern modbus_timer_t modbus_master_resp_timeout_timer;
 extern uint8_t modbus_master_msg_repeat_couter;
 
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
@@ -166,7 +166,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
 
     mock_USART_req_msg_sended_EVENT();
     check_modbus_master_manager();
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_TIME_OUT_MS, modbus_master_resp_timeout);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_TIME_OUT_MS, modbus_master_resp_timeout_timer);
 }
 
 //  MODBUS_MASTER_RESP_WAITING state tests
@@ -206,7 +206,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_send_req_read_resp_msg_sequance(slave_ID);
 
-    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout);
+    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndFrameErrorCatchedThenAfterT3_5CharIncMsgRepeatCounter)
@@ -277,7 +277,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 1], readed_coil_disin[1]);
 }
 
-TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedLessTimeThanRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedRespProcessedAndNoExceptionCodeRecivedThenPushMsgBuferPtrToFreeQueue)
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedLessTimeThanRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedRespProcessedAndNoExceptionCodeRecivedThenPushMsgBuferPtrToFreeQueue)
 {
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
@@ -327,7 +327,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
     generate_send_req_read_resp_msg_sequance(slave_ID);
 
-    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout);
+    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
     TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
 }
 
@@ -348,7 +348,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr], readed_coil_disin[0]);
     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 1], readed_coil_disin[1]);
-    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout);
+    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
     TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
 }
 
@@ -373,7 +373,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
 }
 
-TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThanRepeatOnErrorParamAndErrorReportedThenPushMsgBuferPtrToFreeQueue)
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThanRepeatOnErrorParamAndErrorReportedThenPushMsgBuferPtrToFreeQueue)
 {
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
@@ -390,7 +390,7 @@ TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhe
     TEST_ASSERT_NULL(msg_buf);
 }
 
-TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThenRepeatOnErrorParamAndSlaveErrorReportedThenGoToIdleState)
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThenRepeatOnErrorParamAndSlaveErrorReportedThenGoToIdleState)
 {
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
@@ -405,8 +405,6 @@ TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAn
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, modbus_master_manager_state_machine);
 }
-
-
 
 // TEST(Master_RTU_test,)
 // {
@@ -503,6 +501,6 @@ static void generate_send_req_read_resp_msg_sequance(modbus_device_ID_t slave_ID
 
 static void error_report_test_function(modbus_error_rep_t *error_rep)
 {
-    memset(&test_error_rep,0,sizeof(test_error_rep));
+    memset(&test_error_rep, 0, sizeof(test_error_rep));
     test_error_rep = *error_rep;
 }

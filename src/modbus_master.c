@@ -36,7 +36,7 @@ PRIVATE modbus_queue_t *free_q = &master_free_queue;
 PRIVATE modbus_queue_t *tx_rx_q = &master_tx_rx_queue;
 PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *msg_buf = NULL;
-PRIVATE modbus_timer_t modbus_master_resp_timeout = 0;
+PRIVATE modbus_timer_t modbus_master_resp_timeout_timer = 0;
 PRIVATE uint8_t modbus_master_msg_repeat_couter = 0;
 
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
@@ -80,7 +80,7 @@ const struct modbus_master_functions_mapper master_functions_mapper[] = {
 
 void register_modbus_master_error_cb(modbus_master_error_cb_t error_callback)
 {
-    modbus_error_callback=error_callback;
+    modbus_error_callback = error_callback;
 }
 
 modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
@@ -198,7 +198,7 @@ void check_modbus_master_manager(void)
                 // To Do Do in the future -> log event that for specific req slave id resp was catched
 
                 // RTU_driver->disable_T3,5_timer ->  for now T_3_5_Timer_Flag is cleared when T 1_5Flag is seted in this state ->
-                msg_buf->resp.len = 0; // set resp data buf ptr to first char
+                msg_buf->resp.len = 0; // ToDo define test for this step set resp data buf ptr to first char
             }
             else // RET_OK
             {
@@ -206,13 +206,13 @@ void check_modbus_master_manager(void)
                 modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
             }
         }
-        else if (0 == modbus_master_resp_timeout)
+        else if (1 == modbus_master_resp_timeout_timer)
         {
         }
         break;
     case MODBUS_MASTER_RESP_RECIVED:
         if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
-        {  
+        {
             modbus_master_msg_repeat_couter++;
             if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
             {
@@ -230,7 +230,7 @@ void check_modbus_master_manager(void)
                     modbus_error_callback(&error_rep);
                 }
                 // memset(modbus_msg,0,sizoef(modbus_msg)); // will be shown if necessary in buger reusing tests
-                modbus_queue_push(free_q,&msg_buf);
+                modbus_queue_push(free_q, &msg_buf);
                 modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
             }
         }
@@ -346,11 +346,11 @@ static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *mod
 
 static void modbus_master_enable_resp_timeout_timer(void)
 {
-    modbus_master_resp_timeout = MODBUS_MASTER_RESP_TIME_OUT_MS;
+    modbus_master_resp_timeout_timer = MODBUS_MASTER_RESP_TIME_OUT_MS;
 }
 static void modbus_master_disable_resp_timeout_timer(void)
 {
-    modbus_master_resp_timeout = 0;
+    modbus_master_resp_timeout_timer = 0;
 }
 
 static void modbus_master_req_sended_callback(void)

@@ -21,7 +21,7 @@ extern modbus_msg_t *msg_buf;
 
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 extern modbus_master_state_t modbus_master_manager_state_machine;
-extern modbus_timer_t modbus_master_resp_timeout;
+extern modbus_timer_t modbus_master_resp_timeout_timer;
 extern uint8_t modbus_master_msg_repeat_couter;
 
 extern modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG;
