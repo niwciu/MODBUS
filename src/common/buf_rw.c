@@ -14,10 +14,11 @@
 #include "buf_rw.h"
 
 /**
- * @brief Writes a 16-bit unsigned integer to a buffer.
+ * @brief Writes a 16-bit unsigned integer to a uint8_t buffer.
  *
  * Writes the given 16-bit unsigned integer `data` to the buffer `buf`.
  * The buffer `buf` is assumed to be an array of uint8_t.
+ * The most significant byte of data is written at first
  *
  * @param buf Pointer to the buffer where data will be written.
  * @param data 16-bit unsigned integer to be written to the buffer.
@@ -29,7 +30,7 @@ void write_u16_to_buf(uint8_t *buf, uint16_t data)
 }
 
 /**
- * @brief Reads a 16-bit unsigned integer from a buffer.
+ * @brief Reads a 16-bit unsigned integer from a uint8_t buffer.
  *
  * Reads a 16-bit unsigned integer from the buffer `buf` and returns it.
  * The buffer `buf` is assumed to be an array of const uint8_t.

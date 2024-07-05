@@ -18,14 +18,25 @@
 #include <stdio.h>
 
 /**
- * @brief Sends a Modbus RTU message.
+ * @brief Generates a Modbus RTU message ready to send.
  *
- * Constructs a Modbus RTU message by appending CRC to the message buffer.
+ * This function constructs a Modbus RTU message by appending the Modbus slave
+ * address and CRC to the message buffer. It also sets the correct length
+ * of the entire RTU message, ensuring it is ready for transmission.
  *
- * @param buf Pointer to the buffer containing the Modbus message.
- * @param msg_len Pointer to the size of the message buffer, updated to include CRC.
- * @param slave_ID ID of the Modbus slave device.
- * @return modbus_ret_t Returns RET_OK if successful, otherwise RET_ERROR.
+ * @param[in,out] buf Pointer to the buffer containing the Modbus PDU message.
+ *                    The buffer is updated with the slave address and CRC.
+ * @param[in,out] msg_len Pointer to the current size of the message buffer,
+ *                        updated to include the CRC.
+ * @param[in] slave_ID ID of the Modbus slave device.
+ * @return modbus_ret_t The status of the message construction.
+ *
+ * @retval RET_OK The message was successfully constructed and is ready to send.
+ * @retval RET_ERROR An error occurred, such as a NULL buffer pointer or an
+ *                   invalid message length.
+ *
+ * @note This function requires the additional `modbus_crc` module for calculating
+ *       the CRC to be placed in the message.
  */
 modbus_ret_t modbus_RTU_send(modbus_buf_t *buf, modbus_buf_size_t *msg_len, modbus_device_ID_t slave_ID)
 {
@@ -52,14 +63,17 @@ modbus_ret_t modbus_RTU_send(modbus_buf_t *buf, modbus_buf_size_t *msg_len, modb
 /**
  * @brief Receives and validates a Modbus RTU message.
  *
- * Receives and validates a Modbus RTU message by checking CRC and slave ID.
+ * This function receives a Modbus RTU message and validates it by checking the CRC
+ * and the slave ID. It ensures the integrity and correctness of the received message.
  *
- * @param buf Pointer to the buffer containing the received Modbus message.
- * @param msg_len Length of the received Modbus message including CRC.
- * @param slave_ID ID of the Modbus slave device.
- * @return - RET_OK - if successful,
- * @return - RET_ERROR_SLAVE_ID - if resp cointain wrong slave ID on RTU layer
- * @return - RET_ERROR_CRC - if Calculated CRC from the recv msg is different than CRC written in recv msg.
+ * @param[in] buf Pointer to the buffer containing the received Modbus message.
+ * @param[in] msg_len Length of the received Modbus message, including the CRC.
+ * @param[in] slave_ID ID of the Modbus slave device to validate against.
+ * @return modbus_ret_t The result of the validation.
+ *
+ * @retval RET_OK The message was successfully received and validated.
+ * @retval RET_ERROR_SLAVE_ID The received message contains an incorrect slave ID / slave address.
+ * @retval RET_ERROR_CRC The calculated CRC from the received message is different from the CRC in the received message.
  */
 modbus_ret_t modbus_RTU_recv(modbus_buf_t *buf, modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID)
 {

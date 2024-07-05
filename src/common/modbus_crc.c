@@ -4,6 +4,7 @@
  *
  * This file contains the implementation of the CRC calculation function for Modbus protocol.
  * It uses a precomputed lookup table for efficient CRC computation.
+ * Table created using : http://www.sunshine2k.de/coding/javascript/crc/crc_js.html (reflected loock up table)
  *
  * @author niwciu (niwciu@gmail.com)
  * @date 2024-05-11

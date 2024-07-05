@@ -28,17 +28,23 @@ void modbus_queue_init(modbus_queue_t *q)
 {
     q->head = 0;
     q->tail = 0;
-    q->last_queue_pos_status = LAST_QUEUE_POS_EMPTY; // ToDo test na inita
+    q->last_queue_pos_status = LAST_QUEUE_POS_EMPTY; 
 }
 
 /**
  * @brief Pushes a Modbus message onto the queue.
  *
- * Pushes a Modbus message onto the end of the queue. If the queue is full,
- * it updates the last queue position status to indicate data storage.
+ * This function adds a Modbus message to the end of the queue. If the queue is full,
+ * the function will do nothing. The function takes a pointer to a pointer to the
+ * Modbus message and sets the data pointer to NULL after pushing it onto the queue.
  *
- * @param q Pointer to the Modbus message queue structure.
- * @param data Pointer to a pointer to the Modbus message to push onto the queue.
+ * @param[in] q Pointer to the Modbus message queue structure.
+ * @param[in,out] data Pointer to a pointer to the Modbus message to push onto the queue.
+ *                     After pushing the message onto the queue, the pointer is set to NULL.
+ * @details The function ensures that the data pointer is set to NULL after the message
+ *          is pushed onto the queue, to prevent potential reuse of the same message.
+ *          If the queue is full, the function does nothing and the data pointer remains unchanged.
+ * @note If the data pointer is not NULL after calling this function, the operation did not succeed.
  */
 void modbus_queue_push(modbus_queue_t *q, modbus_msg_t **data)
 {
@@ -49,7 +55,7 @@ void modbus_queue_push(modbus_queue_t *q, modbus_msg_t **data)
         // check if queue full
         if (LAST_QUEUE_POS_STORE_DATA == q->last_queue_pos_status)
         {
-            return;
+            return; 
         }
         else
         {
