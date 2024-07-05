@@ -70,6 +70,19 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMasgPushToModbusQue
     TEST_ASSERT_EQUAL(0, q->tail);
 }
 
+TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMasgPushToModbusQueueThenMsgPtrNotSetToNull)
+{
+    modbus_msg_t *msg_ptr;
+    modbus_queue_init(q);
+    for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    {
+        msg_ptr = &msg_buf[i];
+        modbus_queue_push(q, &msg_ptr);
+    }
+    msg_ptr = &msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS];
+    modbus_queue_push(q, &msg_ptr);
+    TEST_ASSERT_NOT_NULL(msg_ptr);
+}
 TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenModbusMsgPtrToPushedModbusMsgEqualToNull)
 {
     modbus_msg_t *msg_ptr =&msg_buf[0];
