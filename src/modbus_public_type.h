@@ -75,6 +75,19 @@ extern "C"
         MODBUS_MASTER_RESP_FRAME_ERR    /**< Modbus response frame error. */
     } modbus_master_resp_read_error_t;
 
+    typedef enum
+    {
+        MODBUS_READ_COILS_FUNC_CODE = 0x01U,
+        MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE = 0x02U,
+        MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE = 0x03U,
+        MODBUS_READ_INPUT_REGISTERS_FUNC_CODE = 0x04U,
+        MODBUS_WRITE_SINGLE_COIL_FUNC_CODE = 0x05U,
+        MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE = 0x06U,
+        MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE = 0x0FU,
+        MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE = 0x10U,
+    } modbus_fun_code_t;
+
+    
     typedef uint16_t modbus_adr_t;      /**< Modbus address type. */
     typedef bool modbus_coil_disin_t;   /**< Modbus coil and discrete input type (boolean). */
     typedef uint16_t modbus_reg_t;      /**< Modbus register type. */
