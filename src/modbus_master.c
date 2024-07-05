@@ -236,7 +236,20 @@ void check_modbus_master_manager(void)
         }
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
-            modbus_master_read_slave_resp(msg_buf);
+            modbus_ret_t read_status = modbus_master_read_slave_resp(msg_buf);
+            if( RET_ERROR_EXCEPTION_CODE_RECIVED == read_status)
+            {
+                if (NULL != modbus_error_callback)
+                {
+                    static modbus_error_rep_t error_rep;
+                    error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
+                    error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
+                    error_rep.exception_code = msg_buf->resp.data[MODBUS_RESP_EXCEPTION_CODE_IDX];
+                    modbus_error_callback(&error_rep);
+                }
+            }
+
+    
             modbus_master_msg_repeat_couter = 0;
             modbus_queue_push(free_q, &msg_buf);
             modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;

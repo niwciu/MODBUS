@@ -436,6 +436,7 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
                 update_master_specific_data_type_from_modbus_msg(resp->data, req->data, fun_code, rw_data_ptr);
             }
             status = RET_OK;
+            // ToDo czy ta funkcja nie powinna zwracać RET ERROR gdy brakuje wskaźnika do zapisu danych 
         }
         else
         {
@@ -589,6 +590,11 @@ static bool modbus_response_contains_error(const modbus_msg_t *modbus_msg)
  *
  * @param[in] modbus_msg Pointer to the Modbus message structure containing the request and response data.
  * @return - The status of the response processing.
+ * @retval - RET_OK
+ * @retval - RET_ERROR
+ * @retval - RET_ERROR_BYTE_CNT
+ * @retval - RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH
+ *
  */
 static modbus_ret_t process_modbus_response(modbus_msg_t *modbus_msg)
 {

@@ -215,8 +215,8 @@ TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhe
     modbus_device_ID_t slave_ID = 0x03;
     modbus_data_qty_t coils_qty = 2;
     modbus_coil_disin_t readed_coil_disin[coils_qty];
-    modbus_buf_t read_dis_in_ex_code_02_resp[] = {0x03, 0x82, 0x02, 0x60, 0xA1};
-    modbus_buf_size_t buf_len = sizeof(read_dis_in_ex_code_02_resp)/sizeof(modbus_buf_t);
+    modbus_buf_t read_coil_ex_code_02_resp[] = {0x03, 0x81, 0x02, 0x60, 0x51};
+    modbus_buf_size_t buf_len = sizeof(read_coil_ex_code_02_resp) / sizeof(modbus_buf_t);
 
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
 
@@ -225,7 +225,7 @@ TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhe
 
     generate_send_req_sequence();
     // generate fun code 02 resp RTU msg
-    memcpy(msg_buf->resp.data, read_dis_in_ex_code_02_resp, buf_len);
+    memcpy(msg_buf->resp.data, read_coil_ex_code_02_resp, buf_len);
     msg_buf->resp.len = buf_len;
     generate_msg_T_1_5_char_brake_sequence();
     generate_msg_T_3_5_char_brake_sequence();
