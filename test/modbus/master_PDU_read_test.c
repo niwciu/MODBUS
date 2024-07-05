@@ -613,7 +613,7 @@ TEST(Master_PDU_read, GivenMasterReadDisInReqSendedWhenFunctionCodeWithException
     // generating correct req RTU_msg
     modbus_master_read_coils_req(RTU_msg, coil_adr, coils_qty);
     modbus_RTU_send(RTU_msg->req.data, &RTU_msg->req.len, Slave_ID);
-    // generate fun code 01 resp RTU msg
+    // generate fun code 02 resp RTU msg
     memcpy(RTU_msg->resp.data, read_dis_in_ex_code_02_resp, buf_len);
     RTU_msg->resp.len = buf_len;
 
