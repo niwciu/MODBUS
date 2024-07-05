@@ -140,7 +140,7 @@ extern "C"
     {
         MODBUS_SLAVE_IDLE,             ///< Slave is idle
         MODBUS_SLAVE_MSG_RECIVED,      ///< Slave has received a message
-        MODBUS_SLAVE_TRANSMITING_RESP, ///< Slave is transmitting a response
+        MODBUS_SLAVE_TRANSMITTING_RESP, ///< Slave is transmitting a response
         MODBUS_SLAVE_UNKNOWN,          ///< Slave state is unknown
     } modbus_slave_state_t;
 

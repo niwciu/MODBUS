@@ -224,7 +224,7 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     mock_3_5_char_timer_IRQ();
     check_modbus_request();
     TEST_ASSERT_EQUAL(USART_SENDING_DATA, slave_USART_Tx_status);
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_TRANSMITING_RESP, slave_manager_state_machine);
+    TEST_ASSERT_EQUAL(MODBUS_SLAVE_TRANSMITTING_RESP, slave_manager_state_machine);
 }
 
 TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndSlaveSendingRespWhenWholeRespSendThenInitMsgBuffAndGoToIdleState)

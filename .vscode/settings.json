@@ -80,7 +80,8 @@
     "buf_rw.h": "c",
     "modbus_slave_pdu.h": "c",
     "modbus_crc.h": "c",
-    "modbus_pdu_common.h": "c"
+    "modbus_pdu_common.h": "c",
+    "modbus_slave_rtu.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "cmake.sourceDirectory": "D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/test/hw_test/STM32G070RB_MODBUS_MASTER"
