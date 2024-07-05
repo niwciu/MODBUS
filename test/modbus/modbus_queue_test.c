@@ -28,11 +28,12 @@ TEST_TEAR_DOWN(Modbus_Queue_test)
     /* Cleanup after every test */
 }
 
-TEST(Modbus_Queue_test, WhenModbusQueueInitThenQueueHeadAndTailIsEqualToZero)
+TEST(Modbus_Queue_test, WhenModbusQueueInitThenQueueHeadAndTailIsEqualToZeroAndLastQueuePosStatusIsEpmty)
 {
     modbus_queue_init(q);
     TEST_ASSERT_EQUAL(0, q->head);
     TEST_ASSERT_EQUAL(0, q->tail);
+    TEST_ASSERT_EQUAL(LAST_QUEUE_POS_EMPTY,q->last_queue_pos_status);
 }
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenHeadisEqualTo1AndTailIsEqualTo0)
