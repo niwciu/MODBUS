@@ -1069,10 +1069,10 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenR
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, modbus_master_manager_state_machine);
 }
 
-TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenRtuCrcErrorCatchedThenAfterT3_5CharReportError)
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenRespWithRtuCrcErrorCatchedThenAfterT3_5CharReportError)
 {
     modbus_adr_t coil_adr = 0x0001;
-    modbus_device_ID_t slave_ID = 0x03;
+    modbus_device_ID_t slave_ID = 0x06;
     modbus_data_qty_t coils_qty = 2;
     modbus_coil_disin_t readed_coil_disin[coils_qty];
 
