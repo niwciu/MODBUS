@@ -753,24 +753,24 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_RTU_CRC_ERROR_FLAG);
 }
 
-// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRtuCrcErrorCatchedLessTimeThanRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenRespProcessed)
-// {
-//     modbus_adr_t coil_adr = 0x0001;
-//     modbus_device_ID_t slave_ID = 0x03;
-//     modbus_data_qty_t coils_qty = 2;
-//     modbus_coil_disin_t readed_coil_disin[coils_qty];
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRtuCrcErrorCatchedLessTimeThanRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenRespProcessed)
+{
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_device_ID_t slave_ID = 0x03;
+    modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
-//     mock_slave_coil[0] = !!COIL_ON;
-//     mock_slave_coil[1] = !!COIL_ON;
+    mock_slave_coil[0] = !!COIL_ON;
+    mock_slave_coil[1] = !!COIL_ON;
 
-//     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-//     generate_read_frame_error_catch_sequance(slave_ID, 1);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+    generate_read_rtu_crc_error_catch_sequance(slave_ID, 1);
 
-//     generate_send_req_read_resp_msg_sequance(slave_ID);
+    generate_send_req_read_resp_msg_sequance(slave_ID);
 
-//     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr], readed_coil_disin[0]);
-//     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 1], readed_coil_disin[1]);
-// }
+    TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr], readed_coil_disin[0]);
+    TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 1], readed_coil_disin[1]);
+}
 
 // TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRtuCrcErrorCatchedLessTimeThanRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedThenResponsTimeOutTimerDisabledAndRepeatCounterEqual0)
 // {
@@ -783,7 +783,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 //     mock_slave_coil[1] = !!COIL_ON;
 
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-//     generate_read_frame_error_catch_sequance(slave_ID, 1);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, 1);
 
 //     generate_send_req_read_resp_msg_sequance(slave_ID);
 
@@ -806,7 +806,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
 
 //     generate_send_req_sequence();
-//     generate_read_frame_error_catch_sequance(slave_ID, 1);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, 1);
 //     // generate fun code 02 resp RTU msg
 //     memcpy(msg_buf->resp.data, read_coil_ex_code_02_resp, buf_len);
 //     msg_buf->resp.len = buf_len;
@@ -831,7 +831,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 //     mock_slave_coil[1] = !!COIL_ON;
 
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-//     generate_read_frame_error_catch_sequance(slave_ID, 1);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, 1);
 
 //     generate_send_req_read_resp_msg_sequance(slave_ID);
 
@@ -849,7 +849,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 //     mock_slave_coil[1] = !!COIL_ON;
 
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-//     generate_read_frame_error_catch_sequance(slave_ID, 1);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, 1);
 
 //     generate_send_req_read_resp_msg_sequance(slave_ID);
 
@@ -868,7 +868,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
 
-//     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
 //     generate_send_req_read_resp_msg_sequance(slave_ID);
 
 //     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr], readed_coil_disin[0]);
@@ -890,7 +890,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
 
 //     generate_send_req_sequence();
-//     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
 //     // generate fun code 02 resp RTU msg
 //     memcpy(msg_buf->resp.data, read_coil_ex_code_02_resp, buf_len);
 //     msg_buf->resp.len = buf_len;
@@ -916,7 +916,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
 
-//     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
 //     generate_send_req_read_resp_msg_sequance(slave_ID);
 //     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
 // }
@@ -932,7 +932,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
 
-//     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
 //     generate_send_req_read_resp_msg_sequance(slave_ID);
 //     TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
 // }
@@ -949,7 +949,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
 //     register_modbus_master_error_cb(error_report_test_function);
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-//     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
 
 //     TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
 //     TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
@@ -970,7 +970,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
 //     register_modbus_master_error_cb(error_report_test_function);
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-//     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
 
 //     TEST_ASSERT_NULL(msg_buf);
 // }
@@ -987,7 +987,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
 //     register_modbus_master_error_cb(error_report_test_function);
 //     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-//     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
+//     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
 //     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, modbus_master_manager_state_machine);
 // }
 
