@@ -129,8 +129,8 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
 }
 
 //  MODBUS_MASTER_TRANSMITTING_REQ state tests,
-// ToDo - >decide what to do with two tests bellow that looks like not form this layer
-// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenTxIrqDisabled)
+// First two commented tests related to callback actions trigered by driver ToDo set seperate section for all callback triger
+// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAllDriverCallbackRegisteredAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenTxIrqDisabled)
 // {
 //     modbus_adr_t coil_adr = 0x0002;
 //     modbus_device_ID_t slave_ID = 0x09;
@@ -143,7 +143,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
 //     mock_USART_req_msg_sended_EVENT();
 //     TEST_ASSERT_EQUAL(IRQ_DISABLED, mock_master_USART.Tx_IRQ);
 // }
-// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMODBUS_MASTER_REQ_TRANSMITION_FLAG_Cleared)
+// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAllDriverCallbackRegisteredAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMODBUS_MASTER_REQ_TRANSMITION_FLAG_Cleared)
 // {
 //     modbus_adr_t coil_adr = 0x0002;
 //     modbus_device_ID_t slave_ID = 0x09;
