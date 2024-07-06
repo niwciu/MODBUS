@@ -234,6 +234,17 @@ void check_modbus_master_manager(void)
                 modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
                 MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_CLEARED;
             }
+            else
+            {
+                if (NULL != modbus_error_callback)
+                {
+                    static modbus_error_rep_t error_rep;
+                    error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
+                    error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
+                    error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
+                    modbus_error_callback(&error_rep);
+                }
+            }
         }
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_CLEARED == MODBUS_MASTER_RTU_CRC_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
