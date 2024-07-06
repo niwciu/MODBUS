@@ -269,14 +269,23 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedAndM
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
 }
-// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedAndMsgRecivedWhenTimer_1_5CharExpiredAndRTUCrcErrorCatchedThen )
-// {
-// TEST_FAIL_MESSAGE("Implement your test!");
-// }
-// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedAndMsgRecivedWhenTimer_1_5CharExpiredAndRTUSlaveIdErrorCatchedThenMsgBufRespLenSetTo0)
-// {
-//     TEST_FAIL_MESSAGE("Implement your test!");
-// }
+
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedAndMsgRecivedWhenTimer_1_5CharExpiredAndRTUSlaveIdErrorCatchedThenMsgBufRespLenSetTo0)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+    generate_send_req_sequence();
+    generate_resp_using_slave_lib(slave_ID);
+    msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX] = slave_ID+1;
+
+    generate_msg_T_1_5_char_brake_sequence();
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(0, msg_buf->resp.len);
+}
 // TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedAndMsgRecivedWhenTimer_1_5CharExpiredAndNoRtuErrorInRespMsgThenRespTimoutTimerDisabled)
 // {
 //     TEST_FAIL_MESSAGE("Implement your test!");

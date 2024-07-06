@@ -189,12 +189,7 @@ void check_modbus_master_manager(void)
             }
             else if (RET_ERROR_SLAVE_ID == RTU_status)
             {
-                // if slave id is wrong device stay in this state and wait for proper resp or resp timeout
-                // stay in MODBUS_MASTER_RECEIVING_RESP
-                // To Do Do in the future -> log event that for specific req slave id resp was catched
-
-                // RTU_driver->disable_T3,5_timer ->  for now T_3_5_Timer_Flag is cleared when T 1_5Flag is seted in this state ->
-                msg_buf->resp.len = 0; // ToDo define test for this step set resp data buf ptr to first char
+                msg_buf->resp.len = 0;
             }
             else // RET_OK
             {
