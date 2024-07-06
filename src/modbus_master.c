@@ -244,7 +244,7 @@ void check_modbus_master_manager(void)
                     error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
                     modbus_error_callback(&error_rep);
                 }
-                // modbus_master_msg_repeat_couter = 0;
+                modbus_master_msg_repeat_couter = 0;
                 modbus_queue_push(free_q, &msg_buf);
                 modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
             }
