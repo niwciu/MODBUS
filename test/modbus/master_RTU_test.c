@@ -125,32 +125,33 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWh
 }
 
 //  MODBUS_MASTER_TRANSMITTING_REQ state tests,
-TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenTxIrqDisabled)
-{
-    modbus_adr_t coil_adr = 0x0002;
-    modbus_device_ID_t slave_ID = 0x09;
-    modbus_data_qty_t coils_qty = 2;
-    modbus_coil_disin_t readed_coil_disin[coils_qty];
+// ToDo - >decide what to do with two tests bellow that looks like not form this layer
+// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenTxIrqDisabled)
+// {
+//     modbus_adr_t coil_adr = 0x0002;
+//     modbus_device_ID_t slave_ID = 0x09;
+//     modbus_data_qty_t coils_qty = 2;
+//     modbus_coil_disin_t readed_coil_disin[coils_qty];
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-    check_modbus_master_manager();
+//     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+//     check_modbus_master_manager();
 
-    mock_USART_req_msg_sended_EVENT();
-    TEST_ASSERT_EQUAL(IRQ_DISABLED, mock_master_USART.Tx_IRQ);
-}
-TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMODBUS_MASTER_REQ_TRANSMITION_FLAG_Cleared)
-{
-    modbus_adr_t coil_adr = 0x0002;
-    modbus_device_ID_t slave_ID = 0x09;
-    modbus_data_qty_t coils_qty = 2;
-    modbus_coil_disin_t readed_coil_disin[coils_qty];
+//     mock_USART_req_msg_sended_EVENT();
+//     TEST_ASSERT_EQUAL(IRQ_DISABLED, mock_master_USART.Tx_IRQ);
+// }
+// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenMODBUS_MASTER_REQ_TRANSMITION_FLAG_Cleared)
+// {
+//     modbus_adr_t coil_adr = 0x0002;
+//     modbus_device_ID_t slave_ID = 0x09;
+//     modbus_data_qty_t coils_qty = 2;
+//     modbus_coil_disin_t readed_coil_disin[coils_qty];
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-    check_modbus_master_manager();
+//     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+//     check_modbus_master_manager();
 
-    mock_USART_req_msg_sended_EVENT();
-    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
-}
+//     mock_USART_req_msg_sended_EVENT();
+//     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_REQ_TRANSMITION_FLAG);
+// }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenResponseTimeoutIsEnabled)
 {
