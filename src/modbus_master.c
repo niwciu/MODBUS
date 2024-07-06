@@ -183,14 +183,9 @@ void check_modbus_master_manager(void)
             RTU_status = modbus_RTU_recv(msg_buf->resp.data, msg_buf->resp.len, modbus_req_slave_ID);
             if (RET_ERROR_CRC == RTU_status)
             {
-                // update repetetion anu error counter
-                // if couter > then defined max req repetition then proced to err else repeta request
                 // stop response time out timer
-
-                /****  for happy path we are setting error flag and going to next state*/
                 MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_SET;
-                // modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
-                /**** happy path do not write test for this scenario **/
+                modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
             }
             else if (RET_ERROR_SLAVE_ID == RTU_status)
             {
