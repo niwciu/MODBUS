@@ -26,6 +26,8 @@ extern uint8_t modbus_master_msg_repeat_couter;
 
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 extern modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG;
+extern modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG;
+extern modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG;
 
 static modbus_error_rep_t test_error_rep;
 
@@ -185,6 +187,38 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_WAITING, modbus_master_manager_state_machine);
 }
+
+// MODBUS_MASTER_RESP_RECIVED
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedThenModbusT1_5FlagCleared)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+    check_modbus_master_manager();
+
+    mock_USART_req_msg_sended_EVENT();
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_TIMER_1_5_CHAR_FLAG);
+}
+
+// TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedThenModbusT3_5FlagAndT3_5FlagCleared)
+// {
+//     modbus_adr_t coil_adr = 0x0002;
+//     modbus_device_ID_t slave_ID = 0x09;
+//     modbus_data_qty_t coils_qty = 2;
+//     modbus_coil_disin_t readed_coil_disin[coils_qty];
+
+//     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+//     check_modbus_master_manager();
+
+//     mock_USART_req_msg_sended_EVENT();
+//     check_modbus_master_manager();
+//     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_TIMER_3_5_CHAR_FLAG);
+// // }
+
 //  MODBUS_MASTER_RESP_WAITING state tests
 //  resp msg recived correct
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charExpiredThenRespProcessed)
