@@ -24,7 +24,7 @@ TEST_GROUP_RUNNER(Master_RTU_test)
     // MODBUS_MASTER_RESP_RECIVED
     // zerowanie flag
     RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedThenModbusT1_5FlagCleared);
-    // RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedThenModbusT3_5FlagCleared);
+    RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedThenModbusT3_5FlagCleared);
     // wystapienie bledu crc to...
     // wystapienie  RET_ERROR_SLAVE_ID bledu slave id przy parsowaniu to smg_buf len ==0
     // wystopienie RET_OK przy parsowaniu RTU to wylacz resp timer i idz do nastepnego stani
