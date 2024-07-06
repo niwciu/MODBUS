@@ -228,12 +228,12 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedAndM
     modbus_coil_disin_t readed_coil_disin[coils_qty];
 
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
-    check_modbus_master_manager();
+    generate_send_req_sequence();
+    generate_resp_using_slave_lib(slave_ID);
     // change CRC in resp to 0x0000
     msg_buf->resp.data[msg_buf->resp.len - 2] = 0;
     msg_buf->resp.data[msg_buf->resp.len - 1] = 0;
-
-    mock_USART_req_msg_sended_EVENT();
+    generate_msg_T_1_5_char_brake_sequence();
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(MODBUS_FLAG_SET, MODBUS_MASTER_RTU_CRC_ERROR_FLAG);
 }

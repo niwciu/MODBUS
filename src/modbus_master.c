@@ -180,7 +180,7 @@ void check_modbus_master_manager(void)
             modbus_device_ID_t modbus_req_slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
             MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
             MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
-            RTU_status = modbus_RTU_recv(msg_buf->req.data, msg_buf->req.len, modbus_req_slave_ID);
+            RTU_status = modbus_RTU_recv(msg_buf->resp.data, msg_buf->resp.len, modbus_req_slave_ID);
             if (RET_ERROR_CRC == RTU_status)
             {
                 // update repetetion anu error counter
@@ -188,7 +188,7 @@ void check_modbus_master_manager(void)
                 // stop response time out timer
 
                 /****  for happy path we are setting error flag and going to next state*/
-                // MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_SET;
+                MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_SET;
                 // modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
                 /**** happy path do not write test for this scenario **/
             }
