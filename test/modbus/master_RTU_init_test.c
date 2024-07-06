@@ -20,6 +20,7 @@ extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 extern modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG;
 extern modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG;
 extern modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG;
+extern modbus_status_flag_t MODBUS_MASTER_RTU_CRC_ERROR_FLAG;
 
 TEST_SETUP(master_RTU_init_test)
 {
@@ -115,6 +116,13 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenFrameErrorFlagIsClea
     modbus_master_init(RTU, 0, 0);
     TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_FRAME_ERROR_FLAG);
 }
+
+TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRtuCrcErrorFlagCleared)
+{
+    modbus_master_init(RTU, 0, 0);
+    TEST_ASSERT_EQUAL(MODBUS_FLAG_CLEARED, MODBUS_MASTER_RTU_CRC_ERROR_FLAG);
+}
+
 
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRequestTransmiscionCompleateCallbackRegistered)
 {
