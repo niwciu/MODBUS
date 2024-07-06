@@ -168,7 +168,22 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_TIME_OUT_MS, modbus_master_resp_timeout_timer);
 }
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenModbusMasterManagerStateMachineEqualToModbusMasterRespWaiting)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+    modbus_coil_disin_t readed_coil_disin[coils_qty];
 
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+
+    mock_USART_req_msg_sended_EVENT();
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_WAITING, modbus_master_manager_state_machine);
+}
 //  MODBUS_MASTER_RESP_WAITING state tests
 //  resp msg recived correct
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charExpiredThenRespProcessed)

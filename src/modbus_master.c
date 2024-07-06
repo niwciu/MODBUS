@@ -156,7 +156,7 @@ void check_modbus_master_manager(void)
     switch (modbus_master_manager_state_machine)
     {
     case MODBUS_MASTER_IDLE:
-        if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status)) // ToDo refacotr for check condition function
+        if ((tx_rx_q->head != tx_rx_q->tail) || (LAST_QUEUE_POS_STORE_DATA == tx_rx_q->last_queue_pos_status)) // ToDo refacotr check_data_to_send
         {
             msg_buf = modbus_queue_pop(tx_rx_q);
             modbus_master_send_req_from_msg_buf();
