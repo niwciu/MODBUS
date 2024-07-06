@@ -244,6 +244,7 @@ void check_modbus_master_manager(void)
                     error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
                     modbus_error_callback(&error_rep);
                 }
+                modbus_queue_push(free_q, &msg_buf);
             }
         }
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_CLEARED == MODBUS_MASTER_RTU_CRC_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
