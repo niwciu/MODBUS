@@ -226,10 +226,14 @@ void check_modbus_master_manager(void)
                 modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
             }
         }
-        else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
+        else if ((MODBUS_FLAG_SET == MODBUS_MASTER_RTU_CRC_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
+        {
+
+        }
+        else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_CLEARED == MODBUS_MASTER_RTU_CRC_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
             modbus_ret_t read_status = modbus_master_read_slave_resp(msg_buf);
-            if( RET_ERROR_EXCEPTION_CODE_RECIVED == read_status)
+            if (RET_ERROR_EXCEPTION_CODE_RECIVED == read_status)
             {
                 if (NULL != modbus_error_callback)
                 {
@@ -241,7 +245,6 @@ void check_modbus_master_manager(void)
                 }
             }
 
-    
             modbus_master_msg_repeat_couter = 0;
             modbus_queue_push(free_q, &msg_buf);
             modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
