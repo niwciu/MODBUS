@@ -43,7 +43,7 @@ PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNK
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
-PRIVATE modbus_status_flag_t MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_UNKNOWN; // ToDo add cehcking this flag in init tests
+PRIVATE modbus_status_flag_t MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_UNKNOWN; 
 
 static void modbus_master_send_req_from_msg_buf(void);
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
@@ -147,6 +147,7 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
     MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
     MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+    MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_CLEARED;
     // set all internall variable to its default values
     modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
     modbus_master_msg_repeat_couter = 0;        // ToDo init test for this var
