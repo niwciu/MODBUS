@@ -183,7 +183,7 @@ void check_modbus_master_manager(void)
             RTU_status = modbus_RTU_recv(msg_buf->resp.data, msg_buf->resp.len, modbus_req_slave_ID);
             if (RET_ERROR_CRC == RTU_status)
             {
-                // stop response time out timer
+                modbus_master_disable_resp_timeout_timer();
                 MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_SET;
                 modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
             }
