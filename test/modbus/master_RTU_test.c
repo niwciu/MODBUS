@@ -40,6 +40,7 @@ static void generate_msg_T_3_5_char_brake_sequence(void);
 static void generate_read_frame_error_catch_sequance(modbus_device_ID_t slave_ID, uint8_t sequence_repeat);
 static void generate_send_req_read_resp_msg_sequance(modbus_device_ID_t slave_ID);
 static void error_report_test_function(modbus_error_rep_t *error_rep);
+static void set_new_CRC_val(modbus_req_resp_t *req_res,modbus_CRC_t new_CRC);
 
 modbus_coil_disin_t debug_readed_coil_disin[2] = {!!COIL_OFF};
 
@@ -247,9 +248,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedAndM
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
-    // change CRC in resp to 0x0000
-    msg_buf->resp.data[msg_buf->resp.len - 2] = 0;
-    msg_buf->resp.data[msg_buf->resp.len - 1] = 0;
+    set_new_CRC_val(&msg_buf->resp, 0);
     generate_msg_T_1_5_char_brake_sequence();
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_RECIVED, modbus_master_manager_state_machine);
@@ -264,9 +263,8 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedAndM
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
-    // change CRC in resp to 0x0000
-    msg_buf->resp.data[msg_buf->resp.len - 2] = 0;
-    msg_buf->resp.data[msg_buf->resp.len - 1] = 0;
+    set_new_CRC_val(&msg_buf->resp,0);
+
     generate_msg_T_1_5_char_brake_sequence();
     check_modbus_master_manager();
     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
@@ -796,4 +794,10 @@ static void error_report_test_function(modbus_error_rep_t *error_rep)
 {
     memset(&test_error_rep, 0, sizeof(test_error_rep));
     test_error_rep = *error_rep;
+}
+
+static void set_new_CRC_val(modbus_req_resp_t *req_res, modbus_CRC_t new_CRC)
+{
+    req_res->data[req_res->len - 2] = (modbus_buf_t)(new_CRC);
+    req_res->data[req_res->len - 1] = (modbus_buf_t)(new_CRC >> 8);
 }
