@@ -43,6 +43,7 @@ PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNK
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE modbus_status_flag_t MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_UNKNOWN; // ToDo add cehcking this flag in init tests
 
 static void modbus_master_send_req_from_msg_buf(void);
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
