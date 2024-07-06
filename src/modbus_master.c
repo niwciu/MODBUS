@@ -187,7 +187,7 @@ void check_modbus_master_manager(void)
                 // stop response time out timer
 
                 /****  for happy path we are setting error flag and going to next state*/
-                // MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
+                // MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_SET;
                 // modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
                 /**** happy path do not write test for this scenario **/
             }
