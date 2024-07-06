@@ -18,7 +18,7 @@ extern "C"
 
 #define MAX_MODBUS_MSG_QUEUE_ITEMS  2                     /**< Maximum Modbus message queue items. */
 #define MODBUS_MASTER_RESP_TIME_OUT_MS 1000               /**< Modbus master response timeout in milliseconds. */
-#define MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR 3           /**< Number of retries on any Modbus master error. */
+#define MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR 0           /**< Number of retries on any Modbus master error. */
 
 #ifdef UNIT_TEST
 #define MAIN_APP_COILS_QTY              MODBUS_MAX_READ_COILS_QTY + 1            /**< Quantity of coils for unit testing. */
