@@ -30,6 +30,11 @@ extern modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG;
 extern modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG;
 extern modbus_status_flag_t MODBUS_MASTER_RTU_CRC_ERROR_FLAG;
 
+extern modbus_coil_disin_t mock_master_coil_data[100];
+extern modbus_coil_disin_t mock_master_dis_in[100];
+extern modbus_reg_t mock_master_holding_reg[100];
+extern modbus_reg_t mock_master_inreg[100];
+
 static modbus_error_rep_t test_error_rep;
 
 static void reset_all_RTU_buffers(void);
@@ -326,12 +331,12 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     modbus_adr_t coil_adr = 0x0001;
     modbus_device_ID_t slave_ID = 0x03;
     modbus_data_qty_t coils_qty = 2;
-    modbus_coil_disin_t readed_coil_disin[2] = {!!COIL_OFF};
+    modbus_coil_disin_t readed_coil_disin[2] = {!!COIL_OFF}; //ToDo do usuniecia
 
     mock_slave_coil[coil_adr] = !!COIL_ON;
     mock_slave_coil[coil_adr + 1] = !!COIL_ON;
 
-    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin);
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID, readed_coil_disin); // ToDo ostatni parametr do usunięcia
     generate_send_req_sequence();
     TEST_ASSERT_EQUAL(!!COIL_OFF, readed_coil_disin[0]);
     TEST_ASSERT_EQUAL(!!COIL_OFF, readed_coil_disin[1]);
@@ -340,8 +345,8 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     generate_msg_T_1_5_char_brake_sequence();
     generate_msg_T_3_5_char_brake_sequence();
 
-    TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr], readed_coil_disin[0]);
-    TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 1], readed_coil_disin[1]);
+    TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr], mock_master_coil_data[0]);
+    TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 1], mock_master_coil_data[1]);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndTimer3_5charExpiredThenResponsTimeOutTimerDisabled)
