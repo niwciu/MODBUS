@@ -120,8 +120,6 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInpu
 {
     modbus_adr_t in_reg_adr = 0x0001;
     modbus_data_qty_t in_reg_qty = 4;
-    modbus_reg_t readed_inreg[4] = {0};
-    RTU_msg->rw_data_ptr = (void *)(readed_inreg);
 
     mock_set_expected_slave_input_reg_alternately(in_reg_adr, in_reg_qty, 0x5A5A);
 
@@ -130,15 +128,13 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadInpu
 
     modbus_master_read_slave_resp(RTU_msg);
 
-    TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_inreg + in_reg_adr, readed_inreg, in_reg_qty);
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_inreg + in_reg_adr, mock_master_inreg + in_reg_adr, in_reg_qty);
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadHoldingRegistersThenMasterHoldingRegistersUpdateToHoldingRegistersValue)
 {
     modbus_adr_t hreg_adr = 0x0003;
     modbus_data_qty_t hreg_qty = 6;
-    modbus_reg_t readed_hreg[6] = {0};
-    RTU_msg->rw_data_ptr = (void *)(readed_hreg);
 
     mock_set_expected_slave_hreg_alternately(hreg_adr, hreg_qty, 0x5A5A);
 
@@ -147,7 +143,7 @@ TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterReadHold
 
     modbus_master_read_slave_resp(RTU_msg);
 
-    TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_hreg + hreg_adr, readed_hreg, hreg_qty);
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_hreg + hreg_adr, mock_master_holding_reg + hreg_adr, hreg_qty);
 }
 
 TEST(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeWhenMasterWriteSingleCoilRespAndOutputAddressIsCorrectThenMasterWriteSingleCoilRespRetOk)
