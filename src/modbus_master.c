@@ -50,8 +50,6 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
 static void push_all_available_msg_buffer_to_free_queue(void);
 static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_param);
 static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param);
-static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
-static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
 static void modbus_master_enable_resp_timeout_timer(void);
 static void modbus_master_disable_resp_timeout_timer(void);
 
@@ -60,7 +58,7 @@ static void modbus_master_T_1_5_char_expired_callback(void);
 static void modbus_master_T_3_5_char_expired_callback(void);
 static void modbus_master_frame_error_callback(void);
 
-typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty);
+typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param);
 struct modbus_master_functions_mapper
 {
     modbus_fun_code_t fun_code;
@@ -71,8 +69,8 @@ const struct modbus_master_functions_mapper master_functions_mapper[] = {
     {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_master_read_discrete_inputs_req},
     {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, modbus_master_read_holding_reg_req},
     {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, modbus_master_read_input_reg_req},
-    {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, modbus_master_write_single_coil_req_wrapper},
-    {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, modbus_master_write_single_reg_req_wrapper},
+    {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, modbus_master_write_single_coil_req},
+    {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, modbus_master_write_single_reg_req},
     {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, modbus_master_write_multiple_coils_req},
     {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_master_write_multiple_reg_req},
 };
@@ -84,47 +82,47 @@ void register_modbus_master_error_cb(modbus_master_error_cb_t error_callback)
     modbus_error_callback = error_callback;
 }
 
-modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
+modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty, slave_ID, (void *)(rw_data_ptr)};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty, slave_ID, 0,NULL, 0,NULL};
     return generate_request(&req_input_param);
 }
 
-modbus_master_req_ret_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
+modbus_master_req_ret_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty, slave_ID, (void *)(rw_data_ptr)};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty, slave_ID, 0,NULL, 0,NULL};
     return generate_request(&req_input_param);
 }
 
-modbus_master_req_ret_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID, modbus_reg_t *rw_data_ptr)
+modbus_master_req_ret_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty, slave_ID, (void *)(rw_data_ptr)};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty, slave_ID, 0,NULL, 0,NULL};
     return generate_request(&req_input_param);
 }
 
-modbus_master_req_ret_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty, modbus_device_ID_t slave_ID, modbus_reg_t *rw_data_ptr)
+modbus_master_req_ret_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty, slave_ID, (void *)(rw_data_ptr)};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty, slave_ID, 0, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
 modbus_master_req_ret_t modbus_master_write_single_coil(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_coil_disin_t coil_2_write)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr, 0, slave_ID, (void *)(&coil_2_write)};
+    req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr, 0, slave_ID, coil_2_write, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
 modbus_master_req_ret_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_reg_t reg_2_write)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr, 0, slave_ID, (void *)(&reg_2_write)};
+    req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr, 0, slave_ID, 0, NULL, reg_2_write, NULL};
     return generate_request(&req_input_param);
 }
 modbus_master_req_ret_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID, modbus_reg_t *rw_data_ptr)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, adr, reg_qty, slave_ID, (void *)(rw_data_ptr)};
+    req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, adr, reg_qty, slave_ID, 0, NULL, 0, rw_data_ptr};
     return generate_request(&req_input_param);
 }
 modbus_master_req_ret_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, adr, coils_qty, slave_ID, (void *)(rw_data_ptr)};
+    req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, adr, coils_qty, slave_ID, 0, rw_data_ptr, 0, NULL};
     return generate_request(&req_input_param);
 }
 void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
@@ -341,7 +339,7 @@ static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_pa
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
     }
-    msg_buf->rw_data_ptr = req_param->rw_data_ptr;
+    // msg_buf->rw_data_ptr = req_param->rw_data_ptr;
     modbus_queue_push(tx_rx_q, &msg_buf);
     return MODBUS_MASTER_REQUEST_SEND_TO_QUEUE;
 }
@@ -354,23 +352,13 @@ static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, req_input_p
     {
         if (master_functions_mapper[i].fun_code == req_param->fun_code)
         {
-            msg_buf->rw_data_ptr = req_param->rw_data_ptr;
-            PDU_ret_status = master_functions_mapper[i].fun_code_action(msg_buf, req_param->adr, req_param->obj_qty);
+            // msg_buf->rw_data_ptr = req_param->rw_data_ptr;
+            PDU_ret_status = master_functions_mapper[i].fun_code_action(msg_buf, req_param);
         }
     }
     return PDU_ret_status;
 }
 
-static modbus_ret_t modbus_master_write_single_coil_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
-{
-    (void)(coils_qty);
-    return modbus_master_write_single_coil_req(modbus_msg, adr);
-}
-static modbus_ret_t modbus_master_write_single_reg_req_wrapper(modbus_msg_t *modbus_msg, modbus_adr_t adr, modbus_data_qty_t coils_qty)
-{
-    (void)(coils_qty);
-    return modbus_master_write_single_reg_req(modbus_msg, adr);
-}
 
 static void modbus_master_enable_resp_timeout_timer(void)
 {

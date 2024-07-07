@@ -258,7 +258,10 @@ extern "C"
         modbus_adr_t adr;            ///< Address of the Modbus object to read/write
         modbus_data_qty_t obj_qty;   ///< Quantity of Modbus data objects to read/write
         modbus_device_ID_t slave_ID; ///< ID of the Modbus slave device
-        void *rw_data_ptr;           ///< Pointer to the data to read/write
+        modbus_coil_disin_t coil_2_write;           
+        modbus_coil_disin_t *coils_2_write;           
+        modbus_reg_t reg_2_write;
+        modbus_reg_t *regs_2_write;
     } req_input_param_struct_t;
 #ifdef __cplusplus
 }
