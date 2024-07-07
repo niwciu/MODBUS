@@ -431,12 +431,13 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrec
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02)
 {
-    // static req_input_param_struct_t req={0};
-    // modbus_adr_t coil_adr = 0x0000;
-    // modbus_coil_disin_t coil_2_write = !!COIL_ON;
-    // req.adr = coil_adr;
-    // req.coil_2_write = coil_2_write;
-    // RTU_msg->rw_data_ptr = (void *)(&coil_2_write);    modbus_master_write_single_coil_req(RTU_msg, &req);
+    static req_input_param_struct_t req={0};
+    modbus_adr_t coil_adr = 0x0000;
+    modbus_coil_disin_t coil_2_write = !!COIL_ON;
+    req.adr = coil_adr;
+    req.coil_2_write = coil_2_write;
+    // RTU_msg->rw_data_ptr = (void *)(&coil_2_write);    
+    modbus_master_write_single_coil_req(RTU_msg, &req);
     set_out_of_range_obj_adress(RTU_msg, MAIN_APP_COILS_QTY);
 
     parse_master_request_and_prepare_resp(RTU_msg);
