@@ -34,7 +34,7 @@ static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg);
 static modbus_ret_t set_coil_din_value_from_modbus_msg(const modbus_buf_t *data_state_ptr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t *rw_data_ptr);
 static modbus_ret_t set_master_coil_din_state(modbus_coil_disin_t *coil_din_ptr, modbus_coil_disin_t coil_state);
 static modbus_ret_t set_master_register_value(modbus_reg_t *hreg_tab_ptr, modbus_reg_t hreg_val);
-static bool modbus_response_contains_error(const modbus_msg_t *modbus_msg);
+static bool modbus_response_contain_exception_code(const modbus_msg_t *modbus_msg);
 static modbus_ret_t process_modbus_response(modbus_msg_t *modbus_msg);
 
 static const modbus_function_mapper_t modbus_master_function_mapper[] = {
@@ -303,7 +303,7 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *modbus_msg, mo
  * @return - RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH if the function codes in the request and response do not match.
  * @return - Other specific return values from process_modbus_response() if successful or for detailed error handling.
  * @see check_null_ptr_correctness()
- * @see modbus_response_contains_error()
+ * @see modbus_response_contain_exception_code()
  * @see process_modbus_response()
  * @see update_master_data_from_modbus_msg()
  */
@@ -314,8 +314,9 @@ modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
         return RET_NULL_PTR_ERROR;
     }
 
-    if (modbus_response_contains_error(modbus_msg))
+    if (modbus_response_contain_exception_code(modbus_msg))
     {
+        // zamiast zwracał błąd można po prostu wysłać exception slave id fun code
         return RET_ERROR_EXCEPTION_CODE_RECIVED;
     }
 
@@ -580,7 +581,7 @@ static modbus_ret_t set_master_register_value(modbus_reg_t *hreg_tab_ptr, modbus
  * @param[in] modbus_msg Pointer to the Modbus message structure containing the response data.
  * @return True if an error code is present, false otherwise.
  */
-static bool modbus_response_contains_error(const modbus_msg_t *modbus_msg)
+static bool modbus_response_contain_exception_code(const modbus_msg_t *modbus_msg)
 {
     return (modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & MODBUS_EXCEPTION_CODE_MASK) == MODBUS_EXCEPTION_CODE_MASK;
 }
