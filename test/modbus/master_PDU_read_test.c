@@ -274,7 +274,7 @@ TEST(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith17DisInWhenMasterRead
     TEST_ASSERT_EQUAL_UINT8_ARRAY(mock_slave_dis_in + disin_adr, mock_master_dis_in + disin_adr, disin_qty);
 }
 
-TEST(Master_PDU_read, GivenSlaveReadInputRegisterResponsRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue)
+TEST(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith4InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue)
 {
     static req_input_param_struct_t req = {0};
     modbus_adr_t in_reg_adr = 0x0001;
