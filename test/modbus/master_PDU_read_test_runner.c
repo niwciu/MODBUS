@@ -28,7 +28,7 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     // ToDo many bytes data tests
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith4InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith8InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
-    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith9InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith9InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
     // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith16InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
     // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith17InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
 
