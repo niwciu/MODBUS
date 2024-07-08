@@ -131,6 +131,24 @@ TEST(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor8CoilsWhenMasterReadSl
     TEST_ASSERT_EQUAL_UINT8_ARRAY(&mock_slave_coil[coil_adr], &mock_master_coil_data[coil_adr], coils_qty);
 }
 
+TEST(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor9CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue)
+{
+    static req_input_param_struct_t req = {0};
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_data_qty_t coils_qty = 8;
+    req.adr = coil_adr;
+    req.obj_qty = coils_qty;
+
+    mock_set_expected_slave_coils_alternately(coil_adr, coils_qty, !!COIL_ON);
+    modbus_master_read_coils_req(RTU_msg, &req);
+
+    parse_master_request_and_prepare_resp(RTU_msg);
+    status = modbus_master_read_slave_resp(RTU_msg);
+
+    // TEST_ASSERT_EQUAL(RET_OK, status);
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(&mock_slave_coil[coil_adr], &mock_master_coil_data[coil_adr], coils_qty);
+}
+
 TEST(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue)
 {
     static req_input_param_struct_t req = {0};

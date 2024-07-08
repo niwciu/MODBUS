@@ -16,7 +16,7 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     // Poniżej wpoinny być testy na read in sigle byte read many byte ToDo
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor4CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor8CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
-    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor9CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor9CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
     // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor16CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
     // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor17CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
     // ToDo many bytes data tests
