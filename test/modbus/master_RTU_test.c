@@ -932,7 +932,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
 
     TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
     TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, test_error_rep.resp_read_error);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_RTU_CRC_ERR, test_error_rep.resp_read_error);
     TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
 }
 

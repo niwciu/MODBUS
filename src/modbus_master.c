@@ -240,9 +240,10 @@ void check_modbus_master_manager(void)
                     static modbus_error_rep_t error_rep;
                     error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
                     error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
-                    error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
+                    error_rep.resp_read_error = MODBUS_MASTER_RESP_RTU_CRC_ERR;
                     modbus_error_callback(&error_rep);
                 }
+                // memset(modbus_msg,0,sizoef(modbus_msg)); // will be shown if necessary in buger reusing tests
                 modbus_master_msg_repeat_couter = 0;
                 modbus_queue_push(free_q, &msg_buf);
                 modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
@@ -260,12 +261,6 @@ void check_modbus_master_manager(void)
             // do nothing untill 3_5TFlag is not set
         }
         break;
-        // case MODBUS_MASTER_RESP_PROCESING:
-        //     break;
-
-        // case MODBUS_MASTER_ERROR_SERVICE:
-        //     // W zależności od tego co było błędem wykonuję jego obsługę
-        //     break;
     }
 }
 
