@@ -238,23 +238,23 @@ TEST(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith9DisInWhenMasterReadS
     TEST_ASSERT_EQUAL_UINT8_ARRAY(mock_slave_dis_in + disin_adr, mock_master_dis_in + disin_adr, disin_qty);
 }
 
-// TEST(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith16DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue)
-// {
-//     static req_input_param_struct_t req = {0};
-//     modbus_adr_t disin_adr = 0x0001;
-//     modbus_data_qty_t disin_qty = 16;
-//     req.adr = disin_adr;
-//     req.obj_qty = disin_qty;
+TEST(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith16DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue)
+{
+    static req_input_param_struct_t req = {0};
+    modbus_adr_t disin_adr = 0x0001;
+    modbus_data_qty_t disin_qty = 16;
+    req.adr = disin_adr;
+    req.obj_qty = disin_qty;
 
-//     mock_set_expected_slave_disc_in_alternately(disin_adr, disin_qty);
+    mock_set_expected_slave_disc_in_alternately(disin_adr, disin_qty);
 
-//     modbus_master_read_discrete_inputs_req(RTU_msg, &req);
-//     parse_master_request_and_prepare_resp(RTU_msg);
+    modbus_master_read_discrete_inputs_req(RTU_msg, &req);
+    parse_master_request_and_prepare_resp(RTU_msg);
 
-//     modbus_master_read_slave_resp(RTU_msg);
+    modbus_master_read_slave_resp(RTU_msg);
 
-//     TEST_ASSERT_EQUAL_UINT8_ARRAY(mock_slave_dis_in + disin_adr, mock_master_dis_in + disin_adr, disin_qty);
-// }
+    TEST_ASSERT_EQUAL_UINT8_ARRAY(mock_slave_dis_in + disin_adr, mock_master_dis_in + disin_adr, disin_qty);
+}
 
 // TEST(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith17DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue)
 // {
