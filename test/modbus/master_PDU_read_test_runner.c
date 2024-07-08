@@ -14,7 +14,11 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     RUN_TEST_CASE(Master_PDU_read, MasterWriteMultipleRegRespWithNullPtrPassedAsArgument);
 
     // Poniżej wpoinny być testy na read in sigle byte read many byte ToDo
-    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor4CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor8CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor9CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor16CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor17CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
     // ToDo many bytes data tests
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
     // ToDo many bytes data tests
@@ -25,6 +29,7 @@ TEST_GROUP_RUNNER(Master_PDU_read)
 
     // // Master Read Write funcitons respons test
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveWriteSingleCoilResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect);
+    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveWriteSingleCoilResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect);
     // RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithCorrectFunctionCodeAndWrongOutputAdressWhenMasterWriteSingleCoilRespThenMasterWriteSingleCoilReturnErrorOutputAddress);
     // RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithIncorectFunctionCodeWhenMasterWriteSingleCoilThenMasterWriteSingleCoilReturnErrorFuncCode);
     // RUN_TEST_CASE(Master_PDU_read, GivenSlaveRespondWithCorectFunctionCodeAndCorrectOutputAdrAndIncorrectCoilValueWhenMasterWriteSignleCoilThenMasterWriteSingleCoilRetValueError);
