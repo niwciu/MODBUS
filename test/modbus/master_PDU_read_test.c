@@ -377,6 +377,78 @@ TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith6HolRegRecivedWhen
     TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_hreg + hreg_adr, mock_master_holding_reg + hreg_adr, hreg_qty);
 }
 
+TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith8HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue)
+{
+    static req_input_param_struct_t req = {0};
+    modbus_adr_t hreg_adr = 0x0003;
+    modbus_data_qty_t hreg_qty = 8;
+    req.adr = hreg_adr;
+    req.obj_qty = hreg_qty;
+
+    mock_set_expected_slave_hreg_alternately(hreg_adr, hreg_qty, 0x5A5A);
+
+    modbus_master_read_holding_reg_req(RTU_msg, &req);
+    parse_master_request_and_prepare_resp(RTU_msg);
+
+    modbus_master_read_slave_resp(RTU_msg);
+
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_hreg + hreg_adr, mock_master_holding_reg + hreg_adr, hreg_qty);
+}
+
+TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith9HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue)
+{
+    static req_input_param_struct_t req = {0};
+    modbus_adr_t hreg_adr = 0x0003;
+    modbus_data_qty_t hreg_qty = 9;
+    req.adr = hreg_adr;
+    req.obj_qty = hreg_qty;
+
+    mock_set_expected_slave_hreg_alternately(hreg_adr, hreg_qty, 0x5A5A);
+
+    modbus_master_read_holding_reg_req(RTU_msg, &req);
+    parse_master_request_and_prepare_resp(RTU_msg);
+
+    modbus_master_read_slave_resp(RTU_msg);
+
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_hreg + hreg_adr, mock_master_holding_reg + hreg_adr, hreg_qty);
+}
+
+TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith16HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue)
+{
+    static req_input_param_struct_t req = {0};
+    modbus_adr_t hreg_adr = 0x0003;
+    modbus_data_qty_t hreg_qty = 16;
+    req.adr=hreg_adr;
+    req.obj_qty=hreg_qty;
+
+    mock_set_expected_slave_hreg_alternately(hreg_adr, hreg_qty, 0x5A5A);
+
+    modbus_master_read_holding_reg_req(RTU_msg, &req);
+    parse_master_request_and_prepare_resp(RTU_msg);
+
+    modbus_master_read_slave_resp(RTU_msg);
+
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_hreg + hreg_adr, mock_master_holding_reg + hreg_adr, hreg_qty);
+}
+
+TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith17HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue)
+{
+    static req_input_param_struct_t req = {0};
+    modbus_adr_t hreg_adr = 0x0003;
+    modbus_data_qty_t hreg_qty = 17;
+    req.adr = hreg_adr;
+    req.obj_qty = hreg_qty;
+
+    mock_set_expected_slave_hreg_alternately(hreg_adr, hreg_qty, 0x5A5A);
+
+    modbus_master_read_holding_reg_req(RTU_msg, &req);
+    parse_master_request_and_prepare_resp(RTU_msg);
+
+    modbus_master_read_slave_resp(RTU_msg);
+
+    TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_hreg + hreg_adr, mock_master_holding_reg + hreg_adr, hreg_qty);
+}
+
 TEST(Master_PDU_read, GivenSlaveWriteSingleCoilResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect)
 {
     static req_input_param_struct_t req= {0};

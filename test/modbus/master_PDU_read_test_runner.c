@@ -34,6 +34,10 @@ TEST_GROUP_RUNNER(Master_PDU_read)
 
     // ToDo many bytes data tests
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith6HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith8HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith9HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith16HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith17HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
     // ToDo many bytes data tests
 
     // // Master Read Write funcitons respons test
