@@ -359,7 +359,7 @@ TEST(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith17InRegRecivedWhenMa
     TEST_ASSERT_EQUAL_HEX16_ARRAY(mock_slave_inreg + in_reg_adr, mock_master_inreg + in_reg_adr, in_reg_qty);
 }
 
-TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue)
+TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith6HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue)
 {
     static req_input_param_struct_t req = {0};
     modbus_adr_t hreg_adr = 0x0003;
