@@ -184,7 +184,7 @@ TEST(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor17CoilsWhenMasterReadS
     TEST_ASSERT_EQUAL_UINT8_ARRAY(&mock_slave_coil[coil_adr], &mock_master_coil_data[coil_adr], coils_qty);
 }
 
-TEST(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue)
+TEST(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith4DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue)
 {
     static req_input_param_struct_t req = {0};
     modbus_adr_t disin_adr = 0x0001;

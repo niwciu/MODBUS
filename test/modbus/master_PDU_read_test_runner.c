@@ -20,7 +20,11 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor16CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor17CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
     // ToDo many bytes data tests
-    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith4DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith8DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith9DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith16DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+    // RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith17DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
     // ToDo many bytes data tests
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
     // ToDo many bytes data tests
