@@ -250,19 +250,7 @@ void check_modbus_master_manager(void)
         }
         else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_CLEARED == MODBUS_MASTER_RTU_CRC_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
         {
-            modbus_ret_t read_status = modbus_master_read_slave_resp(msg_buf);
-            if (RET_ERROR_EXCEPTION_CODE_RECIVED == read_status)
-            {
-                if (NULL != modbus_error_callback)
-                {
-                    static modbus_error_rep_t error_rep;
-                    error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
-                    error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
-                    error_rep.exception_code = msg_buf->resp.data[MODBUS_RESP_EXCEPTION_CODE_IDX];
-                    modbus_error_callback(&error_rep);
-                }
-            }
-
+            modbus_master_read_slave_resp(msg_buf);
             modbus_master_msg_repeat_couter = 0;
             modbus_queue_push(free_q, &msg_buf);
             modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
@@ -328,7 +316,6 @@ static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_pa
     {
         return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR;
     }
-    msg_buf->rw_data_ptr = NULL;
     modbus_lib_ret = generate_request_PDU_data(msg_buf, req_param);
     if (0 > modbus_lib_ret)
     {
@@ -339,7 +326,6 @@ static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_pa
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
     }
-    // msg_buf->rw_data_ptr = req_param->rw_data_ptr;
     modbus_queue_push(tx_rx_q, &msg_buf);
     return MODBUS_MASTER_REQUEST_SEND_TO_QUEUE;
 }

@@ -102,10 +102,21 @@ extern "C"
     {
         modbus_device_ID_t slave_ID;                     /**< Modbus slave ID. */
         modbus_fun_code_t fun_conde;                     /**< Modbus function code. */
-        modbus_exception_code_t exception_code;          /**< Modbus exception code. */
         modbus_master_req_ret_t req_gen_error;           /**< Modbus master request generation error. */
         modbus_master_resp_read_error_t resp_read_error; /**< Modbus master response read error. */
     } modbus_error_rep_t;
+
+    typedef struct
+    {
+        modbus_device_ID_t slave_ID;                     /**< Modbus slave ID. */
+        modbus_fun_code_t fun_conde;
+        modbus_exception_code_t exception_code; /**< Modbus exception code. */
+        modbus_adr_t data_adr;
+        modbus_data_qty_t data_qty;                    /**< Modbus function code. */
+        modbus_coil_disin_t readed_coil_val;
+        modbus_reg_t readed_reg_val;
+       
+    } modbus_read_data_t;
 
     /**
      * @brief Typedef for Modbus master error callback function.

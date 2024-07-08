@@ -198,7 +198,7 @@ extern "C"
     {
         modbus_req_resp_t req;  ///< Modbus request details
         modbus_req_resp_t resp; ///< Modbus response details
-        void *rw_data_ptr;      ///< Pointer to the data to read/write
+        // void *rw_data_ptr;      ///< Pointer to the data to read/write
     } modbus_msg_t;
 
     /**

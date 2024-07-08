@@ -43,8 +43,4 @@ TEST_GROUP_RUNNER(Master_PDU_read)
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveWriteMultipleCoilResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect);
     RUN_TEST_CASE(Master_PDU_read, GivenSlaveWriteMultipleReglResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect);
     
-    // master recive exception code tests
-    RUN_TEST_CASE(Master_PDU_read, GivenMasterReadCoilReqSendedAndWhenFunctionCodeWithExceptionCodeMaskRecivedThenModbusMasterReadSlaveReturnExceptionCodeRecivedStatus);
-    RUN_TEST_CASE(Master_PDU_read, GivenMasterReadDisInReqSendedWhenFunctionCodeWithExceptionCodeMaskRecivedThenModbusMasterReadSlaveReturnExceptionCodeRecivedStatus);
-    // RUN_TEST_CASE(Master_PDU_read, );
 }
