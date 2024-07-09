@@ -1225,6 +1225,51 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenW
     // TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
 }
 
+TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitWhenAndQueueFullWithRequestsWhenLastRequestSendThanProcessedCorrectly)
+{
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_device_ID_t slave_ID = 0x03;
+    modbus_data_qty_t coils_qty = 2;
+
+    modbus_adr_t reg_adr = 20;
+    // modbus_device_ID_t slave_ID = 0x04;
+    modbus_data_qty_t reg_qty = 6;
+
+    // mock_slave_coil[0] = !!COIL_ON;
+    mock_slave_coil[1] = !!COIL_ON;
+    mock_slave_coil[2] = !!COIL_OFF;
+    mock_slave_coil[3] = !!COIL_OFF;
+    mock_slave_coil[4] = !!COIL_ON;
+    mock_slave_coil[5] = !!COIL_OFF;
+    mock_slave_coil[6] = !!COIL_ON;
+
+    mock_slave_hreg[20] = 0x5A5A;
+    mock_slave_hreg[21] = 0xFA5F;
+    mock_slave_hreg[22] = 0;
+    mock_slave_hreg[23] = 0x1111;
+    mock_slave_hreg[24] = 0xFFFF;
+    mock_slave_hreg[25] = 0xABCD;
+    mock_clear_modbus_master_coil_data();
+    for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS-1; i++)
+    {
+        modbus_master_read_coils(coil_adr + i, coils_qty, slave_ID);
+    }
+
+    modbus_master_read_holding_reg(reg_adr, reg_qty, slave_ID);
+
+    for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
+    {
+        generate_send_req_read_resp_msg_sequance(slave_ID);
+    }
+    TEST_ASSERT_EQUAL_HEX16(mock_slave_hreg[reg_adr], mock_master_holding_reg[reg_adr]);
+    TEST_ASSERT_EQUAL_HEX16(mock_slave_hreg[reg_adr + 1], mock_master_holding_reg[reg_adr + 1]);
+    TEST_ASSERT_EQUAL_HEX16(mock_slave_hreg[reg_adr + 2], mock_master_holding_reg[reg_adr + 2]);
+    TEST_ASSERT_EQUAL_HEX16(mock_slave_hreg[reg_adr + 3], mock_master_holding_reg[reg_adr + 3]);
+    TEST_ASSERT_EQUAL_HEX16(mock_slave_hreg[reg_adr + 4], mock_master_holding_reg[reg_adr + 4]);
+    TEST_ASSERT_EQUAL_HEX16(mock_slave_hreg[reg_adr + 5], mock_master_holding_reg[reg_adr + 5]);
+    // TEST_FAIL_MESSAGE("Implement your test!");
+}
+
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndQueueFullWithRequestsWhenSendAllRequestsAndAddNewDifferentRequestThanPlacedEarlierToEmptyQueueAndSendRequestAndRecivedRespThenResponsProceededCorrectly)
 {
     modbus_adr_t coil_adr = 0x0001;
@@ -1288,10 +1333,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndQueueFullWithRequests
     TEST_ASSERT_EQUAL_HEX16(mock_slave_hreg[reg_adr + 5], mock_master_holding_reg[reg_adr + 5]);
 }
 
-// TEST(Master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+
 
 // TEST(Master_RTU_test,)
 // {
