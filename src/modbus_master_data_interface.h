@@ -24,3 +24,5 @@ void modbus_master_hreg_exception(modbus_read_data_t *resp_data);
 
 void modbus_master_inreg_read(modbus_device_ID_t slave_adr, modbus_adr_t data_adr, modbus_reg_t inreg_val);
 void modbus_master_inreg_exception(modbus_read_data_t *resp_data);
+
+void modbus_data_timeout_error(modbus_master_error_report_t timeout_error_rep);

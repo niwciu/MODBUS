@@ -43,7 +43,7 @@ PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNK
 PRIVATE modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
-PRIVATE modbus_status_flag_t MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_UNKNOWN; 
+PRIVATE modbus_status_flag_t MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 
 static void modbus_master_send_req_from_msg_buf(void);
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode);
@@ -58,13 +58,13 @@ static void modbus_master_T_1_5_char_expired_callback(void);
 static void modbus_master_T_3_5_char_expired_callback(void);
 static void modbus_master_frame_error_callback(void);
 
-static bool check_data_to_send_availability (modbus_queue_t *q);
+static bool check_data_to_send_availability(modbus_queue_t *q);
 static void modbus_master_idle_state_handling(void);
 static void modbus_master_transmitting_state_handling(void);
 static void modbus_master_resp_waiting_state_handling(void);
 static void modbus_master_resp_recived_state_handling(void);
 
-    typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param);
+typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param);
 struct modbus_master_functions_mapper
 {
     modbus_fun_code_t fun_code;
@@ -90,19 +90,19 @@ void register_modbus_master_error_cb(modbus_master_error_cb_t error_callback)
 
 modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty, slave_ID, 0,NULL, 0,NULL};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty, slave_ID, 0, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
 
 modbus_master_req_ret_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty, slave_ID, 0,NULL, 0,NULL};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty, slave_ID, 0, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
 
 modbus_master_req_ret_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty, slave_ID, 0,NULL, 0,NULL};
+    req_input_param_struct_t req_input_param = {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty, slave_ID, 0, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
 
@@ -255,7 +255,6 @@ static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, req_input_p
     return PDU_ret_status;
 }
 
-
 static void modbus_master_enable_resp_timeout_timer(void)
 {
     modbus_master_resp_timeout_timer = MODBUS_MASTER_RESP_TIME_OUT_MS;
@@ -291,7 +290,7 @@ static bool check_data_to_send_availability(modbus_queue_t *q)
 
 static void modbus_master_idle_state_handling(void)
 {
-    if (check_data_to_send_availability(tx_rx_q)) 
+    if (check_data_to_send_availability(tx_rx_q))
     {
         msg_buf = modbus_queue_pop(tx_rx_q);
         modbus_master_send_req_from_msg_buf();
@@ -349,7 +348,7 @@ static void modbus_master_resp_recived_state_handling(void)
         {
             if (NULL != modbus_error_callback)
             {
-                static modbus_error_rep_t error_rep;
+                static modbus_master_error_report_t error_rep;
                 error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
                 error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
                 error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
@@ -373,7 +372,7 @@ static void modbus_master_resp_recived_state_handling(void)
         {
             if (NULL != modbus_error_callback)
             {
-                static modbus_error_rep_t error_rep;
+                static modbus_master_error_report_t error_rep;
                 error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
                 error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
                 error_rep.resp_read_error = MODBUS_MASTER_RESP_RTU_CRC_ERR;

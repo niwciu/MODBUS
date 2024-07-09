@@ -15,7 +15,9 @@ modbus_coil_disin_t mock_master_coil_data[100] = {0};
 modbus_coil_disin_t mock_master_dis_in[100] = {0};
 modbus_reg_t mock_master_holding_reg[100] = {0};
 modbus_reg_t mock_master_inreg[100] = {0};
+
 modbus_read_data_t exception_data;
+modbus_master_error_report_t modbus_master_error_rep;
 typedef struct
 {
     modbus_adr_t data_adr;
@@ -37,10 +39,9 @@ void modbus_master_coil_write(modbus_device_ID_t slave_adr, modbus_adr_t data_ad
 }
 void modbus_master_inreg_exception(modbus_read_data_t *resp_data)
 {
-    memset(&exception_data, 0, sizeof(exception_data));
+    memset(&exception_data, 0, sizeof(modbus_read_data_t));
     exception_data = *resp_data;
 }
-
 
 void modbus_master_disin_read(modbus_device_ID_t slave_adr, modbus_adr_t data_adr, modbus_coil_disin_t disin_val)
 {
@@ -49,10 +50,9 @@ void modbus_master_disin_read(modbus_device_ID_t slave_adr, modbus_adr_t data_ad
 }
 void modbus_master_coil_exception(modbus_read_data_t *resp_data)
 {
-    memset(&exception_data, 0, sizeof(exception_data));
+    memset(&exception_data, 0, sizeof(modbus_read_data_t));
     exception_data = *resp_data;
 }
-
 
 void modbus_master_hreg_read(modbus_device_ID_t slave_adr, modbus_adr_t data_adr, modbus_reg_t hreg_val)
 {
@@ -67,10 +67,9 @@ void modbus_master_hreg_write(modbus_device_ID_t slave_adr, modbus_adr_t data_ad
 }
 void modbus_master_disin_exception(modbus_read_data_t *resp_data)
 {
-    memset(&exception_data, 0, sizeof(exception_data));
+    memset(&exception_data, 0, sizeof(modbus_read_data_t));
     exception_data = *resp_data;
 }
-
 
 void modbus_master_inreg_read(modbus_device_ID_t slave_adr, modbus_adr_t data_adr, modbus_reg_t inreg_val)
 {
@@ -79,6 +78,12 @@ void modbus_master_inreg_read(modbus_device_ID_t slave_adr, modbus_adr_t data_ad
 }
 void modbus_master_hreg_exception(modbus_read_data_t *resp_data)
 {
-    memset(&exception_data, 0, sizeof(exception_data));
+    memset(&exception_data, 0, sizeof(modbus_read_data_t));
     exception_data = *resp_data;
+}
+
+void modbus_data_timeout_error(modbus_master_error_report_t timeout_error_rep)
+{
+    memset(&modbus_master_error_rep, 0, sizeof(modbus_master_error_report_t));
+    modbus_master_error_rep= timeout_error_rep;
 }
