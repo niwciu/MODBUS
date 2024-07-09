@@ -384,10 +384,32 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhen
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, modbus_master_manager_state_machine);
 }
 
-//  TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRespWithWrongSlaveIdRecivedWhenTimeOutTimerExpiredThenTimeOutErrorReported)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRespWithWrongSlaveIdRecivedWhenTimeOutTimerExpiredThenTimeOutErrorReported)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    generate_send_req_sequence();
+    generate_resp_using_slave_lib(slave_ID);
+    msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX] = slave_ID + 1;
+    check_modbus_master_manager();
+    modbus_master_resp_timeout_timer = 20;
+    check_modbus_master_manager();
+    generate_msg_T_1_5_char_brake_sequence();
+    check_modbus_master_manager();
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(20,modbus_master_resp_timeout_timer);
+    check_modbus_master_manager();
+    modbus_master_resp_timeout_timer = 1;
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_TIMEOUT_ERR, modbus_master_error_rep.resp_read_error);
+    TEST_ASSERT_EQUAL_HEX8(slave_ID, modbus_master_error_rep.slave_ID);
+    TEST_ASSERT_EQUAL_HEX16(coil_adr, modbus_master_error_rep.data_adr);
+    TEST_ASSERT_EQUAL_HEX16(coils_qty, modbus_master_error_rep.data_qty);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
+}
 
 //  TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRespWithWrongSlaveIdRecivedTwiceWhenTimeOutTimerExpiredThenTimeOutErrorReported)
 // {
