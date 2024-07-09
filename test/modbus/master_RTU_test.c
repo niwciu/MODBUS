@@ -36,7 +36,7 @@ extern modbus_reg_t mock_master_holding_reg[100];
 extern modbus_reg_t mock_master_inreg[100];
 
 static modbus_master_error_report_t test_error_rep;
-extern modbus_master_error_report_t master_error_rep;
+extern modbus_master_error_report_t modbus_master_error_rep;
 extern modbus_read_data_t exception_data;
 
 static void reset_all_RTU_buffers(void);
@@ -323,12 +323,12 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhen
     modbus_master_resp_timeout_timer = 20;
     check_modbus_master_manager();
     modbus_master_resp_timeout_timer = 1;
-
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_TIMEOUT_ERR, test_error_rep.resp_read_error);
-    TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
-    TEST_ASSERT_EQUAL(coil_adr, test_error_rep.data_adr);
-    TEST_ASSERT_EQUAL(coils_qty, test_error_rep.data_qty);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_TIMEOUT_ERR, modbus_master_error_rep.resp_read_error);
+    TEST_ASSERT_EQUAL_HEX8(slave_ID, modbus_master_error_rep.slave_ID);
+    TEST_ASSERT_EQUAL_HEX16(coil_adr, modbus_master_error_rep.data_adr);
+    TEST_ASSERT_EQUAL_HEX16(coils_qty, modbus_master_error_rep.data_qty);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
 }
 //  TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhenRespTimeOutTimerEqual1AndErrorReporteDThenPushMsgBuferPtrToFreeQueue)
 // {

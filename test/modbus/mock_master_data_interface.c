@@ -82,8 +82,8 @@ void modbus_master_hreg_exception(modbus_read_data_t *resp_data)
     exception_data = *resp_data;
 }
 
-void modbus_data_timeout_error(modbus_master_error_report_t timeout_error_rep)
+void modbus_master_data_timeout_error(modbus_master_error_report_t *timeout_error_rep)
 {
     memset(&modbus_master_error_rep, 0, sizeof(modbus_master_error_report_t));
-    modbus_master_error_rep= timeout_error_rep;
+    modbus_master_error_rep= *timeout_error_rep;
 }
