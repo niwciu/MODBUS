@@ -342,6 +342,7 @@ static void modbus_master_resp_waiting_state_handling(void)
         modbus_master_data_timeout_error(&timeout_error);
 
         modbus_queue_push(free_q, &msg_buf);
+        modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
     }
 }
 
