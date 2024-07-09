@@ -1050,10 +1050,43 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenR
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, modbus_master_manager_state_machine);
 }
 
-// TEST(Master_RTU_test,)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+TEST(Master_RTU_test,GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenWhenFrameErrorAndRtuCrcErrorCatchedInDifferentOrderModbusMasterReqRepeatOnAnyErrorTimesPlusOneTimeThenReportError)
+{
+    modbus_adr_t coil_adr = 0x0001;
+    modbus_device_ID_t slave_ID = 0x06;
+    modbus_data_qty_t coils_qty = 2;
+    // uint8_t err_seq_rep;
+
+
+    mock_slave_coil[0] = !!COIL_ON;
+    mock_slave_coil[1] = !!COIL_ON;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    static uint8_t err_selector=0;
+    for (uint8_t i=0; i<(MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR+1);i++)
+    {
+        if (0 == err_selector)
+        {
+            generate_read_frame_error_catch_sequance(slave_ID, 1);
+            err_selector++;
+        }
+        else
+        {
+            generate_read_rtu_crc_error_catch_sequance(slave_ID, 1);
+            err_selector=0;
+        }
+        
+    }
+
+
+    TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
+    if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR%2==0)
+        TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, test_error_rep.resp_read_error);
+    else
+        TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_RTU_CRC_ERR, test_error_rep.resp_read_error);
+    TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
+}
 
 // TEST(Master_RTU_test,)
 // {

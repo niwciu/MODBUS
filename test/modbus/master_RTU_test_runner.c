@@ -106,8 +106,10 @@ TEST_GROUP_RUNNER(Master_RTU_test)
         RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenRespWithRtuCrcErrorCatchedThenAfterT3_5CharReportError);
         RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenRespWithRtuCrcErrorCatchedThenAfterT3_5CharGoToIdleState);
     }
-
-    // test na wywołanie raportu różnymi błędami (trzeba postawić warunek znanej ilości licznika powtórzeń w given testu i opatrzyć koden wywołaniatestu)
+    if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= 2)
+    {
+        RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenWhenFrameErrorAndRtuCrcErrorCatchedInDifferentOrderModbusMasterReqRepeatOnAnyErrorTimesPlusOneTimeThenReportError);
+    }
     //
     //
     // test na wielokrotne użycie już wykorzystaneo bufora -> odpowiedź czy trzeba go zerować przed zwolnieniem
@@ -115,8 +117,4 @@ TEST_GROUP_RUNNER(Master_RTU_test)
     //
     // RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhen);
     // RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhen);
-    // RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhen);
-
-
-    
 }
