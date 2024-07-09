@@ -340,6 +340,8 @@ static void modbus_master_resp_waiting_state_handling(void)
         timeout_error.fun_conde = msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX];
         timeout_error.resp_read_error= MODBUS_MASTER_RESP_TIMEOUT_ERR;
         modbus_master_data_timeout_error(&timeout_error);
+
+        modbus_queue_push(free_q, &msg_buf);
     }
 }
 
