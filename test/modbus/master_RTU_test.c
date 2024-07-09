@@ -348,12 +348,25 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhen
     TEST_ASSERT_NULL(msg_buf);
 }
 
-//  TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhenRespTimeOutTimerEqual1AndErrorReporteDThenDisableTimeOutTimer)
-// {
-//    TEST_FAIL_MESSAGE("Implement your test!");
-// }
+ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhenRespTimeOutTimerEqual1AndErrorReportedThenDisableTimeOutTimer)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
 
-//  TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhenRespTimeOutTimerEqual1AndErrorReporteDThenSetMasterIdleState)
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    generate_send_req_sequence();
+    generate_resp_using_slave_lib(slave_ID);
+    check_modbus_master_manager();
+    // ToDo zrobić mocka dla timera 1ms i opierdzielić funkcję aktualizacji wartości timera
+    modbus_master_resp_timeout_timer = 20;
+    check_modbus_master_manager();
+    modbus_master_resp_timeout_timer = 1;
+    check_modbus_master_manager();
+    TEST_ASSERT_EQUAL(0,modbus_master_msg_repeat_couter);
+}
+
+//  TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhenRespTimeOutTimerEqual1AndErrorReportedThenSetMasterIdleState)
 // {
 //    TEST_FAIL_MESSAGE("Implement your test!");
 // }
