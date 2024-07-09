@@ -16,8 +16,8 @@ extern "C"
 #endif /* __cplusplus */
 #include "modbus_type.h"
 
-    extern modbus_buf_t master_RTU_req_buf[MAX_MODBUS_MSG_QUEUE_ITEMS][MODBUS_RTU_BUFFER_SIZE];
-    extern modbus_buf_t master_RTU_resp_buf[MAX_MODBUS_MSG_QUEUE_ITEMS][MODBUS_RTU_BUFFER_SIZE];
+    extern modbus_buf_t master_RTU_req_buf[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS][MODBUS_RTU_BUFFER_SIZE];
+    extern modbus_buf_t master_RTU_resp_buf[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS][MODBUS_RTU_BUFFER_SIZE];
 
 #ifdef __cplusplus
 }

@@ -9,12 +9,14 @@
  *
  */
 #include "modbus_master_data_interface.h"
+#include "mock_master_data_interface.h"
+#include "modbus_config.h"
 #include <memory.h>
 
-modbus_coil_disin_t mock_master_coil_data[100] = {0};
-modbus_coil_disin_t mock_master_dis_in[100] = {0};
-modbus_reg_t mock_master_holding_reg[100] = {0};
-modbus_reg_t mock_master_inreg[100] = {0};
+modbus_coil_disin_t mock_master_coil_data[MOCK_MASTER_COILS_TABLE_SIZE] = {0};
+modbus_coil_disin_t mock_master_dis_in[MOCK_MASTER_DIS_IN_TABLE_SIZE] = {0};
+modbus_reg_t mock_master_holding_reg[MOCK_MASTER_IN_REG_TABLE_SIZE] = {0};
+modbus_reg_t mock_master_inreg[MOCK_MASTER_H_REG_TABLE_SIZE] = {0};
 
 modbus_read_data_t exception_data;
 modbus_master_error_report_t modbus_master_error_rep;
@@ -86,4 +88,12 @@ void modbus_master_data_timeout_error(modbus_master_error_report_t *timeout_erro
 {
     memset(&modbus_master_error_rep, 0, sizeof(modbus_master_error_report_t));
     modbus_master_error_rep= *timeout_error_rep;
+}
+
+void mock_clear_modbus_master_coil_data(void)
+{
+    for(uint16_t i=0; i<(sizeof(mock_master_coil_data)/sizeof(mock_master_coil_data[0])); i++)
+    {
+        mock_master_coil_data[i]=0;
+    }
 }

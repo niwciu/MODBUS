@@ -3,13 +3,13 @@
 
 // #include "tested_module.h"
 
-#define MAX_HEAD_INDEX (MAX_MODBUS_MSG_QUEUE_ITEMS - 1)
+#define MAX_HEAD_INDEX (MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS - 1)
 TEST_GROUP(Modbus_Queue_test);
 static modbus_queue_t test_queue;
 static modbus_queue_t *q;
-static modbus_buf_t req_buf[MAX_MODBUS_MSG_QUEUE_ITEMS + 3];
-static modbus_buf_t resp_buf[MAX_MODBUS_MSG_QUEUE_ITEMS + 3];
-static modbus_msg_t msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS + 3];
+static modbus_buf_t req_buf[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS + 3];
+static modbus_buf_t resp_buf[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS + 3];
+static modbus_msg_t msg_buf[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS + 3];
 static modbus_msg_t *pop_msg;
 
 TEST_SETUP(Modbus_Queue_test)
@@ -33,12 +33,12 @@ TEST(Modbus_Queue_test, WhenModbusQueueInitThenQueueHeadAndTailIsEqualToZeroAndL
     modbus_queue_init(q);
     TEST_ASSERT_EQUAL(0, q->head);
     TEST_ASSERT_EQUAL(0, q->tail);
-    TEST_ASSERT_EQUAL(LAST_QUEUE_POS_EMPTY,q->last_queue_pos_status);
+    TEST_ASSERT_EQUAL(LAST_QUEUE_POS_EMPTY, q->last_queue_pos_status);
 }
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenHeadisEqualTo1AndTailIsEqualTo0)
 {
-    modbus_msg_t *msg_ptr=&msg_buf[0];
+    modbus_msg_t *msg_ptr = &msg_buf[0];
     modbus_queue_init(q);
     modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_EQUAL(1, q->head);
@@ -57,14 +57,14 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMasgPushToModbusQue
 {
     modbus_msg_t *msg_ptr;
     modbus_queue_init(q);
-    for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         msg_ptr = &msg_buf[i];
         modbus_queue_push(q, &msg_ptr);
     }
     TEST_ASSERT_EQUAL(MAX_HEAD_INDEX, q->head);
     TEST_ASSERT_EQUAL(0, q->tail);
-    msg_ptr = &msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS];
+    msg_ptr = &msg_buf[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS];
     modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_EQUAL(MAX_HEAD_INDEX, q->head);
     TEST_ASSERT_EQUAL(0, q->tail);
@@ -74,22 +74,22 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMasgPushToModbusQue
 {
     modbus_msg_t *msg_ptr;
     modbus_queue_init(q);
-    for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         msg_ptr = &msg_buf[i];
         modbus_queue_push(q, &msg_ptr);
     }
-    msg_ptr = &msg_buf[MAX_MODBUS_MSG_QUEUE_ITEMS];
+    msg_ptr = &msg_buf[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS];
     modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_NOT_NULL(msg_ptr);
 }
 TEST(Modbus_Queue_test, GivenModbusQueueInitWhenModbusMasgPushToModbusQueueThenModbusMsgPtrToPushedModbusMsgEqualToNull)
 {
-    modbus_msg_t *msg_ptr =&msg_buf[0];
+    modbus_msg_t *msg_ptr = &msg_buf[0];
     modbus_queue_init(q);
 
-    TEST_ASSERT_EQUAL(&msg_buf[0],msg_ptr);
-    modbus_queue_push(q,&msg_ptr);
+    TEST_ASSERT_EQUAL(&msg_buf[0], msg_ptr);
+    modbus_queue_push(q, &msg_ptr);
     TEST_ASSERT_NULL(msg_ptr);
 }
 
@@ -132,7 +132,7 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMsgPopAndModbusMsgP
 
     modbus_msg_t *msg_ptr;
     modbus_queue_init(q);
-    for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         msg_ptr = &msg_buf[i];
         modbus_queue_push(q, &msg_ptr);
@@ -151,12 +151,12 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullAndNextPopAllModbusMsgAndModb
 {
     modbus_msg_t *msg_ptr;
     modbus_queue_init(q);
-    for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         msg_ptr = &msg_buf[i];
         modbus_queue_push(q, &msg_ptr);
     }
-    for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(q);
     }

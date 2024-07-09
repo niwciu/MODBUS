@@ -16,7 +16,7 @@ extern "C"
 #endif /* __cplusplus */
     // clang-format off
 
-#define MAX_MODBUS_MSG_QUEUE_ITEMS  2                     /**< Maximum Modbus message queue items. */
+#define MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS  5                     /**< Maximum Modbus message queue items. */
 #define MODBUS_MASTER_RESP_TIME_OUT_MS 1000               /**< Modbus master response timeout in milliseconds. */
 #define MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR 3           /**< Number of retries on any Modbus master error. */
 

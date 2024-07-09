@@ -7,13 +7,13 @@
 #include "modbus_queue.h"
 
 #include "mock_master_driver_interface.h"
-// #include "mock_master_app_data.h"
+#include "mock_master_data_interface.h"
 #include "mock_slave_app_data.h"
 #include <memory.h>
 
 TEST_GROUP(Master_RTU_req_gen_test);
 
-#define TEST_SLAVE_COILS_TABLE_SIZE (MASTER_COILS_TABLE_SIZE)
+#define TEST_SLAVE_COILS_TABLE_SIZE (MOCK_MASTER_COILS_TABLE_SIZE)
 
 extern modbus_queue_t *tx_rx_q;
 extern modbus_queue_t *free_q;
@@ -73,7 +73,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldin
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_req_ret_t ret_status;
 
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
@@ -126,7 +126,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputR
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_req_ret_t ret_status;
 
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
@@ -158,7 +158,6 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsW
     modbus_data_qty_t coil_qty = 3;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_req_ret_t ret_status;
-    
 
     modbus_buf_t expected_master_request[] = {0x08, 0x01, 0x00, 0x05, 0x00, 0x03, 0x6c, 0x93};
     uint8_t expected_msg_len = (sizeof(expected_master_request) / sizeof(modbus_buf_t));
@@ -180,7 +179,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsW
     modbus_data_qty_t coil_qty = 3;
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_req_ret_t ret_status;
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
@@ -232,7 +231,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInW
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_req_ret_t ret_status;
 
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
@@ -286,7 +285,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingl
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_req_ret_t ret_status;
 
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
@@ -325,7 +324,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingl
     modbus_msg_t *tx_rx_msg_buf;
     modbus_master_req_ret_t ret_status;
 
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
@@ -365,7 +364,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMulti
     modbus_master_req_ret_t ret_status;
     modbus_reg_t hreg_data[] = {0x2001, 0x2002, 0x2003, 0x2004};
 
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
@@ -419,7 +418,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMulti
     modbus_master_req_ret_t ret_status;
     modbus_coil_disin_t coils_data[] = {!!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_ON};
 
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_queue_pop(free_q);
     }
@@ -446,7 +445,7 @@ TEST(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMulti
 
 static void reset_all_RTU_buffers(void)
 {
-    for (int i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (int i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         modbus_msg_t *msg;
         msg = modbus_queue_pop(free_q);

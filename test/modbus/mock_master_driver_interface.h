@@ -11,7 +11,7 @@
 #include "mock_master_slave_common.h"
 
 #pragma once
-#define MASTER_COILS_TABLE_SIZE 10
+
 
 
 extern driver_init_status_t mock_master_USART;

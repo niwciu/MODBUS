@@ -36,7 +36,7 @@ static modbus_queue_t master_tx_rx_queue;
 
 PRIVATE modbus_queue_t *free_q = &master_free_queue;
 PRIVATE modbus_queue_t *tx_rx_q = &master_tx_rx_queue;
-PRIVATE modbus_msg_t modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
+PRIVATE modbus_msg_t modbus_msg[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *msg_buf = NULL;
 PRIVATE modbus_timer_t modbus_master_resp_timeout_timer = 0;
 PRIVATE uint8_t modbus_master_msg_repeat_couter = 0;
@@ -193,7 +193,7 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 {
     if (RTU == mode)
     {
-        for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+        for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
         {
             modbus_msg[i].req.data = &master_RTU_req_buf[i][0];
             modbus_msg[i].resp.data = &master_RTU_resp_buf[i][0];
@@ -202,7 +202,7 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
     // else if( OTHER_MODE == mode)
     else
     {
-        for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+        for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
         {
             modbus_msg[i].req.data = NULL;
             modbus_msg[i].resp.data = NULL;
@@ -213,7 +213,7 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 static void push_all_available_msg_buffer_to_free_queue(void)
 {
     modbus_msg_t *msg_ptr;
-    for (uint8_t i = 0; i < MAX_MODBUS_MSG_QUEUE_ITEMS; i++)
+    for (uint8_t i = 0; i < MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS; i++)
     {
         msg_ptr = &modbus_msg[i];
         modbus_queue_push(free_q, &msg_ptr);
@@ -336,9 +336,9 @@ static void modbus_master_resp_waiting_state_handling(void)
         static modbus_master_error_report_t timeout_error;
         timeout_error.slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
         timeout_error.data_adr = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_ADR_IDX]);
-        timeout_error.data_qty= read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_QTY_IDX]);
+        timeout_error.data_qty = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_QTY_IDX]);
         timeout_error.fun_conde = msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX];
-        timeout_error.resp_read_error= MODBUS_MASTER_RESP_TIMEOUT_ERR;
+        timeout_error.resp_read_error = MODBUS_MASTER_RESP_TIMEOUT_ERR;
         modbus_master_data_timeout_error(&timeout_error);
 
         modbus_queue_push(free_q, &msg_buf);

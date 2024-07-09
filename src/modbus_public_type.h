@@ -104,7 +104,7 @@ extern "C"
         modbus_fun_code_t fun_conde;                     /**< Modbus function code. */
         modbus_adr_t data_adr;
         modbus_data_qty_t data_qty;
-        modbus_master_req_ret_t req_gen_error;           /**< Modbus master request generation error. */
+        // modbus_master_req_ret_t req_gen_error;           /**< Modbus master request generation error. */
         modbus_master_resp_read_error_t resp_read_error; /**< Modbus master response read error. */
     } modbus_master_error_report_t;
 

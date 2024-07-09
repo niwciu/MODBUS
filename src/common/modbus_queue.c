@@ -28,7 +28,7 @@ void modbus_queue_init(modbus_queue_t *q)
 {
     q->head = 0;
     q->tail = 0;
-    q->last_queue_pos_status = LAST_QUEUE_POS_EMPTY; 
+    q->last_queue_pos_status = LAST_QUEUE_POS_EMPTY;
 }
 
 /**
@@ -48,20 +48,20 @@ void modbus_queue_init(modbus_queue_t *q)
  */
 void modbus_queue_push(modbus_queue_t *q, modbus_msg_t **data)
 {
-    int32_t new_head = (q->head + 1) % MAX_MODBUS_MSG_QUEUE_ITEMS;
+    int32_t new_head = (q->head + 1) % MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS;
 
     if (new_head == q->tail)
     {
         // check if queue full
         if (LAST_QUEUE_POS_STORE_DATA == q->last_queue_pos_status)
         {
-            return; 
+            return;
         }
         else
         {
             q->last_queue_pos_status = LAST_QUEUE_POS_STORE_DATA;
             q->modbus_msg[q->head] = *data;
-            *data=NULL;
+            *data = NULL;
         }
     }
     else
@@ -100,7 +100,7 @@ modbus_msg_t *modbus_queue_pop(modbus_queue_t *q)
     else
     {
         ret = q->modbus_msg[q->tail];
-        q->tail = (q->tail + 1) % MAX_MODBUS_MSG_QUEUE_ITEMS;
+        q->tail = (q->tail + 1) % MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS;
     }
 
     return ret;
