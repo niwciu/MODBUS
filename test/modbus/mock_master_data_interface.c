@@ -39,7 +39,7 @@ void modbus_master_coil_write(modbus_device_ID_t slave_adr, modbus_adr_t data_ad
     mock_colis_write_confirmation.data_adr = data_adr;
     mock_colis_write_confirmation.coil_qty = coil_qty;
 }
-void modbus_master_inreg_exception(modbus_read_data_t *resp_data)
+void modbus_master_inreg_exception(const modbus_read_data_t *resp_data)
 {
     memset(&exception_data, 0, sizeof(modbus_read_data_t));
     exception_data = *resp_data;
@@ -50,7 +50,7 @@ void modbus_master_disin_read(modbus_device_ID_t slave_adr, modbus_adr_t data_ad
     (void)(slave_adr);
     mock_master_dis_in[data_adr] = disin_val;
 }
-void modbus_master_coil_exception(modbus_read_data_t *resp_data)
+void modbus_master_coil_exception(const modbus_read_data_t *resp_data)
 {
     memset(&exception_data, 0, sizeof(modbus_read_data_t));
     exception_data = *resp_data;
@@ -67,7 +67,7 @@ void modbus_master_hreg_write(modbus_device_ID_t slave_adr, modbus_adr_t data_ad
     mock_reg_write_confirmation.data_adr = data_adr;
     mock_reg_write_confirmation.coil_qty = hreg_qty;
 }
-void modbus_master_disin_exception(modbus_read_data_t *resp_data)
+void modbus_master_disin_exception(const modbus_read_data_t *resp_data)
 {
     memset(&exception_data, 0, sizeof(modbus_read_data_t));
     exception_data = *resp_data;
@@ -78,13 +78,13 @@ void modbus_master_inreg_read(modbus_device_ID_t slave_adr, modbus_adr_t data_ad
     (void)(slave_adr);
     mock_master_inreg[data_adr] = inreg_val;
 }
-void modbus_master_hreg_exception(modbus_read_data_t *resp_data)
+void modbus_master_hreg_exception(const modbus_read_data_t *resp_data)
 {
     memset(&exception_data, 0, sizeof(modbus_read_data_t));
     exception_data = *resp_data;
 }
 
-void modbus_master_data_timeout_error(modbus_master_error_report_t *timeout_error_rep)
+void modbus_master_data_timeout_error(const modbus_master_error_report_t *timeout_error_rep)
 {
     memset(&modbus_master_error_rep, 0, sizeof(modbus_master_error_report_t));
     modbus_master_error_rep= *timeout_error_rep;

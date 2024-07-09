@@ -23,17 +23,20 @@ static modbus_ret_t modbus_master_write_multiple_coils_resp(modbus_msg_t *modbus
 static modbus_ret_t modbus_master_write_multiple_reg_resp(modbus_msg_t *modbus_msg);
 
 static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_qty_t data_len);
-// static modbus_ret_t write_single_reg_coil_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, void *rw_data_ptr);
 static modbus_data_t modbus_get_max_len_2_read(modbus_req_t req_code);
 
 static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
+static void update_master_coils_frmo_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
+static void update_master_dis_in_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
+static void update_input_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
+static void update_holding_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
 
 static modbus_ret_t report_write_operation_confirmation(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-// static modbus_ret_t check_out_val_or_out_qty_correctnes(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
 static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg);
 
 static bool modbus_response_contain_exception_code(const modbus_msg_t *modbus_msg);
 static modbus_ret_t process_modbus_exception_code(modbus_msg_t *modbus_msg);
+static modbus_ret_t send_exception_code_report_data(modbus_read_data_t *ex_code_data);
 static modbus_ret_t process_modbus_response(modbus_msg_t *modbus_msg);
 
 static const modbus_function_mapper_t modbus_master_function_mapper[] = {
@@ -355,51 +358,70 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
     switch (resp_fun_code)
     {
     case MODBUS_READ_COILS_FUNC_CODE:
-        for (modbus_data_qty_t i = 0; i < data_qty; i++)
-        {
-            if (0 != ((resp->data[MODBUS_RESP_READ_DATA_IDX + (i / 8)]) & (1 << (i % 8))))
-            {
-                modbus_master_coil_read(slave_adr, data_adr + i, !!COIL_ON);
-            }
-            else
-            {
-                modbus_master_coil_read(slave_adr, data_adr + i, !!COIL_OFF);
-            }
-        }
+        update_master_coils_frmo_modbus_msg(data_qty, resp, slave_adr, data_adr);
         break;
     case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
 
-        for (modbus_data_qty_t i = 0; i < data_qty; i++)
-        {
-            if (0 != ((resp->data[MODBUS_RESP_READ_DATA_IDX + (i / 8)]) & (1 << (i % 8))))
-            {
-                modbus_master_disin_read(slave_adr, data_adr + i, !!COIL_ON);
-            }
-            else
-            {
-                modbus_master_disin_read(slave_adr, data_adr + i, !!COIL_OFF);
-            }
-        }
+        update_master_dis_in_from_modbus_msg(data_qty, resp, slave_adr, data_adr);
         break;
 
     case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
-        for (modbus_data_qty_t i = 0; i < data_qty; i++)
-        {
-            modbus_data_t reg_data = read_u16_from_buf(&(resp->data[MODBUS_RESP_READ_DATA_IDX + (i * 2)]));
-            modbus_master_inreg_read(slave_adr, data_adr + i, reg_data);
-        }
+        update_input_reg_from_modbus_msg(data_qty, resp, slave_adr, data_adr);
         break;
     case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
-        for (modbus_data_qty_t i = 0; i < data_qty; i++)
-        {
-            modbus_data_t reg_data = read_u16_from_buf(&(resp->data[MODBUS_RESP_READ_DATA_IDX + (i * 2)]));
-            modbus_master_hreg_read(slave_adr, data_adr + i, reg_data);
-        }
+        update_holding_reg_from_modbus_msg(data_qty, resp, slave_adr, data_adr);
         break;
     default:
         break;
     }
     return RET_OK;
+}
+
+static void update_master_coils_frmo_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
+{
+    for (modbus_data_qty_t i = 0; i < data_qty; i++)
+    {
+        if (0 != ((resp->data[MODBUS_RESP_READ_DATA_IDX + (i / 8)]) & (1 << (i % 8))))
+        {
+            modbus_master_coil_read(slave_adr, data_adr + i, !!COIL_ON);
+        }
+        else
+        {
+            modbus_master_coil_read(slave_adr, data_adr + i, !!COIL_OFF);
+        }
+    }
+}
+static void update_master_dis_in_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
+{
+    for (modbus_data_qty_t i = 0; i < data_qty; i++)
+    {
+        if (0 != ((resp->data[MODBUS_RESP_READ_DATA_IDX + (i / 8)]) & (1 << (i % 8))))
+        {
+            modbus_master_disin_read(slave_adr, data_adr + i, !!COIL_ON);
+        }
+        else
+        {
+            modbus_master_disin_read(slave_adr, data_adr + i, !!COIL_OFF);
+        }
+    }
+}
+
+static void update_input_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
+{
+    for (modbus_data_qty_t i = 0; i < data_qty; i++)
+    {
+        modbus_data_t reg_data = read_u16_from_buf(&(resp->data[MODBUS_RESP_READ_DATA_IDX + (i * 2)]));
+        modbus_master_inreg_read(slave_adr, data_adr + i, reg_data);
+    }
+}
+
+static void update_holding_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
+{
+    for (modbus_data_qty_t i = 0; i < data_qty; i++)
+    {
+        modbus_data_t reg_data = read_u16_from_buf(&(resp->data[MODBUS_RESP_READ_DATA_IDX + (i * 2)]));
+        modbus_master_hreg_read(slave_adr, data_adr + i, reg_data);
+    }
 }
 
 static modbus_ret_t report_write_operation_confirmation(const modbus_req_resp_t *resp, const modbus_req_resp_t *req)
@@ -462,23 +484,30 @@ static modbus_ret_t process_modbus_exception_code(modbus_msg_t *modbus_msg)
     resp.exception_code = modbus_msg->resp.data[MODBUS_RESP_EXCEPTION_CODE_IDX];
     resp.data_adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
     resp.data_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
-    switch (resp.fun_conde)
+    send_exception_code_report_data(&resp);
+    return status;
+}
+
+static modbus_ret_t send_exception_code_report_data(modbus_read_data_t *ex_code_data)
+{
+    modbus_ret_t status = RET_OK;
+    switch (ex_code_data->fun_conde)
     {
     case MODBUS_READ_COILS_FUNC_CODE:
     case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:
     case MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE:
-        modbus_master_coil_exception(&resp);
+        modbus_master_coil_exception(ex_code_data);
         break;
     case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
-        modbus_master_disin_exception(&resp);
+        modbus_master_disin_exception(ex_code_data);
         break;
     case MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE:
     case MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE:
     case MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE:
-        modbus_master_hreg_exception(&resp);
+        modbus_master_hreg_exception(ex_code_data);
         break;
     case MODBUS_READ_INPUT_REGISTERS_FUNC_CODE:
-        modbus_master_inreg_exception(&resp);
+        modbus_master_inreg_exception(ex_code_data);
         break;
     default:
         status = RET_ERROR;

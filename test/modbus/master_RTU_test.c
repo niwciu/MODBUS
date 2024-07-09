@@ -1403,7 +1403,7 @@ static void generate_send_req_read_resp_msg_sequance(modbus_device_ID_t slave_ID
     generate_msg_T_3_5_char_brake_sequence();
 }
 
-static void error_report_test_function(modbus_master_error_report_t *error_rep)
+static void error_report_test_function(const modbus_master_error_report_t *error_rep)
 {
     memset(&test_error_rep, 0, sizeof(test_error_rep));
     test_error_rep = *error_rep;

@@ -60,11 +60,20 @@ static void modbus_master_T_1_5_char_expired_callback(void);
 static void modbus_master_T_3_5_char_expired_callback(void);
 static void modbus_master_frame_error_callback(void);
 
-static bool check_data_to_send_availability(modbus_queue_t *q);
+static bool check_data_to_send_availability(const modbus_queue_t *q);
 static void modbus_master_idle_state_handling(void);
 static void modbus_master_transmitting_state_handling(void);
 static void modbus_master_resp_waiting_state_handling(void);
+static void modbus_master_resp_timeout_handle();
+static void modbus_master_RTU_recv_state_handle();
 static void modbus_master_resp_recived_state_handling(void);
+
+static void modbus_master_msg_recived_correctly_state_handle();
+
+static void modbus_master_RTU_CRC_error_state_handling(void);
+static void modbus_master_frame_error_state_handling(void);
+
+static void modbus_master_msg_process_end(void);
 
 typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param);
 struct modbus_master_functions_mapper
@@ -285,7 +294,7 @@ static void modbus_master_frame_error_callback(void)
 {
     MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
 }
-static bool check_data_to_send_availability(modbus_queue_t *q)
+static bool check_data_to_send_availability(const modbus_queue_t *q)
 {
     return ((q->head != q->tail) || (LAST_QUEUE_POS_STORE_DATA == q->last_queue_pos_status));
 }
@@ -310,39 +319,47 @@ static void modbus_master_resp_waiting_state_handling(void)
 {
     if (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_1_5_CHAR_FLAG)
     {
-        modbus_ret_t RTU_status;
-        modbus_device_ID_t modbus_req_slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
-        MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
-        MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
-        RTU_status = modbus_RTU_recv(msg_buf->resp.data, msg_buf->resp.len, modbus_req_slave_ID);
-        if (RET_ERROR_CRC == RTU_status)
-        {
-            modbus_master_disable_resp_timeout_timer();
-            MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_SET;
-            modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
-        }
-        else if (RET_ERROR_SLAVE_ID == RTU_status)
-        {
-            msg_buf->resp.len = 0;
-        }
-        else // RET_OK
-        {
-            modbus_master_disable_resp_timeout_timer();
-            modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
-        }
+        modbus_master_RTU_recv_state_handle();
     }
     else if (1 == modbus_master_resp_timeout_timer)
     {
-        static modbus_master_error_report_t timeout_error;
-        timeout_error.slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
-        timeout_error.data_adr = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_ADR_IDX]);
-        timeout_error.data_qty = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_QTY_IDX]);
-        timeout_error.fun_conde = msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX];
-        timeout_error.resp_read_error = MODBUS_MASTER_RESP_TIMEOUT_ERR;
-        modbus_master_data_timeout_error(&timeout_error);
+        modbus_master_resp_timeout_handle();
+        modbus_master_msg_process_end();
+    }
+}
 
-        modbus_queue_push(free_q, &msg_buf);
-        modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
+void modbus_master_resp_timeout_handle()
+{
+    static modbus_master_error_report_t timeout_error;
+    timeout_error.slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
+    timeout_error.data_adr = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_ADR_IDX]);
+    timeout_error.data_qty = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_QTY_IDX]);
+    timeout_error.fun_conde = msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX];
+    timeout_error.resp_read_error = MODBUS_MASTER_RESP_TIMEOUT_ERR;
+    modbus_master_data_timeout_error(&timeout_error);
+}
+
+static void modbus_master_RTU_recv_state_handle()
+{
+    modbus_ret_t RTU_status;
+    modbus_device_ID_t modbus_req_slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
+    MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+    MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
+    RTU_status = modbus_RTU_recv(msg_buf->resp.data, msg_buf->resp.len, modbus_req_slave_ID);
+    if (RET_ERROR_CRC == RTU_status)
+    {
+        modbus_master_disable_resp_timeout_timer();
+        MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_SET;
+        modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
+    }
+    else if (RET_ERROR_SLAVE_ID == RTU_status)
+    {
+        msg_buf->resp.len = 0;
+    }
+    else // RET_OK
+    {
+        modbus_master_disable_resp_timeout_timer();
+        modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
     }
 }
 
@@ -350,61 +367,75 @@ static void modbus_master_resp_recived_state_handling(void)
 {
     if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
     {
-        modbus_master_msg_repeat_couter++;
-        if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
-        {
-            modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
-            MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
-        }
-        else
-        {
-            if (NULL != modbus_error_callback)
-            {
-                static modbus_master_error_report_t error_rep;
-                error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
-                error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
-                error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
-                modbus_error_callback(&error_rep);
-            }
-            // memset(modbus_msg,0,sizoef(modbus_msg)); // will be shown if necessary in buger reusing tests
-            modbus_master_msg_repeat_couter = 0;
-            modbus_queue_push(free_q, &msg_buf);
-            modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
-        }
+        modbus_master_frame_error_state_handling();
     }
     else if ((MODBUS_FLAG_SET == MODBUS_MASTER_RTU_CRC_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
     {
-        modbus_master_msg_repeat_couter++;
-        if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
-        {
-            modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
-            MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_CLEARED;
-        }
-        else
-        {
-            if (NULL != modbus_error_callback)
-            {
-                static modbus_master_error_report_t error_rep;
-                error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
-                error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
-                error_rep.resp_read_error = MODBUS_MASTER_RESP_RTU_CRC_ERR;
-                modbus_error_callback(&error_rep);
-            }
-            // memset(modbus_msg,0,sizoef(modbus_msg)); // will be shown if necessary in buger reusing tests
-            modbus_master_msg_repeat_couter = 0;
-            modbus_queue_push(free_q, &msg_buf);
-            modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
-        }
+        modbus_master_RTU_CRC_error_state_handling();
     }
     else if ((MODBUS_FLAG_CLEARED == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_CLEARED == MODBUS_MASTER_RTU_CRC_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
     {
-        modbus_master_read_slave_resp(msg_buf);
-        modbus_master_msg_repeat_couter = 0;
-        modbus_queue_push(free_q, &msg_buf);
-        modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
+        modbus_master_msg_recived_correctly_state_handle();
     }
     else
     {
         // do nothing untill 3_5TFlag is not set
     }
+}
+
+static void modbus_master_msg_recived_correctly_state_handle(void)
+{
+    modbus_master_read_slave_resp(msg_buf);
+    modbus_master_msg_process_end();
+}
+
+static void modbus_master_RTU_CRC_error_state_handling(void)
+{
+    modbus_master_msg_repeat_couter++;
+    if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
+    {
+        modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
+        MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+    }
+    else
+    {
+        if (NULL != modbus_error_callback)
+        {
+            static modbus_master_error_report_t error_rep;
+            error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
+            error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
+            error_rep.resp_read_error = MODBUS_MASTER_RESP_RTU_CRC_ERR;
+            modbus_error_callback(&error_rep);
+        }
+        modbus_master_msg_process_end();
+    }
+}
+
+static void modbus_master_frame_error_state_handling(void)
+{
+    modbus_master_msg_repeat_couter++;
+    if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
+    {
+        modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
+        MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+    }
+    else
+    {
+        if (NULL != modbus_error_callback)
+        {
+            static modbus_master_error_report_t error_rep;
+            error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
+            error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
+            error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
+            modbus_error_callback(&error_rep);
+        }
+        modbus_master_msg_process_end();
+    }
+}
+
+static void modbus_master_msg_process_end(void)
+{
+    modbus_master_msg_repeat_couter = 0;
+    modbus_queue_push(free_q, &msg_buf);
+    modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
 }
