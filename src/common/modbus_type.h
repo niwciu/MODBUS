@@ -119,7 +119,8 @@ extern "C"
         RET_ERROR_CRC = -3,                        ///< Error: CRC error
         RET_ERROR_SLAVE_ID = -2,                   ///< Error: Invalid slave ID
         RET_ERROR = -1,                            ///< General error
-        RET_OK = 0,                                ///< Operation successful
+        RET_OK = 0,
+        MAX_RET_VAL =0xFFFF,                        ///< MAX_RET_VAL defined for set max scope of the enum returned value in case of returning a readed number.
     } modbus_ret_t;
 
     /**

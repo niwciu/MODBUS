@@ -11,6 +11,7 @@
 #include "modbus_slave_data.h"
 #include <stdio.h>
 
+modbus_reg_t readed_data =0;
 modbus_reg_t *Slave_Holding_Registers[HOLDING_REG_QTY];        /**< Array of pointers to holding registers for the Modbus slave. */
 modbus_reg_t *Slave_Input_Registers[INPUT_REG_QTY];            /**< Array of pointers to input registers for the Modbus slave. */
 modbus_coil_disin_t *Slave_Coils[COILS_QTY];                   /**< Array of pointers to coils for the Modbus slave. */
@@ -60,7 +61,7 @@ modbus_ret_t get_coil_din_state(modbus_coil_disin_t **coils_din_tab_ptr, modbus_
 {
     if (NULL != (coils_din_tab_ptr[coil_din_adr]))
     {
-        return (modbus_ret_t)(*coils_din_tab_ptr[coil_din_adr]);
+        return (*coils_din_tab_ptr[coil_din_adr]);
     }
     else
         return RET_ERROR;
@@ -103,7 +104,7 @@ modbus_ret_t get_register_state(modbus_reg_t **reg_tab_ptr, modbus_adr_t reg_adr
 {
     if (NULL != (reg_tab_ptr[reg_adr]))
     {
-        return (modbus_ret_t)(*reg_tab_ptr[reg_adr]);
+        return (*reg_tab_ptr[reg_adr]);
     }
     else
     {
