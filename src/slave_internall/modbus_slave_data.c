@@ -55,7 +55,7 @@ void register_app_data_to_modbus_reg_table(modbus_reg_t **reg_table, modbus_adr_
  *
  * @param coils_din_tab_ptr Pointer to the table of coils or discrete inputs.
  * @param coil_din_adr Address of the coil or discrete input to query.
- * @return modbus_ret_t The state of the coil or discrete input.
+ * @return modbus_ret_t The state of the coil or discrete input or RET_ERROR .
  */
 modbus_ret_t get_coil_din_state(modbus_coil_disin_t **coils_din_tab_ptr, modbus_adr_t coil_din_adr)
 {
@@ -98,7 +98,7 @@ modbus_ret_t set_coil_state(modbus_coil_disin_t **coils_tab_ptr, modbus_adr_t co
  *
  * @param reg_tab_ptr Pointer to the table of holding or input registers.
  * @param reg_adr Address of the register to query.
- * @return modbus_ret_t The value of the register.
+ * @return modbus_ret_t The value of the register or RET_ERROR.
  */
 modbus_ret_t get_register_state(modbus_reg_t **reg_tab_ptr, modbus_adr_t reg_adr)
 {

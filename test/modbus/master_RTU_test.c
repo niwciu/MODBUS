@@ -46,7 +46,7 @@ static void generate_msg_T_1_5_char_brake_sequence(void);
 static void generate_msg_T_3_5_char_brake_sequence(void);
 static void generate_read_frame_error_catch_sequance(modbus_device_ID_t slave_ID, uint8_t sequence_repeat);
 static void generate_send_req_read_resp_msg_sequance(modbus_device_ID_t slave_ID);
-static void error_report_test_function(const modbus_master_error_report_t *error_rep);
+// static void error_report_test_function(const modbus_master_error_report_t *error_rep);
 static void set_new_CRC_val(modbus_req_resp_t *req_res, modbus_CRC_t new_CRC);
 static void generate_read_rtu_crc_error_catch_sequance(modbus_device_ID_t slave_ID, uint8_t sequence_repeat);
 
@@ -74,11 +74,11 @@ TEST_TEAR_DOWN(Master_RTU_test)
 }
 
 // //  Modbus Master Manager tests
-TEST(Master_RTU_test, WhenTestFunctionRegisterdAsModbusErrorCallbackThenModbusErrorCallbackPtrEqualToTestFunctionAdres)
-{
-    register_modbus_master_error_cb(error_report_test_function);
-    TEST_ASSERT_EQUAL(&error_report_test_function, modbus_error_callback);
-}
+// TEST(Master_RTU_test, WhenTestFunctionRegisterdAsModbusErrorCallbackThenModbusErrorCallbackPtrEqualToTestFunctionAdres)
+// {
+//     register_modbus_master_error_cb(error_report_test_function);
+//     TEST_ASSERT_EQUAL(&error_report_test_function, modbus_error_callback);
+// }
 // //  IDLE state tests
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSending)
 {
@@ -776,14 +776,13 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     mock_slave_coil[0] = !!COIL_ON;
     mock_slave_coil[1] = !!COIL_ON;
 
-    register_modbus_master_error_cb(error_report_test_function);
+    // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
 
-    TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, test_error_rep.resp_read_error);
-    // TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
+    TEST_ASSERT_EQUAL(slave_ID, modbus_master_error_rep.slave_ID);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, modbus_master_error_rep.resp_read_error);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThanRepeatOnErrorParamAndErrorReportedThenPushMsgBuferPtrToFreeQueue)
@@ -795,7 +794,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     mock_slave_coil[0] = !!COIL_ON;
     mock_slave_coil[1] = !!COIL_ON;
 
-    register_modbus_master_error_cb(error_report_test_function);
+    // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
 
@@ -811,7 +810,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     mock_slave_coil[0] = !!COIL_ON;
     mock_slave_coil[1] = !!COIL_ON;
 
-    register_modbus_master_error_cb(error_report_test_function);
+    // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, modbus_master_manager_state_machine);
@@ -826,7 +825,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     mock_slave_coil[0] = !!COIL_ON;
     mock_slave_coil[1] = !!COIL_ON;
 
-    register_modbus_master_error_cb(error_report_test_function);
+    // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
     TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
@@ -1066,13 +1065,13 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     mock_slave_coil[0] = !!COIL_ON;
     mock_slave_coil[1] = !!COIL_ON;
 
-    register_modbus_master_error_cb(error_report_test_function);
+    // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
 
-    TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_RTU_CRC_ERR, test_error_rep.resp_read_error);
+    TEST_ASSERT_EQUAL(slave_ID, modbus_master_error_rep.slave_ID);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_RTU_CRC_ERR, modbus_master_error_rep.resp_read_error);
     // TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
 }
 
@@ -1085,7 +1084,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     mock_slave_coil[0] = !!COIL_ON;
     mock_slave_coil[1] = !!COIL_ON;
 
-    register_modbus_master_error_cb(error_report_test_function);
+    // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
 
@@ -1101,7 +1100,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     mock_slave_coil[0] = !!COIL_ON;
     mock_slave_coil[1] = !!COIL_ON;
 
-    register_modbus_master_error_cb(error_report_test_function);
+    // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_IDLE, modbus_master_manager_state_machine);
@@ -1116,7 +1115,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     mock_slave_coil[0] = !!COIL_ON;
     mock_slave_coil[1] = !!COIL_ON;
 
-    register_modbus_master_error_cb(error_report_test_function);
+    // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
     TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
@@ -1216,12 +1215,12 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenW
         }
     }
 
-    TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(slave_ID, modbus_master_error_rep.slave_ID);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
     if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR % 2 == 0)
-        TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, test_error_rep.resp_read_error);
+        TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, modbus_master_error_rep.resp_read_error);
     else
-        TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_RTU_CRC_ERR, test_error_rep.resp_read_error);
+        TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_RTU_CRC_ERR, modbus_master_error_rep.resp_read_error);
     // TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
 }
 
@@ -1403,11 +1402,11 @@ static void generate_send_req_read_resp_msg_sequance(modbus_device_ID_t slave_ID
     generate_msg_T_3_5_char_brake_sequence();
 }
 
-static void error_report_test_function(const modbus_master_error_report_t *error_rep)
-{
-    memset(&test_error_rep, 0, sizeof(test_error_rep));
-    test_error_rep = *error_rep;
-}
+// static void error_report_test_function(const modbus_master_error_report_t *error_rep)
+// {
+//     memset(&test_error_rep, 0, sizeof(test_error_rep));
+//     test_error_rep = *error_rep;
+// }
 
 static void set_new_CRC_val(modbus_req_resp_t *req_res, modbus_CRC_t new_CRC)
 {

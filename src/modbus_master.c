@@ -94,10 +94,10 @@ const struct modbus_master_functions_mapper master_functions_mapper[] = {
 
 #define MODBUS_MASTER_FUNCTIONS_MAPPER_SIZE (sizeof(master_functions_mapper) / sizeof(master_functions_mapper[0]));
 
-void register_modbus_master_error_cb(modbus_master_error_cb_t error_callback)
-{
-    modbus_error_callback = error_callback;
-}
+// void register_modbus_master_error_cb(modbus_master_error_cb_t error_callback)
+// {
+//     modbus_error_callback = error_callback;
+// }
 
 modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID)
 {
@@ -399,14 +399,13 @@ static void modbus_master_RTU_CRC_error_state_handling(void)
     }
     else
     {
-        if (NULL != modbus_error_callback)
-        {
-            static modbus_master_error_report_t error_rep;
-            error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
-            error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
-            error_rep.resp_read_error = MODBUS_MASTER_RESP_RTU_CRC_ERR;
-            modbus_error_callback(&error_rep);
-        }
+
+        static modbus_master_error_report_t error_rep;
+        error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
+        error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
+        error_rep.resp_read_error = MODBUS_MASTER_RESP_RTU_CRC_ERR;
+        // modbus_error_callback(&error_rep);
+        modbus_master_communication_error(&error_rep);
         modbus_master_msg_process_end();
     }
 }
@@ -421,14 +420,13 @@ static void modbus_master_frame_error_state_handling(void)
     }
     else
     {
-        if (NULL != modbus_error_callback)
-        {
-            static modbus_master_error_report_t error_rep;
-            error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
-            error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
-            error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
-            modbus_error_callback(&error_rep);
-        }
+
+        static modbus_master_error_report_t error_rep;
+        error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
+        error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
+        error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
+        // modbus_error_callback(&error_rep);
+        modbus_master_communication_error(&error_rep);
         modbus_master_msg_process_end();
     }
 }

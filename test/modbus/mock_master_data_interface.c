@@ -97,3 +97,9 @@ void mock_clear_modbus_master_coil_data(void)
         mock_master_coil_data[i]=0;
     }
 }
+
+void modbus_master_communication_error(const modbus_master_error_report_t *communication_error_rep)
+{
+    memset(&modbus_master_error_rep, 0, sizeof(modbus_master_error_report_t));
+    modbus_master_error_rep = *communication_error_rep;
+}

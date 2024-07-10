@@ -52,6 +52,7 @@ static const modbus_function_mapper_t modbus_master_function_mapper[] = {
 
 #define MODBUS_MASTER_FUNCTION_MAPPER_SIZE (sizeof(modbus_master_function_mapper) / sizeof(modbus_master_function_mapper[0]));
 
+
 modbus_ret_t modbus_master_read_holding_reg_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK == check_null_ptr_correctness(msg_buf))
@@ -88,19 +89,7 @@ modbus_ret_t modbus_master_read_discrete_inputs_req(modbus_msg_t *msg_buf, req_i
     }
 }
 
-/**
- * @brief Initiates a Modbus master request to read coils.
- *
- * This function prepares a Modbus master request to read coils at a specified address
- * with a specified quantity of coils.
- *
- * @param[in,out] modbus_msg Pointer to the Modbus message structure to be populated with the request data.
- * @param[in] adr Starting address of the coils to read.
- * @param[in] coils_qty Quantity of coils to read.
- * @return - RET_OK if the request is successfully prepared.
- * @return - RET_NULL_PTR_ERROR if the provided @p modbus_msg pointer is null.
- * @return - RET_ERROR if the quantity of coils requested exceeds the maximum allowed.
- */
+
 modbus_ret_t modbus_master_read_coils_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK == check_null_ptr_correctness(msg_buf))
@@ -130,18 +119,7 @@ modbus_ret_t modbus_master_write_single_reg_req(modbus_msg_t *msg_buf, req_input
     }
 }
 
-/**
- * @brief Sends a Modbus request to write a single coil in a slave device.
- *
- * This function constructs a Modbus request message to write a single coil in a slave device
- * based on the provided address.
- *
- * @param[in] modbus_msg Pointer to the Modbus message structure where the request will be stored.
- * @param[in] adr Address of the coil to write.
- * @return - RET_OK if the request is constructed successfully.
- * @return - RET_NULL_PTR_ERROR if the provided @p modbus_msg pointer is null.
- * @return - RET_ERROR if there is an error in constructing the request.
- */
+
 modbus_ret_t modbus_master_write_single_coil_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK == check_null_ptr_correctness(msg_buf))
@@ -159,19 +137,7 @@ modbus_ret_t modbus_master_write_single_coil_req(modbus_msg_t *msg_buf, req_inpu
     }
 }
 
-/**
- * @brief Sends a Modbus request to write multiple holding registers in a slave device.
- *
- * This function constructs a Modbus request message to write multiple holding registers in a slave device
- * based on the provided starting address and quantity of registers to write.
- *
- * @param[in] modbus_msg Pointer to the Modbus message structure where the request will be stored.
- * @param[in] adr Starting address of the holding registers to write.
- * @param[in] reg_qty Number of holding registers to write.
- * @return - RET_OK if the request is constructed successfully.
- * @return - RET_NULL_PTR_ERROR if the provided @p modbus_msg pointer is null.
- * @return - RET_ERROR if the provided register quantity is out of range or there is an error in constructing the request.
- */
+
 modbus_ret_t modbus_master_write_multiple_reg_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK != check_null_ptr_correctness(msg_buf))
@@ -203,19 +169,7 @@ modbus_ret_t modbus_master_write_multiple_reg_req(modbus_msg_t *msg_buf, req_inp
     return RET_OK;
 }
 
-/**
- * @brief Constructs a Modbus request to write multiple coils in a slave device.
- *
- * Constructs a Modbus request message to write multiple coils starting from
- * the specified address in a slave device.
- *
- * @param[in] modbus_msg Pointer to the Modbus message structure where the request will be stored.
- * @param[in] adr Starting address of the coils to write.
- * @param[in] coils_qty Number of coils to write.
- * @return RET_OK if the request is successfully constructed.
- * @return RET_NULL_PTR_ERROR if modbus_msg is NULL.
- * @return RET_ERROR if the coil quantity is out of range or there is an error in constructing the request.
- */
+
 modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK != check_null_ptr_correctness(msg_buf))
@@ -247,17 +201,7 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *msg_buf, req_i
     return RET_OK;
 }
 
-/**
- * @brief Processes a Modbus response received from a slave device.
- *
- * This function checks for null pointer correctness, verifies if the response
- * contains an error exception code, and processes the Modbus response if
- * no errors are found.
- *
- * @param[in] modbus_msg Pointer to the Modbus message structure containing the response.
- * @return - RET_OK if the response is successfully processed.
- * @return - RET_NULL_PTR_ERROR if modbus_msg is NULL.
- */
+
 modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
 {
     if (RET_OK != check_null_ptr_correctness(modbus_msg))
@@ -391,6 +335,20 @@ static void update_master_coils_frmo_modbus_msg(modbus_data_qty_t data_qty, cons
         }
     }
 }
+
+/**
+ * @brief Updates discrete inputs (coils) from data received in a Modbus response message.
+ *
+ * This function reads `data_qty` amount of data from the response (`resp`) starting at index
+ * `MODBUS_RESP_READ_DATA_IDX`. For each bit in the data, it determines the state of the coil
+ * (ON or OFF) and updates the discrete inputs (`modbus_master_disin_read`) at consecutive
+ * addresses starting from `data_adr` on the Modbus device with address `slave_adr`.
+ *
+ * @param[in] data_qty The quantity of data (number of coils) to update.
+ * @param[in] resp Pointer to the Modbus response structure containing the response data.
+ * @param[in] slave_adr Modbus device address of the slave.
+ * @param[in] data_adr Starting address in the discrete inputs to update.
+ */
 static void update_master_dis_in_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
 {
     for (modbus_data_qty_t i = 0; i < data_qty; i++)
@@ -406,6 +364,18 @@ static void update_master_dis_in_from_modbus_msg(modbus_data_qty_t data_qty, con
     }
 }
 
+/**
+ * @brief Updates input registers with data received from a Modbus response message.
+ *
+ * This function reads `data_qty` amount of data from the response (`resp`) starting at index
+ * `MODBUS_RESP_READ_DATA_IDX`, and updates the input registers (`modbus_master_inreg_read`)
+ * at consecutive addresses starting from `data_adr` on the Modbus device with address `slave_adr`.
+ *
+ * @param[in] data_qty The quantity of data (number of registers) to update.
+ * @param[in] resp Pointer to the Modbus response structure containing the response data.
+ * @param[in] slave_adr Modbus device address of the slave.
+ * @param[in] data_adr Starting address in the input registers to update.
+ */
 static void update_input_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
 {
     for (modbus_data_qty_t i = 0; i < data_qty; i++)
@@ -415,6 +385,18 @@ static void update_input_reg_from_modbus_msg(modbus_data_qty_t data_qty, const m
     }
 }
 
+/**
+ * @brief Updates holding registers with data received from a Modbus response message.
+ *
+ * This function reads `data_qty` amount of data from the response (`resp`) starting at index
+ * `MODBUS_RESP_READ_DATA_IDX`, and updates the holding registers (`modbus_master_hreg_read`)
+ * at consecutive addresses starting from `data_adr` on the Modbus device with address `slave_adr`.
+ *
+ * @param[in] data_qty The quantity of data (number of registers) to update.
+ * @param[in] resp Pointer to the Modbus response structure containing the response data.
+ * @param[in] slave_adr Modbus device address of the slave.
+ * @param[in] data_adr Starting address in the holding registers to update.
+ */
 static void update_holding_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
 {
     for (modbus_data_qty_t i = 0; i < data_qty; i++)
@@ -424,6 +406,18 @@ static void update_holding_reg_from_modbus_msg(modbus_data_qty_t data_qty, const
     }
 }
 
+/**
+ * @brief Reports confirmation of a Modbus write operation based on the response received.
+ *
+ * This function processes the response (`resp`) received from a Modbus device after a write operation
+ * request (`req`). Depending on the function code (`resp_fun_code`) in the response, it confirms the
+ * write operation by invoking the appropriate write function for coils or holding registers.
+ *
+ * @param[in] resp Pointer to the Modbus response structure containing the response data.
+ * @param[in] req Pointer to the Modbus request structure containing the request data.
+ *
+ * @retval RET_OK Indicates that the write operation confirmation was successfully reported.
+ */
 static modbus_ret_t report_write_operation_confirmation(const modbus_req_resp_t *resp, const modbus_req_resp_t *req)
 {
     modbus_device_ID_t slave_adr = resp->data[MODBUS_SLAVE_ADR_IDX];
@@ -450,7 +444,20 @@ static modbus_ret_t report_write_operation_confirmation(const modbus_req_resp_t 
     return RET_OK;
 }
 
-
+/**
+ * @brief Checks the correctness of pointers in the Modbus message structure.
+ *
+ * This function verifies the validity of pointers within the provided Modbus message
+ * structure (`modbus_msg`). It checks if the `modbus_msg` pointer itself, the request
+ * data pointer (`modbus_msg->req.data`), and the response data pointer (`modbus_msg->resp.data`)
+ * are not NULL.
+ *
+ * @param[in] modbus_msg Pointer to the Modbus message structure to be checked.
+ *
+ * @retval RET_OK           If all pointers within `modbus_msg` are valid.
+ * @retval RET_NULL_PTR_ERROR If any of the pointers (`modbus_msg`, `modbus_msg->req.data`,
+ *                           `modbus_msg->resp.data`) are NULL.
+ */
 static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
@@ -465,16 +472,37 @@ static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg)
 }
 
 /**
- * @brief Checks if the Modbus response contains an error code.
+ * @brief Checks if the Modbus response message contains an exception code.
+ *
+ * This function examines the Modbus response message (`modbus_msg`) to determine
+ * if it includes an exception code. It evaluates the function code field of the
+ * response against the MODBUS_EXCEPTION_CODE_MASK to detect the presence of an
+ * exception code.
  *
  * @param[in] modbus_msg Pointer to the Modbus message structure containing the response data.
- * @return True if an error code is present, false otherwise.
+ *
+ * @retval true  If the response message contains an exception code.
+ * @retval false If the response message does not contain an exception code.
  */
 static bool modbus_response_contain_exception_code(const modbus_msg_t *modbus_msg)
 {
     return (modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & MODBUS_EXCEPTION_CODE_MASK) == MODBUS_EXCEPTION_CODE_MASK;
 }
 
+/**
+ * @brief Processes the Modbus exception code received in a response message.
+ *
+ * This function extracts and interprets the Modbus exception code from the
+ * response message in `modbus_msg`. It initializes a `modbus_read_data_t` structure
+ * (`resp`) with relevant details from the response, including slave ID, function code,
+ * exception code, data address, and quantity. Finally, it invokes
+ * `send_exception_code_report_data` to handle the exception code and report it if necessary.
+ *
+ * @param[in] modbus_msg Pointer to the Modbus message structure containing the response data.
+ *
+ * @retval RET_OK The Modbus exception code was processed successfully.
+ * @retval Any other return status indicates an error occurred during processing such us unrecognized function code.
+ */
 static modbus_ret_t process_modbus_exception_code(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status = RET_OK;
@@ -488,6 +516,20 @@ static modbus_ret_t process_modbus_exception_code(modbus_msg_t *modbus_msg)
     return status;
 }
 
+/**
+ * @brief Sends an exception code report based on the Modbus function code.
+ *
+ * This function processes the Modbus function code in `ex_code_data` and sends
+ * an exception code report based on the type of function code. Depending on the
+ * function code, specific exception handling functions are called to process the exception.
+ *
+ * @param[in] ex_code_data Pointer to the Modbus read data structure containing
+ *                        the function code and associated data.
+ *
+ * @retval RET_OK The exception code report was sent successfully.
+ * @retval RET_ERROR An error occurred during processing, such as an unrecognized
+ *                   function code.
+ */
 static modbus_ret_t send_exception_code_report_data(modbus_read_data_t *ex_code_data)
 {
     modbus_ret_t status = RET_OK;
@@ -515,15 +557,16 @@ static modbus_ret_t send_exception_code_report_data(modbus_read_data_t *ex_code_
     return status;
 }
 /**
- * @brief Processes the Modbus response based on the request function code.
+ * @brief Sends an exception code report based on the Modbus function code.
  *
- * @param[in] modbus_msg Pointer to the Modbus message structure containing the request and response data.
- * @return - The status of the response processing.
- * @retval - RET_OK
- * @retval - RET_ERROR
- * @retval - RET_ERROR_BYTE_CNT
- * @retval - RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH
+ * This function sends an exception code report based on the Modbus function code
+ * contained in `ex_code_data`. Depending on the function code, specific exception
+ * handling functions are called to process the exception.
  *
+ * @param[in] ex_code_data Pointer to the Modbus read data structure containing
+ *                        the function code and associated data.
+ * @retval RET_OK The exception code report was sent successfully.
+ * @retval RET_ERROR The function code is unrecognized, and no report was sent.
  */
 static modbus_ret_t process_modbus_response(modbus_msg_t *modbus_msg)
 {

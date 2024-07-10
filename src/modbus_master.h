@@ -17,7 +17,7 @@ extern "C"
 #endif /* __cplusplus */
 #include "modbus_public_type.h"
 
-    void register_modbus_master_error_cb(modbus_master_error_cb_t error_callback);
+    // void register_modbus_master_error_cb(modbus_master_error_cb_t error_callback);
     modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID);
     modbus_master_req_ret_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID);
     modbus_master_req_ret_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID);

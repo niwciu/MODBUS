@@ -26,3 +26,4 @@ void modbus_master_inreg_read(modbus_device_ID_t slave_adr, modbus_adr_t data_ad
 void modbus_master_inreg_exception(const modbus_read_data_t *resp_data);
 
 void modbus_master_data_timeout_error(const modbus_master_error_report_t *timeout_error_rep);
+void modbus_master_communication_error(const modbus_master_error_report_t *communication_error_rep);
