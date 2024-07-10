@@ -128,7 +128,7 @@ extern "C"
      *
      * @param error_report Pointer to the Modbus error report structure.
      */
-    typedef void (*modbus_master_error_cb_t)(modbus_master_error_report_t *error_report);
+    typedef void (*modbus_master_error_cb_t)(const modbus_master_error_report_t *error_report);
 
 #ifdef __cplusplus
 }

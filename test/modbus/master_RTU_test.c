@@ -46,7 +46,7 @@ static void generate_msg_T_1_5_char_brake_sequence(void);
 static void generate_msg_T_3_5_char_brake_sequence(void);
 static void generate_read_frame_error_catch_sequance(modbus_device_ID_t slave_ID, uint8_t sequence_repeat);
 static void generate_send_req_read_resp_msg_sequance(modbus_device_ID_t slave_ID);
-static void error_report_test_function(modbus_master_error_report_t *error_rep);
+static void error_report_test_function(const modbus_master_error_report_t *error_rep);
 static void set_new_CRC_val(modbus_req_resp_t *req_res, modbus_CRC_t new_CRC);
 static void generate_read_rtu_crc_error_catch_sequance(modbus_device_ID_t slave_ID, uint8_t sequence_repeat);
 
