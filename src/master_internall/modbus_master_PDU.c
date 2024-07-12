@@ -32,7 +32,7 @@ static void update_input_reg_from_modbus_msg(modbus_data_qty_t data_qty, const m
 static void update_holding_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
 
 static modbus_ret_t report_write_operation_confirmation(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg);
+static modbus_ret_t check_null_ptr_correctness(const modbus_msg_t *modbus_msg);
 
 static bool modbus_response_contain_exception_code(const modbus_msg_t *modbus_msg);
 static modbus_ret_t process_modbus_exception_code(modbus_msg_t *modbus_msg);
@@ -458,7 +458,7 @@ static modbus_ret_t report_write_operation_confirmation(const modbus_req_resp_t 
  * @retval RET_NULL_PTR_ERROR If any of the pointers (`modbus_msg`, `modbus_msg->req.data`,
  *                           `modbus_msg->resp.data`) are NULL.
  */
-static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg)
+static modbus_ret_t check_null_ptr_correctness(const modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
     {
