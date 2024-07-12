@@ -1,11 +1,26 @@
 /**
  * @file modbus_driver_interface.h
+ * @brief Defines the interface for a Modbus RTU driver.
  * @author niwciu (niwciu@gmail.com)
- * @brief
  * @date 2024-05-24
- *
  * @copyright Copyright (c) 2024
  *
+ * This header file defines the interface structure and function pointers
+ * required for implementing a Modbus RTU driver. It includes functions
+ * for initializing the driver, sending messages, enabling and disabling
+ * reception, and subscribing to various callback events related to Modbus
+ * communication.
+ *
+ * The `modbus_RTU_driver_struct_t` structure encapsulates function pointers
+ * for initializing the driver (`init`), sending messages (`send`), enabling
+ * reception (`enable_rcev`), disabling reception (`disable_rcev`), and subscribing
+ * to specific callback events such as timeout expiration (`subscribe_t_1_5_char_expired_cb`),
+ * message transmission completion (`subscribe_msg_tx_done_cb`), timeout error handling
+ * (`subscribe_t_3_5_char_expired_cb`), and Modbus frame error detection (`subscribe_modbus_frame_error_cb`).
+ *
+ * @note Implement these functions according to the requirements of your Modbus RTU
+ *       master or slave application. Ensure proper initialization and configuration
+ *       of the driver functions for reliable Modbus communication.
  */
 #ifndef _MODBUS_DRIVER_INTERFACE_H_
 #define _MODBUS_DRIVER_INTERFACE_H_

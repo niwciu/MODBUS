@@ -1,12 +1,24 @@
 
 /**
  * @file modbus_master.h
+ * @brief Declarations for Modbus master functions and initialization.
  * @author niwciu (niwciu@gmail.com)
- * @brief
  * @date 2024-05-27
- *
  * @copyright Copyright (c) 2024
  *
+ * This header file provides declarations for Modbus master functions and initialization routines.
+ * It includes functions for reading and writing coils (discrete outputs) and registers (input and holding),
+ * as well as initializing the Modbus master configuration and managing Modbus responses.
+ *
+ * Functions like `modbus_master_read_coils` and `modbus_master_write_single_reg` are used to perform
+ * Modbus transactions with a specified slave device identified by `slave_ID` and targeted data addresses (`adr`).
+ *
+ * The `modbus_master_init` function initializes the Modbus master with specified communication parameters
+ * such as mode (`mode`), baud rate (`baud_rate`), and parity (`parity`). The `check_modbus_master_manager` function,
+ * although suggested for renaming, is intended to manage Modbus responses or slave communications.
+ *
+ * @note Ensure correct usage of these functions according to the Modbus protocol specifications and your
+ *       application's requirements for reliable communication with Modbus slave devices.
  */
 #ifndef _MODBUS_MASTER_H_
 #define _MODBUS_MASTER_H_

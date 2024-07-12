@@ -1,12 +1,29 @@
 /**
  * @file modbus_master.c
- * @author niwciu (niwciu@gmail.com)
- * @brief
+ * @brief Implementation of a Modbus master protocol handler for embedded systems.
+ *
+ * This file provides robust functionalities to manage communication with Modbus-compatible
+ * slave devices. It supports reading and writing coils, discrete inputs, holding registers,
+ * and input registers, adhering to the Modbus RTU (Remote Terminal Unit) protocol over a
+ * serial interface.
+ *
  * @version 0.0.1
  * @date 2024-05-27
  *
- * @copyright Copyright (c) 2024
+ * @note
+ * - This implementation assumes the usage of Modbus RTU for communication with slave devices.
+ * - It includes error handling mechanisms, timeout management, and CRC checks for reliable
+ *   data transmission.
  *
+ * @see modbus_master.h for function declarations and data type definitions used in this file.
+ * @see modbus_master_PDU.h and modbus_master_RTU.h for definitions related to protocol data units
+ *      and the RTU driver interface.
+ * @see modbus_queue.h for the implementation of queue structures used in message management.
+ * @see modbus_RTU.h for functions specific to handling the Modbus RTU protocol.
+ * @see modbus_type.h for Modbus-specific data type definitions used throughout the implementation.
+ * @see modbus_driver_interface.h for the driver interface facilitating interaction with hardware.
+ * @see modbus_master_data_interface.h for data interface functions related to Modbus master operations.
+ * @see buf_rw.h for utility functions used for buffer read and write operations.
  */
 
 #include "modbus_master.h"
@@ -229,6 +246,27 @@ static void push_all_available_msg_buffer_to_free_queue(void)
     }
 }
 
+/**
+ * @brief Generates a Modbus request message and sends it to the specified slave device.
+ *
+ * This function performs the following operations:
+ * - Retrieves a Modbus message buffer (`msg_buf`) from the free queue (`free_q`).
+ * - Generates the Protocol Data Unit (PDU) data for the request based on the provided
+ *   request parameters (`req_param`) using the `generate_request_PDU_data` function.
+ * - Sends the generated request using the Modbus RTU transmission function (`modbus_RTU_send`).
+ * - Pushes the Modbus message buffer (`msg_buf`) into the transmission/reception queue (`tx_rx_q`).
+ *
+ * If any operation encounters an error or if the free queue is empty, appropriate error codes
+ * are returned to indicate the failure reason.
+ *
+ * @param req_param Pointer to the structure containing input parameters for the request,
+ *                 including function code, slave ID, and data pointers.
+ *
+ * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE Request successfully generated and sent to queue.
+ * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR Failed to pop a message buffer from the free queue.
+ * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR Error occurred during PDU data generation.
+ * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR Error occurred during Modbus RTU transmission.
+ */
 static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_param)
 {
     msg_buf = modbus_queue_pop(free_q);
@@ -251,6 +289,21 @@ static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_pa
     return MODBUS_MASTER_REQUEST_SEND_TO_QUEUE;
 }
 
+/**
+ * @brief Generates Modbus Protocol Data Unit (PDU) data based on the provided request parameters.
+ *
+ * This function iterates through the master functions mapper to find a match for the given
+ * function code (`req_param->fun_code`). Once a matching function is found, it invokes the
+ * corresponding action function from the mapper to populate the Modbus message buffer (`msg_buf`)
+ * with the required PDU data.
+ *
+ * @param msg_buf Pointer to the Modbus message buffer where the PDU data will be generated.
+ * @param req_param Pointer to the structure containing input parameters for the request,
+ *                 including function code and data pointers.
+ * @return modbus_ret_t Returns the status of the PDU generation process. If a matching function
+ *         code is found in the mapper, it returns the status of the action function execution.
+ *         If no match is found, it returns RET_ERROR_UNKNOWN_MAPPER_FUN_CODE.
+ */
 static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     modbus_ret_t PDU_ret_status = RET_ERROR_UNKNOWN_MAPPER_FUN_CODE;
@@ -259,46 +312,123 @@ static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, req_input_p
     {
         if (master_functions_mapper[i].fun_code == req_param->fun_code)
         {
-            // msg_buf->rw_data_ptr = req_param->rw_data_ptr;
             PDU_ret_status = master_functions_mapper[i].fun_code_action(msg_buf, req_param);
         }
     }
     return PDU_ret_status;
 }
 
+/**
+ * @brief Enables the Modbus response timeout timer with a specified timeout value.
+ *
+ * This function sets the Modbus response timeout timer (`modbus_master_resp_timeout_timer`)
+ * to a predefined timeout value (`MODBUS_MASTER_RESP_TIME_OUT_MS`). This timer is used
+ * to detect when a response from the Modbus slave device is overdue.
+ */
 static void modbus_master_enable_resp_timeout_timer(void)
 {
     modbus_master_resp_timeout_timer = MODBUS_MASTER_RESP_TIME_OUT_MS;
 }
+
+/**
+ * @brief Disables the Modbus response timeout timer.
+ *
+ * This function sets the Modbus response timeout timer (`modbus_master_resp_timeout_timer`)
+ * to zero, effectively disabling it. This is typically called when a Modbus response
+ * is received or handled, ensuring that no timeout occurs during active communication.
+ */
 static void modbus_master_disable_resp_timeout_timer(void)
 {
     modbus_master_resp_timeout_timer = 0;
 }
 
+/**
+ * @brief Notifies that a Modbus request has been successfully sent.
+ *
+ * This function is called by the driver to indicate that a Modbus request
+ * has been successfully transmitted over the communication channel. It clears
+ * the `MODBUS_MASTER_REQ_TRANSMITION_FLAG` to `MODBUS_FLAG_CLEARED`, allowing
+ * the system to proceed with subsequent operations.
+ *
+ * @note This callback function is typically used to synchronize actions after
+ * sending a Modbus request.
+ */
 static void modbus_master_req_sended_callback(void)
 {
     MODBUS_MASTER_REQ_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
 }
 
+/**
+ * @brief Sets the Modbus 1.5 character timeout flag upon timer expiration.
+ *
+ * This function sets the `MODBUS_MASTER_TIMER_1_5_CHAR_FLAG` to `MODBUS_FLAG_SET`.
+ * It serves as a callback function used to indicate that the 1.5 character timeout period
+ * has expired during Modbus communication.
+ *
+ * @note This function is typically registered with a timer or scheduler to handle the timeout
+ * condition required by the Modbus protocol for communication synchronization.
+ */
 static void modbus_master_T_1_5_char_expired_callback(void)
 {
     MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_SET;
 }
 
+/**
+ * @brief Sets the Modbus 3.5 character timeout flag upon timer expiration.
+ *
+ * This function sets the `MODBUS_MASTER_TIMER_3_5_CHAR_FLAG` to `MODBUS_FLAG_SET`.
+ * It is used as a callback function to indicate that the 3.5 character timeout period
+ * has expired during Modbus communication.
+ *
+ * @note This function is typically registered with a timer or scheduler to handle the timeout
+ * condition required by the Modbus protocol for communication synchronization.
+ */
 static void modbus_master_T_3_5_char_expired_callback(void)
 {
     MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_SET;
 }
 
+/**
+ * @brief Sets the Modbus frame error flag to indicate a detected frame error.
+ *
+ * This function sets the `MODBUS_MASTER_FRAME_ERROR_FLAG` to `MODBUS_FLAG_SET`.
+ * It serves as a callback function invoked by the USART driver upon detecting a frame error
+ * during Modbus communication.
+ *
+ * @note This function is typically registered with the USART driver to handle frame errors
+ * encountered while transmitting or receiving Modbus messages.
+ */
 static void modbus_master_frame_error_callback(void)
 {
     MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
 }
+/**
+ * @brief Checks the availability of data to send in a Modbus queue.
+ *
+ * This function checks if there is data available to send in the specified Modbus queue (`q`).
+ * It returns true if either of the following conditions is met:
+ * - The queue's head pointer (`head`) is not equal to its tail pointer (`tail`), indicating data is present.
+ * - The queue's last position status (`last_queue_pos_status`) equals `LAST_QUEUE_POS_STORE_DATA`.
+ *
+ * @param q Pointer to the Modbus queue structure (`modbus_queue_t`) to check.
+ * @return true if data is available to send, false otherwise.
+ */
 static bool check_data_to_send_availability(const modbus_queue_t *q)
 {
     return ((q->head != q->tail) || (LAST_QUEUE_POS_STORE_DATA == q->last_queue_pos_status));
 }
 
+/**
+ * @brief Handles the idle state in the Modbus master manager.
+ *
+ * This function checks if there is data available to send in the transmit/receive queue (`tx_rx_q`).
+ * If data is available:
+ * - It retrieves a message buffer (`msg_buf`) from the queue using `modbus_queue_pop`.
+ * - It sends the request stored in `msg_buf` by calling `modbus_master_send_req_from_msg_buf`.
+ *
+ * This function is responsible for managing the transition from the idle state to transmitting
+ * a Modbus request when data is available in the queue.
+ */
 static void modbus_master_idle_state_handling(void)
 {
     if (check_data_to_send_availability(tx_rx_q))
@@ -307,6 +437,18 @@ static void modbus_master_idle_state_handling(void)
         modbus_master_send_req_from_msg_buf();
     }
 }
+/**
+ * @brief Handles the state during Modbus message transmission.
+ *
+ * This function enables the response timeout timer and updates the state machine
+ * to indicate that the system is now waiting for a response (`MODBUS_MASTER_RESP_WAITING`).
+ *
+ * It checks if the transmission flag (`MODBUS_MASTER_REQ_TRANSMITION_FLAG`) is cleared,
+ * indicating that the system is ready to transmit a Modbus request.
+ * Upon clearing the transmission flag:
+ * - The response timeout timer is enabled using `modbus_master_enable_resp_timeout_timer`.
+ * - The state machine transitions to `MODBUS_MASTER_RESP_WAITING`.
+ */
 static void modbus_master_transmitting_state_handling(void)
 {
     if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
@@ -315,6 +457,18 @@ static void modbus_master_transmitting_state_handling(void)
         modbus_master_manager_state_machine = MODBUS_MASTER_RESP_WAITING;
     }
 }
+
+/**
+ * @brief Handles the state when waiting for a Modbus response.
+ *
+ * This function determines the appropriate action based on the state of timers
+ * and flags related to Modbus communication:
+ * - If `MODBUS_MASTER_TIMER_1_5_CHAR_FLAG` is set, it calls
+ *   `modbus_master_RTU_recv_state_handle` to handle the reception of Modbus data.
+ * - If `modbus_master_resp_timeout_timer` equals 1, indicating a response timeout,
+ *   it calls `modbus_master_resp_timeout_handle` to handle the timeout error
+ *   and subsequently ends the message processing using `modbus_master_msg_process_end`.
+ */
 static void modbus_master_resp_waiting_state_handling(void)
 {
     if (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_1_5_CHAR_FLAG)
@@ -328,6 +482,20 @@ static void modbus_master_resp_waiting_state_handling(void)
     }
 }
 
+/**
+ * @brief Handles the timeout event for a Modbus master response.
+ *
+ * This function is called when a timeout occurs while waiting for a response
+ * from a Modbus slave device:
+ * - Initializes a static instance of `modbus_master_error_report_t` for timeout error reporting.
+ * - Retrieves relevant data from `msg_buf` to populate `timeout_error`:
+ *   - `slave_ID`: Modbus slave address extracted from the request data.
+ *   - `data_adr`: Address field from the Modbus request.
+ *   - `data_qty`: Quantity field from the Modbus request.
+ *   - `fun_conde`: Function code from the Modbus response (if available).
+ *   - `resp_read_error`: Indicates a timeout error (`MODBUS_MASTER_RESP_TIMEOUT_ERR`).
+ * - Invokes `modbus_master_data_timeout_error` to handle and report the timeout error.
+ */
 void modbus_master_resp_timeout_handle()
 {
     static modbus_master_error_report_t timeout_error;
@@ -339,6 +507,23 @@ void modbus_master_resp_timeout_handle()
     modbus_master_data_timeout_error(&timeout_error);
 }
 
+/**
+ * @brief Handles the state when a Modbus RTU response is received.
+ *
+ * This function processes the response received from the Modbus RTU interface:
+ * - Resets the MODBUS_MASTER_TIMER_1_5_CHAR_FLAG and MODBUS_MASTER_TIMER_3_5_CHAR_FLAG
+ *   indicating the end of the response reception timing.
+ * - Calls modbus_RTU_recv to interpret the response and determines the RTU_status.
+ * - If RTU_status indicates a CRC error (RET_ERROR_CRC):
+ *   - Disables the Modbus response timeout timer.
+ *   - Sets MODBUS_MASTER_RTU_CRC_ERROR_FLAG to indicate a CRC error occurred.
+ *   - Updates modbus_master_manager_state_machine to MODBUS_MASTER_RESP_RECIVED.
+ * - If RTU_status indicates an invalid slave ID (RET_ERROR_SLAVE_ID):
+ *   - Resets the response length (msg_buf->resp.len) to 0.
+ * - If RTU_status is successful (RET_OK):
+ *   - Disables the Modbus response timeout timer.
+ *   - Updates modbus_master_manager_state_machine to MODBUS_MASTER_RESP_RECIVED.
+ */
 static void modbus_master_RTU_recv_state_handle()
 {
     modbus_ret_t RTU_status;
@@ -363,6 +548,21 @@ static void modbus_master_RTU_recv_state_handle()
     }
 }
 
+/**
+ * @brief Handles the state when a Modbus response is received.
+ *
+ * This function determines the appropriate action based on the flags and timers
+ * related to Modbus communication:
+ * - If both `MODBUS_MASTER_FRAME_ERROR_FLAG` and `MODBUS_MASTER_TIMER_3_5_CHAR_FLAG` are set,
+ *   it calls `modbus_master_frame_error_state_handling` to handle frame errors.
+ * - If both `MODBUS_MASTER_RTU_CRC_ERROR_FLAG` and `MODBUS_MASTER_TIMER_3_5_CHAR_FLAG` are set,
+ *   it calls `modbus_master_RTU_CRC_error_state_handling` to handle CRC errors.
+ * - If `MODBUS_MASTER_FRAME_ERROR_FLAG` and `MODBUS_MASTER_RTU_CRC_ERROR_FLAG` are cleared,
+ *   and `MODBUS_MASTER_TIMER_3_5_CHAR_FLAG` is set, it calls
+ *   `modbus_master_msg_recived_correctly_state_handle` to process the received message correctly.
+ * - Otherwise, it takes no action until `MODBUS_MASTER_TIMER_3_5_CHAR_FLAG` is set. This flag is set
+ *   after 3.5 character times of silence on the Modbus line.
+ */
 static void modbus_master_resp_recived_state_handling(void)
 {
     if ((MODBUS_FLAG_SET == MODBUS_MASTER_FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == MODBUS_MASTER_TIMER_3_5_CHAR_FLAG))
@@ -383,12 +583,35 @@ static void modbus_master_resp_recived_state_handling(void)
     }
 }
 
+/**
+ * @brief Handles the correct reception of a Modbus response message.
+ *
+ * This function is invoked when a Modbus response message is received correctly
+ * without any frame or CRC errors. It calls `modbus_master_read_slave_resp` to
+ * process the received response stored in `msg_buf`. After processing, it finalizes
+ * the message handling by calling `modbus_master_msg_process_end` to push the message
+ * buffer back to the free queue and transition the state machine to idle state (`MODBUS_MASTER_IDLE`).
+ */
 static void modbus_master_msg_recived_correctly_state_handle(void)
 {
     modbus_master_read_slave_resp(msg_buf);
     modbus_master_msg_process_end();
 }
 
+/**
+ * @brief Handles CRC error during Modbus master communication.
+ *
+ * This function is called when a CRC error is detected in the Modbus response during
+ * master communication. It increments the message repeat counter and checks if the maximum
+ * retry count (`MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR`) has been exceeded. If retries are within
+ * the limit, it transitions the state machine to repeat the request (`MODBUS_MASTER_REPEAT_REQUEST`)
+ * and clears the CRC error flag (`MODBUS_MASTER_RTU_CRC_ERROR_FLAG`).
+ *
+ * If retries exceed the limit, it constructs an error report (`error_rep`) containing
+ * details such as slave ID, function code, and error type (`MODBUS_MASTER_RESP_RTU_CRC_ERR`).
+ * The function then calls `modbus_master_communication_error` to handle the communication error
+ * and invokes `modbus_master_msg_process_end` to finalize the message processing.
+ */
 static void modbus_master_RTU_CRC_error_state_handling(void)
 {
     modbus_master_msg_repeat_couter++;
@@ -404,12 +627,25 @@ static void modbus_master_RTU_CRC_error_state_handling(void)
         error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
         error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
         error_rep.resp_read_error = MODBUS_MASTER_RESP_RTU_CRC_ERR;
-        // modbus_error_callback(&error_rep);
         modbus_master_communication_error(&error_rep);
         modbus_master_msg_process_end();
     }
 }
 
+/**
+ * @brief Handles frame error during Modbus master communication.
+ *
+ * This function is called when a frame error is detected during Modbus master communication.
+ * It increments the message repeat counter and checks if the maximum retry count
+ * (`MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR`) has been exceeded. If retries are within the limit,
+ * it transitions the state machine to repeat the request (`MODBUS_MASTER_REPEAT_REQUEST`)
+ * and clears the frame error flag (`MODBUS_MASTER_FRAME_ERROR_FLAG`).
+ *
+ * If retries exceed the limit, it constructs an error report (`error_rep`) containing
+ * details such as slave ID, function code, and error type (`MODBUS_MASTER_RESP_FRAME_ERR`).
+ * The function then calls `modbus_master_communication_error` to handle the communication error
+ * and invokes `modbus_master_msg_process_end` to finalize the message processing.
+ */
 static void modbus_master_frame_error_state_handling(void)
 {
     modbus_master_msg_repeat_couter++;
@@ -425,12 +661,22 @@ static void modbus_master_frame_error_state_handling(void)
         error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
         error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
         error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
-        // modbus_error_callback(&error_rep);
         modbus_master_communication_error(&error_rep);
         modbus_master_msg_process_end();
     }
 }
 
+/**
+ * @brief Finalizes the Modbus master message processing.
+ *
+ * This function finalizes the processing of the Modbus master message by performing
+ * the following actions:
+ * 1. Resets the Modbus master message repeat counter (`modbus_master_msg_repeat_couter`) to zero.
+ * 2. Pushes the Modbus message buffer (`msg_buf`) back into the free queue (`free_q`).
+ * 3. Transitions the Modbus master manager state machine (`modbus_master_manager_state_machine`)
+ *    to the idle state (`MODBUS_MASTER_IDLE`), indicating that the Modbus master is ready
+ *    for the next communication operation.
+ */
 static void modbus_master_msg_process_end(void)
 {
     modbus_master_msg_repeat_couter = 0;
