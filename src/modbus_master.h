@@ -14,7 +14,7 @@
  * Modbus transactions with a specified slave device identified by `slave_ID` and targeted data addresses (`adr`).
  *
  * The `modbus_master_init` function initializes the Modbus master with specified communication parameters
- * such as mode (`mode`), baud rate (`baud_rate`), and parity (`parity`). The `check_modbus_master_manager` function,
+ * such as mode (`mode`), baud rate (`baud_rate`), and parity (`parity`). The `update_modbus_master_manager` function,
  * although suggested for renaming, is intended to manage Modbus responses or slave communications.
  *
  * @note Ensure correct usage of these functions according to the Modbus protocol specifications and your
@@ -42,7 +42,7 @@ extern "C"
     modbus_master_req_ret_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr);
 
     void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity);
-    void check_modbus_master_manager(void); // ToDo zmiana nazwy na check_slave_respo albo master_parse_modbus_resp albo check_modbus_master_resp
+    void update_modbus_master_manager(void); // ToDo zmiana nazwy na check_slave_respo albo master_parse_modbus_resp albo check_modbus_master_resp
 
 #ifdef __cplusplus
 }

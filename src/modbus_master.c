@@ -92,12 +92,33 @@ static void modbus_master_frame_error_state_handling(void);
 
 static void modbus_master_msg_process_end(void);
 
+/**
+ * @brief Function pointer type for handling Modbus master function codes.
+ *
+ * This typedef defines a function pointer type for functions that handle Modbus master function codes.
+ *
+ * @param msg_buf Pointer to the Modbus message buffer.
+ * @param req_param Pointer to the request input parameters.
+ * @return Status of the Modbus operation.
+ */
 typedef modbus_ret_t (*modbus_master_fun_code_handler_t)(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param);
+
+/**
+ * @brief Structure mapping Modbus function codes to their corresponding handlers.
+ *
+ * This structure maps Modbus function codes to their corresponding handler functions.
+ */
 struct modbus_master_functions_mapper
 {
-    modbus_fun_code_t fun_code;
-    modbus_master_fun_code_handler_t fun_code_action;
+    modbus_fun_code_t fun_code;                       /**< Modbus function code */
+    modbus_master_fun_code_handler_t fun_code_action; /**< Function handler for the Modbus function code */
 };
+
+/**
+ * @brief Array mapping Modbus function codes to their corresponding handlers.
+ *
+ * This constant array maps Modbus function codes to their corresponding handler functions.
+ */
 const struct modbus_master_functions_mapper master_functions_mapper[] = {
     {MODBUS_READ_COILS_FUNC_CODE, modbus_master_read_coils_req},
     {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_master_read_discrete_inputs_req},
@@ -111,54 +132,182 @@ const struct modbus_master_functions_mapper master_functions_mapper[] = {
 
 #define MODBUS_MASTER_FUNCTIONS_MAPPER_SIZE (sizeof(master_functions_mapper) / sizeof(master_functions_mapper[0]));
 
-// void register_modbus_master_error_cb(modbus_master_error_cb_t error_callback)
-// {
-//     modbus_error_callback = error_callback;
-// }
-
+/**
+ * @brief Reads coils from a slave device.
+ *
+ * This function creates a request to read coils from a specified address on a slave device.
+ *
+ * @param adr The starting address to read coils from.
+ * @param coils_qty The quantity of coils to read.
+ * @param slave_ID The ID of the slave device to read from.
+ * @return The status of the Modbus master request.
+ * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
+ * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
+ * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
+ * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ */
 modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID)
 {
     req_input_param_struct_t req_input_param = {MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty, slave_ID, 0, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
 
+/**
+ * @brief Reads discrete inputs from a slave device.
+ *
+ * This function creates a request to read discrete inputs from a specified address on a slave device.
+ *
+ * @param adr The starting address to read discrete inputs from.
+ * @param discrete_input_qty The quantity of discrete inputs to read.
+ * @param slave_ID The ID of the slave device to read from.
+ * @return The status of the Modbus master request.
+ * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
+ * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
+ * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
+ * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ */
 modbus_master_req_ret_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID)
 {
     req_input_param_struct_t req_input_param = {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty, slave_ID, 0, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
 
+/**
+ * @brief Reads input registers from a slave device.
+ *
+ * This function creates a request to read input registers from a specified address on a slave device.
+ *
+ * @param adr The starting address to read input registers from.
+ * @param reg_qty The quantity of input registers to read.
+ * @param slave_ID The ID of the slave device to read from.
+ * @return The status of the Modbus master request.
+ * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
+ * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
+ * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
+ * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ */
 modbus_master_req_ret_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID)
 {
     req_input_param_struct_t req_input_param = {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty, slave_ID, 0, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
 
+/**
+ * @brief Reads holding registers from a slave device.
+ *
+ * This function creates a request to read holding registers from a specified address on a slave device.
+ *
+ * @param adr The starting address to read holding registers from.
+ * @param hreg_qty The quantity of holding registers to read.
+ * @param slave_ID The ID of the slave device to read from.
+ * @return The status of the Modbus master request.
+ * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
+ * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
+ * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
+ * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ */
 modbus_master_req_ret_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty, modbus_device_ID_t slave_ID)
 {
     req_input_param_struct_t req_input_param = {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty, slave_ID, 0, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
+
+/**
+ * @brief Writes a single coil to a slave device.
+ *
+ * This function creates a request to write a single coil to a specified address on a slave device.
+ *
+ * @param adr The address to write the coil to.
+ * @param slave_ID The ID of the slave device to write to.
+ * @param coil_2_write The value of the coil to write.
+ * @return The status of the Modbus master request.
+ * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
+ * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
+ * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
+ * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ */
 modbus_master_req_ret_t modbus_master_write_single_coil(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_coil_disin_t coil_2_write)
 {
     req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr, 0, slave_ID, coil_2_write, NULL, 0, NULL};
     return generate_request(&req_input_param);
 }
+
+/**
+ * @brief Writes a single register to a slave device.
+ *
+ * This function creates a request to write a single register to a specified address on a slave device.
+ *
+ * @param adr The address to write the register to.
+ * @param slave_ID The ID of the slave device to write to.
+ * @param reg_2_write The value of the register to write.
+ * @return The status of the Modbus master request.
+ * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
+ * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
+ * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
+ * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ */
 modbus_master_req_ret_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_reg_t reg_2_write)
 {
     req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr, 0, slave_ID, 0, NULL, reg_2_write, NULL};
     return generate_request(&req_input_param);
 }
+
+/**
+ * @brief Writes multiple registers to a slave device.
+ *
+ * This function creates a request to write multiple registers to a specified address on a slave device.
+ *
+ * @param adr The starting address to write the registers to.
+ * @param reg_qty The quantity of registers to write.
+ * @param slave_ID The ID of the slave device to write to.
+ * @param rw_data_ptr A pointer to the data to write to the registers.
+ * @return The status of the Modbus master request.
+ * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
+ * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
+ * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
+ * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ */
 modbus_master_req_ret_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID, modbus_reg_t *rw_data_ptr)
 {
     req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, adr, reg_qty, slave_ID, 0, NULL, 0, rw_data_ptr};
     return generate_request(&req_input_param);
 }
+
+/**
+ * @brief Writes multiple coils to a slave device.
+ *
+ * This function creates a request to write multiple coils to a specified address on a slave device.
+ *
+ * @param adr The starting address to write the coils to.
+ * @param coils_qty The quantity of coils to write.
+ * @param slave_ID The ID of the slave device to write to.
+ * @param rw_data_ptr A pointer to the data to write to the coils.
+ * @return The status of the Modbus master request.
+ * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
+ * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
+ * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
+ * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ */
 modbus_master_req_ret_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
 {
     req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, adr, coils_qty, slave_ID, 0, rw_data_ptr, 0, NULL};
     return generate_request(&req_input_param);
 }
+
+/**
+ * @brief Initializes the Modbus master.
+ *
+ * This function sets up the Modbus master by registering message request/response data buffers,
+ * initializing queues, and pushing all available message buffers to the free queue.
+ * It also initializes the RTU driver with the provided baud rate and parity settings, and registers
+ * the necessary callbacks for handling various Modbus events.
+ *
+ * @param mode The mode of Modbus communication (e.g., RTU).
+ * @param baud_rate The baud rate for the RTU communication.
+ * @param parity The parity setting for the RTU communication.
+ *
+ * @note This function sets up all internal flags and the Modbus master state machine to their default values.
+ */
 void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
     register_msg_req_resp_data_buffers(mode);
@@ -185,7 +334,21 @@ void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
     modbus_master_msg_repeat_couter = 0;        // ToDo init test for this var
     modbus_master_disable_resp_timeout_timer(); // ToDo init test for this var
 }
-void check_modbus_master_manager(void)
+
+/**
+ * @brief Updates the Modbus master state machine.
+ *
+ * This function manages the state transitions of the Modbus master state machine.
+ * Depending on the current state, it invokes the appropriate handler function:
+ * - `MODBUS_MASTER_IDLE`: Calls `modbus_master_idle_state_handling` to handle the idle state.
+ * - `MODBUS_MASTER_REPEAT_REQUEST`: Calls `modbus_master_send_req_from_msg_buf` to resend the request.
+ * - `MODBUS_MASTER_TRANSMITTING_REQ`: Calls `modbus_master_transmitting_state_handling` to handle the transmitting state.
+ * - `MODBUS_MASTER_RESP_WAITING`: Calls `modbus_master_resp_waiting_state_handling` to handle the response waiting state.
+ * - `MODBUS_MASTER_RESP_RECIVED`: Calls `modbus_master_resp_recived_state_handling` to handle the received response state.
+ *
+ * If the state does not match any of the above, it defaults to setting the state machine to `MODBUS_MASTER_IDLE`.
+ */
+void update_modbus_master_manager(void)
 {
     switch (modbus_master_manager_state_machine)
     {
@@ -204,9 +367,21 @@ void check_modbus_master_manager(void)
     case MODBUS_MASTER_RESP_RECIVED:
         modbus_master_resp_recived_state_handling();
         break;
+    default:
+        modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
+        break;
     }
 }
 
+/**
+ * @brief Sends the Modbus request from the message buffer.
+ *
+ * This function sends the Modbus request stored in `msg_buf` using the RTU driver.
+ * It sets up the RTU driver to receive the response, updates the transmission flag,
+ * and transitions the state machine to the transmitting request state.
+ *
+ * @note Assumes `RTU_driver` is properly initialized and `msg_buf` contains the request to be sent.
+ */
 static void modbus_master_send_req_from_msg_buf(void)
 {
     RTU_driver->send(msg_buf->req.data, msg_buf->req.len);
@@ -215,6 +390,18 @@ static void modbus_master_send_req_from_msg_buf(void)
     modbus_master_manager_state_machine = MODBUS_MASTER_TRANSMITTING_REQ;
 }
 
+/**
+ * @brief Registers request and response data buffers for Modbus messages based on the mode.
+ *
+ * This function assigns the appropriate data buffers to each Modbus message in the `modbus_msg` array
+ * depending on the specified Modbus mode. For the RTU mode, it assigns the `master_RTU_req_buf` and
+ * `master_RTU_resp_buf` buffers. If a different mode is provided, it sets the data pointers to `NULL`.
+ *
+ * @param mode The Modbus mode to configure (e.g., RTU).
+ *
+ * @note The function assumes that `modbus_msg` is an array containing Modbus message structures,
+ *       and `master_RTU_req_buf` and `master_RTU_resp_buf` are arrays of buffers for the RTU mode.
+ */
 static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
 {
     if (RTU == mode)
@@ -236,6 +423,16 @@ static void register_msg_req_resp_data_buffers(modbus_mode_t mode)
     }
 }
 
+/**
+ * @brief Pushes all available Modbus message buffers to the free queue.
+ *
+ * This function iterates through all Modbus message buffers defined in `modbus_msg` and
+ * pushes each buffer into the free queue (`free_q`). This is typically used during
+ * initialization to ensure all message buffers are available for future use.
+ *
+ * @note This function assumes that `modbus_msg` is an array containing the available Modbus message buffers,
+ *       and `free_q` is a queue intended to store these buffers for future allocation.
+ */
 static void push_all_available_msg_buffer_to_free_queue(void)
 {
     modbus_msg_t *msg_ptr;
