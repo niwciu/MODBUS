@@ -1,0 +1,49 @@
+/**
+ * @file modbus_driver_config.h
+ * @author niwciu (niwciu@gmail.com)
+ * @brief
+ * @version 0.0.1
+ * @date 2024-05-24
+ *
+ * @copyright Copyright (c) 2024
+ *
+ */
+#pragma once
+
+#include "stm32g070xx.h"
+
+#define RX_DATA_BUF_SIZE 256
+#define LOW 0
+#define HIGH 1
+
+/** modbus USART and Timer selection configuration*/
+#define MODBUS_USART (USART1)
+#define MODBUS_USART_CLK APBENR2
+#define MODBUS_USART_CLK_EN (RCC_APBENR2_USART1EN)
+#define MODBUS_USART_CLK_FREQ 64000000UL
+#define MODBUS_USART_IRQN USART1_IRQn
+#define MODBUS_USART_IRQHandler USART1_IRQHandler
+#define MODBUS_USART_IRQ_PRIORITY 10
+
+#define MODBUS_USART_PORT (GPIOB)
+#define MODBUS_USART_RX_MODE (GPIO_MODER_MODE7_1)
+#define MODBUS_USART_TX_MODE (GPIO_MODER_MODE6_1)
+#define MODBUS_USART_DE_MODE (GPIO_MODER_MODE3_1)
+#define MODBUS_USART_RX_MODE_Msk (GPIO_MODER_MODE7)
+#define MODBUS_USART_TX_MODE_Msk (GPIO_MODER_MODE6)
+#define MODBUS_USART_DE_MODE_Msk (GPIO_MODER_MODE3)
+#define MODBUS_USART_RX_AF_Msk (GPIO_AFRL_AFSEL7)
+#define MODBUS_USART_TX_AF_Msk (GPIO_AFRL_AFSEL6)
+#define MODBUS_USART_DE_AF_Msk (GPIO_AFRL_AFSEL3)
+#define MODBUS_USART_RX_AF (0)
+#define MODBUS_USART_TX_AF (0)
+#define MODBUS_USART_DE_AF (GPIO_AFRL_AFSEL3_2)
+#define MODBUS_USART_AF_REG (LOW)
+#define MODBUS_USART_GPIO_CLK_EN (RCC_IOPENR_GPIOBEN)
+
+#define MODBUS_TIMER (TIM7)
+#define MODBUS_TIMER_CLK_EN (RCC_APBENR1_TIM7EN)
+#define MODBUS_TIMER_CLK_FREQ 64000000UL
+#define MODBUS_TIMER_IRQN TIM7_IRQn
+#define MODBUS_TIMER_IRQHandler TIM7_LPTIM2_IRQHandler
+#define MODBUS_TIMER_IRQ_PRIORITY 10
