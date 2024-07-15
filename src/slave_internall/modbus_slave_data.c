@@ -11,7 +11,7 @@
 #include "modbus_slave_data.h"
 #include <stdio.h>
 
-modbus_reg_t readed_data =0;
+modbus_reg_t readed_data = 0;
 modbus_reg_t *Slave_Holding_Registers[HOLDING_REG_QTY];        /**< Array of pointers to holding registers for the Modbus slave. */
 modbus_reg_t *Slave_Input_Registers[INPUT_REG_QTY];            /**< Array of pointers to input registers for the Modbus slave. */
 modbus_coil_disin_t *Slave_Coils[COILS_QTY];                   /**< Array of pointers to coils for the Modbus slave. */

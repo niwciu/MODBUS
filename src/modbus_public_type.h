@@ -111,14 +111,14 @@ extern "C"
 
     typedef struct
     {
-        modbus_device_ID_t slave_ID;                    /**< Modbus slave ID. */
-        modbus_fun_code_t fun_conde;                    /**< Modbus function code. */
-        modbus_exception_code_t exception_code;         /**< Modbus exception code. */
-        modbus_adr_t data_adr;                          /**< Modbus adress of processed object. */
-        modbus_data_qty_t data_qty;                     /**< Quantitt of processed object. First object located under data_adr position. */
+        modbus_device_ID_t slave_ID;            /**< Modbus slave ID. */
+        modbus_fun_code_t fun_conde;            /**< Modbus function code. */
+        modbus_exception_code_t exception_code; /**< Modbus exception code. */
+        modbus_adr_t data_adr;                  /**< Modbus adress of processed object. */
+        modbus_data_qty_t data_qty;             /**< Quantitt of processed object. First object located under data_adr position. */
         // modbus_coil_disin_t readed_coil_val;
         // modbus_reg_t readed_reg_val;
-       
+
     } modbus_read_data_t;
 
     /**

@@ -79,7 +79,7 @@ static const modbus_function_mapper_t modbus_slave_function_mapper[] = {
  */
 modbus_ret_t parse_master_request_and_prepare_resp(modbus_msg_t *rx_msg)
 {
-    
+
     if ((NULL == rx_msg) || (NULL == rx_msg->req.data) || (NULL == rx_msg->resp.data))
     {
         return RET_NULL_PTR_ERROR;

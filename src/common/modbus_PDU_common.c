@@ -50,4 +50,3 @@ void clear_coil_din_status_byte(modbus_buf_t *buf, modbus_data_qty_t qty)
         *(buf + i) = 0;
     }
 }
-
