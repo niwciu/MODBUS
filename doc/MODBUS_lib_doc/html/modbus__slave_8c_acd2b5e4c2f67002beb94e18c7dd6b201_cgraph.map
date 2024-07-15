@@ -1,0 +1,5 @@
+<map id="register_app_data_to_modbus_slave_inreg_table" name="register_app_data_to_modbus_slave_inreg_table">
+<area shape="rect" id="Node000001" title="Registers application data to Modbus slave input registers table." alt="" coords="5,5,186,48"/>
+<area shape="rect" id="Node000002" href="$modbus__slave__data_8c.html#ad7ea9a889feaf7f8dbced706d0db3123" title="Registers application data to the Modbus holding or input registers table." alt="" coords="234,5,376,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,24,218,24,218,29,186,29"/>
+</map>

@@ -1,0 +1,35 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_slave.c" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_slave.c">
+<area shape="rect" id="Node000001" title="Implementation of Modbus slave functions for handling communication and data management." alt="" coords="321,5,505,64"/>
+<area shape="rect" id="Node000002" href="$modbus__slave_8h.html" title="Declarations of Modbus slave functions for handling communication and data management." alt="" coords="626,261,741,288"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="497,62,542,83,588,110,632,144,668,185,682,215,686,246,681,246,676,217,664,188,628,148,585,115,539,88,495,67"/>
+<area shape="rect" id="Node000006" href="$modbus__slave___p_d_u_8h.html" title="Header file for Modbus Slave Protocol Data Unit (PDU) handling." alt="" coords="5,112,154,139"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="322,63,142,110,141,105,320,58"/>
+<area shape="rect" id="Node000008" href="$modbus__type_8h.html" title="Header file defining types and constants for Modbus protocol implementation." alt="" coords="256,261,367,288"/>
+<area shape="poly" id="edge16_Node000001_Node000008" title=" " alt="" coords="399,65,369,121,339,188,321,247,316,245,334,186,365,119,394,63"/>
+<area shape="rect" id="Node000010" href="$modbus__slave___r_t_u_8h.html" title="Header file for Modbus RTU slave functionality." alt="" coords="178,112,325,139"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="362,67,289,107,286,102,359,62"/>
+<area shape="rect" id="Node000011" href="$modbus___r_t_u_8h.html" title="Header file for Modbus RTU communication protocol implementation." alt="" coords="348,187,459,213"/>
+<area shape="poly" id="edge13_Node000001_Node000011" title=" " alt="" coords="414,64,408,171,402,171,409,64"/>
+<area shape="rect" id="Node000012" href="$modbus__driver__interface_8h.html" title="Defines the interface for a Modbus RTU driver." alt="" coords="483,187,655,213"/>
+<area shape="poly" id="edge17_Node000001_Node000012" title=" " alt="" coords="442,62,549,174,545,177,438,66"/>
+<area shape="rect" id="Node000013" title=" " alt="" coords="729,112,796,139"/>
+<area shape="poly" id="edge20_Node000001_Node000013" title=" " alt="" coords="506,57,714,109,713,114,504,62"/>
+<area shape="rect" id="Node000003" href="$modbus__public__type_8h.html" title="Defines public types and enums used in Modbus communication." alt="" coords="348,336,499,363"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="639,291,484,334,483,329,637,286"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="507,411,572,437"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="445,361,508,400,505,404,442,365"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="386,411,461,437"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="426,363,426,395,421,395,421,363"/>
+<area shape="rect" id="Node000007" href="$modbus__slave__data_8h_source.html" title=" " alt="" coords="77,187,223,213"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="94,137,129,174,126,177,90,141"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="179,211,271,252,268,257,177,216"/>
+<area shape="rect" id="Node000009" href="$modbus__config_8h.html" title="Defines configuration constants for a Modbus master application." alt="" coords="192,336,311,363"/>
+<area shape="poly" id="edge10_Node000007_Node000009" title=" " alt="" coords="161,212,236,322,232,325,157,215"/>
+<area shape="poly" id="edge8_Node000008_Node000003" title=" " alt="" coords="332,286,393,325,390,330,330,291"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="303,290,273,326,269,322,299,287"/>
+<area shape="poly" id="edge12_Node000010_Node000008" title=" " alt="" coords="259,138,303,246,298,248,254,140"/>
+<area shape="poly" id="edge15_Node000011_Node000003" title=" " alt="" coords="408,213,422,320,417,321,403,214"/>
+<area shape="poly" id="edge14_Node000011_Node000008" title=" " alt="" coords="389,216,341,254,337,250,386,212"/>
+<area shape="poly" id="edge19_Node000012_Node000004" title=" " alt="" coords="570,214,546,396,540,395,565,214"/>
+<area shape="poly" id="edge18_Node000012_Node000008" title=" " alt="" coords="525,216,372,259,370,254,523,211"/>
+</map>

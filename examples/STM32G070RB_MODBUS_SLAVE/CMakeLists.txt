@@ -22,14 +22,15 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_TOOLCHAIN_FILE ../config/STM32/Toolchain-arm-gcc.cmake)
 
 set(CUSTOM_TARGETS_FILE_DIR ./custom_targets.cmake)
+
 # Allow assembler
 enable_language(ASM)
 
-project(STM32G070RB_MODBUS_SLAVE)
+project(STM32G070RB_MODBUS_SLAVE_HW_TEST)
 
 set(INCLUDE_DIRS
 Core
-Core/Inc
+Core/Inc/
 Core/Startup
 
 Drivers
@@ -38,12 +39,10 @@ Drivers/CMSIS/Device
 Drivers/CMSIS/Include
 Drivers/CMSIS/STM32G0_Drivers
 Drivers/STM32G0_Drivers/core_init
-Drivers/STM32G0_Drivers/core_usart
 
-
-../src
-
-../lib
+../../src
+../../src/common
+../../src/slave_internall
 
 .
 )
@@ -53,8 +52,16 @@ set(C_SRCS
     Core/Src/syscalls.c
     Core/Src/sysmem.c
     Drivers/STM32G0_Drivers/core_init/core_init.c
-    Drivers/STM32G0_Drivers/usart/usart.c
+    Drivers/STM32G0_Drivers/modbus_driver_interface.c
 
+	../../src/slave_internall/modbus_slave_PDU.c
+    ../../src/slave_internall/modbus_slave_RTU.c
+    ../../src/common/modbus_RTU.c
+    ../../src/slave_internall/modbus_slave_data.c
+    ../../src/common/modbus_crc.c
+    ../../src/common/buf_rw.c
+    ../../src/modbus_slave.c
+    ../../src/common/modbus_PDU_common.c
 	
 )
 
@@ -73,6 +80,7 @@ set(LINKED_LIBS
 link_directories(
 
 )
+
 include(${CUSTOM_TARGETS_FILE_DIR})
 
 include_directories(${INCLUDE_DIRS})

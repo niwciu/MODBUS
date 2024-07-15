@@ -11,33 +11,22 @@
 
 #include "mock_slave_driver_interface.h"
 
-#include "mem.h"
+#include "memory.h"
 
-// typedef struct
-// {
-//     modbus_buf_t *cur_byte_ptr;
-//     modbus_buf_t *last_byte_ptr;
-// } tx_buf_t;
-// tx_buf_t tx_buf;
-
-// modbus_buf_t *rx_data = NULL;
-// rx_cb_t rx_callback = NULL;
 driver_subscr_cb_t mock_msg_tx_done_cb = NULL;
 driver_subscr_cb_t mock_1_5_char_break_cb = NULL;
 driver_subscr_cb_t mock_3_5_char_break_cb = NULL;
 driver_subscr_cb_t mock_frame_error_cb = NULL;
 
-// modbus_buf_t slave_rx_buf[MODBUS_RTU_BUFFER_SIZE];
-
 driver_init_status_t mock_slave_USART = {0, NONE, INIT_UNKNOWN, IRQ_DISABLED, IRQ_DISABLED};
 timer_state_t mock_1_5_char_timer = TIMER_INACTIVE;
 timer_state_t mock_3_5_char_timer = TIMER_INACTIVE;
 
-modbus_req_resp_t *rx_buf = NULL;
+modbus_req_resp_t *rx_msg = NULL;
 
-USART_Rx_status_t USART_Tx_status = USART_IDLE;
-modbus_buf_t mock_rx_buffer[MODBUS_RTU_BUFFER_SIZE];
-modbus_buf_t *mock_rx_buffer_ptr;
+USART_Tx_status_t slave_USART_Tx_status = USART_IDLE;
+modbus_buf_t mock_slave_tx_buffer[MODBUS_RTU_BUFFER_SIZE];
+modbus_buf_t *mock_slave_tx_buffer_ptr;
 
 static void slave_usart_init(baud_t baud, parity_t parity);
 static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
@@ -73,14 +62,14 @@ static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 {
     for (uint8_t i = 0; i < msg_len; i++)
     {
-        mock_rx_buffer[i] = tx_msg[i];
+        mock_slave_tx_buffer[i] = tx_msg[i];
     }
-    mock_rx_buffer_ptr = tx_msg;
-    USART_Tx_status = USART_SENDING_DATA;
+    mock_slave_tx_buffer_ptr = tx_msg;
+    slave_USART_Tx_status = USART_SENDING_DATA;
 }
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 {
-    rx_buf = recv_buf;
+    rx_msg = recv_buf;
     mock_slave_USART.Rx_IRQ = IRQ_ENABLED;
 }
 

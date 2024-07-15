@@ -1,0 +1,9 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_master_data_interface.h" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_master_data_interface.h">
+<area shape="rect" id="Node000001" title="Defines functions for Modbus master data operations and error handling." alt="" coords="5,5,223,64"/>
+<area shape="rect" id="Node000002" href="$modbus__public__type_8h.html" title="Defines public types and enums used in Modbus communication." alt="" coords="38,112,190,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,64,117,96,111,96,111,64"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="35,187,100,213"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,141,86,175,81,172,104,138"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="124,187,198,213"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="124,138,147,172,142,175,120,141"/>
+</map>

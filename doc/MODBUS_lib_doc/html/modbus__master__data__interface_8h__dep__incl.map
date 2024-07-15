@@ -1,0 +1,7 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_master_data_interface.h" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_master_data_interface.h">
+<area shape="rect" id="Node000001" title="Defines functions for Modbus master data operations and error handling." alt="" coords="92,5,310,64"/>
+<area shape="rect" id="Node000002" href="$modbus__master___p_d_u_8c.html" title="Implementation file for Modbus master protocol data unit (PDU) functionality." alt="" coords="5,112,189,187"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,77,133,113,129,110,163,73"/>
+<area shape="rect" id="Node000003" href="$modbus__master_8c.html" title="Implementation of a Modbus master protocol handler for embedded systems." alt="" coords="213,120,397,179"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="240,74,280,118,276,121,236,77"/>
+</map>

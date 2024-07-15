@@ -1,8 +1,18 @@
 /**
  * @file modbus_slave.h
  * @author niwciu (niwciu@gmail.com)
- * @brief
+ * @brief Declarations of Modbus slave functions for handling communication and data management.
  * @date 2024-05-31
+ *
+ * This header file contains the declarations of functions and types related to Modbus slave
+ * communication. It provides interfaces for initializing the Modbus slave, registering application
+ * data to Modbus tables (coils, discrete inputs, input registers, holding registers), and checking
+ * Modbus requests.
+ *
+ * Functions defined in this header are intended to work with a Modbus RTU driver for serial communication,
+ * providing necessary functionality for Modbus slave devices to communicate with a Modbus master.
+ *
+ * @see modbus_slave.c for the corresponding implementation file.
  *
  * @copyright Copyright (c) 2024
  *

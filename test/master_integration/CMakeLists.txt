@@ -57,10 +57,11 @@ set(SRCS
 	../../src/slave_internall/modbus_slave_PDU.c
 	../../src/slave_internall/modbus_slave_RTU.c
 	../../src/common/buf_rw.c
-	../../src/common/modbus_data.c
+	../../src/slave_internall/modbus_slave_data.c
 	../../src/common/modbus_crc.c
 	../../src/common/modbus_RTU.c
 	../../src/common/modbus_queue.c
+	../../src/common/modbus_PDU.c
 	../../src/modbus_master.c
 )
 
@@ -68,12 +69,14 @@ set(TEST_SRCS
     master_integration_test_main.c
     ../modbus/master_RTU_init_test_runner.c
     ../modbus/master_RTU_init_test.c
+	../modbus/master_RTU_req_gen_test_runner.c
+    ../modbus/master_RTU_req_gen_test.c
 	../modbus/master_RTU_test_runner.c
 	../modbus/master_RTU_test.c
 	../modbus/mock_slave_driver_interface.c
 	../modbus/mock_slave_app_data.c
-	../modbus/mock_master_app_data.c
 	../modbus/mock_master_driver_interface.c
+
 	#mock_module.c
 )
 

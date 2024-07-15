@@ -11,7 +11,7 @@
 
 TEST_GROUP(Slave_RTU_init_test);
 
-extern modbus_msg_t slave_msg[MAX_MODBUS_MSG_QUEUE_ITEMS];
+extern modbus_msg_t slave_msg[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS];
 
 extern modbus_queue_t *slave_free_q;
 extern modbus_queue_t *slave_tx_rx_q;

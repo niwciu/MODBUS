@@ -8,20 +8,21 @@
  *
  */
 #include "modbus_driver_interface.h"
+#include "mock_master_slave_common.h"
 
 #pragma once
 
-typedef enum
-{
-    INIT_UNKNOWN,
-    DRIVER_INITIALIZED,
-} init_status_t;
+extern driver_init_status_t mock_master_USART;
 
-typedef struct
-{
-    baud_t baud_rate;
-    parity_t parity;
-    init_status_t init_status;
-} driver_init_status_t;
+extern driver_subscr_cb_t mock_master_msg_tx_done_cb;
+extern driver_subscr_cb_t mock_master_1_5_char_break_cb;
+extern driver_subscr_cb_t mock_master_3_5_char_break_cb;
+extern driver_subscr_cb_t mock_master_frame_error_cb;
+extern modbus_buf_t *mock_master_tx_buf_ptr;
+extern modbus_req_resp_t *mock_master_rx_msg_ptr;
+extern USART_Tx_status_t master_USART_Tx_status;
 
-extern driver_init_status_t mock_USART;
+void mock_USART_req_msg_sended_EVENT(void);
+void mock_USART_T_1_5_timeout_EVENT(void);
+void mock_USART_T_3_5_timeout_EVENT(void);
+void mock_USART_frame_error_EVENT(void);

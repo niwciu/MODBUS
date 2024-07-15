@@ -1,7 +1,7 @@
 /**
  * @file modbus_slave_RTU.h
+ * @brief Header file for Modbus RTU slave functionality.
  * @author niwciu (niwciu@gmail.com)
- * @brief
  * @version 0.0.1
  * @date 2024-06-28
  *

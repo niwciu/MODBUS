@@ -57,11 +57,13 @@ set(C_SRCS
     Drivers/STM32G0_Drivers/modbus_driver_interface.c
 
 	../../../src/slave_internall/modbus_slave_PDU.c
+    ../../../src/slave_internall/modbus_slave_RTU.c
     ../../../src/common/modbus_RTU.c
-    ../../../src/common/modbus_data.c
+    ../../../src/slave_internall/modbus_slave_data.c
     ../../../src/common/modbus_crc.c
     ../../../src/common/buf_rw.c
     ../../../src/modbus_slave.c
+    ../../../src/common/modbus_PDU_common.c
 	
 )
 
