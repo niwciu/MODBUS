@@ -12,5 +12,6 @@ int main(int argc, const char **argv)
 static void run_all_tests(void)
 {
     RUN_TEST_GROUP(master_RTU_init_test);
-    RUN_TEST_GROUP(master_RTU_test);
+    RUN_TEST_GROUP(Master_RTU_req_gen_test);
+    RUN_TEST_GROUP(Master_RTU_test);
 }
