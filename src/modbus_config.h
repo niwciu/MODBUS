@@ -27,13 +27,6 @@ extern "C"
 #define MODBUS_MASTER_RESP_TIME_OUT_MS 1000               /**< Modbus master response timeout in milliseconds. */
 #define MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR 3           /**< Number of retries on any Modbus master error. */
 
-#ifdef UNIT_TEST
-#define MAIN_APP_COILS_QTY              MODBUS_MAX_READ_COILS_QTY + 1            /**< Quantity of coils for unit testing. */
-#define MAIN_APP_DISCRET_INPUTS_QTY     MODBUS_MAX_READ_DISCRETE_INPUTS_QTY + 1  /**< Quantity of discrete inputs for unit testing. */
-#define MAIN_APP_INPUT_REG_QTY          MODBUS_MAX_READ_REG_QTY + 1              /**< Quantity of input registers for unit testing. */
-#define MAIN_APP_HOLDING_REG_QTY        MODBUS_MAX_READ_REG_QTY + 1              /**< Quantity of holding registers for unit testing. */
-#endif
-
 #ifndef UNIT_TEST
 #define MAIN_APP_COILS_QTY              100                                      /**< Default quantity of coils. */
 #define MAIN_APP_DISCRET_INPUTS_QTY     100                                      /**< Default quantity of discrete inputs. */
