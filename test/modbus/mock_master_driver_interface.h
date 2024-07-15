@@ -11,9 +11,8 @@
 #include "mock_master_slave_common.h"
 
 #pragma once
-#define MASTER_COILS_TABLE_SIZE 10
 
-extern modbus_coil_disin_t mock_master_coils[MASTER_COILS_TABLE_SIZE];
+
 
 extern driver_init_status_t mock_master_USART;
 

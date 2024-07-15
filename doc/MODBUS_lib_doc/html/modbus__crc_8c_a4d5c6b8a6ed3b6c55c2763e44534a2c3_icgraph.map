@@ -1,0 +1,7 @@
+<map id="calculate_CRC" name="calculate_CRC">
+<area shape="rect" id="Node000001" title="Calculates CRC (Cyclic Redundancy Check) for given data buffer." alt="" coords="188,31,295,57"/>
+<area shape="rect" id="Node000002" href="$modbus___r_t_u_8c.html#af819eb2a50b22193da5c1a01b4c36f11" title="Receives and validates a Modbus RTU message." alt="" coords="8,5,137,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="172,36,137,31,138,26,173,31"/>
+<area shape="rect" id="Node000003" href="$modbus___r_t_u_8c.html#a37bdeebf867bda0c5bc4c4a2af4cc167" title="Generates a Modbus RTU message ready to send." alt="" coords="5,56,140,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,57,141,62,140,57,172,52"/>
+</map>

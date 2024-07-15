@@ -70,6 +70,7 @@ extern "C"
 #define MODBUS_REQUEST_WRITE_MULTI_DATA_IDX (MODBUS_PDU_BUF_OFFSET + 6U)
 #define MODBUS_RESP_READ_BYTE_CNT_IDX (MODBUS_PDU_BUF_OFFSET + 1U)
 #define MODBUS_RESP_READ_DATA_IDX (MODBUS_PDU_BUF_OFFSET + 2U)
+
 #define MODBUS_RESP_WRITE_ADR_IDX (MODBUS_PDU_BUF_OFFSET + 1U)
 #define MODBUS_RESP_WRITE_SINGLE_DATA_IDX (MODBUS_PDU_BUF_OFFSET + 3U)
 #define MODBUS_RESP_WRITE_MULTIPLE_DATA_QTY_IDX (MODBUS_PDU_BUF_OFFSET + 3U)
@@ -97,8 +98,8 @@ extern "C"
      */
     typedef enum
     {
-        COIL_OFF = 0x0000, ///< Coil is off.
-        COIL_ON = 0xFF00,  ///< Coil is on.
+        COIL_OFF = 0x0000, /**< Coil is off. */
+        COIL_ON = 0xFF00,  /**< Coil is on. */
     } modbus_w_coil_t;
 
     /**
@@ -106,19 +107,20 @@ extern "C"
      */
     typedef enum
     {
-        RET_ERROR_EXCEPTION_CODE_RECIVED = -12,    ///< Error: Exception code received
-        RET_ERROR_UNKNOWN_MAPPER_FUN_CODE = -11,   ///< Error: Unknown mapper function code
-        RET_NULL_PTR_ERROR = -10,                  ///< Error: Null pointer
-        RET_ERROR_WRITE_MULTI_OUT_QTY = -9,        ///< Error: Write multiple out of quantity
-        RET_ERROR_WRITE_SINGLE_OUT_VAL = -8,       ///< Error: Write single out of value
-        RET_ERROR_WRITE_OUT_ADR = -7,              ///< Error: Write out of address
-        RET_ERROR_DATA_TAB_NULL_PTR = -6,          ///< Error: Data table null pointer
-        RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH = -5, ///< Error: Request/response function code mismatch
-        RET_ERROR_BYTE_CNT = -4,                   ///< Error: Byte count mismatch
-        RET_ERROR_CRC = -3,                        ///< Error: CRC error
-        RET_ERROR_SLAVE_ID = -2,                   ///< Error: Invalid slave ID
-        RET_ERROR = -1,                            ///< General error
-        RET_OK = 0,                                ///< Operation successful
+        RET_ERROR_EXCEPTION_CODE_RECIVED = -12,    /**< Error: Exception code received */
+        RET_ERROR_UNKNOWN_MAPPER_FUN_CODE = -11,   /**< Error: Unknown mapper function cod */
+        RET_NULL_PTR_ERROR = -10,                  /**< Error: Null pointer */
+        RET_ERROR_WRITE_MULTI_OUT_QTY = -9,        /**< Error: Write multiple out of quantity */
+        RET_ERROR_WRITE_SINGLE_OUT_VAL = -8,       /**< Error: Write single out of value */
+        RET_ERROR_WRITE_OUT_ADR = -7,              /**< Error: Write out of address */
+        RET_ERROR_DATA_TAB_NULL_PTR = -6,          /**< Error: Data table null pointer */
+        RET_ERROR_REQ_RESP_FUN_CODE_MISMATCH = -5, /**< Error: Request/response function code mismatch */
+        RET_ERROR_BYTE_CNT = -4,                   /**< Error: Byte count mismatch */
+        RET_ERROR_CRC = -3,                        /**< Error: CRC error */
+        RET_ERROR_SLAVE_ID = -2,                   /**< Error: Invalid slave ID */
+        RET_ERROR = -1,                            /**< General error */
+        RET_OK = 0,
+        MAX_RET_VAL = 0xFFFF, /**< MAX_RET_VAL defined for set max scope of the enum returned value in case of returning a readed number. */
     } modbus_ret_t;
 
     /**
@@ -126,11 +128,11 @@ extern "C"
      */
     typedef enum
     {
-        MODBUS_MASTER_IDLE,             ///< Master is idle
-        MODBUS_MASTER_REPEAT_REQUEST,   ///< Master is repeating a request
-        MODBUS_MASTER_TRANSMITTING_REQ, ///< Master is transmitting a request
-        MODBUS_MASTER_RESP_WAITING,     ///< Master is waiting for a response
-        MODBUS_MASTER_RESP_RECIVED,     ///< Master has received a response
+        MODBUS_MASTER_IDLE,             /**< Master is idle */
+        MODBUS_MASTER_REPEAT_REQUEST,   /**< Master is repeating a request */
+        MODBUS_MASTER_TRANSMITTING_REQ, /**< Master is transmitting a request */
+        MODBUS_MASTER_RESP_WAITING,     /**< Master is waiting for a response */
+        MODBUS_MASTER_RESP_RECIVED,     /**< Master has received a response */
     } modbus_master_state_t;
 
     /**
@@ -138,10 +140,10 @@ extern "C"
      */
     typedef enum
     {
-        MODBUS_SLAVE_IDLE,             ///< Slave is idle
-        MODBUS_SLAVE_MSG_RECIVED,      ///< Slave has received a message
-        MODBUS_SLAVE_TRANSMITTING_RESP, ///< Slave is transmitting a response
-        MODBUS_SLAVE_UNKNOWN,          ///< Slave state is unknown
+        MODBUS_SLAVE_IDLE,              /**< Slave is idle */
+        MODBUS_SLAVE_MSG_RECIVED,       /**< Slave has received a message */
+        MODBUS_SLAVE_TRANSMITTING_RESP, /**< Slave is transmitting a response */
+        MODBUS_SLAVE_UNKNOWN,           /**< Slave state is unknown */
     } modbus_slave_state_t;
 
     /**
@@ -149,9 +151,9 @@ extern "C"
      */
     typedef enum
     {
-        MODBUS_FLAG_CLEARED, ///< Flag is cleared
-        MODBUS_FLAG_SET,     ///< Flag is set
-        MODBUS_FLAG_UNKNOWN, ///< Flag status is unknown
+        MODBUS_FLAG_CLEARED, /**< Flag is cleared */
+        MODBUS_FLAG_SET,     /**< Flag is set */
+        MODBUS_FLAG_UNKNOWN, /**< Flag status is unknown */
     } modbus_status_flag_t;
 
     /**
@@ -159,8 +161,8 @@ extern "C"
      */
     typedef enum
     {
-        LAST_QUEUE_POS_EMPTY,      ///< Last queue position is empty
-        LAST_QUEUE_POS_STORE_DATA, ///< Last queue position stores data
+        LAST_QUEUE_POS_EMPTY,      /**< Last queue position is empty */
+        LAST_QUEUE_POS_STORE_DATA, /**< Last queue position stores data */
     } last_q_pos_status_t;
 
     typedef uint16_t modbus_data_t;
@@ -179,8 +181,8 @@ extern "C"
      */
     typedef struct
     {
-        modbus_buf_t *data;    ///< Pointer to the data buffer
-        modbus_buf_size_t len; ///< Length of the data
+        modbus_buf_t *data;    /**< Pointer to the data buffer. */
+        modbus_buf_size_t len; /**< Length of the data. */
     } modbus_req_resp_t;
 
     /**
@@ -195,9 +197,8 @@ extern "C"
      */
     typedef struct
     {
-        modbus_req_resp_t req;  ///< Modbus request details
-        modbus_req_resp_t resp; ///< Modbus response details
-        void *rw_data_ptr;      ///< Pointer to the data to read/write
+        modbus_req_resp_t req;  /**< Modbus request details that contain a pointer to the request data buffer and the length of data stored in the buffer. */
+        modbus_req_resp_t resp; /**< Modbus response details that contain a pointer to the response data buffer and the length of data stored in the buffer. */
     } modbus_msg_t;
 
     /**
@@ -225,8 +226,8 @@ extern "C"
      */
     typedef struct
     {
-        modbus_fun_code_t fun_code;                ///< Modbus function code
-        modbus_fun_code_handler_t fun_code_action; ///< Function pointer to the handler for the defined function code
+        modbus_fun_code_t fun_code;                /**< Modbus function code */
+        modbus_fun_code_handler_t fun_code_action; /**< Function pointer to the handler for the defined function code */
     } modbus_function_mapper_t;
 
     /**
@@ -253,11 +254,14 @@ extern "C"
      */
     typedef struct
     {
-        modbus_fun_code_t fun_code;  ///< Modbus function code
-        modbus_adr_t adr;            ///< Address of the Modbus object to read/write
-        modbus_data_qty_t obj_qty;   ///< Quantity of Modbus data objects to read/write
-        modbus_device_ID_t slave_ID; ///< ID of the Modbus slave device
-        void *rw_data_ptr;           ///< Pointer to the data to read/write
+        modbus_fun_code_t fun_code;         /**< Modbus function code. */
+        modbus_adr_t adr;                   /**< Address of the Modbus object to read/write. */
+        modbus_data_qty_t obj_qty;          /**< Quantity of Modbus data objects to read/write. */
+        modbus_device_ID_t slave_ID;        /**< ID of the Modbus slave device. */
+        modbus_coil_disin_t coil_2_write;   /**< Single coil value to write (used for single coil write function). */
+        modbus_coil_disin_t *coils_2_write; /**< Pointer to multiple coil values to write (used for multiple coil write function). */
+        modbus_reg_t reg_2_write;           /**< Single register value to write (used for single register write function). */
+        modbus_reg_t *regs_2_write;         /**< Pointer to multiple register values to write (used for multiple register write function). */
     } req_input_param_struct_t;
 #ifdef __cplusplus
 }

@@ -290,7 +290,7 @@ static modbus_ret_t handle_slave_read_holding_reg_service(modbus_msg_t *modbus_m
         }
         else
         {
-            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], read_hreg_val);
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], (modbus_reg_t)(read_hreg_val));
         }
     }
     return update_msg_len_and_ret_status(modbus_msg, read_hreg_val, byte_cnt);
@@ -354,7 +354,7 @@ static modbus_ret_t handle_slave_read_input_reg_service(modbus_msg_t *modbus_msg
         }
         else
         {
-            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], read_input_reg_val);
+            write_u16_to_buf(&modbus_msg->resp.data[MODBUS_RESP_READ_DATA_IDX + (i * 2)], (modbus_reg_t)(read_input_reg_val));
         }
     }
     return update_msg_len_and_ret_status(modbus_msg, read_input_reg_val, byte_cnt);

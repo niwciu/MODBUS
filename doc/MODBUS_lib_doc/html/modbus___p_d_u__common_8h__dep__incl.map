@@ -1,0 +1,9 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/common/modbus_PDU_common.h" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/common/modbus_PDU_common.h">
+<area shape="rect" id="Node000001" title="Header file for common Modbus Protocol Data Unit (PDU) operations." alt="" coords="235,5,462,64"/>
+<area shape="rect" id="Node000002" href="$modbus___p_d_u__common_8c.html" title="Implementation file for common Modbus Protocol Data Unit (PDU) operations." alt="" coords="5,120,233,179"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="277,74,179,122,176,117,275,69"/>
+<area shape="rect" id="Node000003" href="$modbus__master___p_d_u_8c.html" title="Implementation file for Modbus master protocol data unit (PDU) functionality." alt="" coords="257,112,440,187"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="351,79,351,112,346,112,346,79"/>
+<area shape="rect" id="Node000004" href="$modbus__slave___p_d_u_8c.html" title="Implementation of Modbus slave protocol data unit (PDU) handling functions." alt="" coords="465,112,648,187"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="416,69,490,109,487,114,414,74"/>
+</map>

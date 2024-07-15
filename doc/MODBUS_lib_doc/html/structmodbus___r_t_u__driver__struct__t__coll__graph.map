@@ -1,0 +1,5 @@
+<map id="modbus_RTU_driver_struct_t" name="modbus_RTU_driver_struct_t">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,96,193,123"/>
+<area shape="rect" id="Node000002" href="$structmodbus__req__resp__t.html" title="Structure representing a Modbus request or response." alt="" coords="31,5,167,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,48,102,95,96,95,96,48"/>
+</map>

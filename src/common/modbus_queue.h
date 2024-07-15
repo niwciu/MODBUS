@@ -33,10 +33,10 @@ extern "C"
      */
     typedef struct
     {
-        uint8_t head;                                         /**< Head index of the queue. */
-        uint8_t tail;                                         /**< Tail index of the queue. */
-        last_q_pos_status_t last_queue_pos_status;            /**< Status of the last queue position. */
-        modbus_msg_t *modbus_msg[MAX_MODBUS_MSG_QUEUE_ITEMS]; /**< Array of pointers to Modbus messages. */
+        uint8_t head;                                                /**< Head index of the queue. */
+        uint8_t tail;                                                /**< Tail index of the queue. */
+        last_q_pos_status_t last_queue_pos_status;                   /**< Status of the last queue position. */
+        modbus_msg_t *modbus_msg[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS]; /**< Array of pointers to Modbus messages. */
     } modbus_queue_t;
 
     void modbus_queue_init(modbus_queue_t *q);

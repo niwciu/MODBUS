@@ -1,0 +1,7 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/slave_internall/modbus_slave_PDU.h" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/slave_internall/modbus_slave_PDU.h">
+<area shape="rect" id="Node000001" title="Header file for Modbus Slave Protocol Data Unit (PDU) handling." alt="" coords="109,5,293,80"/>
+<area shape="rect" id="Node000002" href="$modbus__slave_8c.html" title="Implementation of Modbus slave functions for handling communication and data management." alt="" coords="5,136,189,195"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="161,94,124,137,120,134,157,90"/>
+<area shape="rect" id="Node000003" href="$modbus__slave___p_d_u_8c.html" title="Implementation of Modbus slave protocol data unit (PDU) handling functions." alt="" coords="213,128,397,203"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,90,275,126,271,129,241,94"/>
+</map>

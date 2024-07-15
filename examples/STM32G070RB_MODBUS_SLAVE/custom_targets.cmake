@@ -16,12 +16,12 @@ else()
 	message(STATUS "Lizard was not found. \r\n\tInstall Lizard to get predefined targets for src folder Code Complexity Metrics")
 endif()
 # Prints CCM for src folder in the console
-add_custom_target(ccm lizard ../../../hw/STM32G070RB_MODBUS_SLAVE 
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Include/*"
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Device/*"  
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Debug/*" 
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Core/Src/syscalls.c" 
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Core/Src/sysmem.c" 
+add_custom_target(ccm lizard  ../../../examples/STM32G070RB_MODBUS_SLAVE
+							--exclude="../../../examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Include/*"
+							--exclude="../../../examples/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Device/*"  
+							--exclude="../../../examples/STM32G070RB_MODBUS_MASTER/Debug/*" 
+							--exclude="../../../examples/STM32G070RB_MODBUS_MASTER/Core/Src/syscalls.c" 
+							--exclude="../../../examples/STM32G070RB_MODBUS_MASTER/Core/Src/sysmem.c" 
 							--CCN 12 
 							-Tnloc=30 
 							-a 4 
@@ -30,12 +30,13 @@ add_custom_target(ccm lizard ../../../hw/STM32G070RB_MODBUS_SLAVE
 							-i 1)
 # Create CCM report in reports/Cylcomatic_Complexity/
 add_custom_target(ccmr lizard ../../../hw/ 
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Include/*"
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Device/*"  
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Debug/*" 
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Core/Src/syscalls.c" 
-							--exclude="../../../hw/STM32G070RB_MODBUS_SLAVE/Core/Src/sysmem.c" 
-							--CCN 12 -Tnloc=30 
+							--exclude="../../../hw/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Include/*"
+							--exclude="../../../hw/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Device/*"  
+							--exclude="../../../hw/STM32G070RB_MODBUS_MASTER/Debug/*" 
+							--exclude="../../../hw/STM32G070RB_MODBUS_MASTER/Core/Src/syscalls.c" 
+							--exclude="../../../hw/STM32G070RB_MODBUS_MASTER/Core/Src/sysmem.c" 
+							--CCN 12 
+							-Tnloc=30 
 							-a 4 
 							--languages cpp 
 							-V 
@@ -50,11 +51,11 @@ else()
 	message(STATUS "CppCheck was not found. \r\n\tInstall CppCheck to get predefined targets for static analize")
 endif()
 # Prints static analize output for src folder in the console
-add_custom_target(cppcheck cppcheck ../../../hw/STM32G070RB_MODBUS_SLAVE 
-									-i../../../hw/STM32G070RB_MODBUS_SLAVE/Debug 
-									-i../../../hw/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Include
-									-I../../../hw/STM32G070RB_MODBUS_SLAVE/Core/Inc
-									-I../../../hw/STM32G070RB_MODBUS_SLAVE/Drivers/CMSIS/Device
+add_custom_target(cppcheck cppcheck ../../../hw/STM32G070RB_MODBUS_MASTER
+									-i../../../hw/STM32G070RB_MODBUS_MASTER/Debug 
+									-i../../../hw/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Include
+									-I../../../hw/STM32G070RB_MODBUS_MASTER/Core/Inc
+									-I../../../hw/STM32G070RB_MODBUS_MASTER/Drivers/CMSIS/Device
 									--enable=all 
 									--inconclusive 
 									--force 

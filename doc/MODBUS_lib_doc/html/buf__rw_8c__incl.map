@@ -1,0 +1,7 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/common/buf_rw.c" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/common/buf_rw.c">
+<area shape="rect" id="Node000001" title="Implementation file for buffer read and write operations." alt="" coords="5,5,189,64"/>
+<area shape="rect" id="Node000002" href="$buf__rw_8h.html" title="Header file for buffer read and write operations." alt="" coords="62,112,132,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,64,100,96,94,96,94,64"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="65,187,129,213"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,139,100,171,94,171,94,139"/>
+</map>

@@ -1,0 +1,18 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/slave_internall/modbus_slave_data.c" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/slave_internall/modbus_slave_data.c">
+<area shape="rect" id="Node000001" title="Implementation of Modbus data handling functions." alt="" coords="170,5,353,80"/>
+<area shape="rect" id="Node000002" href="$modbus__slave__data_8h_source.html" title=" " alt="" coords="124,128,271,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="240,82,216,116,212,113,235,79"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="295,128,356,155"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="288,79,311,113,307,116,283,82"/>
+<area shape="rect" id="Node000003" href="$modbus__type_8h.html" title="Header file defining types and constants for Modbus protocol implementation." alt="" coords="97,203,207,229"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="192,157,170,191,166,188,187,154"/>
+<area shape="rect" id="Node000007" href="$modbus__config_8h.html" title="Defines configuration constants for a Modbus master application." alt="" coords="185,277,304,304"/>
+<area shape="poly" id="edge7_Node000002_Node000007" title=" " alt="" coords="205,154,221,202,239,262,234,263,216,203,200,156"/>
+<area shape="rect" id="Node000004" href="$modbus__public__type_8h.html" title="Defines public types and enums used in Modbus communication." alt="" coords="9,277,160,304"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="142,232,108,268,104,264,138,228"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="170,228,218,266,215,270,167,232"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,352,70,379"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="78,306,56,340,51,338,74,303"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="94,352,168,379"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="95,303,117,338,112,340,90,306"/>
+</map>

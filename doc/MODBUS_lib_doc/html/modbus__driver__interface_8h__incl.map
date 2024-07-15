@@ -1,0 +1,14 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_driver_interface.h" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_driver_interface.h">
+<area shape="rect" id="Node000001" title="Defines the interface for a Modbus RTU driver." alt="" coords="197,5,381,64"/>
+<area shape="rect" id="Node000002" href="$modbus__type_8h.html" title="Header file defining types and constants for Modbus protocol implementation." alt="" coords="186,112,296,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="276,66,257,100,253,97,271,63"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="224,261,288,288"/>
+<area shape="poly" id="edge6_Node000001_Node000004" title=" " alt="" coords="304,63,314,95,322,133,324,174,315,214,303,235,287,253,283,249,299,232,311,212,319,174,317,134,309,96,299,65"/>
+<area shape="rect" id="Node000003" href="$modbus__public__type_8h.html" title="Defines public types and enums used in Modbus communication." alt="" coords="5,187,157,213"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="214,142,124,182,122,177,212,137"/>
+<area shape="rect" id="Node000006" href="$modbus__config_8h.html" title="Defines configuration constants for a Modbus master application." alt="" coords="181,187,301,213"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="244,139,244,171,238,171,238,139"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="112,211,212,252,210,257,110,216"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="44,261,118,288"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="84,214,84,246,78,246,78,214"/>
+</map>

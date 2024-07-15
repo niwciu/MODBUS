@@ -1,0 +1,13 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/slave_internall/modbus_slave_RTU.h" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/slave_internall/modbus_slave_RTU.h">
+<area shape="rect" id="Node000001" title="Header file for Modbus RTU slave functionality." alt="" coords="73,5,256,80"/>
+<area shape="rect" id="Node000002" href="$modbus__type_8h.html" title="Header file defining types and constants for Modbus protocol implementation." alt="" coords="109,128,219,155"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,80,167,112,162,112,162,80"/>
+<area shape="rect" id="Node000003" href="$modbus__public__type_8h.html" title="Defines public types and enums used in Modbus communication." alt="" coords="9,203,160,229"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="152,157,111,194,107,190,148,153"/>
+<area shape="rect" id="Node000006" href="$modbus__config_8h.html" title="Defines configuration constants for a Modbus master application." alt="" coords="185,203,304,229"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="180,153,221,190,218,194,176,157"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,277,70,304"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="78,231,56,266,51,263,74,228"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="94,277,168,304"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="95,228,117,263,112,266,90,231"/>
+</map>

@@ -28,15 +28,18 @@
 
 modbus_coil_disin_t coils[20] = {1,0,1,0,0,1,0,1,1,1,0,0,0,1,1,1,1,0,0,1};
 modbus_reg_t hreg[20] = {2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,3001,3002,3003,3004,3005,3006,3007,3008,3009,3010};
+modbus_reg_t inreg[20] = {4201, 4202, 4203, 4204, 4205, 4206, 4207, 4208, 4209, 4210, 4301, 4302, 4303, 4304, 4305, 4306, 4307, 4308, 4309, 4310};
+modbus_device_ID_t Slave_ID = 0x01;
 
 int main(void)
 {
   core_init();
-  modbus_slave_init(RTU,115200,NONE,0x01);
+  modbus_slave_init(RTU,115200,NONE,Slave_ID);
   for (int i=0;i<20;i++)
   {
-    register_app_data_to_modbus_slave_coils_table(0x0000+i,&coils[i]);
-    register_app_data_to_modbus_slave_hreg_table(0x0000+i,&hreg[i]);
+    register_app_data_to_modbus_slave_coils_table(i,&coils[i]);
+    register_app_data_to_modbus_slave_hreg_table(i,&hreg[i]);
+    register_app_data_to_modbus_slave_inreg_table( i, &inreg[i]);
   }
   
   /* Loop forever */
