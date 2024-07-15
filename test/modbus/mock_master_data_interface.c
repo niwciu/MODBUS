@@ -87,14 +87,14 @@ void modbus_master_hreg_exception(const modbus_read_data_t *resp_data)
 void modbus_master_data_timeout_error(const modbus_master_error_report_t *timeout_error_rep)
 {
     memset(&modbus_master_error_rep, 0, sizeof(modbus_master_error_report_t));
-    modbus_master_error_rep= *timeout_error_rep;
+    modbus_master_error_rep = *timeout_error_rep;
 }
 
 void mock_clear_modbus_master_coil_data(void)
 {
-    for(uint16_t i=0; i<(sizeof(mock_master_coil_data)/sizeof(mock_master_coil_data[0])); i++)
+    for (uint16_t i = 0; i < (sizeof(mock_master_coil_data) / sizeof(mock_master_coil_data[0])); i++)
     {
-        mock_master_coil_data[i]=0;
+        mock_master_coil_data[i] = 0;
     }
 }
 

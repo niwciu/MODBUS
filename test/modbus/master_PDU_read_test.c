@@ -100,8 +100,8 @@ TEST(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor4CoilsWhenMasterReadSl
     static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0001;
     modbus_data_qty_t coils_qty = 4;
-    req.adr=coil_adr;
-    req.obj_qty=coils_qty;
+    req.adr = coil_adr;
+    req.obj_qty = coils_qty;
 
     mock_set_expected_slave_coils_alternately(coil_adr, coils_qty, !!COIL_ON);
     modbus_master_read_coils_req(RTU_msg, &req);
@@ -189,8 +189,8 @@ TEST(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith4DisInWhenMasterReadS
     static req_input_param_struct_t req = {0};
     modbus_adr_t disin_adr = 0x0001;
     modbus_data_qty_t disin_qty = 4;
-    req.adr=disin_adr;
-    req.obj_qty=disin_qty;
+    req.adr = disin_adr;
+    req.obj_qty = disin_qty;
 
     mock_set_expected_slave_disc_in_alternately(disin_adr, disin_qty);
 
@@ -279,8 +279,8 @@ TEST(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith4InRegRecivedWhenMas
     static req_input_param_struct_t req = {0};
     modbus_adr_t in_reg_adr = 0x0001;
     modbus_data_qty_t in_reg_qty = 4;
-    req.adr=in_reg_adr;
-    req.obj_qty=in_reg_qty;
+    req.adr = in_reg_adr;
+    req.obj_qty = in_reg_qty;
     mock_set_expected_slave_input_reg_alternately(in_reg_adr, in_reg_qty, 0x5A5A);
 
     modbus_master_read_input_reg_req(RTU_msg, &req);
@@ -364,8 +364,8 @@ TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith6HolRegRecivedWhen
     static req_input_param_struct_t req = {0};
     modbus_adr_t hreg_adr = 0x0003;
     modbus_data_qty_t hreg_qty = 6;
-    req.adr=hreg_adr;
-    req.obj_qty=hreg_qty;
+    req.adr = hreg_adr;
+    req.obj_qty = hreg_qty;
 
     mock_set_expected_slave_hreg_alternately(hreg_adr, hreg_qty, 0x5A5A);
 
@@ -418,8 +418,8 @@ TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith16HolRegRecivedWhe
     static req_input_param_struct_t req = {0};
     modbus_adr_t hreg_adr = 0x0003;
     modbus_data_qty_t hreg_qty = 16;
-    req.adr=hreg_adr;
-    req.obj_qty=hreg_qty;
+    req.adr = hreg_adr;
+    req.obj_qty = hreg_qty;
 
     mock_set_expected_slave_hreg_alternately(hreg_adr, hreg_qty, 0x5A5A);
 
@@ -451,20 +451,20 @@ TEST(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith17HolRegRecivedWhe
 
 TEST(Master_PDU_read, GivenSlaveWriteSingleCoilResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect)
 {
-    static req_input_param_struct_t req= {0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0003;
     modbus_coil_disin_t coil_2_write = !!COIL_ON;
     // RTU_msg->rw_data_ptr = (void *)(&coil_2_write);
-    req.adr=coil_adr;
-    req.coil_2_write=coil_2_write;
+    req.adr = coil_adr;
+    req.coil_2_write = coil_2_write;
 
     modbus_master_write_single_coil_req(RTU_msg, &req);
     parse_master_request_and_prepare_resp(RTU_msg);
 
     modbus_master_read_slave_resp(RTU_msg);
 
-    TEST_ASSERT_EQUAL_INT16(coil_adr,mock_colis_write_confirmation.data_adr );
-    TEST_ASSERT_EQUAL_INT16( 1,mock_colis_write_confirmation.coil_qty);
+    TEST_ASSERT_EQUAL_INT16(coil_adr, mock_colis_write_confirmation.data_adr);
+    TEST_ASSERT_EQUAL_INT16(1, mock_colis_write_confirmation.coil_qty);
 }
 
 TEST(Master_PDU_read, GivenSlaveWriteSingleReglResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect)
@@ -509,10 +509,10 @@ TEST(Master_PDU_read, GivenSlaveWriteMultipleReglResponsRecivedWhenMasterReadSla
     static req_input_param_struct_t req = {0};
     modbus_adr_t reg_adr = 0x0005;
     modbus_data_qty_t reg_qty = 10;
-    modbus_reg_t reg_2_write[10] = {0x5A5A,0xA5A5,0x5A5A,0xA5A5,0x5A5A,0xA5A5,0x5A5A,0xA5A5,0x5A5A,0xA5A5};
+    modbus_reg_t reg_2_write[10] = {0x5A5A, 0xA5A5, 0x5A5A, 0xA5A5, 0x5A5A, 0xA5A5, 0x5A5A, 0xA5A5, 0x5A5A, 0xA5A5};
     // RTU_msg->rw_data_ptr = (void *)(coils_2_write);
-    req.adr=reg_adr;
-    req.obj_qty=reg_qty;
+    req.adr = reg_adr;
+    req.obj_qty = reg_qty;
     req.regs_2_write = reg_2_write;
 
     modbus_master_write_multiple_reg_req(RTU_msg, &req);
@@ -522,7 +522,6 @@ TEST(Master_PDU_read, GivenSlaveWriteMultipleReglResponsRecivedWhenMasterReadSla
     TEST_ASSERT_EQUAL_HEX16(reg_adr, mock_reg_write_confirmation.data_adr);
     TEST_ASSERT_EQUAL_INT16(reg_qty, mock_reg_write_confirmation.coil_qty);
 }
-
 
 // TEST(Master_PDU_read_exception_code, WhenRegisterModbusErrorCbCalledThenModbusErrorCbEqualToRegisteredFunctionPointer)
 // {

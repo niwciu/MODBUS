@@ -82,10 +82,10 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqRecivedWhenTimer1_5CharT
     modbus_adr_t coil_adr = 0x0001;
     modbus_data_qty_t coils_qty = 2;
     modbus_device_ID_t msg_slave_ID = 0x99;
-    req.adr=coil_adr;
-    req.obj_qty=coils_qty;
+    req.adr = coil_adr;
+    req.obj_qty = coils_qty;
     // req.slave_ID=msg_slave_ID;
-    
+
     modbus_master_read_coils_req(slave_msg_ptr, &req);
     modbus_RTU_send(slave_msg_ptr->req.data, &slave_msg_ptr->req.len, msg_slave_ID);
     mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request

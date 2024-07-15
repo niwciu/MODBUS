@@ -16,7 +16,7 @@ TEST_GROUP(Slave_PDU_resp);
 
 TEST_SETUP(Slave_PDU_resp)
 {
-   
+
     /* Init before every test */
     mock_register_slave_coils_data();
     mock_register_slave_discrete_inputs_data();
@@ -46,8 +46,8 @@ TEST(Slave_PDU_resp, SlaveParseMsgWhenReqDataBufferPassAsNullPtrArgumentToParse)
     static req_input_param_struct_t req = {0};
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 5;
-    req.adr=adr;
-    req.obj_qty=coil_qty;
+    req.adr = adr;
+    req.obj_qty = coil_qty;
 
     modbus_master_read_coils_req(RTU_msg, &req);
     RTU_msg->req.data = NULL;
@@ -364,12 +364,12 @@ TEST(Slave_PDU_resp, SlaveWriteSingleCoil)
     static req_input_param_struct_t req = {0};
     modbus_adr_t adr = 0x0000;
     modbus_w_coil_t resp_buf_coil_expected_value = COIL_ON;
-    modbus_coil_disin_t coil_2_write= !!COIL_ON;
+    modbus_coil_disin_t coil_2_write = !!COIL_ON;
     // RTU_msg->rw_data_ptr=(void*)(&coil_2_write);
     req.adr = adr;
-    req.coil_2_write=coil_2_write;
+    req.coil_2_write = coil_2_write;
 
-    modbus_master_write_single_coil_req(RTU_msg,&req);
+    modbus_master_write_single_coil_req(RTU_msg, &req);
     parse_master_request_and_prepare_resp(RTU_msg);
 
     TEST_ASSERT_EQUAL_UINT8(MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
@@ -390,7 +390,7 @@ TEST(Slave_PDU_resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus)
     mock_set_all_slave_cails_to_off();
     TEST_ASSERT_EQUAL(0, mock_slave_coil[adr]);
 
-    modbus_master_write_single_coil_req(RTU_msg,&req);
+    modbus_master_write_single_coil_req(RTU_msg, &req);
     parse_master_request_and_prepare_resp(RTU_msg);
     TEST_ASSERT_EQUAL(1, mock_slave_coil[adr]);
     TEST_ASSERT_EQUAL(MODBUS_WRITE_SINGLE_RESP_LEN, RTU_msg->resp.len);
@@ -403,9 +403,9 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils5Coils)
     modbus_data_qty_t coil_qty = 5;
     modbus_coil_disin_t coils_2_write[5] = {!!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON};
     // RTU_msg->rw_data_ptr = (void *)(coils_2_write);
-    
+
     req.adr = adr;
-    req.obj_qty=coil_qty;
+    req.obj_qty = coil_qty;
     req.coils_2_write = coils_2_write;
 
     mock_set_all_slave_cails_to_off();
@@ -450,7 +450,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleCoils8Coils)
     static req_input_param_struct_t req = {0};
     modbus_adr_t adr = 0x0000;
     modbus_data_qty_t coil_qty = 8;
-    modbus_coil_disin_t coils_2_write[8] = { !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF};
+    modbus_coil_disin_t coils_2_write[8] = {!!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF, !!COIL_ON, !!COIL_OFF};
     // RTU_msg->rw_data_ptr = (void *)(coils_2_write);
     req.adr = adr;
     req.obj_qty = coil_qty;
@@ -676,7 +676,7 @@ TEST(Slave_PDU_resp, SlaveWriteSingleRegister)
     modbus_reg_t reg_val = 0x5A5A;
     // RTU_msg->rw_data_ptr=(void*)(&reg_val);
     req.adr = adr;
-    req.reg_2_write=reg_val;
+    req.reg_2_write = reg_val;
 
     modbus_master_write_single_reg_req(RTU_msg, &req);
     parse_master_request_and_prepare_resp(RTU_msg);
@@ -696,7 +696,7 @@ TEST(Slave_PDU_resp, SlaveWriteSingleRegisterAndCheckRegisterValue)
     req.reg_2_write = reg_val;
 
     mock_reset_all_slave_hreg_value();
-    
+
     modbus_master_write_single_reg_req(RTU_msg, &req);
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -712,7 +712,7 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3Reg)
     modbus_data_qty_t reg_qty = 3;
     // RTU_msg->rw_data_ptr = (void *)(reg_val);
     req.adr = adr;
-    req.obj_qty =reg_qty;
+    req.obj_qty = reg_qty;
     req.regs_2_write = reg_val;
 
     mock_reset_all_slave_hreg_value();
@@ -733,9 +733,9 @@ TEST(Slave_PDU_resp, SlaveWriteMultipleRegister3regAndCheckRegValue)
     modbus_reg_t exp_reg_val[3] = {0x5A5A, 0xA5A5, 0x5A5A};
     modbus_data_qty_t reg_qty = 3;
     // RTU_msg->rw_data_ptr = (void *)(exp_reg_val);
-    req.adr=adr;
-    req.obj_qty=reg_qty;
-    req.regs_2_write=exp_reg_val;
+    req.adr = adr;
+    req.obj_qty = reg_qty;
+    req.regs_2_write = exp_reg_val;
 
     mock_reset_all_slave_hreg_value();
 

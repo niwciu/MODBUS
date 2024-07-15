@@ -55,9 +55,9 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveRequestWithUnsuportedFunctionCodeT
 // Read Coils exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
-    req.adr=coil_adr;
+    req.adr = coil_adr;
     req.obj_qty = MODBUS_MAX_READ_COILS_QTY;
 
     modbus_master_read_coils_req(RTU_msg, &req);
@@ -73,7 +73,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToRead
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
     req.adr = coil_adr;
     req.obj_qty = MODBUS_MAX_READ_COILS_QTY;
@@ -91,7 +91,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToRead
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
     req.adr = coil_adr;
     req.obj_qty = 1;
@@ -109,7 +109,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStart
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = MAIN_APP_COILS_QTY - 1;
     req.adr = coil_adr;
     req.obj_qty = 2;
@@ -125,7 +125,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCorrectStartin
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestAndGetErrorWhenReadingCoilsThenSlaveRespondWithExceptionCode04)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0001;
     modbus_data_qty_t coil_qty = 4;
     req.adr = coil_adr;
@@ -144,9 +144,9 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestAndGetErrorWhenRea
 // Read Discrete Inputs exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithDiscreteInputsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t din_adr = 0x0000;
-    req.adr=din_adr;
+    req.adr = din_adr;
     req.obj_qty = MODBUS_MAX_READ_DISCRETE_INPUTS_QTY;
 
     modbus_master_read_discrete_inputs_req(RTU_msg, &req);
@@ -161,7 +161,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithDiscr
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithDiscreteInputsQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t din_adr = 0x0000;
 
     req.adr = din_adr;
@@ -179,7 +179,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithDiscr
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t din_adr = 0x0000;
     req.adr = din_adr;
     req.obj_qty = 1;
@@ -197,7 +197,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithIncor
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t din_adr = MAIN_APP_DISCRET_INPUTS_QTY - 1;
     req.adr = din_adr;
     req.obj_qty = 2;
@@ -213,14 +213,14 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithCorre
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestAndGetErrorWhenReadingDiscreteInputsThenSlaveRespondWithExceptionCode04)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t din_adr = 0x0001;
     modbus_data_qty_t din_qty = 4;
     req.adr = din_adr;
     req.obj_qty = din_qty;
 
     modbus_master_read_discrete_inputs_req(RTU_msg, &req);
- 
+
     mock_clear_modbus_slave_discrete_inputs_data_table();
     parse_master_request_and_prepare_resp(RTU_msg);
 
@@ -232,7 +232,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestAndGetErr
 // Read Input Register exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t in_reg_adr = 0x0000;
     req.adr = in_reg_adr;
     req.obj_qty = MODBUS_MAX_READ_REG_QTY;
@@ -249,13 +249,13 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputR
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t in_reg_adr = 0x0000;
     req.adr = in_reg_adr;
     req.obj_qty = MODBUS_MAX_READ_REG_QTY;
 
     modbus_master_read_input_reg_req(RTU_msg, &req);
-   
+
     set_zero_obj_qty_in_req_frame(RTU_msg);
 
     parse_master_request_and_prepare_resp(RTU_msg);
@@ -267,7 +267,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputR
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t in_reg_adr = 0x0000;
     req.adr = in_reg_adr;
     req.obj_qty = 1;
@@ -284,7 +284,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorr
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t in_reg_adr = MAIN_APP_INPUT_REG_QTY - 1;
     req.adr = in_reg_adr;
     req.obj_qty = 2;
@@ -300,7 +300,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithCorrec
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestAndGetErrorWhenReadingInputRegisterThenSlaveRespondWithExceptionCode04)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t in_reg_adr = 0x0001;
     modbus_data_qty_t in_reg_qty = 4;
     req.adr = in_reg_adr;
@@ -320,7 +320,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestAndGetErro
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHoldingRegisterQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t hreg_adr = 0x0000;
     req.adr = hreg_adr;
     req.obj_qty = MODBUS_MAX_READ_REG_QTY;
@@ -338,7 +338,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHold
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHoldingRegisterQtyToReadEqual0ThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t hreg_adr = 0x0000;
     req.adr = hreg_adr;
     req.obj_qty = MODBUS_MAX_READ_REG_QTY;
@@ -356,7 +356,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHold
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t hreg_adr = 0x0000;
     req.adr = hreg_adr;
     req.obj_qty = 1;
@@ -374,7 +374,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithInco
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t hreg_adr = MAIN_APP_INPUT_REG_QTY - 1;
     req.adr = hreg_adr;
     req.obj_qty = 2;
@@ -390,16 +390,16 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithCorr
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestAndGetErrorWhenReadingHoldingRegisterThenSlaveRespondWithExceptionCode04)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t hreg_adr = 0x0001;
     modbus_data_qty_t hreg_qty = 4;
     req.adr = hreg_adr;
     req.obj_qty = hreg_qty;
 
     modbus_master_read_holding_reg_req(RTU_msg, &req);
- 
+
     mock_clear_modbus_slave_holding_resgister_data_table();
-    
+
     parse_master_request_and_prepare_resp(RTU_msg);
 
     TEST_ASSERT_EQUAL((MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE | MODBUS_EXCEPTION_CODE_MASK), RTU_msg->resp.data[MODBUS_FUNCTION_CODE_IDX]);
@@ -410,12 +410,12 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestAndGetEr
 // Write Signle Coil exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectCoilValueThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
     modbus_data_t incorrect_msg_coil_value = 0xFFFF;
     modbus_coil_disin_t coil_2_write = !!COIL_ON;
-    req.adr=coil_adr;
-    req.coil_2_write=coil_2_write;
+    req.adr = coil_adr;
+    req.coil_2_write = coil_2_write;
     // RTU_msg->rw_data_ptr = (void *)(&coil_2_write);
 
     modbus_master_write_single_coil_req(RTU_msg, &req);
@@ -431,12 +431,12 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrec
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
     modbus_coil_disin_t coil_2_write = !!COIL_ON;
     req.adr = coil_adr;
     req.coil_2_write = coil_2_write;
-    // RTU_msg->rw_data_ptr = (void *)(&coil_2_write);    
+    // RTU_msg->rw_data_ptr = (void *)(&coil_2_write);
     modbus_master_write_single_coil_req(RTU_msg, &req);
     set_out_of_range_obj_adress(RTU_msg, MAIN_APP_COILS_QTY);
 
@@ -449,7 +449,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrec
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndGetErrorStatusWhenWritingCoilThenSlaveRespondWithExceptionCode04)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0001;
     modbus_coil_disin_t coil_2_write = !!COIL_ON;
     req.adr = coil_adr;
@@ -482,12 +482,12 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndGetErrorS
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t reg_adr = 0x0000;
     modbus_reg_t reg_2_write = 0x5a5a;
     // RTU_msg->rw_data_ptr = (void *)(&reg_2_write);
-    req.adr=reg_adr;
-    req.reg_2_write=reg_2_write;
+    req.adr = reg_adr;
+    req.reg_2_write = reg_2_write;
 
     modbus_master_write_single_reg_req(RTU_msg, &req);
     set_out_of_range_obj_adress(RTU_msg, MAIN_APP_HOLDING_REG_QTY);
@@ -501,7 +501,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestWithInco
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestAndGetErrorStatusWhenWritingRegisterThenSlaveRespondWithExceptionCode04)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t reg_adr = 0x0001;
     modbus_reg_t reg_2_write = 0x5a5a;
     // RTU_msg->rw_data_ptr = (void *)(&reg_2_write);
@@ -520,11 +520,11 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestAndGetEr
 // Write Multiple Coils exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCoilsQtyToWriteAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
     modbus_coil_disin_t coil_2_write[MODBUS_MAX_WRITE_COILS_QTY] = {!!COIL_ON};
     // RTU_msg->rw_data_ptr = (void *)(coil_2_write);
-    req.adr=coil_adr;
+    req.adr = coil_adr;
     req.obj_qty = MODBUS_MAX_WRITE_COILS_QTY;
     req.coils_2_write = coil_2_write;
 
@@ -540,7 +540,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCoils
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCoilsQtyToWriteEqual0ThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
     modbus_coil_disin_t coil_2_write[MODBUS_MAX_WRITE_COILS_QTY] = {!!COIL_ON};
     // RTU_msg->rw_data_ptr = (void *)(coil_2_write);
@@ -561,7 +561,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCoils
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithWrongByteCountThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
     modbus_coil_disin_t coil_2_write[20] = {!!COIL_ON};
     // RTU_msg->rw_data_ptr = (void *)(coil_2_write);
@@ -582,7 +582,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithWrong
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
     modbus_coil_disin_t coil_2_write[20] = {!!COIL_ON};
     // RTU_msg->rw_data_ptr = (void *)(coil_2_write);
@@ -602,7 +602,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithIncor
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = MAIN_APP_COILS_QTY - 1;
     modbus_coil_disin_t coil_2_write[2] = {!!COIL_ON};
     // RTU_msg->rw_data_ptr = (void *)(coil_2_write);
@@ -621,7 +621,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCorre
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestAndGetErrorWhenReadingCoilsThenSlaveRespondWithExceptionCode04)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t coil_adr = 0x0000;
     modbus_coil_disin_t coil_2_write[2] = {!!COIL_ON};
     // RTU_msg->rw_data_ptr = (void *)(coil_2_write);
@@ -642,13 +642,13 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestAndGetErr
 // Write Multiple Register exception tests
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithRegisterQtyToWriteAboveAllowedValueThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t reg_adr = 0x0000;
     modbus_reg_t hreg_2_write[MODBUS_MAX_WRITE_REG_QTY] = {0x5a5a};
     // RTU_msg->rw_data_ptr = (void *)(&hreg_2_write);
-    req.adr=reg_adr;
+    req.adr = reg_adr;
     req.obj_qty = MODBUS_MAX_WRITE_REG_QTY;
-    req.regs_2_write=hreg_2_write;
+    req.regs_2_write = hreg_2_write;
 
     modbus_master_write_multiple_reg_req(RTU_msg, &req);
     increase_obj_qty_in_req_frame(RTU_msg);
@@ -662,7 +662,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithR
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithRegisterQtyToWriteEqual0ThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t reg_adr = 0x0000;
     modbus_reg_t hreg_2_write[MODBUS_MAX_WRITE_REG_QTY] = {0x5a5a};
     // RTU_msg->rw_data_ptr = (void *)(&hreg_2_write);
@@ -683,7 +683,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithR
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithWrongByteCountThenSlaveRespondWithExceptionCode03)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t reg_adr = 0x0000;
     modbus_reg_t hreg_2_write[20] = {0x5a5a};
     // RTU_msg->rw_data_ptr = (void *)(&hreg_2_write);
@@ -704,7 +704,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithW
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t reg_adr = 0x0000;
     modbus_reg_t hreg_2_write[20] = {0x5a5a};
     // RTU_msg->rw_data_ptr = (void *)(&hreg_2_write);
@@ -724,7 +724,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithI
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t reg_adr = MAIN_APP_HOLDING_REG_QTY - 1;
     modbus_reg_t hreg_2_write[2] = {0x5a5a};
     // RTU_msg->rw_data_ptr = (void *)(&hreg_2_write);
@@ -743,7 +743,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithC
 
 TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestAndGetErrorWhenReadingCoilsThenSlaveRespondWithExceptionCode04)
 {
-    static req_input_param_struct_t req={0};
+    static req_input_param_struct_t req = {0};
     modbus_adr_t reg_adr = 0x0000;
     modbus_reg_t hreg_2_write[2] = {0x5a5a};
     // RTU_msg->rw_data_ptr = (void *)(&hreg_2_write);
@@ -752,7 +752,7 @@ TEST(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestAndGe
     req.regs_2_write = hreg_2_write;
 
     modbus_master_write_multiple_reg_req(RTU_msg, &req);
-   
+
     mock_clear_modbus_slave_holding_resgister_data_table();
     parse_master_request_and_prepare_resp(RTU_msg);
 

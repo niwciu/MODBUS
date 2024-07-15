@@ -13,19 +13,19 @@ TEST_GROUP_RUNNER(Slave_PDU_resp)
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead9Coils);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead16Coils);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead17Coils);
-// Slave Read Discrete Inputs tests
+    // Slave Read Discrete Inputs tests
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead5DiscreteInputs);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead8DiscreteInputs);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead9DiscreteInputs);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead16DiscreteInputs);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead17DiscreteInputs);
-// Slave Read Holdeing Registers tests
+    // Slave Read Holdeing Registers tests
     RUN_TEST_CASE(Slave_PDU_resp, SlaveReadOneHoldingRegister);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead3HoldingRegisters);
-// Slave Read Input Registers tests
+    // Slave Read Input Registers tests
     RUN_TEST_CASE(Slave_PDU_resp, SlaveReadOneInputRegister);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveRead3InputRegisters);
-// Slave Write Slave_Coils tests
+    // Slave Write Slave_Coils tests
     RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteSingleCoil);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils5Coils);
@@ -40,7 +40,7 @@ TEST_GROUP_RUNNER(Slave_PDU_resp)
 
     RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils17Coils);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus);
-// Slave Write Register tests (Holding Registers are R/w)
+    // Slave Write Register tests (Holding Registers are R/w)
     RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteSingleRegister);
     RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteSingleRegisterAndCheckRegisterValue);
 

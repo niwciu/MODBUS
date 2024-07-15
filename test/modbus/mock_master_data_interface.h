@@ -1,12 +1,12 @@
 /**
  * @file mock_master_data_interface.h
  * @author niwciu (niwciu@gmail.com)
- * @brief 
+ * @brief
  * @version 0.0.1
  * @date 2024-07-09
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 
 #define MOCK_MASTER_COILS_TABLE_SIZE 100

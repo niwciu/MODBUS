@@ -41,7 +41,7 @@ static const modbus_RTU_driver_struct_t master_RTU_driver_interface = {
     master_uasrt_subscribe_msg_tx_done_callback,
     master_uasrt_subscribe_t_3_5_char_expired_cb,
     master_uasrt_subscribe_modbus_frame_error_cb,
-    };
+};
 
 const modbus_RTU_driver_struct_t *get_master_RTU_driver_interface(void)
 {
@@ -61,7 +61,7 @@ static void master_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
     master_USART_Tx_status = USART_SENDING_DATA;
     mock_master_USART.Tx_IRQ = IRQ_ENABLED;
 }
-static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf) 
+static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
 {
     mock_master_rx_msg_ptr = recv_buf;
     mock_master_USART.Rx_IRQ = IRQ_ENABLED;
@@ -72,7 +72,7 @@ static void master_disable_usart_rx_interrupt(void)
 }
 static void master_uasrt_subscribe_t_1_5_char_expired_cb(driver_subscr_cb_t callback)
 {
-    mock_master_1_5_char_break_cb= callback;
+    mock_master_1_5_char_break_cb = callback;
 }
 static void master_uasrt_subscribe_msg_tx_done_callback(driver_subscr_cb_t callback)
 {
@@ -93,7 +93,7 @@ static void master_uasrt_subscribe_modbus_frame_error_cb(driver_subscr_cb_t call
 void mock_USART_req_msg_sended_EVENT(void)
 {
     // operations deone when USART dirver send last data from request msg
-    mock_master_USART.Tx_IRQ=IRQ_DISABLED;
+    mock_master_USART.Tx_IRQ = IRQ_DISABLED;
     mock_master_msg_tx_done_cb();
 }
 

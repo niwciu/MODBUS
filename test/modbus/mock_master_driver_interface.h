@@ -12,8 +12,6 @@
 
 #pragma once
 
-
-
 extern driver_init_status_t mock_master_USART;
 
 extern driver_subscr_cb_t mock_master_msg_tx_done_cb;
