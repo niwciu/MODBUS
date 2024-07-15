@@ -1,0 +1,50 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/common/modbus_type.h" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/common/modbus_type.h">
+<area shape="rect" id="Node000001" title="Header file defining types and constants for Modbus protocol implementation." alt="" coords="878,5,1061,64"/>
+<area shape="rect" id="Node000002" href="$modbus___p_d_u__common_8h.html" title="Header file for common Modbus Protocol Data Unit (PDU) operations." alt="" coords="56,120,283,179"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="863,45,603,69,449,88,296,115,264,122,262,117,294,109,448,83,603,63,863,40"/>
+<area shape="rect" id="Node000006" href="$modbus___r_t_u_8h.html" title="Header file for Modbus RTU communication protocol implementation." alt="" coords="1190,120,1373,179"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="1064,67,1203,117,1201,122,1062,72"/>
+<area shape="rect" id="Node000008" href="$modbus__master_8c.html" title="Implementation of a Modbus master protocol handler for embedded systems." alt="" coords="566,243,749,301"/>
+<area shape="poly" id="edge20_Node000001_Node000008" title=" " alt="" coords="863,43,774,51,682,64,604,85,575,98,556,114,545,131,543,148,547,165,556,185,578,216,607,240,604,244,574,220,551,188,542,167,538,148,540,129,552,110,572,94,602,80,681,59,773,45,862,38"/>
+<area shape="rect" id="Node000009" href="$modbus__slave_8c.html" title="Implementation of Modbus slave functions for handling communication and data management." alt="" coords="1305,365,1488,424"/>
+<area shape="poly" id="edge21_Node000001_Node000009" title=" " alt="" coords="1077,38,1210,46,1360,60,1498,80,1553,94,1595,110,1637,133,1668,158,1691,190,1711,234,1723,273,1721,292,1710,311,1696,324,1675,336,1620,356,1554,372,1489,384,1488,378,1553,367,1618,351,1673,331,1693,320,1706,308,1716,290,1718,274,1706,236,1686,192,1664,162,1634,138,1593,114,1552,99,1497,86,1359,65,1210,51,1076,43"/>
+<area shape="rect" id="Node000010" href="$modbus__queue_8h.html" title="Header file for Modbus message queue management." alt="" coords="566,120,749,179"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="877,72,738,122,736,117,875,67"/>
+<area shape="rect" id="Node000011" href="$modbus__master___p_d_u_8h.html" title="Header file defining Modbus master protocol data unit (PDU) functionality." alt="" coords="307,112,491,187"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="863,52,696,77,510,115,492,119,490,114,509,109,696,72,863,46"/>
+<area shape="rect" id="Node000012" href="$modbus__master___r_t_u_8h.html" title=" " alt="" coords="774,112,957,187"/>
+<area shape="poly" id="edge14_Node000001_Node000012" title=" " alt="" coords="935,77,901,113,897,110,931,73"/>
+<area shape="rect" id="Node000014" href="$modbus__driver__interface_8h.html" title="Defines the interface for a Modbus RTU driver." alt="" coords="982,120,1165,179"/>
+<area shape="poly" id="edge17_Node000001_Node000014" title=" " alt="" coords="1008,74,1049,118,1045,121,1004,77"/>
+<area shape="rect" id="Node000015" href="$modbus__slave___r_t_u_8h.html" title="Header file for Modbus RTU slave functionality." alt="" coords="1771,112,1955,187"/>
+<area shape="poly" id="edge22_Node000001_Node000015" title=" " alt="" coords="1077,36,1213,43,1382,56,1568,78,1753,109,1772,114,1770,119,1752,115,1567,83,1382,62,1213,49,1077,42"/>
+<area shape="rect" id="Node000017" href="$modbus__slave__data_8h_source.html" title=" " alt="" coords="1398,112,1581,187"/>
+<area shape="poly" id="edge25_Node000001_Node000017" title=" " alt="" coords="1077,48,1225,73,1386,109,1398,113,1397,118,1385,115,1224,79,1076,54"/>
+<area shape="rect" id="Node000003" href="$modbus___p_d_u__common_8c.html" title="Implementation file for common Modbus Protocol Data Unit (PDU) operations." alt="" coords="5,243,233,301"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="154,194,134,243,129,241,149,192"/>
+<area shape="rect" id="Node000004" href="$modbus__master___p_d_u_8c.html" title="Implementation file for Modbus master protocol data unit (PDU) functionality." alt="" coords="307,235,491,309"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="239,184,330,232,328,236,236,188"/>
+<area shape="rect" id="Node000005" href="$modbus__slave___p_d_u_8c.html" title="Implementation of Modbus slave protocol data unit (PDU) handling functions." alt="" coords="645,357,828,432"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="209,188,246,233,260,255,269,274,278,291,296,307,323,320,358,332,449,353,551,370,644,381,644,387,550,375,448,358,357,337,321,325,294,312,274,295,264,277,256,258,242,236,205,192"/>
+<area shape="rect" id="Node000007" href="$modbus___r_t_u_8c.html" title="Implementation file for Modbus RTU communication protocol." alt="" coords="1046,243,1229,301"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1238,191,1174,244,1170,240,1234,187"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="1191,186,1178,189,1116,202,1062,208,970,213,878,218,825,225,762,237,735,245,734,239,761,232,824,220,877,213,970,208,1061,203,1115,196,1177,184,1190,181"/>
+<area shape="poly" id="edge8_Node000006_Node000009" title=" " alt="" coords="1278,194,1279,251,1284,280,1295,308,1318,339,1347,363,1344,367,1314,342,1290,311,1279,282,1273,251,1273,194"/>
+<area shape="poly" id="edge10_Node000010_Node000008" title=" " alt="" coords="660,194,660,242,655,242,655,194"/>
+<area shape="poly" id="edge12_Node000011_Node000004" title=" " alt="" coords="402,203,402,234,396,234,396,203"/>
+<area shape="poly" id="edge13_Node000011_Node000008" title=" " alt="" coords="493,191,597,240,595,244,490,196"/>
+<area shape="poly" id="edge16_Node000012_Node000008" title=" " alt="" coords="790,197,709,244,706,240,788,193"/>
+<area shape="rect" id="Node000013" href="$modbus__master___r_t_u_8c.html" title="Implementation file for Modbus Master using RTU (Remote Terminal Unit) protocol." alt="" coords="774,235,957,309"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="868,203,868,234,863,234,863,203"/>
+<area shape="poly" id="edge18_Node000014_Node000008" title=" " alt="" coords="980,186,970,189,866,213,762,237,738,245,737,240,761,232,865,208,969,184,979,181"/>
+<area shape="poly" id="edge19_Node000014_Node000009" title=" " alt="" coords="1048,193,1034,221,1025,251,1024,281,1028,295,1036,308,1052,322,1077,335,1146,356,1226,372,1304,382,1304,388,1225,377,1145,361,1075,340,1049,326,1032,311,1023,297,1019,282,1020,251,1029,219,1043,191"/>
+<area shape="poly" id="edge23_Node000015_Node000009" title=" " alt="" coords="1834,201,1787,270,1754,311,1690,346,1620,369,1551,384,1489,392,1488,387,1550,379,1619,364,1688,341,1751,307,1783,267,1829,198"/>
+<area shape="rect" id="Node000016" href="$modbus__slave___r_t_u_8c.html" title="Implementation of Modbus RTU slave functionality." alt="" coords="1822,235,2005,309"/>
+<area shape="poly" id="edge24_Node000015_Node000016" title=" " alt="" coords="1887,200,1901,233,1896,235,1882,202"/>
+<area shape="rect" id="Node000018" href="$modbus__slave___p_d_u_8h.html" title="Header file for Modbus Slave Protocol Data Unit (PDU) handling." alt="" coords="1305,235,1488,309"/>
+<area shape="poly" id="edge26_Node000017_Node000018" title=" " alt="" coords="1454,201,1427,236,1423,233,1450,198"/>
+<area shape="rect" id="Node000019" href="$modbus__slave__data_8c.html" title="Implementation of Modbus data handling functions." alt="" coords="1513,235,1696,309"/>
+<area shape="poly" id="edge29_Node000017_Node000019" title=" " alt="" coords="1537,196,1571,232,1568,236,1533,200"/>
+<area shape="poly" id="edge28_Node000018_Node000005" title=" " alt="" coords="1290,302,1242,312,1020,352,829,382,828,377,1019,347,1241,307,1289,297"/>
+<area shape="poly" id="edge27_Node000018_Node000009" title=" " alt="" coords="1399,325,1399,365,1394,365,1394,325"/>
+</map>

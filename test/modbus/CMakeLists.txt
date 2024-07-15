@@ -56,11 +56,11 @@ set(SRCS
 	../../src/slave_internall/modbus_slave_PDU.c
 	../../src/slave_internall/modbus_slave_RTU.c
 	../../src/common/buf_rw.c
-	../../src/common/modbus_data.c
+	../../src/slave_internall/modbus_slave_data.c
 	../../src/common/modbus_crc.c
 	../../src/common/modbus_RTU.c
 	../../src/common/modbus_queue.c
-	../../src/common/modbus_PDU.c
+	../../src/common/modbus_PDU_common.c
 	../../src/modbus_master.c
 	../../src/modbus_slave.c
 )
@@ -75,6 +75,8 @@ set(TEST_SRCS
 	slave_PDU_resp_test.c
 	slave_PDU_exception_code_test_runner.c
 	slave_PDU_exception_code_test.c
+	# master_RTU_read_error_test_runner.c
+	# master_RTU_read_error_test.c
 	modbus_data_test.c
 	modbus_data_test_runner.c
 	modbus_CRC_test.c
@@ -84,12 +86,14 @@ set(TEST_SRCS
 	modbus_queue_test.c
 	modbus_queue_test_runner.c
 	mock_slave_app_data.c
-	mock_master_app_data.c
 	mock_master_driver_interface.c
 	mock_slave_driver_interface.c
+	mock_master_data_interface.c
 
 	master_RTU_init_test_runner.c
     master_RTU_init_test.c
+	master_RTU_req_gen_test_runner.c
+	master_RTU_req_gen_test.c
 	master_RTU_test_runner.c
 	master_RTU_test.c
 	slave_RTU_init_test_runner.c

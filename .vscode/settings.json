@@ -74,7 +74,18 @@
     "modbus_slave.h": "c",
     "modbus_public_type.h": "c",
     "mock_master_driver_interface.h": "c",
-    "modbus_queue.h": "c"
+    "modbus_queue.h": "c",
+    "modbus_driver_config.h": "c",
+    "mock_slave_app_data.h": "c",
+    "buf_rw.h": "c",
+    "modbus_slave_pdu.h": "c",
+    "modbus_crc.h": "c",
+    "modbus_pdu_common.h": "c",
+    "modbus_slave_rtu.h": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c",
+    "modbus_master_data_interface.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
   "cmake.sourceDirectory": "D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/test/hw_test/STM32G070RB_MODBUS_MASTER"

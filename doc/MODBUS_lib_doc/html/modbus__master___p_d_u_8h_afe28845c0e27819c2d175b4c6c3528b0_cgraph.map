@@ -1,0 +1,5 @@
+<map id="modbus_master_write_multiple_reg_req" name="modbus_master_write_multiple_reg_req">
+<area shape="rect" id="Node000001" title="Constructs a Modbus request to write multiple registers." alt="" coords="5,5,154,48"/>
+<area shape="rect" id="Node000002" href="$buf__rw_8c.html#a12b07bbd37b141df32b9b137dee81a9e" title="Writes a 16&#45;bit unsigned integer to a uint8_t buffer." alt="" coords="202,13,320,40"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,24,186,24,186,29,154,29"/>
+</map>

@@ -1,0 +1,1 @@
+Exceptioon code read tests for master_PDU
