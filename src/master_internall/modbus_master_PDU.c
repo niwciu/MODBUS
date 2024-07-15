@@ -1,9 +1,22 @@
 /**
  * @file modbus_master_PDU.c
- * @brief Implementation file for Modbus Master Protocol Data Unit (PDU) handling.
+ * @brief Implementation file for Modbus master protocol data unit (PDU) functionality.
+ *
+ * This file implements functions for generating Modbus master protocol data unit (PDU) requests
+ * for various Modbus operations including reading holding registers, input registers, discrete inputs,
+ * and coils, as well as writing single and multiple registers and coils. It also includes a function
+ * for processing responses received from a Modbus slave.
+ *
  * @author niwciu (niwciu@gmail.com)
- * @date 2024-06-28
+ * @date 2024-05-30
+ * @version 1.0.0
+ *
  * @copyright Copyright (c) 2024
+ *
+ * @remark The implementation assumes proper configuration and usage of the Modbus protocol
+ *         with functions optimized for generating requests and handling responses in master mode.
+ *         It includes support for various Modbus function codes and ensures robust error handling
+ *         for null pointer checks and parameter validation.
  */
 
 #include "modbus_master_PDU.h"
@@ -32,13 +45,20 @@ static void update_input_reg_from_modbus_msg(modbus_data_qty_t data_qty, const m
 static void update_holding_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
 
 static modbus_ret_t report_write_operation_confirmation(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg);
+static modbus_ret_t check_null_ptr_correctness(const modbus_msg_t *modbus_msg);
 
 static bool modbus_response_contain_exception_code(const modbus_msg_t *modbus_msg);
 static modbus_ret_t process_modbus_exception_code(modbus_msg_t *modbus_msg);
 static modbus_ret_t send_exception_code_report_data(modbus_read_data_t *ex_code_data);
 static modbus_ret_t process_modbus_response(modbus_msg_t *modbus_msg);
 
+/**
+ * @brief Mapping of Modbus function codes to their corresponding response handling functions.
+ *
+ * This array maps each Modbus function code to a function pointer that handles the response
+ * for that particular function code. It provides a centralized mechanism for dispatching
+ * Modbus responses based on their function codes.
+ */
 static const modbus_function_mapper_t modbus_master_function_mapper[] = {
     {MODBUS_READ_COILS_FUNC_CODE, modbus_master_read_coils_resp},
     {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, modbus_master_read_discrete_inputs_resp},
@@ -52,7 +72,19 @@ static const modbus_function_mapper_t modbus_master_function_mapper[] = {
 
 #define MODBUS_MASTER_FUNCTION_MAPPER_SIZE (sizeof(modbus_master_function_mapper) / sizeof(modbus_master_function_mapper[0]));
 
-
+/**
+ * @brief Constructs a Modbus request to read holding registers.
+ *
+ * Constructs a Modbus request message to read holding registers based on the
+ * parameters provided. Checks for null pointer correctness in the message buffer,
+ * prepares the request data accordingly, and sets the appropriate Modbus function code.
+ *
+ * @param msg_buf Pointer to the Modbus message structure where the request will be stored.
+ * @param req_param Pointer to the structure containing input parameters for the request.
+ * @return modbus_ret_t The status of the request construction.
+ * @retval RET_OK Request constructed successfully.
+ * @retval RET_NULL_PTR_ERROR Null pointer detected in the Modbus message structure.
+ */
 modbus_ret_t modbus_master_read_holding_reg_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK == check_null_ptr_correctness(msg_buf))
@@ -65,6 +97,19 @@ modbus_ret_t modbus_master_read_holding_reg_req(modbus_msg_t *msg_buf, req_input
     }
 }
 
+/**
+ * @brief Constructs a Modbus request to read input registers.
+ *
+ * Constructs a Modbus request message to read input registers based on the
+ * parameters provided. Checks for null pointer correctness in the message buffer,
+ * prepares the request data accordingly, and sets the appropriate Modbus function code.
+ *
+ * @param msg_buf Pointer to the Modbus message structure where the request will be stored.
+ * @param req_param Pointer to the structure containing input parameters for the request.
+ * @return modbus_ret_t The status of the request construction.
+ * @retval RET_OK Request constructed successfully.
+ * @retval RET_NULL_PTR_ERROR Null pointer detected in the Modbus message structure.
+ */
 modbus_ret_t modbus_master_read_input_reg_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK == check_null_ptr_correctness(msg_buf))
@@ -77,6 +122,19 @@ modbus_ret_t modbus_master_read_input_reg_req(modbus_msg_t *msg_buf, req_input_p
     }
 }
 
+/**
+ * @brief Constructs a Modbus request to read discrete inputs.
+ *
+ * Constructs a Modbus request message to read discrete inputs based on the
+ * parameters provided. Checks for null pointer correctness in the message buffer,
+ * prepares the request data accordingly, and sets the appropriate Modbus function code.
+ *
+ * @param msg_buf Pointer to the Modbus message structure where the request will be stored.
+ * @param req_param Pointer to the structure containing input parameters for the request.
+ * @return modbus_ret_t The status of the request construction.
+ * @retval RET_OK Request constructed successfully.
+ * @retval RET_NULL_PTR_ERROR Null pointer detected in the Modbus message structure.
+ */
 modbus_ret_t modbus_master_read_discrete_inputs_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK == check_null_ptr_correctness(msg_buf))
@@ -89,7 +147,19 @@ modbus_ret_t modbus_master_read_discrete_inputs_req(modbus_msg_t *msg_buf, req_i
     }
 }
 
-
+/**
+ * @brief Constructs a Modbus request to read multiple coils.
+ *
+ * Constructs a Modbus request message to read multiple coils based on the
+ * parameters provided. Checks for null pointer correctness in the message buffer,
+ * prepares the request data accordingly, and sets the appropriate Modbus function code.
+ *
+ * @param msg_buf Pointer to the Modbus message structure where the request will be stored.
+ * @param req_param Pointer to the structure containing input parameters for the request.
+ * @return modbus_ret_t The status of the request construction.
+ * @retval RET_OK Request constructed successfully.
+ * @retval RET_NULL_PTR_ERROR Null pointer detected in the Modbus message structure.
+ */
 modbus_ret_t modbus_master_read_coils_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK == check_null_ptr_correctness(msg_buf))
@@ -102,6 +172,19 @@ modbus_ret_t modbus_master_read_coils_req(modbus_msg_t *msg_buf, req_input_param
     }
 }
 
+/**
+ * @brief Constructs a Modbus request to write a single register.
+ *
+ * Constructs a Modbus request message to write a single register based on the
+ * parameters provided. Checks for null pointer correctness in the message buffer,
+ * prepares the request data accordingly, and sets the appropriate Modbus function code.
+ *
+ * @param msg_buf Pointer to the Modbus message structure where the request will be stored.
+ * @param req_param Pointer to the structure containing input parameters for the request.
+ * @return modbus_ret_t The status of the request construction.
+ * @retval RET_OK Request constructed successfully.
+ * @retval RET_NULL_PTR_ERROR Null pointer detected in the Modbus message structure.
+ */
 modbus_ret_t modbus_master_write_single_reg_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK == check_null_ptr_correctness(msg_buf))
@@ -119,7 +202,19 @@ modbus_ret_t modbus_master_write_single_reg_req(modbus_msg_t *msg_buf, req_input
     }
 }
 
-
+/**
+ * @brief Constructs a Modbus request to write a single coil.
+ *
+ * Constructs a Modbus request message to write a single coil based on the
+ * parameters provided. Checks for null pointer correctness in the message buffer,
+ * prepares the request data accordingly, and sets the appropriate Modbus function code.
+ *
+ * @param msg_buf Pointer to the Modbus message structure where the request will be stored.
+ * @param req_param Pointer to the structure containing input parameters for the request.
+ * @return modbus_ret_t The status of the request construction.
+ * @retval RET_OK Request constructed successfully.
+ * @retval RET_NULL_PTR_ERROR Null pointer detected in the Modbus message structure.
+ */
 modbus_ret_t modbus_master_write_single_coil_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK == check_null_ptr_correctness(msg_buf))
@@ -137,7 +232,21 @@ modbus_ret_t modbus_master_write_single_coil_req(modbus_msg_t *msg_buf, req_inpu
     }
 }
 
-
+/**
+ * @brief Constructs a Modbus request to write multiple registers.
+ *
+ * Constructs a Modbus request message to write multiple registers based on the
+ * parameters provided. Checks for null pointer correctness in the message buffer,
+ * validates the quantity of registers to be written, and prepares the request data
+ * accordingly.
+ *
+ * @param msg_buf Pointer to the Modbus message structure where the request will be stored.
+ * @param req_param Pointer to the structure containing input parameters for the request.
+ * @return modbus_ret_t The status of the request construction.
+ * @retval RET_OK Request constructed successfully.
+ * @retval RET_NULL_PTR_ERROR Null pointer detected in the Modbus message structure.
+ * @retval RET_ERROR Invalid quantity of registers to write.
+ */
 modbus_ret_t modbus_master_write_multiple_reg_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK != check_null_ptr_correctness(msg_buf))
@@ -169,7 +278,21 @@ modbus_ret_t modbus_master_write_multiple_reg_req(modbus_msg_t *msg_buf, req_inp
     return RET_OK;
 }
 
-
+/**
+ * @brief Constructs a Modbus request to write multiple coils.
+ *
+ * Constructs a Modbus request message to write multiple coils based on the
+ * parameters provided. Checks for null pointer correctness in the message buffer,
+ * validates the quantity of coils to be written, and prepares the request data
+ * accordingly.
+ *
+ * @param msg_buf Pointer to the Modbus message structure where the request will be stored.
+ * @param req_param Pointer to the structure containing input parameters for the request.
+ * @return modbus_ret_t The status of the request construction.
+ * @retval RET_OK Request constructed successfully.
+ * @retval RET_NULL_PTR_ERROR Null pointer detected in the Modbus message structure.
+ * @retval RET_ERROR Invalid quantity of coils to write.
+ */
 modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *msg_buf, req_input_param_struct_t *req_param)
 {
     if (RET_OK != check_null_ptr_correctness(msg_buf))
@@ -201,7 +324,20 @@ modbus_ret_t modbus_master_write_multiple_coils_req(modbus_msg_t *msg_buf, req_i
     return RET_OK;
 }
 
-
+/**
+ * @brief Processes the Modbus message response.
+ *
+ * This function checks for null pointer correctness in the Modbus message.
+ * If no null pointer error is detected, it checks if the response contains
+ * an exception code. If an exception code is present, it processes the exception.
+ * If no exception code is found, it proceeds to process the main response based
+ * on the function code.
+ *
+ * @param modbus_msg Pointer to the Modbus message structure containing response data.
+ * @return modbus_ret_t The status of the response processing.
+ * @retval RET_OK Response processed successfully.
+ * @retval RET_NULL_PTR_ERROR Null pointer detected in the Modbus message structure.
+ */
 modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
 {
     if (RET_OK != check_null_ptr_correctness(modbus_msg))
@@ -219,46 +355,139 @@ modbus_ret_t modbus_master_read_slave_resp(modbus_msg_t *modbus_msg)
 }
 
 // Master internall functions
+/**
+ * @brief Processes the response for a Modbus "Read Coils" request.
+ *
+ * This function updates the master data with the coils' values received from the Modbus response.
+ *
+ * @param modbus_msg Pointer to the Modbus message structure containing the response.
+ * @return modbus_ret_t The status of the operation.
+ * @retval RET_OK The response was successfully processed and the master data updated.
+ * @retval RET_ERROR The function code in the response is unrecognized, or an error occurred during processing.
+ */
 static modbus_ret_t modbus_master_read_coils_resp(modbus_msg_t *modbus_msg)
 {
     return update_master_data_from_modbus_msg(&modbus_msg->resp, &modbus_msg->req);
 }
 
+/**
+ * @brief Processes the response for a Modbus "Read Discrete Inputs" request.
+ *
+ * This function updates the master data with the discrete inputs' values received from the Modbus response.
+ *
+ * @param modbus_msg Pointer to the Modbus message structure containing the response.
+ * @return modbus_ret_t The status of the operation.
+ * @retval RET_OK The response was successfully processed and the master data updated.
+ * @retval RET_ERROR The function code in the response is unrecognized, or an error occurred during processing.
+ */
 static modbus_ret_t modbus_master_read_discrete_inputs_resp(modbus_msg_t *modbus_msg)
 {
     return update_master_data_from_modbus_msg(&modbus_msg->resp, &modbus_msg->req);
 }
 
+/**
+ * @brief Processes the response for a Modbus "Read Input Registers" request.
+ *
+ * This function updates the master data with the input registers' values received from the Modbus response.
+ *
+ * @param modbus_msg Pointer to the Modbus message structure containing the response.
+ * @return modbus_ret_t The status of the operation.
+ * @retval RET_OK The response was successfully processed and the master data updated.
+ * @retval RET_ERROR The function code in the response is unrecognized, or an error occurred during processing.
+ */
 static modbus_ret_t modbus_master_read_input_reg_resp(modbus_msg_t *modbus_msg)
 {
 
     return update_master_data_from_modbus_msg(&modbus_msg->resp, &modbus_msg->req);
 }
 
+/**
+ * @brief Processes the response for a Modbus "Read Holding Registers" request.
+ *
+ * This function updates the master data with the holding registers' values received from the Modbus response.
+ *
+ * @param modbus_msg Pointer to the Modbus message structure containing the response.
+ * @return modbus_ret_t The status of the operation.
+ * @retval RET_OK The response was successfully processed and the master data updated.
+ * @retval RET_ERROR The function code in the response is unrecognized, or an error occurred during processing.
+ */
 static modbus_ret_t modbus_master_read_holding_reg_resp(modbus_msg_t *modbus_msg)
 {
     return update_master_data_from_modbus_msg(&modbus_msg->resp, &modbus_msg->req);
 }
 
+/**
+ * @brief Handles the response for writing a single coil in Modbus communication.
+ *
+ * This function processes the response message from the Modbus slave after a request
+ * to write a single coil. It reports the completion of the write operation.
+ *
+ * @param modbus_msg Pointer to the Modbus message structure containing response data.
+ * @return modbus_ret_t The status of the operation.
+ * @retval RET_OK Always returns RET_OK to indicate that the write operation response was processed.
+ */
 static modbus_ret_t modbus_master_write_single_coil_resp(modbus_msg_t *modbus_msg)
 {
     return report_write_operation_confirmation(&modbus_msg->resp, &modbus_msg->req);
 }
 
+/**
+ * @brief Handles the response for writing a single register in the Modbus master mode.
+ *
+ * This function confirms the success of the write operation based on the response.
+ *
+ * @param modbus_msg Pointer to the Modbus message containing the response.
+ * @return modbus_ret_t The status of the operation.
+ * @retval RET_OK Always returns RET_OK to indicate that the write operation response was processed.
+ */
 static modbus_ret_t modbus_master_write_single_reg_resp(modbus_msg_t *modbus_msg)
 {
     return report_write_operation_confirmation(&modbus_msg->resp, &modbus_msg->req);
 }
 
+/**
+ * @brief Handles the response for writing multiple coils in Modbus communication.
+ *
+ * This function processes the response message from the Modbus slave after a request
+ * to write multiple coils. It reports the completion of the write operation.
+ *
+ * @param modbus_msg Pointer to the Modbus message structure containing response data.
+ * @return modbus_ret_t The status of the operation.
+ * @retval RET_OK Always returned to indicate that the write operation response was processed.
+ */
 static modbus_ret_t modbus_master_write_multiple_coils_resp(modbus_msg_t *modbus_msg)
 {
     return report_write_operation_confirmation(&modbus_msg->resp, &modbus_msg->req);
 }
+/**
+ * @brief Handles the response for writing multiple registers in Modbus communication.
+ *
+ * This function processes the response message from the Modbus slave after a request
+ * to write multiple registers. It reports the completion of the write operation.
+ *
+ * @param modbus_msg Pointer to the Modbus message structure containing response data.
+ * @return modbus_ret_t The status of the operation.
+ * @retval RET_OK Always returned to indicate that the write operation response was processed.
+ */
 static modbus_ret_t modbus_master_write_multiple_reg_resp(modbus_msg_t *modbus_msg)
 {
     return report_write_operation_confirmation(&modbus_msg->resp, &modbus_msg->req);
 }
 
+/**
+ * @brief Constructs a Modbus read request for registers.
+ *
+ * This function prepares a Modbus request to read registers by populating the request structure
+ * with the appropriate function code, address, and quantity of data to read.
+ *
+ * @param req Pointer to the Modbus request structure to be populated.
+ * @param req_code The Modbus function code for the read request.
+ * @param adr The starting address for the read operation.
+ * @param data_len The quantity of data to read.
+ * @return modbus_ret_t The status of the operation.
+ * @retval RET_OK The request was successfully constructed.
+ * @retval RET_ERROR The data length is out of the allowed range.
+ */
 static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_code, modbus_adr_t adr, modbus_data_qty_t data_len)
 {
     if ((data_len <= modbus_get_max_len_2_read(req_code)) && (data_len >= MODBUS_MIN_REG_COIL_QTY))
@@ -275,6 +504,15 @@ static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_co
     }
 }
 
+/**
+ * @brief Gets the maximum length of data that can be read for a given Modbus request code.
+ *
+ * This function determines the maximum number of data elements that can be read based on the Modbus request code.
+ * It supports reading coils, discrete inputs, holding registers, and input registers.
+ *
+ * @param req_code The Modbus request function code.
+ * @return modbus_data_t The maximum length of data that can be read.
+ */
 static modbus_data_t modbus_get_max_len_2_read(modbus_req_t req_code)
 {
     modbus_data_t max_len = 0;
@@ -293,8 +531,24 @@ static modbus_data_t modbus_get_max_len_2_read(modbus_req_t req_code)
     }
     return max_len;
 }
+
+/**
+ * @brief Updates the Modbus master's data from a Modbus message.
+ *
+ * This function processes the response message to update the various types of data
+ * (coils, discrete inputs, input registers, and holding registers) of the Modbus master device.
+ * It reads the necessary information from the request and response messages and calls the appropriate
+ * update functions based on the function code in the response.
+ *
+ * @param resp Pointer to the Modbus response message structure.
+ * @param req Pointer to the Modbus request message structure.
+ * @return modbus_ret_t
+ * @retval RET_OK The data was successfully updated.
+ * @retval RET_ERROR The function code in the response is unrecognized.
+ */
 static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *resp, const modbus_req_resp_t *req)
 {
+    modbus_ret_t status = RET_OK;
     modbus_device_ID_t slave_adr = resp->data[MODBUS_SLAVE_ADR_IDX];
     modbus_fun_code_t resp_fun_code = resp->data[MODBUS_FUNCTION_CODE_IDX];
     modbus_adr_t data_adr = read_u16_from_buf(req->data + MODBUS_REQUEST_ADR_IDX);
@@ -316,11 +570,24 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
         update_holding_reg_from_modbus_msg(data_qty, resp, slave_adr, data_adr);
         break;
     default:
+        status = RET_ERROR;
         break;
     }
-    return RET_OK;
+    return status;
 }
 
+/**
+ * @brief Updates the Modbus master's coils from a Modbus message.
+ *
+ * This function processes the response message to update the coils
+ * of the Modbus master device. It reads the data from the response message
+ * and updates each coil based on the received data.
+ *
+ * @param data_qty Quantity of coils to update.
+ * @param resp Pointer to the Modbus response message structure.
+ * @param slave_adr The address of the Modbus slave device.
+ * @param data_adr The starting address of the coils in the Modbus slave device.
+ */
 static void update_master_coils_frmo_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
 {
     for (modbus_data_qty_t i = 0; i < data_qty; i++)
@@ -458,7 +725,7 @@ static modbus_ret_t report_write_operation_confirmation(const modbus_req_resp_t 
  * @retval RET_NULL_PTR_ERROR If any of the pointers (`modbus_msg`, `modbus_msg->req.data`,
  *                           `modbus_msg->resp.data`) are NULL.
  */
-static modbus_ret_t check_null_ptr_correctness(modbus_msg_t *modbus_msg)
+static modbus_ret_t check_null_ptr_correctness(const modbus_msg_t *modbus_msg)
 {
     if ((NULL == modbus_msg) || (NULL == modbus_msg->req.data) || (NULL == modbus_msg->resp.data))
     {

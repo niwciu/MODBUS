@@ -1,12 +1,24 @@
 /**
  * @file modbus_master_data_interface.h
+ * @brief Defines functions for Modbus master data operations and error handling.
  * @author niwciu (niwciu@gmail.com)
- * @brief
  * @version 0.0.1
  * @date 2024-07-07
- *
  * @copyright Copyright (c) 2024
  *
+ * This header file declares functions for Modbus master data operations and error handling.
+ * It includes functions for reading and writing coils (discrete outputs), reading and writing
+ * holding registers (Holding Registers), reading discrete inputs, and handling exceptions for
+ * coil and register reads. Additionally, it provides functions to handle timeouts and
+ * communication errors specific to Modbus master operations.
+ *
+ * The functions are designed to interact with a Modbus slave device identified by its address
+ * (`slave_adr`) and specific data addresses (`data_adr`). They utilize types defined in
+ * `modbus_public_type.h` for consistency and clarity in data handling.
+ *
+ * @note Implement these functions according to the Modbus protocol specifications and the
+ *       requirements of your Modbus master application. Handle errors and exceptions
+ *       appropriately to ensure reliable communication with Modbus slave devices.
  */
 
 #include "modbus_public_type.h"

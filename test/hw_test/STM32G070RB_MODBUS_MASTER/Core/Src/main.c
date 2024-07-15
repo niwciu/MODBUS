@@ -28,7 +28,7 @@
 #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
-modbus_coil_disin_t test_coils[20]={0};
+modbus_coil_disin_t test_coils[20] = {0};
 int main(void)
 {
     core_init();
@@ -39,6 +39,6 @@ int main(void)
     /* Loop forever */
     while (1)
     {
-        check_modbus_master_manager();
+        update_modbus_master_manager();
     }
 }
