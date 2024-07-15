@@ -1,0 +1,13 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/common/buf_rw.h" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/common/buf_rw.h">
+<area shape="rect" id="Node000001" title="Header file for buffer read and write operations." alt="" coords="421,5,605,64"/>
+<area shape="rect" id="Node000002" href="$buf__rw_8c.html" title="Implementation file for buffer read and write operations." alt="" coords="5,120,189,179"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="407,62,202,115,178,122,177,117,200,109,406,57"/>
+<area shape="rect" id="Node000003" href="$modbus___r_t_u_8c.html" title="Implementation file for Modbus RTU communication protocol." alt="" coords="213,120,397,179"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="448,74,359,122,357,117,445,69"/>
+<area shape="rect" id="Node000004" href="$modbus__master___p_d_u_8c.html" title="Implementation file for Modbus master protocol data unit (PDU) functionality." alt="" coords="421,112,605,187"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="516,79,516,112,510,112,510,79"/>
+<area shape="rect" id="Node000005" href="$modbus__master_8c.html" title="Implementation of a Modbus master protocol handler for embedded systems." alt="" coords="629,120,813,179"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="581,69,669,117,667,122,578,74"/>
+<area shape="rect" id="Node000006" href="$modbus__slave___p_d_u_8c.html" title="Implementation of Modbus slave protocol data unit (PDU) handling functions." alt="" coords="837,112,1021,187"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="620,57,826,109,837,113,836,118,824,115,619,62"/>
+</map>

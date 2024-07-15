@@ -1,0 +1,11 @@
+<map id="write_u16_to_buf" name="write_u16_to_buf">
+<area shape="rect" id="Node000001" title="Writes a 16&#45;bit unsigned integer to a uint8_t buffer." alt="" coords="202,113,320,140"/>
+<area shape="rect" id="Node000002" href="$modbus__master___p_d_u_8c.html#aa98ae7202dd5aced556eebc5baa356da" title="Constructs a Modbus request to write multiple coils." alt="" coords="5,5,154,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="225,107,152,62,130,51,132,46,155,58,228,102"/>
+<area shape="rect" id="Node000003" href="$modbus__master___p_d_u_8c.html#afe28845c0e27819c2d175b4c6c3528b0" title="Constructs a Modbus request to write multiple registers." alt="" coords="5,72,154,115"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="186,116,154,110,155,104,187,110"/>
+<area shape="rect" id="Node000004" href="$modbus__master___p_d_u_8c.html#a6bba2c17354127d538b8d2eb537146a6" title="Constructs a Modbus request to write a single coil." alt="" coords="5,139,154,181"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="187,143,155,149,154,144,186,138"/>
+<area shape="rect" id="Node000005" href="$modbus__master___p_d_u_8c.html#aa1113c966a7c96ac5c4d3d8d53097c6e" title="Constructs a Modbus request to write a single register." alt="" coords="5,205,154,248"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="228,151,155,196,132,207,130,202,152,191,225,147"/>
+</map>

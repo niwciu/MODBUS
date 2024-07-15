@@ -1,0 +1,7 @@
+<map id="modbus_master_functions_mapper" name="modbus_master_functions_mapper">
+<area shape="rect" id="Node000001" title="Structure mapping Modbus function codes to their corresponding handlers." alt="" coords="5,203,179,245"/>
+<area shape="rect" id="Node000002" href="$structmodbus__msg__t.html" title="Structure representing a Modbus message." alt="" coords="37,112,147,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,155,95,202,89,202,89,155"/>
+<area shape="rect" id="Node000003" href="$structmodbus__req__resp__t.html" title="Structure representing a Modbus request or response." alt="" coords="24,5,160,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,47,95,112,89,112,89,47"/>
+</map>

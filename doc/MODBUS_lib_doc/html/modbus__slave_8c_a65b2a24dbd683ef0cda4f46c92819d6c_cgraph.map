@@ -1,0 +1,5 @@
+<map id="register_app_data_to_modbus_slave_coils_table" name="register_app_data_to_modbus_slave_coils_table">
+<area shape="rect" id="Node000001" title="Registers application data to Modbus slave coils table." alt="" coords="5,5,185,48"/>
+<area shape="rect" id="Node000002" href="$modbus__slave__data_8c.html#a8f0c3b00519bcca73a80878f7f63a1e7" title="Registers application data to the Modbus coils or discrete inputs table." alt="" coords="233,5,400,48"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="185,24,217,24,217,29,185,29"/>
+</map>

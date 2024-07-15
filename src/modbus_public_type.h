@@ -75,19 +75,21 @@ extern "C"
         MODBUS_MASTER_RESP_FRAME_ERR    /**< Modbus response frame error. */
     } modbus_master_resp_read_error_t;
 
+    /**
+     * @brief Modbus function codes enumeration.
+     */
     typedef enum
     {
-        MODBUS_READ_COILS_FUNC_CODE = 0x01U,
-        MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE = 0x02U,
-        MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE = 0x03U,
-        MODBUS_READ_INPUT_REGISTERS_FUNC_CODE = 0x04U,
-        MODBUS_WRITE_SINGLE_COIL_FUNC_CODE = 0x05U,
-        MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE = 0x06U,
-        MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE = 0x0FU,
-        MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE = 0x10U,
+        MODBUS_READ_COILS_FUNC_CODE = 0x01U,              /**< Function code for reading coils. */
+        MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE = 0x02U,    /**< Function code for reading discrete inputs. */
+        MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE = 0x03U,  /**< Function code for reading holding registers. */
+        MODBUS_READ_INPUT_REGISTERS_FUNC_CODE = 0x04U,    /**< Function code for reading input registers. */
+        MODBUS_WRITE_SINGLE_COIL_FUNC_CODE = 0x05U,       /**< Function code for writing a single coil. */
+        MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE = 0x06U,   /**< Function code for writing a single register. */
+        MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE = 0x0FU,    /**< Function code for writing multiple coils. */
+        MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE = 0x10U, /**< Function code for writing multiple registers. */
     } modbus_fun_code_t;
 
-    
     typedef uint16_t modbus_adr_t;      /**< Modbus address type. */
     typedef bool modbus_coil_disin_t;   /**< Modbus coil and discrete input type (boolean). */
     typedef uint16_t modbus_reg_t;      /**< Modbus register type. */
@@ -102,19 +104,18 @@ extern "C"
     {
         modbus_device_ID_t slave_ID;                     /**< Modbus slave ID. */
         modbus_fun_code_t fun_conde;                     /**< Modbus function code. */
-        modbus_adr_t data_adr;
-        modbus_data_qty_t data_qty;
-        // modbus_master_req_ret_t req_gen_error;           /**< Modbus master request generation error. */
+        modbus_adr_t data_adr;                           /**< Address of the data that caused the error. */
+        modbus_data_qty_t data_qty;                      /**< Quantity of data objects that caused the error. */
         modbus_master_resp_read_error_t resp_read_error; /**< Modbus master response read error. */
     } modbus_master_error_report_t;
 
     typedef struct
     {
-        modbus_device_ID_t slave_ID;                     /**< Modbus slave ID. */
-        modbus_fun_code_t fun_conde;
-        modbus_exception_code_t exception_code; /**< Modbus exception code. */
-        modbus_adr_t data_adr;
-        modbus_data_qty_t data_qty;                    /**< Modbus function code. */
+        modbus_device_ID_t slave_ID;                    /**< Modbus slave ID. */
+        modbus_fun_code_t fun_conde;                    /**< Modbus function code. */
+        modbus_exception_code_t exception_code;         /**< Modbus exception code. */
+        modbus_adr_t data_adr;                          /**< Modbus adress of processed object. */
+        modbus_data_qty_t data_qty;                     /**< Quantitt of processed object. First object located under data_adr position. */
         // modbus_coil_disin_t readed_coil_val;
         // modbus_reg_t readed_reg_val;
        

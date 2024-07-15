@@ -1,0 +1,7 @@
+<map id="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_driver_interface.h" name="D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src/modbus_driver_interface.h">
+<area shape="rect" id="Node000001" title="Defines the interface for a Modbus RTU driver." alt="" coords="109,5,293,64"/>
+<area shape="rect" id="Node000002" href="$modbus__master_8c.html" title="Implementation of a Modbus master protocol handler for embedded systems." alt="" coords="5,112,189,171"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,77,127,114,123,110,160,73"/>
+<area shape="rect" id="Node000003" href="$modbus__slave_8c.html" title="Implementation of Modbus slave functions for handling communication and data management." alt="" coords="213,112,397,171"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,73,279,110,275,114,238,77"/>
+</map>

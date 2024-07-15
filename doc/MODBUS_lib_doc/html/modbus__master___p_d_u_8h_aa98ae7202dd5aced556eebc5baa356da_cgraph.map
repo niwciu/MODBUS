@@ -1,0 +1,9 @@
+<map id="modbus_master_write_multiple_coils_req" name="modbus_master_write_multiple_coils_req">
+<area shape="rect" id="Node000001" title="Constructs a Modbus request to write multiple coils." alt="" coords="5,48,154,91"/>
+<area shape="rect" id="Node000002" href="$modbus___p_d_u__common_8c.html#ad2b211d0e16e4d333ca8a4f2b01c5a73" title="Clears the status byte in modbus msg buffer for coils or discrete inputs." alt="" coords="202,5,377,32"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,49,216,33,217,39,155,54"/>
+<area shape="rect" id="Node000003" href="$modbus___p_d_u__common_8c.html#afa699fc765a40b548510864a4400e252" title="Calculates the byte count required for a given quantity of coils or discrete inputs." alt="" coords="209,56,370,83"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,67,193,67,193,72,154,72"/>
+<area shape="rect" id="Node000004" href="$buf__rw_8c.html#a12b07bbd37b141df32b9b137dee81a9e" title="Writes a 16&#45;bit unsigned integer to a uint8_t buffer." alt="" coords="230,107,349,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="155,85,217,100,216,105,153,90"/>
+</map>

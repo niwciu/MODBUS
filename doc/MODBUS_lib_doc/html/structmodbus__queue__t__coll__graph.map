@@ -1,0 +1,7 @@
+<map id="modbus_queue_t" name="modbus_queue_t">
+<area shape="rect" id="Node000001" title="Structure representing a Modbus message queue." alt="" coords="13,203,133,229"/>
+<area shape="rect" id="Node000002" href="$structmodbus__msg__t.html" title="Structure representing a Modbus message." alt="" coords="18,112,128,139"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="76,154,76,202,70,202,70,154"/>
+<area shape="rect" id="Node000003" href="$structmodbus__req__resp__t.html" title="Structure representing a Modbus request or response." alt="" coords="5,5,141,32"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,47,76,112,70,112,70,47"/>
+</map>
