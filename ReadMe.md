@@ -17,10 +17,18 @@
   - ModBus Master & Slave implementation on one harwdware platform
 - Library contain unit test and integration tests that can be reused in project if needed
 ## Library contents description
+TBD
 ## Examples
-This library contain an examples of three different configurations that can be implemented in project usign this library. The fallowin configurations allow to run device as: 
-    - Modbus Slave / Modbus Sever
+Library contain an examples of three different configurations that can be implemented in project. The fallowin configurations allow to run device as: 
+- ModBus RTU Slave (ModBus RTU Sever)
+- ModBus RTU Master (ModBus RTU Client)
+- ModBus RTU Slave&Master (ModBus RTU Sever&Client)
+
 ### How to run ModBus RTU Slave example
+TBD
 ### How to run ModBus RTU Master example
+TBD
 ### How to run ModBus RTU Master&Slave example
+TBD
 ## How to use in project
+TBD
