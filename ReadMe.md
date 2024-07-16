@@ -1,4 +1,4 @@
-# ModBus corss platform C library containing Master and Slave RTU implementation 
+# ModBus corss platform C library 
 ## Features
 - Contain ModBus RTU Master and Slave implementation
 - Support the following functions:
