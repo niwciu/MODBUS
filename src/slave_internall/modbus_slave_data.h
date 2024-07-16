@@ -19,7 +19,11 @@ extern "C"
 {
 #endif /* __cplusplus */
 #include "modbus_type.h"
+#ifndef UNIT_TEST
 #include "modbus_config.h"
+#else
+#include "modbus_unit_test_config.h"
+#endif
 
 /**
  * Number of holding registers as determined by the application or protocol limits.
