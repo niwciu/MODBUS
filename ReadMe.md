@@ -1,4 +1,10 @@
 # ModBus corss platform C library 
+![example workflow](https://github.com/niwciu/MODBUS/actions/workflows/run_modbus_tests.yml/badge.svg)
+![example workflow](https://github.com/niwciu/MODBUS/actions/workflows/run_cppcheck.yml/badge.svg)
+![example workflow](https://github.com/niwciu/MODBUS/actions/workflows/clang-format_check.yml/badge.svg)
+![example workflow](https://github.com/niwciu/MODBUS/actions/workflows/run_lizard_lib_check.yml/badge.svg)  
+![GitHub License](https://img.shields.io/github/license/niwciu/MODBUS)
+
 ## Features
 - Contain ModBus RTU Master and Slave implementation
 - Support the following functions:
