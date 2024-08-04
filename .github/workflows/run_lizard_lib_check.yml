@@ -1,4 +1,4 @@
-name: Run Lizard Library Check
+name: Code Complexity Check
 on: 
   workflow_dispatch:
   push:
