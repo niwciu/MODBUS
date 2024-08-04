@@ -46,7 +46,7 @@
 
 PRIVATE modbus_master_state_t modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
 PRIVATE const modbus_RTU_driver_struct_t *RTU_driver = NULL;
-PRIVATE modbus_master_error_cb_t modbus_error_callback = NULL;
+// PRIVATE modbus_master_error_cb_t modbus_error_callback = NULL;
 
 static modbus_queue_t master_free_queue;
 static modbus_queue_t master_tx_rx_queue;
@@ -81,11 +81,11 @@ static bool check_data_to_send_availability(const modbus_queue_t *q);
 static void modbus_master_idle_state_handling(void);
 static void modbus_master_transmitting_state_handling(void);
 static void modbus_master_resp_waiting_state_handling(void);
-static void modbus_master_resp_timeout_handle();
-static void modbus_master_RTU_recv_state_handle();
+static void modbus_master_resp_timeout_handle(void);
+static void modbus_master_RTU_recv_state_handle(void);
 static void modbus_master_resp_recived_state_handling(void);
 
-static void modbus_master_msg_recived_correctly_state_handle();
+static void modbus_master_msg_recived_correctly_state_handle(void);
 
 static void modbus_master_RTU_CRC_error_state_handling(void);
 static void modbus_master_frame_error_state_handling(void);
