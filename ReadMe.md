@@ -34,7 +34,7 @@ Library contain an examples of three different configurations that can be implem
 - ModBus RTU Slave&Master (ModBus RTU Sever&Client)
 
 ### STM32G071RB ModBus RTU Slave example
-By running this example you can read all types of ModBus in the address range 0 to 19.
+By running this example you can read all types of ModBus data in the address range from 0 to 19.
 Below are the default values stored in all object types.
 ```C
 #define EXAMPLE_DATA_QTY 20
@@ -47,7 +47,8 @@ modbus_reg_t inreg_data[EXAMPLE_DATA_QTY] = {4201, 4202, 4203, 4204, 4205, 4206,
 
 You can also write coils and registers using the same address range.
 
-Additionally, it's possible to control the state of the user LED on the Nucleo board. To turn on the LED set coil under address 21 to 1, to turn off the LED set the same coil to 0.
+Additionally, it's possible to control the state of the user LED on the Nucleo board. To turn on the LED set coil under address 21 to 1, to turn off the LED set the same coil to 0.  
+
 #### Requirements for compiling and running the example:
   1. CMake installed
   2. Make or Ninja installed
