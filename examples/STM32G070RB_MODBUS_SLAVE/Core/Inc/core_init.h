@@ -8,11 +8,11 @@
 #define _CORE_INIT_H_
 
 #ifdef __cplusplus
- extern "C" {
+extern "C"
+{
 #endif /* __cplusplus */
 
-
-void core_init(void);
+    void core_init(void);
 
 #ifdef __cplusplus
 }

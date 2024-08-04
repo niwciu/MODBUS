@@ -66,11 +66,6 @@ extern "C"
     extern modbus_coil_disin_t *Slave_Coils[COILS_QTY];
     extern modbus_coil_disin_t *Slave_Discrete_Inputs[DISCRET_INPUT_QTY];
 
-    extern modbus_reg_t *Master_Holding_Registers[HOLDING_REG_QTY];
-    extern modbus_reg_t *Master_Input_Registers[INPUT_REG_QTY];
-    extern modbus_coil_disin_t *Master_Coils[COILS_QTY];
-    extern modbus_coil_disin_t *Master_Discrete_Inputs[DISCRET_INPUT_QTY];
-
     void register_app_data_to_modbus_coils_din_table(modbus_coil_disin_t **coil_din_table, modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr);
     void register_app_data_to_modbus_reg_table(modbus_reg_t **reg_table, modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr);
 
