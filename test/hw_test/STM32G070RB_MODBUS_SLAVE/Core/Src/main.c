@@ -33,18 +33,28 @@ modbus_device_ID_t Slave_ID = 0x01;
 
 int main(void)
 {
+
   core_init();
-  modbus_slave_init(RTU,115200,NONE,Slave_ID);
-  for (int i=0;i<20;i++)
+  modbus_slave_init(RTU, 115200, NONE, Slave_ID);
+  for (int i = 0; i < EXAMPLE_DATA_QTY; i++)
   {
-    register_app_data_to_modbus_slave_coils_table(i,&coils[i]);
-    register_app_data_to_modbus_slave_hreg_table(i,&hreg[i]);
-    register_app_data_to_modbus_slave_inreg_table( i, &inreg[i]);
+      register_app_data_to_modbus_slave_coils_table(i, &coil[i]);
+      register_app_data_to_modbus_slave_hreg_table(i, &hreg[i]);
+      register_app_data_to_modbus_slave_inreg_table(i, &inreg[i]);
   }
-  
+
   /* Loop forever */
-	while(1)
+  while (1)
+  {
+      check_modbus_request();
+  }
+
+  /* Loop forever */
+  while (1)
   {
     check_modbus_request();
+
+    update_LED();
   }
 }
+
