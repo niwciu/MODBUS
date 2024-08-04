@@ -33,11 +33,87 @@ Library contain an examples of three different configurations that can be implem
 - ModBus RTU Master (ModBus RTU Client)
 - ModBus RTU Slave&Master (ModBus RTU Sever&Client)
 
-### How to run ModBus RTU Slave example
-TBD
-### How to run ModBus RTU Master example
-TBD
-### How to run ModBus RTU Master&Slave example
-TBD
-## How to use in project
-TBD
+### How to run STM32G071RB ModBus RTU Slave example
+#### Requirements for compiling and running the example:
+  1. CMake installed
+  2. Make or Ninja installed
+  3. ARM GNU Toolchain (gcc-arm-none-eabi) installed
+  4. STM32_Programmer_CLI installed
+  5. ST-link (placed on Nucleo Board) installed  
+   
+  In order to test the slave node, any software that can simulate Modbus Master RTU is required. In my case I was using [qModMaster](https://sourceforge.net/projects/qmodmaster/)
+
+
+#### Hardware requirements, configuration, and connections
+  1. STM32G071 Nucleo-64<br>
+    ![drawing](https://raw.githubusercontent.com/niwciu/MODBUS/main/examples/doc/images/STM32G071RB_Nucleo.png){width=500;}
+
+#### How to build and run the example
+  1. Open the location you want to clone the repository to in your termina
+  3. Clone the repository to your preferred localization
+      ```bash
+      git clone https://github.com/niwciu/MODBUS.git
+      ``` 
+  4. Enter to  MODBUS/examples/STM32G071RB_MODBUS_SLAVE
+      ```bash
+      cd ./MODBUS/examples/STM32G071RB_MODBUS_SLAVE
+      ``` 
+  5. For Make type:
+      ```bash
+      cmake -S ./ -B Debug -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+      ```
+      ```bash
+      cd Debug
+      ```
+      ```bash 
+      make all
+      ```
+      ```bash 
+      make flash
+      ``` 
+  6. For Ninja type:
+      ```bash 
+      cmake -S ./ -B Debug -G"Ninja" -DCMAKE_BUILD_TYPE=Debug
+      ```
+      ```bash
+      cd Debug
+      ```
+      ```bash
+      ninja
+      ```
+      ```bash 
+      ninja flash
+      ```
+   7. In some cases Nucleo board requires plugging out and in a USB port to run the program.
+### How to run ModBus STM32G071RB RTU Master example
+#### Requirements for compiling and running the example:
+  1. CMake installed
+  2. Make or Ninja installed
+  3. ARM GNU Toolchain (gcc-arm-none-eabi) installed
+  4. STM32_Programmer_CLI installed
+  5. ST-link (placed on Nucleo Board) installed  
+   
+  In order to test the Master node, any software that can simulate Modbus Slave RTU is required. In my case I was using [xxx]()
+
+
+#### Hardware requirements, configuration, and connections
+  1. STM32G071 Nucleo-64<br>
+    ![drawing](https://raw.githubusercontent.com/niwciu/MODBUS/main/examples/doc/images/STM32G071RB_Nucleo.png){width=500;}
+### How to run ModBus STM32G071RB RTU Master&Slave example  
+#### Requirements for compiling and running the example:  
+  1. CMake installed
+  2. Make or Ninja installed
+  3. ARM GNU Toolchain (gcc-arm-none-eabi) installed
+  4. STM32_Programmer_CLI installed
+  5. ST-link (placed on Nucleo Board) installed  
+   
+  In order to test the Master node, any software that can simulate Modbus Slave RTU is required. In my case I was using [xxx]()  
+
+#### Hardware requirements, configuration, and connections
+  1. STM32G071 Nucleo-64<br>
+    ![drawing](https://raw.githubusercontent.com/niwciu/MODBUS/main/examples/doc/images/STM32G071RB_Nucleo.png){width=500;}  
+
+## How to configure, use in project, colaborate and more
+For information about the configuration and usage of the library, as well as collaboration in the project please refer to 
+[MODBUS wiki](https://github.com/niwciu/MODBUS/wiki)
+
