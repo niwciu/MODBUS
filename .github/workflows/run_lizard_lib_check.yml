@@ -1,4 +1,4 @@
-name: Code Complexity Check
+name: Run Code Complexity Check
 on: 
   workflow_dispatch:
   push:
