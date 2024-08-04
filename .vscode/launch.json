@@ -23,7 +23,7 @@
     {
       "cwd": "${workspaceFolder}",
       "executable": "./examples/STM32G070RB_MODBUS_SLAVE/Debug/STM32G070RB_MODBUS_SLAVE.elf", 
-      "name": "Debug with OpenOCD ModBus Slave",
+      "name": "Debug with OpenOCD ModBus Slave example",
       "request": "launch",
       "type": "cortex-debug",
       "servertype": "openocd",

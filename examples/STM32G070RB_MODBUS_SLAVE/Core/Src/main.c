@@ -68,7 +68,7 @@ static void register_modbus_data(void)
         register_app_data_to_modbus_slave_hreg_table(i, &hreg_data[i]);
         register_app_data_to_modbus_slave_inreg_table(i, &inreg_data[i]);
     }
-    register_app_data_to_modbus_slave_coils_table(100, &LED_status);
+    register_app_data_to_modbus_slave_coils_table(21,&LED_status);
 }
 static void update_LED(void)
 {

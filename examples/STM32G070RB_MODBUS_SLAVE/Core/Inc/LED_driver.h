@@ -20,11 +20,11 @@ extern "C"
 #include "stm32g070xx.h"
 
 // LED port and pin defines
-#define LED_PORT (GPIOB)
-#define LED_PORT_CLK_EN (RCC_IOPENR_GPIOBEN)
-#define MODER_LED_Msk (GPIO_MODER_MODE0_Msk)
-#define MODER_LED_0 (GPIO_MODER_MODE0_0)
-#define LED_OUT_PIN (GPIO_ODR_OD0)
+#define LED_PORT (GPIOA)
+#define LED_PORT_CLK_EN (RCC_IOPENR_GPIOAEN)
+#define MODER_LED_Msk (GPIO_MODER_MODE5_Msk)
+#define MODER_LED_0 (GPIO_MODER_MODE5_0)
+#define LED_OUT_PIN (GPIO_ODR_OD5)
 
     void LED_init(void);
     void LED_on(void);

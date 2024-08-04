@@ -26,7 +26,7 @@ set(CUSTOM_TARGETS_FILE_DIR ./custom_targets.cmake)
 # Allow assembler
 enable_language(ASM)
 
-project(STM32G070RB_MODBUS_SLAVE_HW_TEST)
+project(STM32G070RB_MODBUS_SLAVE)
 
 set(INCLUDE_DIRS
 Core
