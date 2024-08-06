@@ -65,7 +65,8 @@ TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenFreeRTUmsgQueueIniti
     modbus_master_init(RTU, 0, 0);
 
     TEST_ASSERT_EQUAL(0, free_q->tail);
-    TEST_ASSERT_EQUAL((MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS - 1), free_q->head);
+    TEST_ASSERT_EQUAL(0, free_q->head);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS, free_q->items_in_queue);
 }
 
 TEST(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered)

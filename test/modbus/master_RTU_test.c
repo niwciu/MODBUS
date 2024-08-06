@@ -1309,15 +1309,15 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndQueueFullWithRequests
     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 4], mock_master_coil_data[coil_adr + 4]);
     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 5], mock_master_coil_data[coil_adr + 5]);
 
-    TEST_ASSERT_EQUAL(LAST_QUEUE_POS_EMPTY, tx_rx_q->last_queue_pos_status);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS - 1, tx_rx_q->head);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS - 1, tx_rx_q->tail);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->items_in_queue);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->head);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->tail);
 
     modbus_master_read_holding_reg(reg_adr, reg_qty, slave_ID);
 
-    TEST_ASSERT_EQUAL(LAST_QUEUE_POS_EMPTY, tx_rx_q->last_queue_pos_status);
-    TEST_ASSERT_EQUAL(0, tx_rx_q->head);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS - 1, tx_rx_q->tail);
+    TEST_ASSERT_EQUAL(1, tx_rx_q->items_in_queue);
+    TEST_ASSERT_EQUAL(1, tx_rx_q->head);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->tail);
 
     generate_send_req_read_resp_msg_sequance(slave_ID);
 

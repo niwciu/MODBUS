@@ -159,11 +159,11 @@ extern "C"
     /**
      * @brief Enum representing the status of the last queue position.
      */
-    typedef enum
-    {
-        LAST_QUEUE_POS_EMPTY,      /**< Last queue position is empty */
-        LAST_QUEUE_POS_STORE_DATA, /**< Last queue position stores data */
-    } last_q_pos_status_t;
+    // typedef enum
+    // {
+    //     LAST_QUEUE_POS_EMPTY,      /**< Last queue position is empty */
+    //     LAST_QUEUE_POS_STORE_DATA, /**< Last queue position stores data */
+    // } last_q_pos_status_t;
 
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
@@ -191,9 +191,9 @@ extern "C"
      * This structure encapsulates the components of a Modbus message, including the request,
      * response, and a pointer to the data to be read or written.
      *
-     * - The `req` member contains the Modbus request details.
-     * - The `resp` member holds the Modbus response details.
-     * - The `rw_data_ptr` member is a pointer to the data that will be read from or written to the Modbus device.
+     *  - The `req` member contains the Modbus request details.
+     * 
+     *  - The `resp` member holds the Modbus response details.  
      */
     typedef struct
     {
