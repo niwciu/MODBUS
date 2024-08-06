@@ -77,7 +77,12 @@ TEST(Master_RTU_test,GivenTimeoutTimerSetToSomeValueWhenUpdateModbusTimeoutTimer
     update_modbus_master_timout_timer();
     TEST_ASSERT_EQUAL((MODBUS_MASTER_RESP_TIME_OUT_MS - 1), modbus_master_resp_timeout_timer);
 }
-//  RUN_TEST_CASE(Master_RTU_test,GivenTimeoutTimerSetTo0WhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerEqual0);
+TEST(Master_RTU_test, GivenTimeoutTimerSetTo0WhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerEqual0)
+{
+    modbus_master_resp_timeout_timer = 0;
+    update_modbus_master_timout_timer();
+    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
+}
 
 //  Modbus Master Manager tests
 
