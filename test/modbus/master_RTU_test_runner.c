@@ -4,10 +4,12 @@
 TEST_GROUP_RUNNER(Master_RTU_test)
 {
     /* Test cases to run */
-
-    // Modbus Master Manager tests
-    // RUN_TEST_CASE(Master_RTU_test, WhenTestFunctionRegisterdAsModbusErrorCallbackThenModbusErrorCallbackPtrEqualToTestFunctionAdres);
-    // MODBUS_MASTER_IDLE state tests
+    // Modbus Master Timeout Timer Update tests
+    RUN_TEST_CASE(Master_RTU_test, GivenTimeoutTimerSetToSomeValueWhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerDecBy1);
+    //  RUN_TEST_CASE(Master_RTU_test,GivenTimeoutTimerSetTo0WhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerEqual0);
+    //  Modbus Master Manager tests
+    //  RUN_TEST_CASE(Master_RTU_test, WhenTestFunctionRegisterdAsModbusErrorCallbackThenModbusErrorCallbackPtrEqualToTestFunctionAdres);
+    //  MODBUS_MASTER_IDLE state tests
     RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSending);
     RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxBufPtrIsEqualToMsgPtr);
     RUN_TEST_CASE(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartRxAndTxIrqEnabled);

@@ -13,8 +13,6 @@
 
 TEST_GROUP(Master_RTU_test);
 
-// #define mock_slave_coil_TABLE_SIZE (MOCK_MASTER_COILS_TABLE_SIZE)
-
 extern modbus_queue_t *tx_rx_q;
 extern modbus_queue_t *free_q;
 extern modbus_msg_t *msg_buf;
@@ -72,13 +70,18 @@ TEST_TEAR_DOWN(Master_RTU_test)
     /* Cleanup after every test */
 }
 
-// //  Modbus Master Manager tests
-// TEST(Master_RTU_test, WhenTestFunctionRegisterdAsModbusErrorCallbackThenModbusErrorCallbackPtrEqualToTestFunctionAdres)
-// {
-//     register_modbus_master_error_cb(error_report_test_function);
-//     TEST_ASSERT_EQUAL(&error_report_test_function, modbus_error_callback);
-// }
-// //  IDLE state tests
+// Modbus Master Timeout Timer Update tests
+TEST(Master_RTU_test,GivenTimeoutTimerSetToSomeValueWhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerDecBy1)
+{
+    modbus_master_resp_timeout_timer=MODBUS_MASTER_RESP_TIME_OUT_MS;
+    update_modbus_master_timout_timer();
+    TEST_ASSERT_EQUAL((MODBUS_MASTER_RESP_TIME_OUT_MS - 1), modbus_master_resp_timeout_timer);
+}
+//  RUN_TEST_CASE(Master_RTU_test,GivenTimeoutTimerSetTo0WhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerEqual0);
+
+//  Modbus Master Manager tests
+
+//  IDLE state tests
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSending)
 {
     modbus_adr_t coil_adr = 0x0002;
