@@ -201,6 +201,22 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_WAITING, modbus_master_manager_state_machine);
 }
 
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenResponseMsgLenghtEqualTo0)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    update_modbus_master_manager();
+    update_modbus_master_manager();
+    update_modbus_master_manager();
+
+    mock_USART_req_msg_sended_EVENT();
+    update_modbus_master_manager();
+    TEST_ASSERT_EQUAL(0, msg_buf->resp.len);
+}
+
 // MODBUS_MASTER_RESP_RECIVED
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedAndMsgRecivedWhenTimer_1_5CharExpiredThenModbusT1_5FlagCleared)
 {
