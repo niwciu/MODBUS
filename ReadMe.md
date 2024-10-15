@@ -132,3 +132,7 @@ Additionally, it's possible to control the state of the user LED on the Nucleo b
 For information about the configuration and usage of the library, as well as collaboration in the project please refer to 
 [MODBUS wiki](https://github.com/niwciu/MODBUS/wiki)
 
+***
+
+![myEmbeddedWayBanerWhiteSmaller](https://github.com/user-attachments/assets/f4825882-e285-4e02-a75c-68fc86ff5716)
+***
