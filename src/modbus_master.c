@@ -384,7 +384,7 @@ void update_modbus_master_manager(void)
  */
 void update_modbus_master_timout_timer(void)
 {
-    if(modbus_master_resp_timeout_timer)
+    if (modbus_master_resp_timeout_timer)
     {
         modbus_master_resp_timeout_timer--;
     }
@@ -630,7 +630,7 @@ static void modbus_master_frame_error_callback(void)
  */
 static bool check_data_to_send_availability(const modbus_queue_t *q)
 {
-    return ((q->head != q->tail) || (q->items_in_queue >0));
+    return ((q->head != q->tail) || (q->items_in_queue > 0));
 }
 
 /**
@@ -668,7 +668,7 @@ static void modbus_master_transmitting_state_handling(void)
 {
     if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
     {
-        msg_buf->resp.len = 0; 
+        msg_buf->resp.len = 0;
         modbus_master_enable_resp_timeout_timer();
         modbus_master_manager_state_machine = MODBUS_MASTER_RESP_WAITING;
     }

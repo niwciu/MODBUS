@@ -23,7 +23,7 @@
 
 #include "modbus_public_type.h"
 
-void __attribute__((__weak__))modbus_master_coil_read(modbus_device_ID_t slave_adr, modbus_adr_t data_adr, modbus_coil_disin_t coil_val);
+void __attribute__((__weak__)) modbus_master_coil_read(modbus_device_ID_t slave_adr, modbus_adr_t data_adr, modbus_coil_disin_t coil_val);
 
 void __attribute__((__weak__)) modbus_master_coil_write(modbus_device_ID_t slave_adr, modbus_adr_t data_adr, modbus_data_qty_t coil_qty);
 void __attribute__((__weak__)) modbus_master_coil_exception(const modbus_read_data_t *resp_data);
