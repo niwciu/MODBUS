@@ -2,11 +2,7 @@
 ![GitHub License](https://img.shields.io/github/license/niwciu/MODBUS)  
 ![GitHub top language](https://img.shields.io/github/languages/top/niwciu/MODBUS)
 ![GitHub Release](https://img.shields.io/github/v/release/niwciu/MODBUS)  
-![GitHub branch check runs](https://img.shields.io/github/check-runs/niwciu/LCD_HD44780/main)  
-![example workflow](https://github.com/niwciu/MODBUS/actions/workflows/run_modbus_tests.yml/badge.svg)
-![example workflow](https://github.com/niwciu/MODBUS/actions/workflows/run_cppcheck.yml/badge.svg)
-![example workflow](https://github.com/niwciu/MODBUS/actions/workflows/clang-format_check.yml/badge.svg)
-![example workflow](https://github.com/niwciu/MODBUS/actions/workflows/run_lizard_lib_check.yml/badge.svg) 
+
 
 ## Features
 - Contain ModBus RTU Master and Slave implementation
