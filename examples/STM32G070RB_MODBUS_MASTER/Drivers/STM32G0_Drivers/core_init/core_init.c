@@ -56,6 +56,6 @@ void core_init(void)
     RCC->CFGR &= ~(RCC_CFGR_PPRE);
     RCC->CFGR |= 0; 
     SysTick->LOAD  = (uint32_t)((SYS_FREQ / SYS_TICK_MAX_CNT) - 1UL);               /* set reload register */
-    SysTick->VAL   = 0UL;                                                           /* Load the SysTick Counter Value */  
-    SysTick->CTRL  = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk;  
+    SysTick->VAL   = 0UL;                                                           /* Load the SysTick Counter Value */
+    SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk | SysTick_CTRL_TICKINT_Msk;
 }

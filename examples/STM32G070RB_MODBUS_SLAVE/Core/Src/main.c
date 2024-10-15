@@ -30,7 +30,6 @@
 
 #define EXAMPLE_DATA_QTY 20
 
-
 modbus_coil_disin_t coil_data[EXAMPLE_DATA_QTY] = {1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1};
 modbus_coil_disin_t din_data[EXAMPLE_DATA_QTY] = {1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1};
 modbus_reg_t hreg_data[EXAMPLE_DATA_QTY] = {2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010};

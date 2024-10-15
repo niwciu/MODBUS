@@ -43,7 +43,7 @@ extern "C"
 
     void modbus_master_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity);
     void update_modbus_master_manager(void); // ToDo zmiana nazwy na check_slave_respo albo master_parse_modbus_resp albo check_modbus_master_resp
-
+    void update_modbus_master_timout_timer(void);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

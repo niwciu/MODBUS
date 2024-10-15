@@ -46,7 +46,7 @@
 
 PRIVATE modbus_master_state_t modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
 PRIVATE const modbus_RTU_driver_struct_t *RTU_driver = NULL;
-PRIVATE modbus_master_error_cb_t modbus_error_callback = NULL;
+// PRIVATE modbus_master_error_cb_t modbus_error_callback = NULL;
 
 static modbus_queue_t master_free_queue;
 static modbus_queue_t master_tx_rx_queue;
@@ -81,11 +81,11 @@ static bool check_data_to_send_availability(const modbus_queue_t *q);
 static void modbus_master_idle_state_handling(void);
 static void modbus_master_transmitting_state_handling(void);
 static void modbus_master_resp_waiting_state_handling(void);
-static void modbus_master_resp_timeout_handle();
-static void modbus_master_RTU_recv_state_handle();
+static void modbus_master_resp_timeout_handle(void);
+static void modbus_master_RTU_recv_state_handle(void);
 static void modbus_master_resp_recived_state_handling(void);
 
-static void modbus_master_msg_recived_correctly_state_handle();
+static void modbus_master_msg_recived_correctly_state_handle(void);
 
 static void modbus_master_RTU_CRC_error_state_handling(void);
 static void modbus_master_frame_error_state_handling(void);
@@ -374,6 +374,23 @@ void update_modbus_master_manager(void)
 }
 
 /**
+ * @brief Updates the Modbus master response timeout timer.
+ *
+ * This function decrements the Modbus master response timeout timer if it is greater than zero.
+ * It is typically called periodically, such as in a timer interrupt or main loop, to manage the
+ * timeout period for Modbus master responses.
+ *
+ * @note Ensure that this function is called at regular intervals of 1ms to maintain accurate timeout tracking.
+ */
+void update_modbus_master_timout_timer(void)
+{
+    if (modbus_master_resp_timeout_timer)
+    {
+        modbus_master_resp_timeout_timer--;
+    }
+}
+
+/**
  * @brief Sends the Modbus request from the message buffer.
  *
  * This function sends the Modbus request stored in `msg_buf` using the RTU driver.
@@ -466,23 +483,24 @@ static void push_all_available_msg_buffer_to_free_queue(void)
  */
 static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_param)
 {
-    msg_buf = modbus_queue_pop(free_q);
+    modbus_msg_t *req_msg_buf = modbus_queue_pop(free_q);
     modbus_ret_t modbus_lib_ret;
-    if (NULL == msg_buf)
+    if (NULL == req_msg_buf)
     {
         return MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR;
     }
-    modbus_lib_ret = generate_request_PDU_data(msg_buf, req_param);
+    modbus_lib_ret = generate_request_PDU_data(req_msg_buf, req_param);
     if (0 > modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_PDU_REQ_ERROR;
     }
-    modbus_lib_ret = modbus_RTU_send(msg_buf->req.data, &msg_buf->req.len, req_param->slave_ID);
+    modbus_lib_ret = modbus_RTU_send(req_msg_buf->req.data, &req_msg_buf->req.len, req_param->slave_ID);
     if (RET_ERROR == modbus_lib_ret)
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
     }
-    modbus_queue_push(tx_rx_q, &msg_buf);
+    // req_msg_buf->resp.len=0; // it's allways done before sending every buffer to modbus driver
+    modbus_queue_push(tx_rx_q, &req_msg_buf);
     return MODBUS_MASTER_REQUEST_SEND_TO_QUEUE;
 }
 
@@ -612,7 +630,7 @@ static void modbus_master_frame_error_callback(void)
  */
 static bool check_data_to_send_availability(const modbus_queue_t *q)
 {
-    return ((q->head != q->tail) || (LAST_QUEUE_POS_STORE_DATA == q->last_queue_pos_status));
+    return ((q->head != q->tail) || (q->items_in_queue > 0));
 }
 
 /**
@@ -650,6 +668,7 @@ static void modbus_master_transmitting_state_handling(void)
 {
     if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
     {
+        msg_buf->resp.len = 0;
         modbus_master_enable_resp_timeout_timer();
         modbus_master_manager_state_machine = MODBUS_MASTER_RESP_WAITING;
     }
@@ -693,9 +712,9 @@ static void modbus_master_resp_waiting_state_handling(void)
  *   - `resp_read_error`: Indicates a timeout error (`MODBUS_MASTER_RESP_TIMEOUT_ERR`).
  * - Invokes `modbus_master_data_timeout_error` to handle and report the timeout error.
  */
-void modbus_master_resp_timeout_handle()
+void modbus_master_resp_timeout_handle(void)
 {
-    static modbus_master_error_report_t timeout_error;
+    modbus_master_error_report_t timeout_error;
     timeout_error.slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
     timeout_error.data_adr = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_ADR_IDX]);
     timeout_error.data_qty = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_QTY_IDX]);
@@ -721,7 +740,7 @@ void modbus_master_resp_timeout_handle()
  *   - Disables the Modbus response timeout timer.
  *   - Updates modbus_master_manager_state_machine to MODBUS_MASTER_RESP_RECIVED.
  */
-static void modbus_master_RTU_recv_state_handle()
+static void modbus_master_RTU_recv_state_handle(void)
 {
     modbus_ret_t RTU_status;
     modbus_device_ID_t modbus_req_slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
@@ -816,6 +835,7 @@ static void modbus_master_RTU_CRC_error_state_handling(void)
     {
         modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
         MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+        msg_buf->resp.len = 0;
     }
     else
     {
@@ -850,6 +870,7 @@ static void modbus_master_frame_error_state_handling(void)
     {
         modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
         MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
+        msg_buf->resp.len = 0;
     }
     else
     {

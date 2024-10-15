@@ -1,1 +1,9 @@
 #include "stm32g070xx.h"
+
+#define SLAVE_ADDRES_EXAMPLE_NODE 0x01
+#define READ_COIL_ADR 1
+#define READ_HREG_ADR 1
+#define WRITE_COIL_ADR 0
+#define WRITE_HREG_ADR 0
+
+#define UPDATE_INTERVAL_MS 300

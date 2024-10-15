@@ -53,19 +53,19 @@ set(C_SRCS
     Core/Src/main.c
     Core/Src/syscalls.c
     Core/Src/sysmem.c
+    Core/Src/modbus_master_data_interface.c
     Drivers/STM32G0_Drivers/core_init/core_init.c
     Drivers/STM32G0_Drivers/modbus_driver_interface.c
 
     ../../../src/master_internall/modbus_master_PDU.c
-	# ../../../src/slave_internall/modbus_slave_PDU.c
     ../../../src/master_internall/modbus_master_RTU.c
-	# ../../../src/slave_internall/modbus_slave_RTU.c
+    ../../../src/master_internall/modbus_queue.c
+    ../../../src/master_internall/modbus_master_PDU.c
     ../../../src/common/modbus_RTU.c
-    ../../../src/common/modbus_data.c
     ../../../src/common/modbus_crc.c
     ../../../src/common/buf_rw.c
-    ../../../src/common/modbus_queue.c
-    ../../../src/common/modbus_PDU.c
+    ../../../src/common/modbus_PDU_common.c
+
     ../../../src/modbus_master.c
 
 

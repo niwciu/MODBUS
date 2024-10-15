@@ -13,8 +13,6 @@
 
 TEST_GROUP(Master_RTU_test);
 
-// #define mock_slave_coil_TABLE_SIZE (MOCK_MASTER_COILS_TABLE_SIZE)
-
 extern modbus_queue_t *tx_rx_q;
 extern modbus_queue_t *free_q;
 extern modbus_msg_t *msg_buf;
@@ -72,13 +70,23 @@ TEST_TEAR_DOWN(Master_RTU_test)
     /* Cleanup after every test */
 }
 
-// //  Modbus Master Manager tests
-// TEST(Master_RTU_test, WhenTestFunctionRegisterdAsModbusErrorCallbackThenModbusErrorCallbackPtrEqualToTestFunctionAdres)
-// {
-//     register_modbus_master_error_cb(error_report_test_function);
-//     TEST_ASSERT_EQUAL(&error_report_test_function, modbus_error_callback);
-// }
-// //  IDLE state tests
+// Modbus Master Timeout Timer Update tests
+TEST(Master_RTU_test, GivenTimeoutTimerSetToSomeValueWhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerDecBy1)
+{
+    modbus_master_resp_timeout_timer = MODBUS_MASTER_RESP_TIME_OUT_MS;
+    update_modbus_master_timout_timer();
+    TEST_ASSERT_EQUAL((MODBUS_MASTER_RESP_TIME_OUT_MS - 1), modbus_master_resp_timeout_timer);
+}
+TEST(Master_RTU_test, GivenTimeoutTimerSetTo0WhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerEqual0)
+{
+    modbus_master_resp_timeout_timer = 0;
+    update_modbus_master_timout_timer();
+    TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
+}
+
+//  Modbus Master Manager tests
+
+//  IDLE state tests
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestPlacedInQueueWhenModbusMasterManagerCheckThenMasterUsartTxStatusIsEqualToUsartSending)
 {
     modbus_adr_t coil_adr = 0x0002;
@@ -191,6 +199,22 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhen
     mock_USART_req_msg_sended_EVENT();
     update_modbus_master_manager();
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_WAITING, modbus_master_manager_state_machine);
+}
+
+TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitingWhenWhloeRequestIsTransmittedThenResponseMsgLenghtEqualTo0)
+{
+    modbus_adr_t coil_adr = 0x0002;
+    modbus_device_ID_t slave_ID = 0x09;
+    modbus_data_qty_t coils_qty = 2;
+
+    modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
+    update_modbus_master_manager();
+    update_modbus_master_manager();
+    update_modbus_master_manager();
+
+    mock_USART_req_msg_sended_EVENT();
+    update_modbus_master_manager();
+    TEST_ASSERT_EQUAL(0, msg_buf->resp.len);
 }
 
 // MODBUS_MASTER_RESP_RECIVED
@@ -1309,15 +1333,15 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndQueueFullWithRequests
     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 4], mock_master_coil_data[coil_adr + 4]);
     TEST_ASSERT_EQUAL(mock_slave_coil[coil_adr + 5], mock_master_coil_data[coil_adr + 5]);
 
-    TEST_ASSERT_EQUAL(LAST_QUEUE_POS_EMPTY, tx_rx_q->last_queue_pos_status);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS - 1, tx_rx_q->head);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS - 1, tx_rx_q->tail);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->items_in_queue);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->head);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->tail);
 
     modbus_master_read_holding_reg(reg_adr, reg_qty, slave_ID);
 
-    TEST_ASSERT_EQUAL(LAST_QUEUE_POS_EMPTY, tx_rx_q->last_queue_pos_status);
-    TEST_ASSERT_EQUAL(0, tx_rx_q->head);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS - 1, tx_rx_q->tail);
+    TEST_ASSERT_EQUAL(1, tx_rx_q->items_in_queue);
+    TEST_ASSERT_EQUAL(1, tx_rx_q->head);
+    TEST_ASSERT_EQUAL(0, tx_rx_q->tail);
 
     generate_send_req_read_resp_msg_sequance(slave_ID);
 

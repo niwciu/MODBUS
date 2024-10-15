@@ -85,8 +85,10 @@
     "array": "c",
     "string": "c",
     "string_view": "c",
-    "modbus_master_data_interface.h": "c"
+    "modbus_master_data_interface.h": "c",
+    "main.h": "c"
   },
   "C_Cpp.errorSquiggles": "disabled",
-  "cmake.sourceDirectory": "D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/test/hw_test/STM32G070RB_MODBUS_MASTER"
+  "cmake.sourceDirectory": "D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/test/hw_test/STM32G070RB_MODBUS_MASTER",
+  "cortex-debug.variableUseNaturalFormat": true
 }
