@@ -29,7 +29,7 @@ void modbus_queue_init(modbus_queue_t *q)
     q->head = 0;
     q->tail = 0;
     // q->last_queue_pos_status = LAST_QUEUE_POS_EMPTY;
-    q->items_in_queue=0;
+    q->items_in_queue = 0;
 }
 
 /**
@@ -100,12 +100,11 @@ modbus_msg_t *modbus_queue_pop(modbus_queue_t *q)
             q->items_in_queue--;
             q->tail = (q->tail + 1) % MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS;
         }
-                
     }
     else
     {
         ret = q->modbus_msg[q->tail];
-        q->modbus_msg[q->tail]=NULL;
+        q->modbus_msg[q->tail] = NULL;
         q->items_in_queue--;
         q->tail = (q->tail + 1) % MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS;
     }

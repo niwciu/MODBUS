@@ -192,8 +192,8 @@ extern "C"
      * response, and a pointer to the data to be read or written.
      *
      *  - The `req` member contains the Modbus request details.
-     * 
-     *  - The `resp` member holds the Modbus response details.  
+     *
+     *  - The `resp` member holds the Modbus response details.
      */
     typedef struct
     {

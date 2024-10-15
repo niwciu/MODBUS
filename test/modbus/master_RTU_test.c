@@ -71,9 +71,9 @@ TEST_TEAR_DOWN(Master_RTU_test)
 }
 
 // Modbus Master Timeout Timer Update tests
-TEST(Master_RTU_test,GivenTimeoutTimerSetToSomeValueWhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerDecBy1)
+TEST(Master_RTU_test, GivenTimeoutTimerSetToSomeValueWhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerDecBy1)
 {
-    modbus_master_resp_timeout_timer=MODBUS_MASTER_RESP_TIME_OUT_MS;
+    modbus_master_resp_timeout_timer = MODBUS_MASTER_RESP_TIME_OUT_MS;
     update_modbus_master_timout_timer();
     TEST_ASSERT_EQUAL((MODBUS_MASTER_RESP_TIME_OUT_MS - 1), modbus_master_resp_timeout_timer);
 }
