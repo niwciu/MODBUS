@@ -33,7 +33,22 @@ Library contain an examples of three different configurations that can be implem
 - ModBus RTU Master (ModBus RTU Client)
 - ModBus RTU Slave&Master (ModBus RTU Sever&Client)
 
-### How to run STM32G071RB ModBus RTU Slave example
+### STM32G071RB ModBus RTU Slave example
+By running this example you can read all types of ModBus data in the address range from 0 to 19.
+Below are the default values stored in all object types.
+```C
+#define EXAMPLE_DATA_QTY 20
+
+modbus_coil_disin_t coil_data[EXAMPLE_DATA_QTY] = {1, 0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1};
+modbus_coil_disin_t din_data[EXAMPLE_DATA_QTY] = {1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1};
+modbus_reg_t hreg_data[EXAMPLE_DATA_QTY] = {2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 3001, 3002, 3003, 3004, 3005, 3006, 3007, 3008, 3009, 3010};
+modbus_reg_t inreg_data[EXAMPLE_DATA_QTY] = {4201, 4202, 4203, 4204, 4205, 4206, 4207, 4208, 4209, 4210, 4301, 4302, 4303, 4304, 4305, 4306, 4307, 4308, 4309, 4310};
+```
+
+You can also write coils and registers using the same address range.
+
+Additionally, it's possible to control the state of the user LED on the Nucleo board. To turn on the LED set coil under address 21 to 1, to turn off the LED set the same coil to 0.  
+
 #### Requirements for compiling and running the example:
   1. CMake installed
   2. Make or Ninja installed
@@ -46,7 +61,7 @@ Library contain an examples of three different configurations that can be implem
 
 #### Hardware requirements, configuration, and connections
   1. STM32G071 Nucleo-64<br>
-    ![drawing](https://raw.githubusercontent.com/niwciu/MODBUS/main/examples/doc/images/STM32G071RB_Nucleo.png){width=500;}
+      <img src="https://raw.githubusercontent.com/niwciu/MODBUS/main/examples/doc/images/STM32G071RB_Nucleo.png"   width="400"><br> <br> 
 
 #### How to build and run the example
   1. Open the location you want to clone the repository to in your termina
@@ -97,8 +112,8 @@ Library contain an examples of three different configurations that can be implem
 
 
 #### Hardware requirements, configuration, and connections
-  1. STM32G071 Nucleo-64<br>
-    ![drawing](https://raw.githubusercontent.com/niwciu/MODBUS/main/examples/doc/images/STM32G071RB_Nucleo.png){width=500;}
+  1. STM32G071 Nucleo-64  
+  <img src="https://raw.githubusercontent.com/niwciu/MODBUS/main/examples/doc/images/STM32G071RB_Nucleo.png"   width="400"><br> <br> 
 ### How to run ModBus STM32G071RB RTU Master&Slave example  
 #### Requirements for compiling and running the example:  
   1. CMake installed
@@ -111,9 +126,13 @@ Library contain an examples of three different configurations that can be implem
 
 #### Hardware requirements, configuration, and connections
   1. STM32G071 Nucleo-64<br>
-    ![drawing](https://raw.githubusercontent.com/niwciu/MODBUS/main/examples/doc/images/STM32G071RB_Nucleo.png){width=500;}  
+    <img src="https://raw.githubusercontent.com/niwciu/MODBUS/main/examples/doc/images/STM32G071RB_Nucleo.png"   width="400"><br> <br>  
 
 ## How to configure, use in project, colaborate and more
 For information about the configuration and usage of the library, as well as collaboration in the project please refer to 
 [MODBUS wiki](https://github.com/niwciu/MODBUS/wiki)
 
+***
+
+![myEmbeddedWayBanerWhiteSmaller](https://github.com/user-attachments/assets/f4825882-e285-4e02-a75c-68fc86ff5716)
+***
