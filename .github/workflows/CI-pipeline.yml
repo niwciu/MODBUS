@@ -1,0 +1,89 @@
+name: CI pipeline
+on: 
+  workflow_dispatch: 
+#   push: 
+jobs:
+  build_unit_test:
+    name: Build Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+        - name: checkout
+          uses: actions/checkout@v4
+
+  build_STM32G070RB:
+    name: Build STM32G070RB
+    runs-on: ubuntu-latest
+    steps:
+        - name: checkout
+          uses: actions/checkout@v4
+
+  clang-format_check:
+    name: RUN Clang-Format Check
+    runs-on: ubuntu-latest
+    needs: [build_unit_test,build_STM32G070RB]
+    steps:
+        - name: checkout
+          uses: actions/checkout@v4
+
+  run_unit_tests:
+    name: RUN Unit Tests
+    runs-on: ubuntu-latest
+    needs: [build_unit_test,build_STM32G070RB]
+    steps:
+        - name: checkout
+          uses: actions/checkout@v4
+
+  check_code_coverage:
+    name: RUN Code Coverage Check
+    runs-on: ubuntu-latest
+    needs: [build_unit_test,build_STM32G070RB]
+    steps:
+        - name: checkout
+          uses: actions/checkout@v4
+        - name: Unit Test Run
+          continue-on-error: true
+          run: arm-none-eabi-gcc --version
+        - name: test step
+          run: arm-none-eabi-gcc --version
+
+  run_cppcheck:
+    name: RUN CppCheck
+    runs-on: ubuntu-latest
+    needs: [build_unit_test,build_STM32G070RB]
+    steps:
+        - name: checkout
+          uses: actions/checkout@v4
+
+  code_complexity_check:
+    name: RUN Code Complexity Check
+    runs-on: ubuntu-latest
+    needs: [build_unit_test,build_STM32G070RB]
+    steps:
+        - name: checkout
+          uses: actions/checkout@v4
+
+  generate_code_coverage_report:
+    name: Generate Code Coverage Report
+    runs-on: ubuntu-latest
+    needs: 
+        - clang-format_check
+        - run_unit_tests
+        - check_code_coverage
+        - run_cppcheck
+        - code_complexity_check
+    steps:
+        - name: checkout
+          uses: actions/checkout@v4
+
+  generate_code_complexity_report:
+    name: Generate Code Complexity Report
+    runs-on: ubuntu-latest
+    needs: 
+        - clang-format_check
+        - run_unit_tests
+        - check_code_coverage
+        - run_cppcheck
+        - code_complexity_check
+    steps:
+        - name: checkout
+          uses: actions/checkout@v4
