@@ -9,18 +9,61 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
+      
+            - name: Get Ninja
+              uses: seanmiddleditch/gha-setup-ninja@master 
+      
+            - name: Build 
+              working-directory: test/modbus
+              run: |
+                mkdir out
+                cmake -Bout -GNinja
+                cmake --build out
     
-    build_STM32G070RB:
-        name: Build STM32G070RB
+    build_STM32G070RB_modbus_master:
+        name: Build STM32G070RB ModBus Master
         runs-on: ubuntu-latest
         steps:
             - name: checkout
               uses: actions/checkout@v4
 
+            - name: Install Arm GNU Toolchain (arm-none-eabi-gcc)
+              uses: carlosperate/arm-none-eabi-gcc-action@v1
+      
+            - name: Get Ninja
+              uses: seanmiddleditch/gha-setup-ninja@master 
+      
+            - name: Build 
+              working-directory: examples/STM32G071RB_MODBUS_MASTER
+              run: |
+                mkdir out
+                cmake -Bout -GNinja -DCMAKE_BUILD_TYPE=Debug
+                cmake --build out
+
+    build_STM32G070RB_modbus_slave:
+        name: Build STM32G070RB ModBus Slave
+        runs-on: ubuntu-latest
+        steps:
+            - name: checkout
+              uses: actions/checkout@v4
+
+            - name: Install Arm GNU Toolchain (arm-none-eabi-gcc)
+              uses: carlosperate/arm-none-eabi-gcc-action@v1
+        
+            - name: Get Ninja
+              uses: seanmiddleditch/gha-setup-ninja@master 
+        
+            - name: Build 
+              working-directory: examples/STM32G071RB_MODBUS_SLAVE
+              run: |
+                mkdir out
+                cmake -Bout -GNinja -DCMAKE_BUILD_TYPE=Debug
+                cmake --build out
+
     run_clang-format_check:
         name: Run Clang-format Check
         runs-on: ubuntu-latest
-        needs: [build_unit_tets,build_STM32G070RB]
+        needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
         steps:
             - name: checkout
               uses: actions/checkout@v4
@@ -28,7 +71,7 @@ jobs:
     run_unit_tests:
         name: Run Unit Tests
         runs-on: ubuntu-latest
-        needs: [build_unit_tets,build_STM32G070RB]
+        needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
         steps:
             - name: checkout
               uses: actions/checkout@v4
@@ -36,7 +79,7 @@ jobs:
     run_code_coverage_check:
         name: Run Code Coverage Check
         runs-on: ubuntu-latest
-        needs: [build_unit_tets,build_STM32G070RB]
+        needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
         steps:
             - name: checkout
               uses: actions/checkout@v4
@@ -49,7 +92,7 @@ jobs:
     run_cppcheck:
         name: Run CppCheck
         runs-on: ubuntu-latest
-        needs: [build_unit_tets,build_STM32G070RB]
+        needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
         steps:
             - name: checkout
               uses: actions/checkout@v4
@@ -57,7 +100,7 @@ jobs:
     run_code_complexity_check:
         name: Run Code Complexity Check
         runs-on: ubuntu-latest
-        needs: [build_unit_tets,build_STM32G070RB]
+        needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
         steps:
             - name: checkout
               uses: actions/checkout@v4
