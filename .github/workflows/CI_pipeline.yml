@@ -34,7 +34,7 @@ jobs:
               uses: seanmiddleditch/gha-setup-ninja@master 
       
             - name: Build 
-              working-directory: examples/STM32G071RB_MODBUS_MASTER
+              working-directory: examples/STM32G070RB_MODBUS_MASTER
               run: |
                 mkdir out
                 cmake -Bout -GNinja -DCMAKE_BUILD_TYPE=Debug
@@ -54,7 +54,7 @@ jobs:
               uses: seanmiddleditch/gha-setup-ninja@master 
         
             - name: Build 
-              working-directory: examples/STM32G071RB_MODBUS_SLAVE
+              working-directory: examples/STM32G070RB_MODBUS_SLAVE
               run: |
                 mkdir out
                 cmake -Bout -GNinja -DCMAKE_BUILD_TYPE=Debug
