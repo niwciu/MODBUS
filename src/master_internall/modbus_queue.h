@@ -35,7 +35,7 @@ extern "C"
     {
         uint8_t head;                                                /**< Head index of the queue. */
         uint8_t tail;                                                /**< Tail index of the queue. */
-        last_q_pos_status_t last_queue_pos_status;                   /**< Status of the last queue position. */
+        uint8_t items_in_queue;                                      /**< Number of items currently present in queue */
         modbus_msg_t *modbus_msg[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS]; /**< Array of pointers to Modbus messages. */
     } modbus_queue_t;
 

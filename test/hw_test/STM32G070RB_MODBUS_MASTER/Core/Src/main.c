@@ -28,17 +28,55 @@
 #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
 #endif
 
-modbus_coil_disin_t test_coils[20] = {0};
+modbus_coil_disin_t readed_coil = 0;
+modbus_coil_disin_t prev_coil_val= 0;
+modbus_data_qty_t coil_qty = 1;
+
+modbus_reg_t readed_hreg = 0;
+modbus_reg_t prev_hreg_val = 0;
+modbus_data_qty_t reg_qty = 1;
+
+uint16_t request_interval = UPDATE_INTERVAL_MS;
+
+uint16_t update_timer = UPDATE_INTERVAL_MS;
+
+static void update_modbus_data(void);
+
 int main(void)
 {
     core_init();
     modbus_master_init(RTU, 115200, ODD);
     // __enable_irq();
 
-    modbus_master_read_coils(0x0001, 0x002, 0x03, &test_coils[0]);
     /* Loop forever */
+
     while (1)
     {
         update_modbus_master_manager();
+
+        update_modbus_data();
+
     }
+}
+
+static void update_modbus_data(void)
+{
+    if (update_timer == 0)
+    {
+        modbus_master_read_coils(READ_COIL_ADR, coil_qty, SLAVE_ADDRES_EXAMPLE_NODE);
+        modbus_master_read_holding_reg(READ_HREG_ADR, reg_qty, SLAVE_ADDRES_EXAMPLE_NODE);
+        modbus_master_write_single_coil(WRITE_COIL_ADR, SLAVE_ADDRES_EXAMPLE_NODE, readed_coil);
+        modbus_master_write_single_reg(WRITE_HREG_ADR, SLAVE_ADDRES_EXAMPLE_NODE, readed_hreg);
+        update_timer = request_interval;
+    }
+}
+
+void SysTick_Handler(void)
+{
+    // Kod obsługi przerwania
+    if (update_timer)
+    {
+        update_timer--;
+    }
+    update_modbus_master_timout_timer();
 }
