@@ -55,3 +55,4 @@ else()
 endif()
 
 add_custom_target(ccr python3 -m gcovr CMakeFiles/modbus_test.dir/D_/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src -r ../../.. --html-details ../../../reports/Code_Coverage/modbus_gcov_report.html)
+add_custom_target(ccc python3 -m gcovr CMakeFiles/modbus_test.dir/D_/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src -r ../../.. --fail-under-line 90)
