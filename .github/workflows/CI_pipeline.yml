@@ -19,6 +19,16 @@ jobs:
                 mkdir out
                 cmake -Bout -GNinja
                 cmake --build out
+
+            - name: Save Build Artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                name: modbus_unit_tests_app
+                path: ./test/modbus/out
+                if-no-files-found: warn
+                retention-days: 1
+                overwrite: true
+            
     
     build_STM32G070RB_modbus_master:
         name: Build STM32G070RB ModBus Master
@@ -73,8 +83,14 @@ jobs:
         runs-on: ubuntu-latest
         needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
         steps:
-            - name: checkout
-              uses: actions/checkout@v4
+          - name: Download Unit Tests Build Artifacts
+            uses: actions/download-artifact@v4
+            with:
+              name: modbus_unit_tests_app
+          - name: Run Unit Tests
+            run: |
+              chmod +x modbus_test
+              ./modbus_test -v
     
     run_code_coverage_check:
         name: Run Code Coverage Check
