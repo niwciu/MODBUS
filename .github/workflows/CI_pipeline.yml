@@ -117,7 +117,7 @@ jobs:
             - name: Check Test Coverage
               uses: threeal/gcovr-action@v1.1.0
               with:
-                fail-under-line: 90
+                fail-under-line: 100
     
     run_cppcheck:
         name: Run CppCheck
