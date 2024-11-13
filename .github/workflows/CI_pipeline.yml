@@ -87,6 +87,7 @@ jobs:
             uses: actions/download-artifact@v4
             with:
               name: modbus_unit_tests_app
+
           - name: Run Unit Tests
             run: |
               chmod +x modbus_test
@@ -99,11 +100,24 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
+
+            - name: Download Unit Tests Build Artifacts
+              uses: actions/download-artifact@v4
+              with:
+                name: modbus_unit_tests_app
+                path: test/modbus/out
+
             - name: Run Unit Tests
               continue-on-error: true
-              run:  arm-none-eabi-gcc --version     # This step will fail
-            - name: Check Code Coverage
-              run: echo "test"                      # This step will not fail
+              working-directory: test/modbus/out
+              run: |
+                chmod +x modbus_test
+                ./modbus_test -v
+
+            - name: Check Test Coverage
+              uses: threeal/gcovr-action@v1.1.0
+              with:
+                fail-under-line: 90
     
     run_cppcheck:
         name: Run CppCheck

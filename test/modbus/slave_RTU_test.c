@@ -280,10 +280,10 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
 }
 
-TEST(Slave_RTU_test, test)
-{
-    TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
-}
+// TEST(Slave_RTU_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
 
 // TEST(Slave_RTU_test, )
 // {
