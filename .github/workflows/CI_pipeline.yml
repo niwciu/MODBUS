@@ -75,11 +75,10 @@ jobs:
         strategy:
           matrix:
             path:
-              - 'src'
-              - 'test'
-            version:
-              - '13'
-              - '18'
+              - check: 'src'
+                exclude: ''
+              - cehck: 'test'
+                exclude: '(hw_test|unity|template)'
         runs-on: ubuntu-latest
         needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
         steps:
@@ -89,8 +88,9 @@ jobs:
             - name: Run clang-format style check for C/C++/Protobuf programs.
               uses: jidicula/clang-format-action@v4.13.0
               with:
-                clang-format-version: ${{matrix.version}}
-                check-path: ${{matrix.path}}
+                clang-format-version: '18'
+                check-path: ${{matrix.path['check']}}
+                exclude-regex: ${{matrix.path['exclude']}}
     
     run_unit_tests:
         name: Run Unit Tests
