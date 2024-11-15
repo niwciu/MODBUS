@@ -77,6 +77,9 @@ jobs:
             path:
               - 'src'
               - 'test'
+            version:
+              - '13'
+              - '18'
         runs-on: ubuntu-latest
         needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
         steps:
@@ -86,7 +89,7 @@ jobs:
             - name: Run clang-format style check for C/C++/Protobuf programs.
               uses: jidicula/clang-format-action@v4.13.0
               with:
-                clang-format-version: '18'
+                clang-format-version: ${{matrix.version}}
                 check-path: ${{matrix.path}}
     
     run_unit_tests:
