@@ -72,6 +72,11 @@ jobs:
 
     run_clang-format_check:
         name: Run Clang-format Check
+        strategy:
+          matrix:
+            path:
+              - 'src'
+              - 'test'
         runs-on: ubuntu-latest
         needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
         steps:
@@ -82,7 +87,7 @@ jobs:
               uses: jidicula/clang-format-action@v4.13.0
               with:
                 clang-format-version: '18'
-                check-path: 'src'
+                check-path: ${{matrix.path}}
     
     run_unit_tests:
         name: Run Unit Tests
