@@ -19,9 +19,21 @@ else()
 	message(STATUS "Lizard was not found. \r\n\tInstall Lizard to get predefined targets for src folder Code Complexity Metrics")
 endif()
 # Prints CCM for src folder in the console
-add_custom_target(ccm lizard ../../../src/ --CCN 12 -Tnloc=30 -a 4 --languages cpp -V -i 1)
+add_custom_target(ccm lizard ../../../src/ 
+							--CCN 12 
+							-Tnloc=30 
+							-a 4 
+							--languages cpp 
+							-V 
+							-i 1)
 # Create CCM report in reports/Cylcomatic_Complexity/
-add_custom_target(ccmr lizard ../../../src/ --CCN 12 -Tnloc=30 -a 4 --languages cpp -V -o ../../../reports/Cyclomatic_Complexity/Lizard_report.html)
+add_custom_target(ccmr lizard ../../../src/ 
+							--CCN 12 
+							-Tnloc=30 
+							-a 4 
+							--languages cpp 
+							-V 
+							-o ../../../reports/Cyclomatic_Complexity/Lizard_report.html)
 
 # TARGET FOR MAKING STATIC ANALYSIS OF THE SOURCE CODE AND UNIT TEST CODE
 # check if cppchec software is available 
@@ -31,12 +43,35 @@ if(cppcheck_program)
 else()
 	message(STATUS "CppCheck was not found. \r\n\tInstall CppCheck to get predefined targets for static analize")
 endif()
-# Prints static analize output for src folder in the console
-add_custom_target(cppcheck_src cppcheck ../../../src --enable=all --inconclusive --force --inline-suppr --platform=win64 --suppress=missingIncludeSystem --suppress=unusedFunction --suppress=missingInclude)
-# Prints static analize output for specific test_module folder in the console
-add_custom_target(cppcheck_test cppcheck ../../../test/modbus -itest/modbus/out -itest/modbus/out_avr --enable=all --inconclusive --force --inline-suppr --platform=win64 --suppress=missingInclude --suppress=missingIncludeSystem) 
-
-# TARGET FOR CREATING CODE COVERAGE REPORTS
+# Prints cppcheck static analize output for src folder in the console
+add_custom_target(cppcheck_src cppcheck 
+										../../../src 
+										--enable=all
+										--force
+										--std=c99
+										# --inline-suppr 
+										# --platform=win64 
+										--suppress=missingIncludeSystem 
+										--suppress=missingInclude
+										--suppress=unusedFunction:../../../src/modbus_slave.c
+										--suppress=unusedFunction:../../../src/modbus_master.c
+										--checkers-report=cppcheck_checkers_report.txt
+										)
+# Prints cppcheck static analize output for unit tests build configuration
+add_custom_target(cppcheck_test cppcheck 
+										--project=../../../test/modbus/out/compile_commands.json
+										--enable=all
+										# --inconclusive
+										--force
+										--std=c99
+										# --inline-suppr 
+										# --platform=win64 
+										--suppress=unusedFunction:*/master_PDU_req_test_runner.c
+										--suppress=missingInclude
+										--suppress=missingIncludeSystem 
+										--checkers-report=cppcheck_checkers_report.txt
+										)
+# TARGET FOR CHECKING CODE COVERAGE AND CREATING CODE COVERAGE REPORTS
 # check if python 3 and gcovr are available 
 find_program(GCOVR gcovr)
 find_program(PYTHON3 python3)
@@ -54,5 +89,11 @@ else()
 	endif()
 endif()
 
-add_custom_target(ccr python3 -m gcovr CMakeFiles/modbus_test.dir/D_/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src -r ../../.. --html-details ../../../reports/Code_Coverage/modbus_gcov_report.html)
-add_custom_target(ccc python3 -m gcovr CMakeFiles/modbus_test.dir/D_/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src -r ../../.. --fail-under-line 90)
+# CODE COVERAGE REPORT
+add_custom_target(ccr python3 -m gcovr CMakeFiles/modbus_test.dir/D_/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src 
+									   -r ../../.. 
+									   --html-details ../../../reports/Code_Coverage/modbus_gcov_report.html)
+# CODE COVERAGE CHECK
+add_custom_target(ccc python3 -m gcovr CMakeFiles/modbus_test.dir/D_/EMBEDDED/LIBRARIES/C_libraries/MODBUS/src 
+									   -r ../../.. 
+									   --fail-under-line 90)
