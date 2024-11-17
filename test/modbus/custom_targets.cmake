@@ -47,7 +47,7 @@ endif()
 add_custom_target(cppcheck_src cppcheck 
 										../../../src 
 										--enable=all
-										--force
+										# --inconclusive
 										--std=c99
 										# --inline-suppr 
 										# --platform=win64 
