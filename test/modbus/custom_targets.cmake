@@ -45,7 +45,7 @@ else()
 	message(STATUS "CppCheck was not found. \r\n\tInstall CppCheck to get predefined targets for static analize")
 endif()
 # Prints cppcheck static analize output for src folder in the console
-add_custom_target(cppcheck_src cppcheck 
+add_custom_target(cppcheck_src cppcheck 1
 										../../../src 
 										--enable=all
 										# --inconclusive
