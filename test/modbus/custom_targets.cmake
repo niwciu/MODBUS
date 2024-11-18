@@ -25,7 +25,7 @@ add_custom_target(ccm lizard ../../../src/
 							-a 4 
 							--languages cpp 
 							-V 
-							-i 1)
+							)
 # Create CCM report in reports/Cylcomatic_Complexity/
 add_custom_target(ccmr lizard ../../../src/ 
 							--CCN 12 
@@ -33,7 +33,8 @@ add_custom_target(ccmr lizard ../../../src/
 							-a 4 
 							--languages cpp 
 							-V 
-							-o ../../../reports/Cyclomatic_Complexity/Lizard_report.html)
+							-o ../../../reports/Cyclomatic_Complexity/Lizard_report.html
+							)
 
 # TARGET FOR MAKING STATIC ANALYSIS OF THE SOURCE CODE AND UNIT TEST CODE
 # check if cppchec software is available 
@@ -55,7 +56,7 @@ add_custom_target(cppcheck_src cppcheck
 										--suppress=missingInclude
 										--suppress=unusedFunction:../../../src/modbus_slave.c
 										--suppress=unusedFunction:../../../src/modbus_master.c
-										--checkers-report=cppcheck_checkers_report.txt
+										# --checkers-report=cppcheck_checkers_report.txt
 										)
 # Prints cppcheck static analize output for unit tests build configuration
 add_custom_target(cppcheck_test cppcheck 
