@@ -63,7 +63,7 @@ add_custom_target(cppcheck_test cppcheck
 										--project=../../../test/modbus/out/compile_commands.json
 										--enable=all
 										# --inconclusive
-										--force
+										# --force
 										--std=c99
 										# --inline-suppr 
 										# --platform=win64 
