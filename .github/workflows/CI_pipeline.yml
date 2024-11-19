@@ -141,14 +141,6 @@ jobs:
             - name: checkout
               uses: actions/checkout@v4
 
-    run_code_complexity_check:
-        name: Run Code Complexity Check
-        runs-on: ubuntu-latest
-        needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
-        steps:
-            - name: checkout
-              uses: actions/checkout@v4
-            
             - name: Run cppcheck-annotation-action
               uses: Konstantin343/cppcheck-annotation-action@v1.0
               with:
@@ -160,12 +152,21 @@ jobs:
                 # annotation-failures: 
                 # annotation-warnings: 
                 # annotation-level-default: 
+
             - name: Annotate lines with errors
               uses: yuzutech/annotations-action@v0.5.0
               with:
                 repo-token: "${{ secrets.GITHUB_TOKEN }}"
                 title: 'Results of CppCheck'
                 input: 'annotations.json'
+
+    run_code_complexity_check:
+        name: Run Code Complexity Check
+        runs-on: ubuntu-latest
+        needs: [build_unit_tets,build_STM32G070RB_modbus_master, build_STM32G070RB_modbus_slave]
+        steps:
+            - name: checkout
+              uses: actions/checkout@v4
           
     generate_code_coverage_report:
         name: Generate Code Coverage Report
