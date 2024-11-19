@@ -70,7 +70,7 @@ add_custom_target(cppcheck_test cppcheck
 										--suppress=unusedFunction:*/master_PDU_req_test_runner.c
 										--suppress=missingInclude
 										--suppress=missingIncludeSystem 
-										--checkers-report=cppcheck_checkers_report.txt
+										# --checkers-report=cppcheck_checkers_report.txt
 										)
 # TARGET FOR CHECKING CODE COVERAGE AND CREATING CODE COVERAGE REPORTS
 # check if python 3 and gcovr are available 
