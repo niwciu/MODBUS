@@ -144,10 +144,11 @@ jobs:
             - name: Run cppcheck-annotation-action
               uses: Konstantin343/cppcheck-annotation-action@main
               with:
-                sources: ./src
+                sources: ./src ./test/modbus
+                additional-args: --force
                 log-level: verbose
                 std: c99
-                suppress: missingIncludeSystem,missingInclude,unusedFunction:./src/modbus_slave.c,unusedFunction:./src/modbus_master.c
+                suppress: missingIncludeSystem,missingInclude,unusedFunction:./test/modbus/master_PDU_read_test_runner.c
                 action-fail-level: 'failure,warning'
                 # annotation-notices:
                 # annotation-failures: 
