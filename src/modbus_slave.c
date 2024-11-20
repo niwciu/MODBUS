@@ -65,8 +65,6 @@ static void modbus_frame_error_callback(void);
  */
 void register_app_data_to_modbus_slave_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
 {
-    uint8_t a[1];
-    a[2] = 1;
     register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, app_data_ptr);
 }
 
