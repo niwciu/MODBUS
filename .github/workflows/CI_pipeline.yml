@@ -142,7 +142,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Run cppcheck-annotation-action
-              uses: Konstantin343/cppcheck-annotation-action@main
+              uses: niwciu/cppcheck-annotation-action@develop
               with:
                 sources: ./src ./test/modbus
                 additional-args: --force
