@@ -79,8 +79,6 @@ TEST(Master_RTU_test, GivenTimeoutTimerSetToSomeValueWhenUpdateModbusTimeoutTime
 }
 TEST(Master_RTU_test, GivenTimeoutTimerSetTo0WhenUpdateModbusTimeoutTimerCalledThenModbusMasterTimeoutTimerEqual0)
 {
-    uint8_t a[1];
-    a[2] = 1;
     modbus_master_resp_timeout_timer = 0;
     update_modbus_master_timout_timer();
     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
