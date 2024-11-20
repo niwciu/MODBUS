@@ -8,6 +8,7 @@
 
 
 #TARGETS FOR RUNNING UNIT TESTS
+message(STATUS "You can use predefined target to run unit tests: \r\n\trun,")
 add_custom_target(run modbus_test)
 
 # TARGET FOR CHECKING CODE COMPLEXITY METRICS"
@@ -40,38 +41,40 @@ add_custom_target(ccmr lizard ../../../src/
 # check if cppchec software is available 
 find_program(cppcheck_program cppcheck)
 if(cppcheck_program)
-	message(STATUS "CppCheck was found, you can use predefined targets for static analize : \r\n\tcppcheck_src,\r\n\tcppcheck_test,")
+	message(STATUS "CppCheck was found, you can use predefined targets for static analize : \r\n\tcppcheck -> ./src ./test/modbus,")
 else()
 	message(STATUS "CppCheck was not found. \r\n\tInstall CppCheck to get predefined targets for static analize")
 endif()
 # Prints cppcheck static analize output for src folder in the console
-add_custom_target(cppcheck_src cppcheck 1
-										../../../src 
+add_custom_target(cppcheck cppcheck
+										../../../src ../../../test/modbus
+										-i../../../test/modbus/out
 										--enable=all
+										--force
 										# --inconclusive
 										--std=c99
 										# --inline-suppr 
 										# --platform=win64 
 										--suppress=missingIncludeSystem 
 										--suppress=missingInclude
-										--suppress=unusedFunction:../../../src/modbus_slave.c
-										--suppress=unusedFunction:../../../src/modbus_master.c
+										--suppress=unusedFunction:../../../test/modbus/master_PDU_read_test_runner.c
+										# --suppress=unusedFunction:../../../src/modbus_master.c
 										# --checkers-report=cppcheck_checkers_report.txt
 										)
 # Prints cppcheck static analize output for unit tests build configuration
-add_custom_target(cppcheck_test cppcheck 
-										--project=../../../test/modbus/out/compile_commands.json
-										--enable=all
-										# --inconclusive
-										# --force
-										--std=c99
-										# --inline-suppr 
-										# --platform=win64 
-										--suppress=unusedFunction:*/master_PDU_req_test_runner.c
-										--suppress=missingInclude
-										--suppress=missingIncludeSystem 
-										# --checkers-report=cppcheck_checkers_report.txt
-										)
+# add_custom_target(cppcheck_test cppcheck 
+# 										--project=../../../test/modbus/out/compile_commands.json
+# 										--enable=all
+# 										# --inconclusive
+# 										# --force
+# 										--std=c99
+# 										# --inline-suppr 
+# 										# --platform=win64 
+# 										--suppress=unusedFunction:*/master_PDU_req_test_runner.c
+# 										--suppress=missingInclude
+# 										--suppress=missingIncludeSystem 
+# 										# --checkers-report=cppcheck_checkers_report.txt
+# 										)
 # TARGET FOR CHECKING CODE COVERAGE AND CREATING CODE COVERAGE REPORTS
 # check if python 3 and gcovr are available 
 find_program(GCOVR gcovr)
