@@ -2,6 +2,14 @@ name: CI Pipeline
 on:
     workflow_dispatch: 
     # push: 
+env:
+  path: ./src
+  CCN: 12
+  Threshold: nloc=30
+  arguments: 4
+  language: cpp
+  verbose: true
+
 jobs:
     build_unit_tets:
         name: Build Unit Tests
@@ -175,12 +183,12 @@ jobs:
             - name: Lizard Runner
               uses: Uno-Takashi/Lizard-Runner@v3
               with: 
-                path: ./src
-                CCN: 12
-                Threshold: nloc=30
-                arguments: 4
-                language: cpp
-                verbose: true
+                path: ${{env.path}}
+                CCN: ${{env.CCN}}
+                Threshold: ${{env.Threshold}}
+                arguments: ${{env.arguments}}
+                language: ${{env.language}}
+                verbose: ${{env.verbose}}
 
           
     generate_code_coverage_report:
@@ -208,3 +216,24 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
+
+            - name: Lizard Runner
+              uses: Uno-Takashi/Lizard-Runner@v3
+              with: 
+                path: ${{env.path}}
+                CCN: ${{env.CCN}}
+                Threshold: ${{env.Threshold}}
+                arguments: ${{env.arguments}}
+                language: ${{env.language}}
+                verbose: ${{env.verbose}}
+                output_file: ./code_complexity_report.html
+
+            - name: Save code complexity report
+              uses: actions/upload-artifact@v4
+              with:
+                  name: code_complexity_report
+                  path: ./code_complexity_report.html
+                  if-no-files-found: warn
+                  retention-days: 5
+                  overwrite: true
+        
