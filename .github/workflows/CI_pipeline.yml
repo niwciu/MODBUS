@@ -145,7 +145,7 @@ jobs:
               uses: niwciu/cppcheck-annotation-action@develop
               with:
                 sources: ./src ./test/modbus
-                additional-args: --force
+                additional-args: --force -UUNITY_FIXTURE_FREE -UUNITY_FIXTURE_MALLOC -UUNITY_OUTPUT_CHAR
                 log-level: verbose
                 std: c99
                 suppress: missingIncludeSystem,missingInclude,unusedFunction:./test/modbus/master_PDU_read_test_runner.c
