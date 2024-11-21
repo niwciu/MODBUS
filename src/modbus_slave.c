@@ -54,7 +54,7 @@ static void modbus_resp_send_callback(void);
 static void modbus_T_1_5_char_expired_callback(void);
 static void modbus_T_3_5_char_expired_callback(void);
 static void modbus_frame_error_callback(void);
-static void lizart_test_function(uint8_t a, unit8_t b, uint8_t c, unit8_t d, unit8_t e);
+static void lizart_test_function(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e);
 
 /**
  * @brief Registers application data to Modbus slave coils table.
@@ -363,7 +363,7 @@ static void modbus_frame_error_callback(void)
     FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
 }
 
-static void lizart_test_function(uint8_t a, unit8_t b, uint8_t c, unit8_t d, unit8_t e)
+static void lizart_test_function(uint8_t a, uint8_t b, uint8_t c, uint8_t d, uint8_t e)
 {
     switch (a)
     {
