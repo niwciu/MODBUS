@@ -232,7 +232,7 @@ jobs:
               uses: actions/upload-artifact@v4
               with:
                   name: Code_Coverage_Report
-                  path: ./gcovr_report/modbus_gcovr_report.html
+                  path: ./gcovr_report  # need to save all files in folder
                   if-no-files-found: warn
                   retention-days: 5
                   overwrite: true
