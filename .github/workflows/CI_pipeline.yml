@@ -171,6 +171,17 @@ jobs:
         steps:
             - name: checkout
               uses: actions/checkout@v4
+
+            - name: Lizard Runner
+              uses: Uno-Takashi/Lizard-Runner@v3
+              with: 
+                path: ./src
+                CCN: 12
+                Threshold: nloc=30
+                arguments: 4
+                language: cpp
+                verbose: true
+
           
     generate_code_coverage_report:
         name: Generate Code Coverage Report
