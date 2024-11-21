@@ -1,7 +1,11 @@
 name: CI Pipeline
 on:
     workflow_dispatch: 
-    # push: 
+    push:
+    pull_request: 
+      branches: 
+        - main
+        - develop
 env:
   path: ./src
   CCN: 12
