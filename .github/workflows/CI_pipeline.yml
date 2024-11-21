@@ -139,6 +139,7 @@ jobs:
             - name: Check Test Coverage
               uses: threeal/gcovr-action@v1.1.0
               with:
+                excludes: test
                 fail-under-line: 90
     
     run_cppcheck:
@@ -181,7 +182,7 @@ jobs:
               uses: actions/checkout@v4
 
             - name: Lizard Runner
-              uses: Uno-Takashi/Lizard-Runner@v3
+              uses: niwciu/Lizard-Runner@develop
               with: 
                 path: ${{env.path}}
                 CCN: ${{env.CCN}}
@@ -223,6 +224,7 @@ jobs:
             - name: Generate Code Coverage Report
               uses: threeal/gcovr-action@v1.1.0
               with:
+                excludes: test
                 html-out: ./gcovr_report/modbus_gcovr_report.html
                 html-details: true
                 html-title: Modbus Library Test Coverage Report
