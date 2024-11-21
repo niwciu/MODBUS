@@ -204,6 +204,39 @@ jobs:
             - name: checkout
               uses: actions/checkout@v4
 
+            - name: Download Unit Tests Build Artifacts
+              uses: actions/download-artifact@v4
+              with:
+                name: modbus_unit_tests_app
+                path: test/modbus/out
+
+            - name: Run Unit Tests
+              continue-on-error: true
+              working-directory: test/modbus/out
+              run: |
+                chmod +x modbus_test
+                ./modbus_test -v
+            
+            - name: Create GCOVR Report Folder
+              run: mkdir gcovr_report
+
+            - name: Generate Code Coverage Report
+              uses: threeal/gcovr-action@v1.1.0
+              with:
+                html-out: ./gcovr_report/modbus_gcovr_report.html
+                html-details: true
+                html-title: Modbus Library Test Coverage Report
+                html-theme: github.dark-green
+
+            - name: Save Code Coverage Report
+              uses: actions/upload-artifact@v4
+              with:
+                  name: Code_Coverage_Report
+                  path: ./gcovr_report/modbus_gcovr_report.html
+                  if-no-files-found: warn
+                  retention-days: 5
+                  overwrite: true
+
     generate_code_complexity_report:
         name: Generate Code Complexity Report
         runs-on: ubuntu-latest
@@ -231,7 +264,7 @@ jobs:
             - name: Save code complexity report
               uses: actions/upload-artifact@v4
               with:
-                  name: code_complexity_report
+                  name: Code_Complexity_Report
                   path: ./code_complexity_report.html
                   if-no-files-found: warn
                   retention-days: 5
