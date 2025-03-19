@@ -106,24 +106,24 @@ add_custom_target(ccc gcovr
 						.
 )
 
-# add_custom_target(ccca gcovr  
-# 						-r ../../../ 
-# 						--json-add-tracefile \"../../../reports/CCR/JSON_ALL/coverage_*.json\"  
-# 						.
-# )
+add_custom_target(ccca gcovr  
+						-r ../../../ 
+						--json-add-tracefile \"../../../reports/CCR/JSON_ALL/coverage_*.json\"  
+						.
+)
 						
-# add_custom_target(ccra  
-# 	COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/
-# 	COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/JSON_ALL/
-# 	COMMAND gcovr 
-# 				-r ../../../ 
-# 				--json-add-tracefile \"../../../reports/CCR/JSON_ALL/coverage_*.json\"  
-# 				--html-details -o ../../../reports/CCR/HTML_OUT/project_coverage.html
-# 				--html-theme github.dark-green
-# 				.
-# )
-# add_dependencies(ccra ccr)
-# add_dependencies(ccca ccr)
+add_custom_target(ccra  
+	COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/
+	COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/JSON_ALL/
+	COMMAND gcovr 
+				-r ../../../
+				--json-add-tracefile \"../../../reports/CCR/JSON_ALL/coverage_*.json\"  
+				--html-details -o ../../../reports/CCR/JSON_ALL/html_out/project_coverage.html
+				--html-theme github.dark-green
+				.
+)
+add_dependencies(ccra ccr)
+add_dependencies(ccca ccr)
 
 find_program(CLANG_FORMAT clang-format)
 if(CLANG_FORMAT)
