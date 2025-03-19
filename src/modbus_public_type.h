@@ -59,10 +59,10 @@ extern "C"
      */
     typedef enum
     {
-        MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE,  /**< OK - request was added to queue succesfully. */
-        MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR,   /**< Error when free queue is empty. */
-        MODBUS_MASTER_LIB_PDU_REQ_ERROR,        /**< Error in Modbus PDU request. */
-        MODBUS_MASTER_LIB_RTU_SEND_ERROR        /**< Error sending Modbus RTU message. */
+        MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE, /**< OK - request was added to queue succesfully. */
+        MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR,  /**< Error when free queue is empty. */
+        MODBUS_MASTER_LIB_PDU_REQ_ERROR,       /**< Error in Modbus PDU request. */
+        MODBUS_MASTER_LIB_RTU_SEND_ERROR       /**< Error sending Modbus RTU message. */
     } modbus_master_req_ret_t;
 
     /**
