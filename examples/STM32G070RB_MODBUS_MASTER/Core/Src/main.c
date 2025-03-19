@@ -45,7 +45,7 @@ static void update_modbus_data(void);
 int main(void)
 {
     core_init();
-    modbus_master_init(RTU, 115200, ODD);
+    modbus_master_init(RTU, 115200, NONE);
     // __enable_irq();
 
     /* Loop forever */
@@ -77,9 +77,11 @@ static void update_modbus_data(void)
             //     modbus_master_read_holding_reg(READ_HREG_ADR, reg_qty, SLAVE_ADDRES_EXAMPLE_NODE);
             // }
             modbus_master_read_coils(READ_COIL_ADR, coil_qty, SLAVE_ADDRES_EXAMPLE_NODE);
-            modbus_master_read_holding_reg(READ_HREG_ADR, reg_qty, SLAVE_ADDRES_EXAMPLE_NODE);
+            // modbus_master_read_holding_reg(READ_HREG_ADR, reg_qty, SLAVE_ADDRES_EXAMPLE_NODE);
             modbus_master_write_single_coil(WRITE_COIL_ADR, SLAVE_ADDRES_EXAMPLE_NODE, readed_coil);
-            modbus_master_write_single_reg(WRITE_HREG_ADR, SLAVE_ADDRES_EXAMPLE_NODE, readed_hreg);
+            modbus_master_write_single_coil(WRITE_COIL_ADR, 0x01, readed_coil);
+            // modbus_master_write_single_reg(WRITE_HREG_ADR, SLAVE_ADDRES_EXAMPLE_NODE, readed_hreg);
+            // modbus_master_write_single_coil(WRITE_COIL_ADR, SLAVE_ADDRES_EXAMPLE_NODE, readed_coil);
             update_timer = request_interval;
     }
 }
