@@ -144,7 +144,7 @@ const struct modbus_master_functions_mapper master_functions_mapper[] = {
  * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
  * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
  * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
- * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ * @retval MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE If the request was successfully sent to the queue.
  */
 modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID)
 {
@@ -164,7 +164,7 @@ modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_q
  * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
  * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
  * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
- * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ * @retval MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE If the request was successfully sent to the queue.
  */
 modbus_master_req_ret_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID)
 {
@@ -184,7 +184,7 @@ modbus_master_req_ret_t modbus_master_read_discrete_inputs(modbus_adr_t adr, mod
  * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
  * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
  * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
- * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ * @retval MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE If the request was successfully sent to the queue.
  */
 modbus_master_req_ret_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID)
 {
@@ -204,7 +204,7 @@ modbus_master_req_ret_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_da
  * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
  * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
  * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
- * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ * @retval MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE If the request was successfully sent to the queue.
  */
 modbus_master_req_ret_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty, modbus_device_ID_t slave_ID)
 {
@@ -224,7 +224,7 @@ modbus_master_req_ret_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_
  * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
  * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
  * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
- * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ * @retval MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE If the request was successfully sent to the queue.
  */
 modbus_master_req_ret_t modbus_master_write_single_coil(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_coil_disin_t coil_2_write)
 {
@@ -244,7 +244,7 @@ modbus_master_req_ret_t modbus_master_write_single_coil(modbus_adr_t adr, modbus
  * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
  * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
  * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
- * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ * @retval MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE If the request was successfully sent to the queue.
  */
 modbus_master_req_ret_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_reg_t reg_2_write)
 {
@@ -265,7 +265,7 @@ modbus_master_req_ret_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_
  * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
  * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
  * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
- * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ * @retval MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE If the request was successfully sent to the queue.
  */
 modbus_master_req_ret_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID, modbus_reg_t *rw_data_ptr)
 {
@@ -286,7 +286,7 @@ modbus_master_req_ret_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbu
  * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR If the free queue is empty.
  * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR If there's an error generating the PDU request.
  * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR If there's an error sending the RTU message.
- * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE If the request was successfully sent to the queue.
+ * @retval MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE If the request was successfully sent to the queue.
  */
 modbus_master_req_ret_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
 {
@@ -476,7 +476,7 @@ static void push_all_available_msg_buffer_to_free_queue(void)
  * @param req_param Pointer to the structure containing input parameters for the request,
  *                 including function code, slave ID, and data pointers.
  *
- * @retval MODBUS_MASTER_REQUEST_SEND_TO_QUEUE Request successfully generated and sent to queue.
+ * @retval MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE Request successfully generated and sent to queue.
  * @retval MODBUS_MASTER_FREE_QUEUE_EMPTY_ERROR Failed to pop a message buffer from the free queue.
  * @retval MODBUS_MASTER_LIB_PDU_REQ_ERROR Error occurred during PDU data generation.
  * @retval MODBUS_MASTER_LIB_RTU_SEND_ERROR Error occurred during Modbus RTU transmission.
@@ -501,7 +501,7 @@ static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_pa
     }
     // req_msg_buf->resp.len=0; // it's allways done before sending every buffer to modbus driver
     modbus_queue_push(tx_rx_q, &req_msg_buf);
-    return MODBUS_MASTER_REQUEST_SEND_TO_QUEUE;
+    return MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE;
 }
 
 /**
