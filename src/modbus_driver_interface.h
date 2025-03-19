@@ -29,7 +29,7 @@
 extern "C"
 {
 #endif /* __cplusplus */
-#include "modbus_type.h"
+#include "modbus_public_type.h"
 #include <stdint.h>
 
     typedef void (*init_func_ptr_t)(baud_t baud, parity_t parity);

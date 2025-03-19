@@ -168,22 +168,8 @@ extern "C"
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;
     typedef uint8_t modbus_byte_count_t;
-    typedef uint8_t modbus_buf_t;
-    typedef uint8_t modbus_buf_size_t;
     typedef uint32_t modbus_timer_t;
     typedef uint16_t modbus_CRC_t;
-
-    /**
-     * @brief Structure representing a Modbus request or response.
-     *
-     * This structure encapsulates the details of a Modbus request or response, including a
-     * pointer to the data buffer and the length of the data.
-     */
-    typedef struct
-    {
-        modbus_buf_t *data;    /**< Pointer to the data buffer. */
-        modbus_buf_size_t len; /**< Length of the data. */
-    } modbus_req_resp_t;
 
     /**
      * @brief Structure representing a Modbus message.
@@ -267,3 +253,5 @@ extern "C"
 }
 #endif /* __cplusplus */
 #endif /* _MODBUS_TYPE_H_ */
+
+// typedef uint8_t modbus_buf_t;

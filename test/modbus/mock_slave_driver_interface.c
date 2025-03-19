@@ -10,7 +10,7 @@
  */
 
 #include "mock_slave_driver_interface.h"
-
+#include "modbus_type.h"
 #include "memory.h"
 
 driver_subscr_cb_t mock_msg_tx_done_cb = NULL;

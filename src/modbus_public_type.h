@@ -96,6 +96,20 @@ extern "C"
     typedef uint16_t modbus_data_qty_t; /**< Modbus data quantity type. */
     typedef uint8_t modbus_device_ID_t; /**< Modbus device ID type. */
     typedef uint32_t baud_t;            /**< Baud rate type. */
+    typedef uint8_t modbus_buf_t;
+    typedef uint8_t modbus_buf_size_t;
+
+    /**
+     * @brief Structure representing a Modbus request or response.
+     *
+     * This structure encapsulates the details of a Modbus request or response, including a
+     * pointer to the data buffer and the length of the data.
+     */
+    typedef struct
+    {
+        modbus_buf_t *data;    /**< Pointer to the data buffer. */
+        modbus_buf_size_t len; /**< Length of the data. */
+    } modbus_req_resp_t;
 
     /**
      * @brief Structure defining Modbus error report.
