@@ -19,7 +19,7 @@ TEST_GROUP_RUNNER(Slave_RTU_test)
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerThenSlavePrepareRespond);
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerThenSlaveSendRespAndGoToModbuSlaveTransmitingResp);
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndSlaveSendingRespWhenWholeRespSendThenInitMsgBuffAndGoToIdleState);
-    //    RUN_TEST_CASE(Slave_RTU_test, );
+    // RUN_TEST_CASE(Slave_RTU_test, );
     //    RUN_TEST_CASE(Slave_RTU_test, );
     //    RUN_TEST_CASE(Slave_RTU_test, );
     //    RUN_TEST_CASE(Slave_RTU_test, );

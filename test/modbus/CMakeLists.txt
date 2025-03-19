@@ -29,6 +29,7 @@ project(modbus_test C)
 add_subdirectory(../unity unity)
 
 set(CUSTOM_TARGETS_FILE_DIR ./custom_targets.cmake)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_C_FLAGS  "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
