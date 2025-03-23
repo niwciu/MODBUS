@@ -718,7 +718,7 @@ void modbus_master_resp_timeout_handle(void)
     timeout_error.slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
     timeout_error.data_adr = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_ADR_IDX]);
     timeout_error.data_qty = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_QTY_IDX]);
-    timeout_error.fun_conde = msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX];
+    timeout_error.fun_conde = msg_buf->req.data[MODBUS_FUNCTION_CODE_IDX];
     timeout_error.resp_read_error = MODBUS_MASTER_RESP_TIMEOUT_ERR;
     modbus_master_data_timeout_error(&timeout_error);
 }
