@@ -11,6 +11,7 @@
 
 #include "modbus_driver_interface.h"
 #include "modbus_driver_config.h"
+#include "modbus_type.h"
 #include <stddef.h>
 
 typedef struct
