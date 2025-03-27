@@ -18,7 +18,7 @@
 #define LOW 0
 #define HIGH 1
 
-#define MASTER_USE_DMA OFF
+#define MASTER_USE_DMA ON
 #define USART_DE_HW_CONTROLL ON
 
 /** modbus USART configuration*/
