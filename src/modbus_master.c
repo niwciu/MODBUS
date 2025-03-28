@@ -668,6 +668,7 @@ static void modbus_master_transmitting_state_handling(void)
 {
     if (MODBUS_FLAG_CLEARED == MODBUS_MASTER_REQ_TRANSMITION_FLAG)
     {
+        MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
         msg_buf->resp.len = 0;
         modbus_master_enable_resp_timeout_timer();
         modbus_master_manager_state_machine = MODBUS_MASTER_RESP_WAITING;
@@ -745,7 +746,6 @@ static void modbus_master_RTU_recv_state_handle(void)
     modbus_ret_t RTU_status;
     modbus_device_ID_t modbus_req_slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
     MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
-    MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
     RTU_status = modbus_RTU_recv(msg_buf->resp.data, msg_buf->resp.len, modbus_req_slave_ID);
     if (RET_ERROR_CRC == RTU_status)
     {
