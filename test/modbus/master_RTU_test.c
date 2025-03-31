@@ -588,7 +588,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
-    generate_read_frame_error_catch_sequance(slave_ID, 3);
+    generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
     // Then
     update_modbus_master_manager();
     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
@@ -604,24 +604,11 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
-    generate_read_rtu_crc_error_catch_sequance(slave_ID, 3);
+    generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
     // Then
     update_modbus_master_manager();
     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndFrameErrorCatchedThenAfterT3_5CharIncMsgRepeatCounter)
 {
@@ -631,9 +618,9 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
 
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_send_req_sequence();
-    TEST_ASSERT_EQUAL(1000, modbus_master_resp_timeout_timer);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_TIME_OUT_MS, modbus_master_resp_timeout_timer);
     generate_resp_using_slave_lib(slave_ID);
-    generate_read_rtu_crc_error_catch_sequance(slave_ID, 3);
+    generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
     // Then
     update_modbus_master_manager();
     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
