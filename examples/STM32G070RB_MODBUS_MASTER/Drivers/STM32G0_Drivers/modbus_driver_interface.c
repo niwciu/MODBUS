@@ -30,7 +30,6 @@ static driver_subscr_cb_t master_t_3_5_char_break_cb = NULL;
 static driver_subscr_cb_t master_frame_error_cb = NULL;
 static driver_subscr_cb_t master_dma_tx_error_cb = NULL;
 
-
 static driver_timer_status_t FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
 
 static modbus_req_resp_t *rx_msg = NULL;
@@ -101,7 +100,7 @@ static void master_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 
 #else
         // According to RM0444 page 1039
-        MODBUS_MASTER_DMA_chanell->CPAR = (uint32_t)&(MODBUS_MASTER_USART->TDR);
+        MODBUS_MASTER_DMA_chanell->CPAR = (uint32_t) & (MODBUS_MASTER_USART->TDR);
         MODBUS_MASTER_DMA_chanell->CMAR = (uint32_t)(tx_msg);
         MODBUS_MASTER_DMA_chanell->CNDTR = msg_len;
         MODBUS_MASTER_DMA_chanell->CCR |= DMA_CCR_TCIE | //
@@ -115,6 +114,8 @@ static void master_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
     }
     // disable timer and clear all flags -> needed for repeat request handle
     FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
+
+    // Wyłącz timer i generuj aktualizację
     MODBUS_MASTER_TIMER->CR1 &= ~TIM_CR1_CEN;
     MODBUS_MASTER_USART->ICR |= USART_ICR_RTOCF; // enable T1,5 char timer interrupt
 }
@@ -184,7 +185,7 @@ void MODBUS_MASTER_DMA_IRQHandler(void)
         {
             master_msg_tx_complete_cb();
         }
-        // DMA -> USART error service - additional service
+        // DMA -> USART error service - additional service not implemented in lib yet
         if (master_dma_tx_error_cb != NULL)
         {
             master_dma_tx_error_cb();
@@ -194,7 +195,20 @@ void MODBUS_MASTER_DMA_IRQHandler(void)
 #endif
 void MODBUS_MASTER_USART_IRQHandler(void)
 {
-    uint32_t modbus_master_usart_ISR = MODBUS_MASTER_USART->ISR; 
+    uint32_t modbus_master_usart_ISR = MODBUS_MASTER_USART->ISR;
+
+    // ======= TIMEOUT (1.5T Modbus) =======
+    if ((modbus_master_usart_ISR)&USART_ISR_RTOF)
+    {
+        MODBUS_MASTER_TIMER->EGR |= TIM_EGR_UG;   // Generuj update (przeładuj rejestry)
+        MODBUS_MASTER_TIMER->CR1 |= TIM_CR1_CEN;  // Ponownie włącz timer
+        if (NULL != master_t_1_5_char_break_cb)
+        {
+            master_t_1_5_char_break_cb();
+        }
+        FRAME_DETECTION_FLAG = FRAME_RECEIVED;
+        MODBUS_MASTER_USART->ICR |= USART_ICR_RTOCF; // jakby to przerwanie kasować dopiero w timerze 7
+    }
 
     // ======= RECIVER ERROR DETECTION =======
     if (modbus_master_usart_ISR & (USART_ISR_FE | USART_ISR_NE | USART_ISR_PE | USART_ISR_ORE))
@@ -202,47 +216,43 @@ void MODBUS_MASTER_USART_IRQHandler(void)
         // Frame Error (FE)
         if (modbus_master_usart_ISR & USART_ISR_FE)
         {
-            // additional service when error detected
-            // ...
             MODBUS_MASTER_USART->ICR = USART_ICR_FECF;
         }
 
         // Noise Error (NE)
         if (modbus_master_usart_ISR & USART_ISR_NE)
         {
-            // additional service when error detected
-            // ...
             MODBUS_MASTER_USART->ICR = USART_ICR_NECF;
         }
 
         // Parity Error (PE)
         if (modbus_master_usart_ISR & USART_ISR_PE)
         {
-            // additional service when error detected
-            // ...
             MODBUS_MASTER_USART->ICR = USART_ICR_PECF;
         }
 
         // Overrun Error (ORE)
         if (modbus_master_usart_ISR & USART_ISR_ORE)
         {
-            // additional service when error detected
-            // ...
             // Read data from RDR to avoid ORE setting right after ORE bit clear
             (void)MODBUS_MASTER_USART->RDR;
             MODBUS_MASTER_USART->ICR = USART_ICR_ORECF;
         }
 
         // Additional error service callback - optional and not implemented in MODBUS_LIB
-        if(master_frame_error_cb!= NULL)
+        if (master_frame_error_cb != NULL)
         {
-            master_frame_error_cb(); 
+            master_frame_error_cb();
         }
         
+        // MODBUS_MASTER_TIMER->CR1 &= ~TIM_CR1_CEN;  // Wyłącz timer
+        // MODBUS_MASTER_TIMER->SR &= ~TIM_SR_UIF;  // Zerowanie flagi przepełnienia
+        MODBUS_MASTER_TIMER->EGR |= TIM_EGR_UG;   // Generuj update (przeładuj rejestry)
+        MODBUS_MASTER_TIMER->CR1 |= TIM_CR1_CEN;  // Ponownie włącz timer
     }
 
     // ======= DATA RECIVED INTERUPT =======
-    if ((modbus_master_usart_ISR) & USART_ISR_RXNE_RXFNE)
+    if ((modbus_master_usart_ISR)&USART_ISR_RXNE_RXFNE)
     {
         rx_msg->data[rx_msg->len] = MODBUS_MASTER_USART->RDR;
         rx_msg->len++;
@@ -251,11 +261,14 @@ void MODBUS_MASTER_USART_IRQHandler(void)
         {
             master_frame_error_cb();
         }
-        MODBUS_MASTER_TIMER->EGR |= TIM_EGR_UG;
-        MODBUS_MASTER_TIMER->CR1 |= TIM_CR1_CEN;
+        
+        // MODBUS_MASTER_TIMER->CR1 &= ~TIM_CR1_CEN;  // Wyłącz timer
+        // MODBUS_MASTER_TIMER->SR &= ~TIM_SR_UIF;  // Zerowanie flagi przepełnienia
+        MODBUS_MASTER_TIMER->EGR |= TIM_EGR_UG;   // Generuj update (przeładuj rejestry)
+        MODBUS_MASTER_TIMER->CR1 |= TIM_CR1_CEN;  // Ponownie włącz timer
     }
 #if MASTER_USE_DMA == OFF
-    if ((modbus_master_usart_ISR) & USART_ISR_TXE_TXFNF)
+    if ((modbus_master_usart_ISR)&USART_ISR_TXE_TXFNF)
     {
         if (tx_buf.cur_byte_ptr < tx_buf.last_byte_ptr)
         {
@@ -267,20 +280,21 @@ void MODBUS_MASTER_USART_IRQHandler(void)
             // koniec nadawania wyłącz przerwanie TXE i włącz RX
             MODBUS_MASTER_USART->CR1 &= ~(USART_CR1_TXEIE_TXFNFIE);
             // włącz przerwanie Transfer completed
-            MODBUS_MASTER_USART->CR1 |= USART_ISR_TC;
+            MODBUS_MASTER_USART->ICR |= USART_ICR_TCCF;
+            MODBUS_MASTER_USART->CR1 |= USART_CR1_TCIE;
         }
     }
 
 #endif
     // ======= USART TX DATA COMPLETED =======
-    if ((modbus_master_usart_ISR) & USART_ISR_TC)
+    if ((modbus_master_usart_ISR)&USART_ISR_TC)
     {
         if (NULL != master_msg_tx_complete_cb)
         {
             master_msg_tx_complete_cb();
         }
         // wyłącz przerwanie transfer compleated i skasuj flage przerwania
-        MODBUS_MASTER_USART->CR1 &= ~(USART_ISR_TC);
+        MODBUS_MASTER_USART->CR1 &= ~(USART_CR1_TCIE);
         MODBUS_MASTER_USART->ICR |= USART_ICR_TCCF;
 #if USART_DE_HW_CONTROLL == OFF
         // ustaw stan wysoki na DE
@@ -288,16 +302,7 @@ void MODBUS_MASTER_USART_IRQHandler(void)
 #endif
     }
 
-    // ======= TIMEOUT (1.5T Modbus) =======
-    if ((modbus_master_usart_ISR) & USART_ISR_RTOF)
-    {
-        if (NULL != master_t_1_5_char_break_cb)
-        {
-            master_t_1_5_char_break_cb();
-        }
-        FRAME_DETECTION_FLAG = FRAME_RECEIVED;
-        MODBUS_MASTER_USART->ICR |= USART_ICR_RTOCF; // jakby to przerwanie kasować dopiero w timerze 7
-    }
+
 }
 
 void MODBUS_MASTER_TIMER_IRQHandler(void)
