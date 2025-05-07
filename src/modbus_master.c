@@ -384,7 +384,7 @@ void update_modbus_master_manager(void)
  */
 void update_modbus_master_timout_timer(void)
 {
-    if (modbus_master_resp_timeout_timer)
+    if (modbus_master_resp_timeout_timer > 1)
     {
         modbus_master_resp_timeout_timer--;
     }
