@@ -92,6 +92,7 @@ set(TEST_SRCS
     slave_RTU_init_test.c
 	slave_RTU_test_runner.c
 	slave_RTU_test.c
+	slave_RTU_suscription_test.c
 	
 	
 

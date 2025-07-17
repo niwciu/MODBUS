@@ -156,14 +156,6 @@ extern "C"
         MODBUS_FLAG_UNKNOWN, /**< Flag status is unknown */
     } modbus_status_flag_t;
 
-    /**
-     * @brief Enum representing the status of the last queue position.
-     */
-    // typedef enum
-    // {
-    //     LAST_QUEUE_POS_EMPTY,      /**< Last queue position is empty */
-    //     LAST_QUEUE_POS_STORE_DATA, /**< Last queue position stores data */
-    // } last_q_pos_status_t;
 
     typedef uint16_t modbus_data_t;
     typedef uint8_t modbus_req_t;

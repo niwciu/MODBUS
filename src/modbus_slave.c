@@ -41,6 +41,8 @@ PRIVATE modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_status_flag_t RESP_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE modbus_event_cb_t req_msg_recived_event_cb = NULL;
+PRIVATE modbus_event_cb_t resp_msg_send_event_cb = NULL;
 
 static void handle_modbus_slave_idle_state(void);
 static void handle_modbus_slave_msg_recived_state(void);
@@ -54,6 +56,7 @@ static void modbus_resp_send_callback(void);
 static void modbus_T_1_5_char_expired_callback(void);
 static void modbus_T_3_5_char_expired_callback(void);
 static void modbus_frame_error_callback(void);
+static void notify_req_msg_recivet_event(void);
 
 /**
  * @brief Registers application data to Modbus slave coils table.
@@ -105,6 +108,33 @@ void register_app_data_to_modbus_slave_inreg_table(modbus_adr_t reg_adr, modbus_
 void register_app_data_to_modbus_slave_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
 {
     register_app_data_to_modbus_reg_table(Slave_Holding_Registers, reg_adr, app_data_ptr);
+}
+
+/**
+ * @brief Registers callback for Modbus slave request received event.
+ *
+ * This function registers a callback function that will be invoked when a valid Modbus request message
+ * is received by the slave. (valid message recive confirmation)
+ *
+ * @param callback Function pointer to the callback to be registered.
+ */
+void register_slave_req_recived_event_cb(modbus_event_cb_t callback)
+{
+   req_msg_recived_event_cb = callback;
+}
+
+
+/**
+ * @brief Registers callback for Modbus slave response sent event.
+ *
+ * This function registers a callback function that will be invoked when a Modbus response message
+ * is sent by the slave. (msg send confirmation)
+ *
+ * @param callback Function pointer to the callback to be registered.
+ */
+void register_slave_resp_send_event_cb(modbus_event_cb_t callback)
+{
+    resp_msg_send_event_cb = callback;
 }
 
 /**
@@ -192,6 +222,7 @@ static void handle_modbus_slave_msg_recived_state(void)
     }
     else if ((MODBUS_FLAG_CLEARED == FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == TIMER_3_5_CHAR_FLAG))
     {
+        notify_req_msg_recivet_event();
         parse_master_request_and_prepare_resp(slave_msg_ptr);
         modbus_RTU_send(slave_msg_ptr->resp.data, &slave_msg_ptr->resp.len, modbus_slave_ID);
         slave_RTU_driver->send(slave_msg_ptr->resp.data, slave_msg_ptr->resp.len);
@@ -360,4 +391,16 @@ static void modbus_T_3_5_char_expired_callback(void)
 static void modbus_frame_error_callback(void)
 {
     FRAME_ERROR_FLAG = MODBUS_FLAG_SET;
+}
+
+/**
+ * @brief 
+ * 
+ */
+static void notify_req_msg_recivet_event(void)
+{
+    if(req_msg_recived_event_cb!=NULL)
+    {
+        req_msg_recived_event_cb();
+    }
 }

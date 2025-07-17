@@ -98,6 +98,8 @@ extern "C"
     typedef uint32_t baud_t;            /**< Baud rate type. */
     typedef uint8_t modbus_buf_t;
     typedef uint8_t modbus_buf_size_t;
+    
+    typedef void(*modbus_event_cb_t)(void);
 
     /**
      * @brief Structure representing a Modbus request or response.

@@ -30,6 +30,9 @@ extern "C"
     void register_app_data_to_modbus_slave_inreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr);
     void register_app_data_to_modbus_slave_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr);
 
+    void register_slave_req_recived_event_cb(modbus_event_cb_t callback);
+    void register_slave_resp_send_event_cb(modbus_event_cb_t callback);
+
     void modbus_slave_init(modbus_mode_t mode, baud_t baud_rate, parity_t parity, modbus_device_ID_t slave_ID);
     void check_modbus_request(void);
 
