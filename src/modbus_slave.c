@@ -57,6 +57,7 @@ static void modbus_T_1_5_char_expired_callback(void);
 static void modbus_T_3_5_char_expired_callback(void);
 static void modbus_frame_error_callback(void);
 static void notify_req_msg_recivet_event(void);
+static void notify_resp_msg_send_event(void);
 
 /**
  * @brief Registers application data to Modbus slave coils table.
@@ -249,6 +250,7 @@ static void handle_modbus_slave_transmitting_resp_state(void)
         slave_manager_state_machine = MODBUS_SLAVE_IDLE;
         slave_msg_ptr->resp.len = 0;
         slave_msg_ptr->req.len = 0;
+        notify_resp_msg_send_event();
     }
 }
 
@@ -394,13 +396,29 @@ static void modbus_frame_error_callback(void)
 }
 
 /**
- * @brief 
- * 
+ * @brief Notifies registered callback about received Modbus request message.
+ *
+ * This function invokes the registered callback to notify that a Modbus request message
+ * has been successfully received by the slave.
  */
 static void notify_req_msg_recivet_event(void)
 {
     if(req_msg_recived_event_cb!=NULL)
     {
         req_msg_recived_event_cb();
+    }
+}
+
+/**
+ * @brief Notifies registered callback about sent Modbus response message.
+ *
+ * This function invokes the registered callback to notify that a Modbus response message
+ * has been successfully sent by the slave.
+ */
+static void notify_resp_msg_send_event(void)
+{
+    if(resp_msg_send_event_cb!=NULL)
+    {
+        resp_msg_send_event_cb();
     }
 }

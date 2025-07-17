@@ -17,9 +17,11 @@ parity_t parity = ODD;
 modbus_mode_t mode = RTU;
 
 uint8_t mock_recived_msg_couter;
+uint8_t mock_send_msg_couter;
 
 static void modify_CRC_in_msg_frame(void);
 static void mock_fun_1(void);
+static void mock_fun_2(void);
 
 TEST_SETUP(Slave_RTU_test)
 {
@@ -315,6 +317,27 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     TEST_ASSERT_EQUAL(1,mock_recived_msg_couter);
 }
 
+TEST(Slave_RTU_test, GivenModbusSlaveInitAndSlaveManagerStateMachineSetToMOdbusSlaveTransmitingResponsAndRespMsgSendCbRegisteredWithMockFun2AndMockSendMsgCounterEqual0AndRespTransmisionFlagSetWhenCheckModbusRequestCalledThenMockSendMsgCounterEqual0)
+{
+    register_slave_req_recived_event_cb(mock_fun_2);
+    mock_send_msg_couter=0;
+    slave_manager_state_machine = MODBUS_SLAVE_TRANSMITTING_RESP;
+    check_modbus_request();
+    TEST_ASSERT_EQUAL(0,mock_send_msg_couter);
+}
+    
+// TEST(Slave_RTU_test, GivenModbusSlaveInitAndSlaveManagerStateMachineSetToMOdbusSlaveTransmitingResponsAndRespMsgSendCbRegisteredWithMockFun2AndMockSendMsgCounterEqual0AndRespTransmisionFlagClearedWhenCheckModbusRequestCalledThenMockSendMsgCounterEqual1)
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
+
+    
+// TEST(Slave_RTU_test, GivenModbusSlaveInitAndSlaveManagerStateMachineSetToMOdbusSlaveTransmitingResponsAndRespMsgSendCbRegisteredWithMockFun2AndMockSendMsgCounterEqual0AndRespTransmisionFlagClearedWhenCheckModbusRequestCalledTwiceThenMockSendMsgCounterEqual1)
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
+
+    
 // TEST(Slave_RTU_test, )
 // {
 //     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
@@ -331,4 +354,9 @@ static void modify_CRC_in_msg_frame(void)
 static void mock_fun_1(void)
 {
     mock_recived_msg_couter++;
+}
+
+static void mock_fun_2(void)
+{
+    mock_send_msg_couter++;
 }
