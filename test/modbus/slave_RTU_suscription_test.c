@@ -25,7 +25,7 @@ TEST(Slave_RTU_event_subscr, WhenRegisterSlaveReqRecivedEvenCbCalledWithMockFun1
     // When
     register_slave_req_recived_event_cb(mock_fun_1);
     // Then
-    TEST_ASSERT_EQUAL(mock_fun_1,req_msg_recived_event_cb);
+    TEST_ASSERT_EQUAL(mock_fun_1, req_msg_recived_event_cb);
 }
 
 TEST(Slave_RTU_event_subscr, WhenRegisterSlaveRespSendEvenCbCalledWithMockFun1AsArgumentThenReqMsgRecivedEventCbIsEqualToMockFun1)
@@ -34,10 +34,9 @@ TEST(Slave_RTU_event_subscr, WhenRegisterSlaveRespSendEvenCbCalledWithMockFun1As
     // When
     register_slave_resp_send_event_cb(mock_fun_1);
     // Then
-    TEST_ASSERT_EQUAL(mock_fun_1,resp_msg_send_event_cb);
+    TEST_ASSERT_EQUAL(mock_fun_1, resp_msg_send_event_cb);
 }
 
 static void mock_fun_1(void)
 {
-
 }

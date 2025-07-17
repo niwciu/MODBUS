@@ -113,7 +113,7 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndModbusMasgPushToModbusQueueWhenMo
     modbus_queue_init(q);
     modbus_queue_push(q, &msg_ptr);
     pop_msg = modbus_queue_pop(q);
-    TEST_ASSERT_MESSAGE(&msg_buf[0]== pop_msg, " Pop message ptr is not equal pushed message ptr");
+    TEST_ASSERT_MESSAGE(&msg_buf[0] == pop_msg, " Pop message ptr is not equal pushed message ptr");
 }
 
 TEST(Modbus_Queue_test, GivenModbusQueueInitAndEmptyAndPopMsgPtrEqualNullWhenModbusMsgPopFromQueueToPopMsgThenPopMsgEqualNull)
@@ -141,7 +141,7 @@ TEST(Modbus_Queue_test, GivenModbusQueueInitAndFullWhenModbusMsgPopAndModbusMsgP
     pop_msg = modbus_queue_pop(q);
     TEST_ASSERT_EQUAL(0, q->head);
     TEST_ASSERT_EQUAL(1, q->tail);
-    TEST_ASSERT_EQUAL(MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS-1, q->items_in_queue);
+    TEST_ASSERT_EQUAL(MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS - 1, q->items_in_queue);
     msg_ptr = &msg_buf[0];
     modbus_queue_push(q, &msg_ptr);
     // Then

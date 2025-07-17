@@ -121,9 +121,8 @@ void register_app_data_to_modbus_slave_hreg_table(modbus_adr_t reg_adr, modbus_r
  */
 void register_slave_req_recived_event_cb(modbus_event_cb_t callback)
 {
-   req_msg_recived_event_cb = callback;
+    req_msg_recived_event_cb = callback;
 }
-
 
 /**
  * @brief Registers callback for Modbus slave response sent event.
@@ -403,7 +402,7 @@ static void modbus_frame_error_callback(void)
  */
 static void notify_req_msg_recivet_event(void)
 {
-    if(req_msg_recived_event_cb!=NULL)
+    if (req_msg_recived_event_cb != NULL)
     {
         req_msg_recived_event_cb();
     }
@@ -417,7 +416,7 @@ static void notify_req_msg_recivet_event(void)
  */
 static void notify_resp_msg_send_event(void)
 {
-    if(resp_msg_send_event_cb!=NULL)
+    if (resp_msg_send_event_cb != NULL)
     {
         resp_msg_send_event_cb();
     }
