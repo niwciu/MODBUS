@@ -1,6 +1,159 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_config.h"
 
+TEST_GROUP_RUNNER(master_RTU_init_test)
+{
+    /* Test cases to run */
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInUnknownModeThenRtuReqAndRespBuffersAreNotRegistered);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRtuReqAndRespBuffersAreRegistered);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenTxRxRTUmsgQueueInitialized);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenFreeRTUmsgQueueInitializedAndFull);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenDriverInterfaceIsRegistered);
+    RUN_TEST_CASE(master_RTU_init_test, GivenBaudAndParitySetWhenModbusMasterInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenModbusMasterManagerStateMachineIsSetToIdle);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenMOdbusSendingRequestFlagIsCleared);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenTimer1_5Char_FlagIsCleared);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenTimer3_5Char_FlagIsCleared);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenFrameErrorFlagIsCleared);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRtuCrcErrorFlagCleared);
+
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenRequestTransmiscionCompleateCallbackRegistered);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenT1_5CharTimeExpiredCallbackRegistered);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenT3_5CharTimeExpiredCallbackRegistered);
+    RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThenFrameErrorFlagCallbackRegistered);
+    // RUN_TEST_CASE(master_RTU_init_test, WhenModbusMasterInitInRTUmodeThen);
+}
+
+TEST_GROUP_RUNNER(Master_PDU_req)
+{
+    /* Test cases to run */
+    RUN_TEST_CASE(Master_PDU_req, ReadSingleHoldingRegisterRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, ReadSingleHoldingRegisterRequest);
+    RUN_TEST_CASE(Master_PDU_req, ReadMaxQtyHoldingRegisterRequest);
+    RUN_TEST_CASE(Master_PDU_req, ReadHoldingRegisterMaxQtyPlus1Request);
+    RUN_TEST_CASE(Master_PDU_req, Read0QtyHoldingRegisterRequest);
+
+    RUN_TEST_CASE(Master_PDU_req, ReadSingleInputRegisterRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, ReadSingleInputRegisterRequest);
+    RUN_TEST_CASE(Master_PDU_req, ReadMaxQtyInputRegisterRequest);
+    RUN_TEST_CASE(Master_PDU_req, ReadInputRegisterMaxQtyPlus1Request);
+    RUN_TEST_CASE(Master_PDU_req, ReadZeroInputRegisterRequest);
+
+    RUN_TEST_CASE(Master_PDU_req, ReadDiscreteInputsRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, ReadDiscreteInputsRequest);
+    RUN_TEST_CASE(Master_PDU_req, ReadMaxQtyDiscreteInputsRequest);
+    RUN_TEST_CASE(Master_PDU_req, ReadMaxQtPlus1DiscreteInputsRequest);
+    RUN_TEST_CASE(Master_PDU_req, ReadZeroDiscreteInputsRequest);
+
+    RUN_TEST_CASE(Master_PDU_req, ReadCoilsRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, ReadCoilsRequest);
+    RUN_TEST_CASE(Master_PDU_req, ReadCoilsMaxQtyRequest);
+    RUN_TEST_CASE(Master_PDU_req, ReadCoilsMaxQtyPlus1Request);
+    RUN_TEST_CASE(Master_PDU_req, ReadZeroCoilsRequest);
+
+    RUN_TEST_CASE(Master_PDU_req, WriteSingleRegisterRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, WriteSingleRegister);
+
+    RUN_TEST_CASE(Master_PDU_req, WriteSingleCoilRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, WriteSingleCoilOn);
+
+    RUN_TEST_CASE(Master_PDU_req, WriteMultipleRegistersRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, WriteMultipleRegisters);
+    RUN_TEST_CASE(Master_PDU_req, WriteMaxQtyMultipleRegisters);
+    RUN_TEST_CASE(Master_PDU_req, WriteMultipleRegistersMaxQtyPlus1);
+    RUN_TEST_CASE(Master_PDU_req, WriteZeroMultipleRegisters);
+
+    RUN_TEST_CASE(Master_PDU_req, Write5MultipleCoilsRequestWithNullPtrModbusMasgPassed);
+    RUN_TEST_CASE(Master_PDU_req, Write5MultipleCoils);
+    RUN_TEST_CASE(Master_PDU_req, Write16MultipleCoils);
+    RUN_TEST_CASE(Master_PDU_req, WriteMaxQtyMultipleCoils);
+    RUN_TEST_CASE(Master_PDU_req, WriteMultipleCoilsMaxQtyPlus1);
+    RUN_TEST_CASE(Master_PDU_req, WriteZeroMultipleCoils);
+
+    // RUN_TEST_CASE(Master_PDU_req, );
+}
+
+TEST_GROUP_RUNNER(Master_RTU_req_gen_test)
+{
+    /* Test cases to run */
+
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadHoldingRegistersWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
+
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadInputRegistersWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
+
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadCoilsWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
+
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusReadDisInWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
+
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleCoilWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegisterWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteSingleRegisterWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleRegistersWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
+
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithProperParametersAndFreeMsgBuffersAreAvailableThenProperRequestSendToTxRxQueue);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithProperParametersAndNoFreeMsgBuffersAreAvailableThenReturnFreeQueueEmptyErr);
+    RUN_TEST_CASE(Master_RTU_req_gen_test, GivenModbusMasterInRTUmodeInitWhenModbusWriteMultipleCoilsWithWrongParametersAndFreeMsgBuffersAreAvailableThenReturnMasterReqLibError);
+
+    // To Do - REQ  error report generation and callback calling when request gen fail
+}
+
+TEST_GROUP_RUNNER(Master_PDU_read)
+{
+    /* Test cases to run */
+    // master read write respond parse with null ptr passed tests
+    RUN_TEST_CASE(Master_PDU_read, MasterReadCoilsRespWithNullPtrPassedAsArgument);
+    RUN_TEST_CASE(Master_PDU_read, MasterReadDiscreteInputsRespWithNullPtrPassedAsArgument);
+    RUN_TEST_CASE(Master_PDU_read, MasterReadInputRegRespWithNullPtrPassedAsArgument);
+    RUN_TEST_CASE(Master_PDU_read, MasterReadHoldingRegRespWithNullPtrPassedAsArgument);
+    RUN_TEST_CASE(Master_PDU_read, MasterWriteSingleCoilsRespWithNullPtrPassedAsArgument);
+    RUN_TEST_CASE(Master_PDU_read, MasterWriteSingleRegRespWithNullPtrPassedAsArgument);
+    RUN_TEST_CASE(Master_PDU_read, MasterWriteMultipleCoilsRespWithNullPtrPassedAsArgument);
+    RUN_TEST_CASE(Master_PDU_read, MasterWriteMultipleRegRespWithNullPtrPassedAsArgument);
+
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor4CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor8CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor9CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor16CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadCoilsResponsRecivedFor17CoilsWhenMasterReadSlaveRespondThenMasterCoilsUpdateToSlaveCoilsValue);
+
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith4DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith8DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith9DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith16DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadDisInResponsRecivedWith17DisInWhenMasterReadSlaveRespondThenMasterDisInUpdateToDisInValue);
+
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith4InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith8InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith9InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith16InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadInputRegisterResponsWith17InRegRecivedWhenMasterReadSlaveRespondThenMasterInRegUpdateToSlaveInRegValue);
+
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith6HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith8HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith9HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith16HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveReadHoldingRegisterResponsWith17HolRegRecivedWhenMasterReadSlaveRespondThenMasterHolRegUpdateToSlaveHolRegValue);
+
+    // // Master Read Write funcitons respons test
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveWriteSingleCoilResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveWriteSingleReglResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveWriteMultipleCoilResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect);
+    RUN_TEST_CASE(Master_PDU_read, GivenSlaveWriteMultipleReglResponsRecivedWhenMasterReadSlaveRespondThenWrieConfirmationDataAreCorrect);
+}
+
 TEST_GROUP_RUNNER(Master_RTU_test)
 {
     /* Test cases to run */
