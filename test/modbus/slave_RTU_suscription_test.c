@@ -30,7 +30,11 @@ TEST(Slave_RTU_event_subscr, WhenRegisterSlaveReqRecivedEvenCbCalledWithMockFun1
 
 TEST(Slave_RTU_event_subscr, WhenRegisterSlaveRespSendEvenCbCalledWithMockFun1AsArgumentThenReqMsgRecivedEventCbIsEqualToMockFun1)
 {
-
+    // Given
+    // When
+    register_slave_resp_send_event_cb(mock_fun_1);
+    // Then
+    TEST_ASSERT_EQUAL(mock_fun_1,resp_msg_send_event_cb);
 }
 
 static void mock_fun_1(void)

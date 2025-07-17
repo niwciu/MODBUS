@@ -150,5 +150,5 @@ TEST_GROUP_RUNNER(Slave_PDU_exception_code)
 TEST_GROUP_RUNNER(Slave_RTU_event_subscr)
 {
     RUN_TEST_CASE(Slave_RTU_event_subscr, WhenRegisterSlaveReqRecivedEvenCbCalledWithMockFun1AsArgumentThenReqMsgRecivedEventCbIsEqualToMockFun1)
-    // RUN_TEST_CASE(Slave_RTU_event_subscr, WhenRegisterSlaveRespSendEvenCbCalledWithMockFun1AsArgumentThenReqMsgRecivedEventCbIsEqualToMockFun1)
+    RUN_TEST_CASE(Slave_RTU_event_subscr, WhenRegisterSlaveRespSendEvenCbCalledWithMockFun1AsArgumentThenReqMsgRecivedEventCbIsEqualToMockFun1)
 }
