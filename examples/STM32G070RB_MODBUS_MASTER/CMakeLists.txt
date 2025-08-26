@@ -61,6 +61,7 @@ set(C_SRCS
     ../../src/master_internall/modbus_master_RTU.c
     ../../src/master_internall/modbus_queue.c
     ../../src/master_internall/modbus_master_PDU.c
+    ../../src/master_internall/modbus_master_data_interface_weak.c
     ../../src/common/modbus_RTU.c
     ../../src/common/modbus_crc.c
     ../../src/common/buf_rw.c
