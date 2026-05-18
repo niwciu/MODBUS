@@ -451,8 +451,11 @@ static void reset_all_RTU_buffers(void)
         msg = modbus_queue_pop(free_q);
         if (NULL != msg)
         {
-            memset(msg->req.data, 0, MODBUS_RTU_BUFFER_SIZE);
-            memset(msg->resp.data, 0, MODBUS_RTU_BUFFER_SIZE);
+            for (size_t j = 0; j < MODBUS_RTU_BUFFER_SIZE; j++)
+            {
+                msg->req.data[j] = 0;
+                msg->resp.data[j] = 0;
+            }
             modbus_queue_push(free_q, &msg);
         }
     }

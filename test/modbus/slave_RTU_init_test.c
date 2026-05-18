@@ -25,6 +25,10 @@ extern modbus_status_flag_t TIMER_3_5_CHAR_FLAG;
 extern modbus_status_flag_t FRAME_ERROR_FLAG;
 extern modbus_status_flag_t RESP_TRANSMITION_FLAG;
 
+static const baud_t valid_baud = 9600;
+static const parity_t valid_parity = NONE;
+static const modbus_device_ID_t valid_slave_ID = 0x01;
+
 TEST_SETUP(Slave_RTU_init_test)
 {
     /* Init before every test */
@@ -37,20 +41,20 @@ TEST_TEAR_DOWN(Slave_RTU_init_test)
 
 TEST(Slave_RTU_init_test, WhenModbusSlavenitInRTUmodeThenRtuReqAndRespBuffersAreRegistered)
 {
-    modbus_slave_init(RTU, 0, 0, 0);
+    modbus_slave_init(RTU, valid_baud, valid_parity, valid_slave_ID);
     TEST_ASSERT_EQUAL(slave_RTU_req_buf, slave_msg->req.data);
     TEST_ASSERT_EQUAL(slave_RTU_resp_buf, slave_msg->resp.data);
 }
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegistered)
 {
-    modbus_slave_init(RTU, 0, 0, 0);
+    modbus_slave_init(RTU, valid_baud, valid_parity, valid_slave_ID);
     TEST_ASSERT_NOT_NULL(slave_RTU_driver);
 }
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInUnknownOrNotDefinedModeThenDriverInterfaceIsNotRegisteredAndEqualNull)
 {
-    modbus_slave_init(UNKNOWN_MODE, 0, 0, 0);
+    modbus_slave_init(UNKNOWN_MODE, valid_baud, valid_parity, valid_slave_ID);
     TEST_ASSERT_NULL(slave_RTU_driver);
 }
 
@@ -59,7 +63,7 @@ TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenD
     baud_t baud = 38400;
     parity_t parity = ODD;
 
-    modbus_slave_init(RTU, baud, parity, 0);
+    modbus_slave_init(RTU, baud, parity, valid_slave_ID);
 
     TEST_ASSERT_EQUAL(baud, mock_slave_USART.baud_rate);
     TEST_ASSERT_EQUAL(parity, mock_slave_USART.parity);
@@ -68,7 +72,7 @@ TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenD
 
 TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStateMachineIsSetToIdle)
 {
-    modbus_slave_init(RTU, 0, 0, 0);
+    modbus_slave_init(RTU, valid_baud, valid_parity, valid_slave_ID);
 
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
 }
@@ -76,7 +80,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStat
 TEST(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenRxInterruptEnable)
 {
 
-    modbus_slave_init(RTU, 0, 0, 0);
+    modbus_slave_init(RTU, valid_baud, valid_parity, valid_slave_ID);
 
     TEST_ASSERT_EQUAL(IRQ_ENABLED, mock_slave_USART.Rx_IRQ);
 }
@@ -86,7 +90,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgTxDoneCallbackIsReg
     baud_t baud = 38400;
     parity_t parity = ODD;
 
-    modbus_slave_init(RTU, baud, parity, 0);
+    modbus_slave_init(RTU, baud, parity, valid_slave_ID);
     TEST_ASSERT_NOT_NULL(mock_msg_tx_done_cb);
 }
 
@@ -95,7 +99,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenT1_5CharExpiredCallbac
     baud_t baud = 38400;
     parity_t parity = ODD;
 
-    modbus_slave_init(RTU, baud, parity, 0);
+    modbus_slave_init(RTU, baud, parity, valid_slave_ID);
     TEST_ASSERT_NOT_NULL(mock_1_5_char_break_cb);
 }
 
@@ -104,7 +108,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenT3_5CharExpiredCallbac
     baud_t baud = 38400;
     parity_t parity = ODD;
 
-    modbus_slave_init(RTU, baud, parity, 0);
+    modbus_slave_init(RTU, baud, parity, valid_slave_ID);
     TEST_ASSERT_NOT_NULL(mock_3_5_char_break_cb);
 }
 
@@ -113,7 +117,7 @@ TEST(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgFrameErrorCallbackI
     baud_t baud = 38400;
     parity_t parity = ODD;
 
-    modbus_slave_init(RTU, baud, parity, 0);
+    modbus_slave_init(RTU, baud, parity, valid_slave_ID);
     TEST_ASSERT_NOT_NULL(mock_frame_error_cb);
 }
 

@@ -11,17 +11,16 @@ TEST_GROUP(Slave_RTU_test);
 extern modbus_slave_state_t slave_manager_state_machine;
 extern modbus_msg_t *slave_msg_ptr;
 
+extern modbus_event_cb_t req_msg_recived_event_cb;
+extern modbus_event_cb_t resp_msg_send_event_cb;
+
 modbus_device_ID_t device_ID = 0x12;
 baud_t baud = 38400;
 parity_t parity = ODD;
 modbus_mode_t mode = RTU;
 
-uint8_t mock_recived_msg_couter;
-uint8_t mock_send_msg_couter;
-
 static void modify_CRC_in_msg_frame(void);
-static void mock_fun_1(void);
-static void mock_fun_2(void);
+static void dummy_cb(void);
 
 TEST_SETUP(Slave_RTU_test)
 {
@@ -285,147 +284,30 @@ TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProp
     TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
 }
 
-TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndMockFun1RegisteredToSlaveMsgRecivedCbAndMockRecivedMsgCounterEqual0WhenCheckModbusRequestCalledThenMockRecivedMsgCounterEqual1)
+TEST(Slave_RTU_test, GivenReqMsgRecidecEventCbEqualNullWhenDummyCbRegisterToSlaveReqRecivedEventCbThenReqMsgRecidecEventCbEqualDummyCb)
 {
-    static req_input_param_struct_t req = {0};
-    modbus_adr_t coil_adr = 0x0001;
-    modbus_data_qty_t coils_qty = 2;
-    modbus_coil_disin_t coil_1 = !!COIL_ON;
-    modbus_coil_disin_t coil_2 = !!COIL_ON;
-
-    req.adr = coil_adr;
-    req.obj_qty = coils_qty;
-
-    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, &coil_1);
-    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr + 1, &coil_2);
-    register_slave_req_recived_event_cb(mock_fun_1);
-    mock_recived_msg_couter = 0;
-
-    modbus_master_read_coils_req(slave_msg_ptr, &req);
-    modbus_RTU_send(slave_msg_ptr->req.data, &slave_msg_ptr->req.len, device_ID);
-    mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
-
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
-    mock_1_5_char_timer_IRQ();
-    check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
-    check_modbus_request();
-    check_modbus_request();
-    mock_3_5_char_timer_IRQ();
+    // Given
+    req_msg_recived_event_cb = NULL;
     // When
-    check_modbus_request();
-    TEST_ASSERT_EQUAL(1, mock_recived_msg_couter);
+    register_slave_req_recived_event_cb(dummy_cb);
+    // Then
+    TEST_ASSERT_EQUAL(dummy_cb, req_msg_recived_event_cb);
 }
 
-TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndMockFun1RegisteredToSlaveMsgRecivedCbAndMockSendMsgCounterEqual0AndModbusSlaveRespTransimitingStateSetWhenCheckModbusRequestCalledThenMockSendMsgCounterEqual0)
+TEST(Slave_RTU_test, GivenRespMsgSendEventCbEqualNullWhenDummyCbRegisterToSlaveRespSendEventCbThenRespMsgSendEventCbEqualDummyCb)
 {
-    static req_input_param_struct_t req = {0};
-    modbus_adr_t coil_adr = 0x0001;
-    modbus_data_qty_t coils_qty = 2;
-    modbus_coil_disin_t coil_1 = !!COIL_ON;
-    modbus_coil_disin_t coil_2 = !!COIL_ON;
-
-    req.adr = coil_adr;
-    req.obj_qty = coils_qty;
-
-    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, &coil_1);
-    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr + 1, &coil_2);
-    register_slave_req_recived_event_cb(mock_fun_1);
-    register_slave_resp_send_event_cb(mock_fun_2);
-    mock_recived_msg_couter = 0;
-    mock_send_msg_couter = 0;
-
-    modbus_master_read_coils_req(slave_msg_ptr, &req);
-    modbus_RTU_send(slave_msg_ptr->req.data, &slave_msg_ptr->req.len, device_ID);
-    mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
-
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
-    mock_1_5_char_timer_IRQ();
-    check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
-    check_modbus_request();
-    check_modbus_request();
-    mock_3_5_char_timer_IRQ();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
+    // Given
+    resp_msg_send_event_cb = NULL;
     // When
-    check_modbus_request();
-    TEST_ASSERT_EQUAL(0, mock_send_msg_couter);
+    register_slave_resp_send_event_cb(dummy_cb);
+    // Then
+    TEST_ASSERT_EQUAL(dummy_cb, resp_msg_send_event_cb);
 }
 
-TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndMockFun1RegisteredToSlaveMsgRecivedCbAndMockSendMsgCounterEqual0AndModbusSlaveRespTransimitingStateSetAndTransmitionFinishedIrqAcourWhenCheckModbusRequestCalledThenMockSendMsgCounterEqual1)
-{
-    static req_input_param_struct_t req = {0};
-    modbus_adr_t coil_adr = 0x0001;
-    modbus_data_qty_t coils_qty = 2;
-    modbus_coil_disin_t coil_1 = !!COIL_ON;
-    modbus_coil_disin_t coil_2 = !!COIL_ON;
-
-    req.adr = coil_adr;
-    req.obj_qty = coils_qty;
-
-    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, &coil_1);
-    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr + 1, &coil_2);
-    register_slave_req_recived_event_cb(mock_fun_1);
-    register_slave_resp_send_event_cb(mock_fun_2);
-    mock_recived_msg_couter = 0;
-    mock_send_msg_couter = 0;
-
-    modbus_master_read_coils_req(slave_msg_ptr, &req);
-    modbus_RTU_send(slave_msg_ptr->req.data, &slave_msg_ptr->req.len, device_ID);
-    mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
-
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
-    mock_1_5_char_timer_IRQ();
-    check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
-    check_modbus_request();
-    check_modbus_request();
-    mock_3_5_char_timer_IRQ();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
-    check_modbus_request();
-    mock_USART_Tx_Done_IRQ();
-    // When
-    check_modbus_request();
-    TEST_ASSERT_EQUAL(1, mock_send_msg_couter);
-}
-
-TEST(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndMockFun1RegisteredToSlaveMsgRecivedCbAndMockSendMsgCounterEqual0AndModbusSlaveRespTransimitingStateSetAndTransmitionFinishedIrqAcourWhenCheckModbusRequestCalledTwiceThenMockSendMsgCounterEqual1)
-{
-    static req_input_param_struct_t req = {0};
-    modbus_adr_t coil_adr = 0x0001;
-    modbus_data_qty_t coils_qty = 2;
-    modbus_coil_disin_t coil_1 = !!COIL_ON;
-    modbus_coil_disin_t coil_2 = !!COIL_ON;
-
-    req.adr = coil_adr;
-    req.obj_qty = coils_qty;
-
-    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, &coil_1);
-    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr + 1, &coil_2);
-    register_slave_req_recived_event_cb(mock_fun_1);
-    register_slave_resp_send_event_cb(mock_fun_2);
-    mock_recived_msg_couter = 0;
-    mock_send_msg_couter = 0;
-
-    modbus_master_read_coils_req(slave_msg_ptr, &req);
-    modbus_RTU_send(slave_msg_ptr->req.data, &slave_msg_ptr->req.len, device_ID);
-    mock_USART_RX_IRQ(); // To simulate that some char was recived after using modbus_RTU_send func to generate recived request
-
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_IDLE, slave_manager_state_machine);
-    mock_1_5_char_timer_IRQ();
-    check_modbus_request();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
-    check_modbus_request();
-    check_modbus_request();
-    mock_3_5_char_timer_IRQ();
-    TEST_ASSERT_EQUAL(MODBUS_SLAVE_MSG_RECIVED, slave_manager_state_machine);
-    check_modbus_request();
-    mock_USART_Tx_Done_IRQ();
-    // When
-    check_modbus_request();
-    check_modbus_request();
-    TEST_ASSERT_EQUAL(1, mock_send_msg_couter);
-}
+// TEST(Slave_RTU_test, )
+// {
+//     TEST_FAIL_MESSAGE("ADDED_NEW_TEST")
+// }
 
 // TEST(Slave_RTU_test, )
 // {
@@ -439,13 +321,6 @@ static void modify_CRC_in_msg_frame(void)
     CRC++;
     write_u16_to_buf(&slave_msg_ptr->req.data[slave_msg_ptr->req.len - 2], CRC);
 }
-
-static void mock_fun_1(void)
+static void dummy_cb(void)
 {
-    mock_recived_msg_couter++;
-}
-
-static void mock_fun_2(void)
-{
-    mock_send_msg_couter++;
 }

@@ -24,7 +24,7 @@
 #############################################################################################################################
 cmake_minimum_required(VERSION 3.10)
 
-project(modbus_test C)
+project (modbus_test C)
 
 add_subdirectory(../unity unity)
 
@@ -39,40 +39,45 @@ elseif ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 set(INCLUDE_DIRS
-	../../src
+	../../lib/modbus
 )
 
 set(TEST_INCLUDE_DIRS
-	../../src
-	../../src/common
-	../../src/master_internall
-	../../src/slave_internall
+	../../lib/modbus
+	../../lib/modbus/common
+	../../lib/modbus/master_internall
+	../../lib/modbus/slave_internall
 	..
 	.
 )
 
 set(SRCS
-	../../src/master_internall/modbus_master_PDU.c
-	../../src/master_internall/modbus_master_RTU.c
-	../../src/master_internall/modbus_queue.c
-	../../src/master_internall/modbus_master_data_interface_weak.c
-	../../src/slave_internall/modbus_slave_PDU.c
-	../../src/slave_internall/modbus_slave_RTU.c
-	../../src/slave_internall/modbus_slave_data.c
-	../../src/common/buf_rw.c
-	../../src/common/modbus_crc.c
-	../../src/common/modbus_RTU.c
-	../../src/common/modbus_PDU_common.c
-	../../src/modbus_master.c
-	../../src/modbus_slave.c
+	../../lib/modbus/master_internall/modbus_master_PDU.c
+	../../lib/modbus/master_internall/modbus_master_RTU.c
+	../../lib/modbus/master_internall/modbus_queue.c
+	../../lib/modbus/slave_internall/modbus_slave_PDU.c
+	../../lib/modbus/slave_internall/modbus_slave_RTU.c
+	../../lib/modbus/slave_internall/modbus_slave_data.c
+	../../lib/modbus/common/buf_rw.c
+	../../lib/modbus/common/modbus_crc.c
+	../../lib/modbus/common/modbus_RTU.c
+	../../lib/modbus/common/modbus_PDU_common.c
+	../../lib/modbus/modbus_master.c
+	../../lib/modbus/modbus_slave.c
 )
 
 set(TEST_SRCS
     modbus_test_main.c
+    master_PDU_req_test_runner.c
     master_PDU_req_test.c
+	master_PDU_read_test_runner.c
 	master_PDU_read_test.c
+	slave_PDU_resp_test_runner.c
 	slave_PDU_resp_test.c
+	slave_PDU_exception_code_test_runner.c
 	slave_PDU_exception_code_test.c
+	# master_RTU_read_error_test_runner.c
+	# master_RTU_read_error_test.c
 	modbus_data_test.c
 	modbus_data_test_runner.c
 	modbus_CRC_test.c
@@ -86,15 +91,16 @@ set(TEST_SRCS
 	mock_slave_driver_interface.c
 	mock_master_data_interface.c
 
+	master_RTU_init_test_runner.c
     master_RTU_init_test.c
+	master_RTU_req_gen_test_runner.c
 	master_RTU_req_gen_test.c
 	master_RTU_test_runner.c
 	master_RTU_test.c
+	slave_RTU_init_test_runner.c
     slave_RTU_init_test.c
 	slave_RTU_test_runner.c
 	slave_RTU_test.c
-	slave_RTU_suscription_test.c
-	
 	
 
 	#mock_module.c

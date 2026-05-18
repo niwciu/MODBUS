@@ -1,0 +1,31 @@
+build:
+  system: make    # make | ninja
+  jobs: 12         # opcjonalne, tylko dla make
+
+module_paths:
+  - ../../test
+  - ../../hw
+common_targets:
+  - format_check
+  - clean
+  - all
+  - run
+  - cppcheck
+  - ccm
+  - ccc
+
+# additional_targets:
+#   WDT:
+#     - ccra
+
+# excluded_targets:
+#   UI:
+#     - cppcheck
+#     - ccr
+
+# # Lista raportów, które mają zostać otwarte dodatkowo
+# reports_to_show:
+#   - "CCM"
+#   - "CCR"
+#   # - "../reports/CCR/JSON_ALL/html_out/coverage.html"
+

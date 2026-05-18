@@ -26,11 +26,12 @@ modbus_req_resp_t *rx_msg = NULL;
 
 USART_Tx_status_t slave_USART_Tx_status = USART_IDLE;
 modbus_buf_t mock_slave_tx_buffer[MODBUS_RTU_BUFFER_SIZE];
-modbus_buf_t *mock_slave_tx_buffer_ptr;
+volatile const modbus_buf_t *mock_slave_tx_buffer_ptr;
 
 static void slave_usart_init(baud_t baud, parity_t parity);
-static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
+static void slave_usart_send(volatile const modbus_buf_t *tx_msg, volatile modbus_buf_size_t msg_len);
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
+static void not_used(void);
 static void slave_t_1_5_char_expired_callback_subscribe(driver_subscr_cb_t callback);
 static void slave_msg_tx_done_callback_subscribe(driver_subscr_cb_t callback);
 static void slave_t_3_5_char_expired_callback_subscribe(driver_subscr_cb_t callback);
@@ -40,7 +41,7 @@ static const modbus_RTU_driver_struct_t slave_RTU_driver_interface = {
     slave_usart_init,
     slave_usart_send,
     slave_enable_usart_rx_interrupt,
-    NULL,
+    not_used,
     slave_t_1_5_char_expired_callback_subscribe,
     slave_msg_tx_done_callback_subscribe,
     slave_t_3_5_char_expired_callback_subscribe,
@@ -58,7 +59,7 @@ static void slave_usart_init(baud_t baud, parity_t parity)
     mock_slave_USART.parity = parity;
     mock_slave_USART.init_status = DRIVER_INITIALIZED;
 }
-static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
+static void slave_usart_send(volatile const modbus_buf_t *tx_msg, volatile modbus_buf_size_t msg_len)
 {
     for (uint8_t i = 0; i < msg_len; i++)
     {
@@ -72,7 +73,9 @@ static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf)
     rx_msg = recv_buf;
     mock_slave_USART.Rx_IRQ = IRQ_ENABLED;
 }
-
+static void not_used(void)
+{
+}
 static void slave_t_1_5_char_expired_callback_subscribe(driver_subscr_cb_t callback)
 {
     mock_1_5_char_break_cb = callback;

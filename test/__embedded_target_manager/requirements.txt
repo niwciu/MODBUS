@@ -1,0 +1,6 @@
+lizard
+gcovr
+pyyaml
+jinja2
+flake8
+black
