@@ -1,0 +1,12 @@
+build:
+  system: make    # make | ninja
+  jobs: 12         # opcjonalne, tylko dla make
+
+module_paths:
+  - ../../test
+  - ../../hw
+
+common_targets:
+  - run
+
+

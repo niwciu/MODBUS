@@ -541,7 +541,10 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
 
     generate_send_req_sequence();
     // generate fun code 02 resp RTU msg
-    memcpy(msg_buf->resp.data, read_coil_ex_code_02_resp, buf_len);
+    for (size_t i = 0; i < buf_len; i++)
+    {
+        msg_buf->resp.data[i] = read_coil_ex_code_02_resp[i];
+    }
     msg_buf->resp.len = buf_len;
     generate_msg_T_1_5_char_brake_sequence();
     generate_msg_T_3_5_char_brake_sequence();
@@ -711,7 +714,11 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
     // generate fun code 02 resp RTU msg
-    memcpy(msg_buf->resp.data, read_coil_ex_code_02_resp, buf_len);
+    for (size_t i = 0; i < buf_len; i++)
+    {
+        msg_buf->resp.data[i] = read_coil_ex_code_02_resp[i];
+    }
+
     msg_buf->resp.len = buf_len;
     generate_msg_T_1_5_char_brake_sequence();
     generate_msg_T_3_5_char_brake_sequence();
@@ -793,7 +800,11 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
     // generate fun code 02 resp RTU msg
-    memcpy(msg_buf->resp.data, read_coil_ex_code_02_resp, buf_len);
+    for (size_t i = 0; i < buf_len; i++)
+    {
+        msg_buf->resp.data[i] = read_coil_ex_code_02_resp[i];
+    }
+
     msg_buf->resp.len = buf_len;
     generate_msg_T_1_5_char_brake_sequence();
     generate_msg_T_3_5_char_brake_sequence();
@@ -1000,7 +1011,11 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
     // generate fun code 02 resp RTU msg
-    memcpy(msg_buf->resp.data, read_coil_ex_code_02_resp, buf_len);
+    for (size_t i = 0; i < buf_len; i++)
+    {
+        msg_buf->resp.data[i] = read_coil_ex_code_02_resp[i];
+    }
+
     msg_buf->resp.len = buf_len;
     generate_msg_T_1_5_char_brake_sequence();
     generate_msg_T_3_5_char_brake_sequence();
@@ -1082,7 +1097,11 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     generate_send_req_sequence();
     generate_resp_using_slave_lib(slave_ID);
     // generate fun code 02 resp RTU msg
-    memcpy(msg_buf->resp.data, read_coil_ex_code_02_resp, buf_len);
+    for (size_t i = 0; i < buf_len; i++)
+    {
+        msg_buf->resp.data[i] = read_coil_ex_code_02_resp[i];
+    }
+
     msg_buf->resp.len = buf_len;
     generate_msg_T_1_5_char_brake_sequence();
     generate_msg_T_3_5_char_brake_sequence();
@@ -1412,8 +1431,11 @@ reset_all_RTU_buffers(void)
         msg = modbus_queue_pop(free_q);
         if (NULL != msg)
         {
-            memset(msg->req.data, 0, MODBUS_RTU_BUFFER_SIZE);
-            memset(msg->resp.data, 0, MODBUS_RTU_BUFFER_SIZE);
+            for (size_t j = 0; j < MODBUS_RTU_BUFFER_SIZE; j++)
+            {
+                msg->req.data[j] = 0;
+                msg->resp.data[j] = 0;
+            }
             modbus_queue_push(free_q, &msg);
         }
     }

@@ -1,145 +1,259 @@
-# PROJECT CUSTOM TARGETS FILE
-#  here you can define custom targets for the project so all team member can use it in the same way
-#  some example of custo targets are shown bello those are targets for:
-# 		1. Running unit tests
-# 		2. Code Complexity Metrics
-# 		3. CppCheck static analize of specific folder
-# 		4. Code Coverage report generation.
+#############################################################################################################################
+# FILE:    custom_targets.cmake
+# BRIEF:   Defines project-specific custom build targets (unit tests, static analysis, complexity, coverage, formatting)
+# NOTE:
+#   Relative paths below are intentional for cleaner console output.
+#   WORKING_DIRECTORY guarantees they resolve correctly at runtime.
+#############################################################################################################################
+
+#############################################################################################################################
+# 0) TARGET CONFIGURATION
+#    -> Replace the "template" values with the actual module names
+#    -> Keep correct case sensitivity
+#############################################################################################################################
+set(SRC_ROOT_DIR lib)
+set(SRC_MODULE_FOLDER_NAME modbus)
+set(TEST_MODULE_FOLDER_NAME modbus)
+set(REPORTS_PREFIX_NAME modbus)
+set(GCOVR_REPORT_SUBFOLDER_NAME modbus)
 
 
-#TARGETS FOR RUNNING UNIT TESTS
-message(STATUS "You can use predefined target to run unit tests: \r\n\trun,")
-add_custom_target(run modbus_test)
+#############################################################################################################################
+# 1) RUN UNIT TESTS
+#############################################################################################################################
+message(STATUS "To run Unit Tests, you can use predefined target: \r\n\trun, \r\n\trun_ctest")
 
-# TARGET FOR CHECKING CODE COMPLEXITY METRICS"
-# check if lizard software is available 
-find_program(lizard_program lizard)
-if(lizard_program)
-	message(STATUS "Lizard was found, you can use predefined targets for src folder Code Complexity Metrics: \r\n\tccm,\r\n\tccmr,")
+add_custom_target(run
+    COMMAND ${CMAKE_COMMAND} -E echo "Running ${PROJECT_NAME} unit tests..."
+    COMMAND ${PROJECT_NAME} 
+    COMMENT "Executing ${PROJECT_NAME} app"
+    VERBATIM
+)
+
+add_custom_target(run_ctest
+    COMMAND ${CMAKE_COMMAND} -E echo "Running ${PROJECT_NAME} unit tests..."
+    COMMAND ${CMAKE_CTEST_COMMAND} 
+    COMMENT "Executing ${PROJECT_NAME} via CTest"
+    VERBATIM
+)
+
+#############################################################################################################################
+# 2) CODE COMPLEXITY (LIZARD)
+#############################################################################################################################
+find_program(LIZARD_EXECUTABLE lizard)
+if(LIZARD_EXECUTABLE)
+    message(STATUS "Lizard found — predefined targets available: \r\n\tccm, \r\n\tccmr")
+
+    add_custom_target(ccm
+        COMMAND ${LIZARD_EXECUTABLE}
+            ../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
+            --CCN 12 
+			-Tnloc=30 
+			-a 4
+            --languages cpp
+            -V 
+			-i 0
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Running Lizard complexity metrics (console output)"
+        VERBATIM
+    )
+
+    add_custom_target(ccmr
+        COMMAND ${CMAKE_COMMAND} -E make_directory ../../reports/CCM/
+        COMMAND ${LIZARD_EXECUTABLE}
+            ../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
+            --CCN 12 
+			-Tnloc=30 
+			-a 4
+            --languages cpp
+            -V 
+			-o ../../reports/CCM/${REPORTS_PREFIX_NAME}.html
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating Lizard HTML complexity report"
+        VERBATIM
+    )
 else()
-	message(STATUS "Lizard was not found. \r\n\tInstall Lizard to get predefined targets for src folder Code Complexity Metrics")
+    message(STATUS "Lizard not found — install it to enable ccm / ccmr targets.")
 endif()
-# Prints CCM for src folder in the console
-add_custom_target(ccm lizard 
-						../../../src/ 
-						--CCN 12 
-						-Tnloc=30 
-						-a 4 
-						--languages cpp 
-						-V 
-						-i 1)
-# Create CCM report in reports/Cylcomatic_Complexity/
-add_custom_command(
-    OUTPUT ../../../reports/CCM/
-    COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCM/
-    COMMENT "Tworzenie katalogów raportów Code Coverage"
-)
-add_custom_target(ccmr 
-	COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCM/
-	COMMAND lizard 
-				../../../src/ 
-				--CCN 12 
-				-Tnloc=30 
-				-a 4 
-				--languages cpp 
-				-V 
-				-o ../../../reports/CCM/modbus.html
-)
-# TARGET FOR MAKING STATIC ANALYSIS OF THE SOURCE CODE AND UNIT TEST CODE
-# check if cppchec software is available 
-find_program(cppcheck_program cppcheck)
-if(cppcheck_program)
-	message(STATUS "CppCheck was found, you can use predefined targets for static analize : \r\n\tcppcheck -> ./src ./test/modbus,")
-else()
-	message(STATUS "CppCheck was not found. \r\n\tInstall CppCheck to get predefined targets for static analize")
-endif()
-# Prints cppcheck static analize output for src folder in the console
-add_custom_target(cppcheck cppcheck
-										../../../src ../../../test/modbus
-										-i../../../test/modbus/out
-										--enable=all
-										--force
-										# --inconclusive
-										--std=c99
-										# --inline-suppr 
-										# --platform=win64 
-										--suppress=missingIncludeSystem 
-										--suppress=missingInclude
-										--suppress=unusedFunction:../../../test/modbus/master_PDU_read_test_runner.c
-										# --suppress=unusedFunction:../../../src/modbus_master.c
-										# --checkers-report=cppcheck_checkers_report.txt
-										)
 
-# TARGET FOR CREATING CODE COVERAGE REPORTS
-# check if python 3 and gcovr are available 
-find_program(GCOVR gcovr)
-if(GCOVR)
-	message(STATUS "python 3 and gcovr was found, you can use predefined targets for uint tests code coverage report generation : 
-					\r\tccc - Code Coverage Check, 
-					\r\tccr - Code Coverage Reports generation,
-					\r\tccca - Code Coverage Check All -> whole project check, 
-					\r\tccra - Code Coverage Reports All -> whole project raport generation")
-else()
-	message(STATUS "pyton 3 was found but gcovr was not found. \r\n\tInstall gcovr to get predefined targets for uint tests code coverage report generation")
-endif()
-add_custom_command(
-    OUTPUT ../../../reports/CCR/ ../../../reports/CCR/JSON_ALL/
-    COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/
-    COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/JSON_ALL/
-    COMMENT "Tworzenie katalogów raportów Code Coverage"
-)
-add_custom_target(ccr
-	COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/
-	COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/JSON_ALL/
-	COMMAND gcovr 
-				-r ../../../src 
-				--json ../../../reports/CCR/JSON_ALL/coverage_modbus.json
-				--json-base  src
-				--html-details ../../../reports/CCR/modbus/modbus_report.html 
-				--html-theme github.dark-green
-				.
-)
-		
-add_custom_target(ccc gcovr  
-						-r ../../../src
-						--fail-under-line 90
-						.
-)
+#############################################################################################################################
+# 3) STATIC ANALYSIS (CPPCHECK)
+#############################################################################################################################
+find_program(CPPCHECK_EXECUTABLE cppcheck)
+if(CPPCHECK_EXECUTABLE)
+    message(STATUS "CppCheck found — predefined target available: \r\n\tcppcheck")
 
-add_custom_target(ccca gcovr  
-						-r ../../../ 
-						--json-add-tracefile \"../../../reports/CCR/JSON_ALL/coverage_*.json\"  
-						.
-)
-						
-add_custom_target(ccra  
-	COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/
-	COMMAND ${CMAKE_COMMAND} -E make_directory ../../../reports/CCR/JSON_ALL/
-	COMMAND gcovr 
-				-r ../../../
-				--json-add-tracefile \"../../../reports/CCR/JSON_ALL/coverage_*.json\"  
-				--html-details -o ../../../reports/CCR/JSON_ALL/html_out/project_coverage.html
-				--html-theme github.dark-green
-				.
-)
-add_dependencies(ccra ccr)
-add_dependencies(ccca ccr)
-
-find_program(CLANG_FORMAT clang-format)
-if(CLANG_FORMAT)
-	message(STATUS "clang-format was found, you can use predefined target for formating the code in project predefined standard : \r\n\tformat \r\n\tformat_test")
+    add_custom_target(cppcheck
+        COMMAND ${CPPCHECK_EXECUTABLE}
+            ../../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
+            ../../../test/${TEST_MODULE_FOLDER_NAME}
+            -i../../test/${TEST_MODULE_FOLDER_NAME}/out
+            -i../../test/${TEST_MODULE_FOLDER_NAME}/cmocks
+            --enable=all
+            --force
+            --std=c99
+            --suppress=missingIncludeSystem
+            --suppress=missingInclude
+			--check-level=exhaustive
+			# --suppress=unusedFunction:../../../test/....
+			--suppress=unusedFunction:../../../test/modbus/master_PDU_read_test_runner.c:3
+			--suppress=unusedFunction:../../../lib/modbus/modbus_slave.c:122 # ToDo Verify this ? -> shuldnt be reported
+			--suppress=unusedFunction:../../../lib/modbus/modbus_slave.c:135 ## ToDo Verify this ? -> shuldnt be reported
+			--checkers-report=cppcheck_checkers_report.txt
+			--error-exitcode=1
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+        COMMENT "Running CppCheck static analysis for src & test directories"
+        VERBATIM
+    )
 else()
-	message(STATUS "clang-format was not found. \r\n\tInstall clang-format to get predefined target for formating the code in project predefined standard")
+    message(STATUS "CppCheck was not found — install it to enable cppcheck target.")
 endif()
-add_custom_target(format  clang-format 
-							-i 
-							-style=file 
-							../../../src/*.c 
-							../../../src/*.h
-)
-add_custom_target(format_test  clang-format 
-								-i 
-								-style=file 
-								../*.c 
-								../*.h
-)
+
+#############################################################################################################################
+# 4) CODE COVERAGE (GCOVR)
+#############################################################################################################################
+find_program(GCOVR_EXECUTABLE gcovr)
+if(GCOVR_EXECUTABLE)
+    message(STATUS "Gcovr found — predefined targets available: \r\n\tccc, \r\n\tccr, \r\n\tccca, \r\n\tccra")
+
+    set(REPORT_DIR ../../reports/CCR)
+    set(REPORT_JSON_DIR ${REPORT_DIR}/JSON_ALL)
+    set(REPORT_COMMON_HTML_DIR ${REPORT_JSON_DIR}/HTML_OUT)
+    set(REPORT_MODULE_DIR ${REPORT_DIR}/${GCOVR_REPORT_SUBFOLDER_NAME})
+
+    add_custom_target(ccr
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${REPORT_DIR}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${REPORT_JSON_DIR}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${REPORT_MODULE_DIR}
+        COMMAND ${GCOVR_EXECUTABLE}
+            -r ../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
+            --json ${REPORT_JSON_DIR}/coverage_${REPORTS_PREFIX_NAME}.json
+            --json-base ${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
+            --html-details ${REPORT_MODULE_DIR}/${REPORTS_PREFIX_NAME}_report.html
+            --html-theme github.dark-green
+            .
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating Code Coverage report for module"
+        VERBATIM
+    )
+
+    add_custom_target(ccc
+        COMMAND ${GCOVR_EXECUTABLE}
+            -r ../../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
+            --fail-under-line 90
+            .
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Performing Code Coverage check (min 90%)"
+        VERBATIM
+    )
+
+    add_custom_target(ccca
+        COMMAND ${GCOVR_EXECUTABLE}
+            -r ../../../
+            --json-add-tracefile "${REPORT_JSON_DIR}/coverage_*.json"
+            .
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Aggregating Code Coverage data from all modules"
+        VERBATIM
+    )
+
+    add_custom_target(ccra
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${REPORT_DIR}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${REPORT_JSON_DIR}
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${REPORT_COMMON_HTML_DIR}
+        COMMAND ${GCOVR_EXECUTABLE}
+            -r ../../../
+            --json-add-tracefile "${REPORT_JSON_DIR}/coverage_*.json"
+            --html-details -o ${REPORT_COMMON_HTML_DIR}/project_coverage.html
+            --html-theme github.dark-green
+            .
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating aggregated Code Coverage HTML report"
+        VERBATIM
+    )
+	add_dependencies(ccc run)
+    add_dependencies(ccra ccr)
+    add_dependencies(ccca ccr)
+else()
+    message(STATUS "Gcovr not found — install it to enable code coverage targets.")
+endif()
+
+#############################################################################################################################
+# 5) CODE FORMATTING (CLANG-FORMAT) — GLOB zamiast '*'
+#############################################################################################################################
+# CMake nie rozwija gwiazdek. Używamy file(GLOB ...) by zbudować listę plików,
+# a potem wstrzykujemy ją do polecenia z COMMAND_EXPAND_LISTS (modern CMake).
+find_program(CLANG_FORMAT_EXECUTABLE clang-format)
+if(CLANG_FORMAT_EXECUTABLE)
+    message(STATUS "clang-format found — predefined targets: \r\n\tformat, \r\n\tformat_check")
+
+    # Zbierz pliki źródłowe do formatowania (ścieżki RELATIVE dla krótszego outputu)
+    file(GLOB FORMAT_SOURCES
+        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+        ../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}/*.c
+        ../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}/*.h
+    )
+
+    file(GLOB FORMAT_TEST_SOURCES
+        RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+        ./*.c
+        ./*.h
+    )
+
+    # Zbierz wszystkie pliki do sprawdzenia/formatowania
+    set(ALL_FORMAT_FILES ${FORMAT_SOURCES} ${FORMAT_TEST_SOURCES})
+
+    # format_check: sprawdza formatowanie bez modyfikowania plików
+    # Uwaga: gdy clang-format dostanie 0 plików, potrafi czytać stdin i wygląda to jak "zawieszenie".
+    # Drugi częsty problem to limity długości linii poleceń (zwłaszcza na Windows) — dlatego lecimy per plik.
+    add_custom_target(format_check
+        COMMENT "Checking formatting (sources + tests) using clang-format"
+    )
+
+    foreach(f IN LISTS ALL_FORMAT_FILES)
+        add_custom_command(TARGET format_check PRE_BUILD
+            COMMAND ${CLANG_FORMAT_EXECUTABLE}
+                    --dry-run --Werror -style=file
+                    "${f}"
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            VERBATIM
+        )
+    endforeach()
+
+    # (Opcjonalnie) jeżeli lista jest pusta, pokaż informację zamiast ryzykować uruchomienie clang-format bez argumentów
+    if(NOT ALL_FORMAT_FILES)
+        add_custom_command(TARGET format_check PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo "format_check: no files matched (nothing to check)."
+            VERBATIM
+        )
+    endif()
+
+    # format: formatuje kod + testy (jeden target)
+    # Zabezpieczenie: jeżeli nie ma plików (np. brak testów albo pusty src), nie wołamy clang-format bez argumentów.
+    add_custom_target(format
+        COMMENT "Formatting source + test files using clang-format"
+    )
+
+    foreach(f IN LISTS ALL_FORMAT_FILES)
+        add_custom_command(TARGET format PRE_BUILD
+            COMMAND ${CLANG_FORMAT_EXECUTABLE}
+                    -i -style=file
+                    "${f}"
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            VERBATIM
+        )
+    endforeach()
+
+    if(NOT ALL_FORMAT_FILES)
+        add_custom_command(TARGET format PRE_BUILD
+            COMMAND ${CMAKE_COMMAND} -E echo "format: no files matched (nothing to format)."
+            VERBATIM
+        )
+    endif()
+
+else()
+    message(STATUS "clang-format was not found — install it to enable code formatting targets.")
+endif()
+#############################################################################################################################
+# END OF FILE
+#############################################################################################################################

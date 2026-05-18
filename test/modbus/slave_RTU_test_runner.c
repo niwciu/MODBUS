@@ -1,77 +1,5 @@
 
 #include "unity/fixture/unity_fixture.h"
-TEST_GROUP_RUNNER(Slave_RTU_init_test)
-{
-    /* Test cases to run */
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlavenitInRTUmodeThenRtuReqAndRespBuffersAreRegistered);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenDriverInterfaceIsRegistered);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInUnknownOrNotDefinedModeThenDriverInterfaceIsNotRegisteredAndEqualNull);
-    RUN_TEST_CASE(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenDriverIsInitializedWithProperBaudAndParity);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStateMachineIsSetToIdle);
-    RUN_TEST_CASE(Slave_RTU_init_test, GivenBaudAndParitySetWhenModbusSlaveInitInRTUmodeThenRxInterruptEnable);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgTxDoneCallbackIsRegistered);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenT1_5CharExpiredCallbackIsRegistered);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenT3_5CharExpiredCallbackIsRegistered);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenMsgFrameErrorCallbackIsRegistered);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeWithDefinedSlaveIdThenModbusSlaveIdIsAssigned);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenModbusSlaveManagerStateMachineIsSetToModbusSlaveIdle);
-    RUN_TEST_CASE(Slave_RTU_init_test, WhenModbusSlaveInitInRTUmodeThenAllModbusStatusFlagsAreCleared);
-    // RUN_TEST_CASE(Slave_RTU_init_test, GivenReqMsgRecivedEventCbNotEqualNullWhenModbusSlaveInitInRTUmodeThenReqMsgRecivedEventCbEqualNull);
-    // RUN_TEST_CASE(Slave_RTU_init_test, GivenRespMsgSendEventCbNotEqualNullWhenModbusSlaveInitInRTUmodeThenRespMsgSendEventCbEqualNull);
-
-    // RUN_TEST_CASE(Slave_RTU_init_test, );
-    // RUN_TEST_CASE(Slave_RTU_init_test, );
-}
-
-TEST_GROUP_RUNNER(Slave_PDU_resp)
-{
-    /* Test cases to run */
-    // Slave Read Slave_Coils request tests
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveParseMsgWhenRtuMsgPassAsNullPtrArgumentToParse);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveParseMsgWhenReqDataBufferPassAsNullPtrArgumentToParse);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveParseMsgWhenRespDataBufferPassAsNullPtrArgumentToParse);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead5Coils);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead8Coils);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead9Coils);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead16Coils);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead17Coils);
-    // Slave Read Discrete Inputs tests
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead5DiscreteInputs);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead8DiscreteInputs);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead9DiscreteInputs);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead16DiscreteInputs);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead17DiscreteInputs);
-    // Slave Read Holdeing Registers tests
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveReadOneHoldingRegister);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead3HoldingRegisters);
-    // Slave Read Input Registers tests
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveReadOneInputRegister);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveRead3InputRegisters);
-    // Slave Write Slave_Coils tests
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteSingleCoil);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteSingleCoilToOnAndCheckCoilStatus);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils5Coils);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils5CoilsAndCheckCoilsStatus);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils8Coils);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils8CoilsAndCheckCoilsStatus);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils9Coils);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils9CoilsAndCheckCoilsStatus);
-
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils16Coils);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils16CoilsAndCheckCoilsStatus);
-
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils17Coils);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleCoils17CoilsAndCheckCoilsStatus);
-    // Slave Write Register tests (Holding Registers are R/w)
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteSingleRegister);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteSingleRegisterAndCheckRegisterValue);
-
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleRegister3Reg);
-    RUN_TEST_CASE(Slave_PDU_resp, SlaveWriteMultipleRegister3regAndCheckRegValue);
-
-    // RUN_TEST_CASE(Slave_PDU_resp, );
-}
-
 TEST_GROUP_RUNNER(Slave_RTU_test)
 {
     /* Test cases to run */
@@ -91,70 +19,13 @@ TEST_GROUP_RUNNER(Slave_RTU_test)
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerThenSlavePrepareRespond);
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerThenSlaveSendRespAndGoToModbuSlaveTransmitingResp);
     RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndSlaveSendingRespWhenWholeRespSendThenInitMsgBuffAndGoToIdleState);
-    RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndMockFun1RegisteredToSlaveMsgRecivedCbAndMockRecivedMsgCounterEqual0WhenCheckModbusRequestCalledThenMockRecivedMsgCounterEqual1);
 
-    RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndMockFun1RegisteredToSlaveMsgRecivedCbAndMockSendMsgCounterEqual0AndModbusSlaveRespTransimitingStateSetWhenCheckModbusRequestCalledThenMockSendMsgCounterEqual0);
-    RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndMockFun1RegisteredToSlaveMsgRecivedCbAndMockSendMsgCounterEqual0AndModbusSlaveRespTransimitingStateSetAndTransmitionFinishedIrqAcourWhenCheckModbusRequestCalledThenMockSendMsgCounterEqual1);
-    RUN_TEST_CASE(Slave_RTU_test, GivenModbusSlaveInitAndReadCoilsReqWithProperSlaveIdAndProperCrcRecivedAndTimer1_5CharTrigerAndTimer3_5CharTrigerAndMockFun1RegisteredToSlaveMsgRecivedCbAndMockSendMsgCounterEqual0AndModbusSlaveRespTransimitingStateSetAndTransmitionFinishedIrqAcourWhenCheckModbusRequestCalledTwiceThenMockSendMsgCounterEqual1);
+    RUN_TEST_CASE(Slave_RTU_test, GivenReqMsgRecidecEventCbEqualNullWhenDummyCbRegisterToSlaveReqRecivedEventCbThenReqMsgRecidecEventCbEqualDummyCb);
+    RUN_TEST_CASE(Slave_RTU_test, GivenRespMsgSendEventCbEqualNullWhenDummyCbRegisterToSlaveRespSendEventCbThenRespMsgSendEventCbEqualDummyCb);
     // RUN_TEST_CASE(Slave_RTU_test, );
-}
-
-TEST_GROUP_RUNNER(Slave_PDU_exception_code)
-{
-    /* Test cases to run */
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveRequestWithUnsuportedFunctionCodeThenRespondWithExceptionCode01);
-
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCoilsQtyToReadEqual0ThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadCoilsRequestAndGetErrorWhenReadingCoilsThenSlaveRespondWithExceptionCode04);
-
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithDiscreteInputsQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithDiscreteInputsQtyToReadEqual0ThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadDiscreteInputsRequestAndGetErrorWhenReadingDiscreteInputsThenSlaveRespondWithExceptionCode04);
-
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithInputRegisterQtyToReadEqual0ThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadInputRegisterRequestAndGetErrorWhenReadingInputRegisterThenSlaveRespondWithExceptionCode04);
-
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHoldingRegisterQtyToReadAboveAllowedValueThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithHoldingRegisterQtyToReadEqual0ThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveReadHoldingRegisterRequestAndGetErrorWhenReadingHoldingRegisterThenSlaveRespondWithExceptionCode04);
-
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectCoilValueThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleCoilRequestAndGetErrorStatusWhenWritingCoilThenSlaveRespondWithExceptionCode04);
-
-    // RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestWithIncorrectRegisterValueThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestWithIncorrectAddresThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteSingleRegisterRequestAndGetErrorStatusWhenWritingRegisterThenSlaveRespondWithExceptionCode04);
-
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCoilsQtyToWriteAboveAllowedValueThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCoilsQtyToWriteEqual0ThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithWrongByteCountThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleCoilsRequestAndGetErrorWhenReadingCoilsThenSlaveRespondWithExceptionCode04);
-
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithRegisterQtyToWriteAboveAllowedValueThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithRegisterQtyToWriteEqual0ThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithWrongByteCountThenSlaveRespondWithExceptionCode03);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithIncorrectStartingAddresThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestWithCorrectStartingAddressAndIncorrectQuantitiOfOutputsThenSlaveRespondWithExceptionCode02);
-    RUN_TEST_CASE(Slave_PDU_exception_code, WhenSlaveReciveWriteMultipleRegistersRequestAndGetErrorWhenReadingCoilsThenSlaveRespondWithExceptionCode04);
-    // RUN_TEST_CASE(Slave_PDU_exception_code, );
-    // RUN_TEST_CASE(Slave_PDU_exception_code, );
-}
-
-TEST_GROUP_RUNNER(Slave_RTU_event_subscr)
-{
-    RUN_TEST_CASE(Slave_RTU_event_subscr, WhenRegisterSlaveReqRecivedEvenCbCalledWithMockFun1AsArgumentThenReqMsgRecivedEventCbIsEqualToMockFun1)
-    RUN_TEST_CASE(Slave_RTU_event_subscr, WhenRegisterSlaveRespSendEvenCbCalledWithMockFun1AsArgumentThenReqMsgRecivedEventCbIsEqualToMockFun1)
+    //    RUN_TEST_CASE(Slave_RTU_test, );
+    //    RUN_TEST_CASE(Slave_RTU_test, );
+    //    RUN_TEST_CASE(Slave_RTU_test, );
+    //    RUN_TEST_CASE(Slave_RTU_test, );
+    //    RUN_TEST_CASE(Slave_RTU_test, );
 }
