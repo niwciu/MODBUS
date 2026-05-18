@@ -126,13 +126,13 @@ if(GCOVR_EXECUTABLE)
         COMMAND ${CMAKE_COMMAND} -E make_directory ${REPORT_JSON_DIR}
         COMMAND ${CMAKE_COMMAND} -E make_directory ${REPORT_MODULE_DIR}
         COMMAND ${GCOVR_EXECUTABLE}
-            -r ../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
+            -r ../../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
             --json ${REPORT_JSON_DIR}/coverage_${REPORTS_PREFIX_NAME}.json
             --json-base ${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
             --html-details ${REPORT_MODULE_DIR}/${REPORTS_PREFIX_NAME}_report.html
             --html-theme github.dark-green
             .
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating Code Coverage report for module"
         VERBATIM
     )
@@ -142,7 +142,7 @@ if(GCOVR_EXECUTABLE)
             -r ../../../${SRC_ROOT_DIR}/${SRC_MODULE_FOLDER_NAME}
             --fail-under-line 90
             .
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Performing Code Coverage check (min 90%)"
         VERBATIM
     )
@@ -152,7 +152,7 @@ if(GCOVR_EXECUTABLE)
             -r ../../../
             --json-add-tracefile "${REPORT_JSON_DIR}/coverage_*.json"
             .
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Aggregating Code Coverage data from all modules"
         VERBATIM
     )
@@ -167,7 +167,7 @@ if(GCOVR_EXECUTABLE)
             --html-details -o ${REPORT_COMMON_HTML_DIR}/project_coverage.html
             --html-theme github.dark-green
             .
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating aggregated Code Coverage HTML report"
         VERBATIM
     )
