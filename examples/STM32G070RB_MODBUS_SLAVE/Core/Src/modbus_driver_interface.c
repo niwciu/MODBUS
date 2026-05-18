@@ -16,8 +16,8 @@
 
 typedef struct
 {
-    modbus_buf_t *cur_byte_ptr;
-    modbus_buf_t *last_byte_ptr;
+    volatile const modbus_buf_t *cur_byte_ptr;
+    volatile const modbus_buf_t *last_byte_ptr;
 } tx_buf_t;
 typedef enum
 {
@@ -25,20 +25,20 @@ typedef enum
     FRAME_RECEIVED,
 } driver_timer_status_t;
 
-driver_subscr_cb_t slave_msg_tx_complete_cb = NULL;
-driver_subscr_cb_t slave_t_1_5_char_break_cb = NULL;
-driver_subscr_cb_t slave_t_3_5_char_break_cb = NULL;
-driver_subscr_cb_t slave_frame_error_cb = NULL;
+static driver_subscr_cb_t slave_msg_tx_complete_cb = NULL;
+static driver_subscr_cb_t slave_t_1_5_char_break_cb = NULL;
+static driver_subscr_cb_t slave_t_3_5_char_break_cb = NULL;
+static driver_subscr_cb_t slave_frame_error_cb = NULL;
 
-driver_timer_status_t FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
+static volatile driver_timer_status_t FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
 
-modbus_req_resp_t *rx_msg = NULL;
-tx_buf_t tx_buf;
+static modbus_req_resp_t *rx_msg = NULL;
+static volatile tx_buf_t tx_buf;
 
 modbus_buf_t mock_slave_tx_buffer[MODBUS_RTU_BUFFER_SIZE];
 
 static void slave_usart_init(baud_t baud, parity_t parity);
-static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
+static void slave_usart_send(volatile const modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
 static void slave_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
 static void slave_t_1_5_char_expired_callback_subscribe(driver_subscr_cb_t callback);
 static void slave_msg_tx_done_callback_subscribe(driver_subscr_cb_t callback);
@@ -79,7 +79,7 @@ static void slave_usart_init(uint32_t Baud, parity_t parity)
     FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
 }
 
-static void slave_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
+static void slave_usart_send(volatile const modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 {
     if ((tx_msg != NULL) && (msg_len > 0))
     {

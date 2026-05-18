@@ -24,7 +24,7 @@ extern "C"
 #include "modbus_driver_interface.h"
 
     modbus_ret_t modbus_RTU_send(volatile modbus_buf_t *buf, volatile modbus_buf_size_t *msg_len, modbus_device_ID_t slave_ID);
-    modbus_ret_t modbus_RTU_recv(volatile modbus_buf_t *buf, volatile modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID);
+    modbus_ret_t modbus_RTU_recv(volatile modbus_buf_t *buf, modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID);
     bool mode_is_correct(modbus_mode_t mode);
     bool baud_rate_is_corret(baud_t baud_rate);
     bool parity_is_correct(parity_t parity);

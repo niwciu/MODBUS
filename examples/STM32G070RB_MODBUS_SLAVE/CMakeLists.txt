@@ -40,9 +40,9 @@ Drivers/CMSIS/Include
 # Drivers/CMSIS/STM32G0_Drivers
 # Drivers/STM32G0_Drivers/core_init
 
-../../src
-../../src/common
-../../src/slave_internall
+../../lib/modbus
+../../lib/modbus/common
+../../lib/modbus/slave_internall
 
 .
 )
@@ -55,14 +55,14 @@ set(C_SRCS
     Core/Src/modbus_driver_interface.c
     Core/Src/LED_driver.c
 
-	../../src/slave_internall/modbus_slave_PDU.c
-    ../../src/slave_internall/modbus_slave_RTU.c
-    ../../src/common/modbus_RTU.c
-    ../../src/slave_internall/modbus_slave_data.c
-    ../../src/common/modbus_crc.c
-    ../../src/common/buf_rw.c
-    ../../src/modbus_slave.c
-    ../../src/common/modbus_PDU_common.c
+	../../lib/modbus/slave_internall/modbus_slave_PDU.c
+    ../../lib/modbus/slave_internall/modbus_slave_RTU.c
+    ../../lib/modbus/common/modbus_RTU.c
+    ../../lib/modbus/slave_internall/modbus_slave_data.c
+    ../../lib/modbus/common/modbus_crc.c
+    ../../lib/modbus/common/buf_rw.c
+    ../../lib/modbus/modbus_slave.c
+    ../../lib/modbus/common/modbus_PDU_common.c
 	
 )
 

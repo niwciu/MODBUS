@@ -59,8 +59,6 @@ int main(void)
     }
 }
 
-// modbus_master_write_single_coil(WRITE_COIL_ADR, SLAVE_ADDRES_EXAMPLE_NODE, readed_coil);
-// modbus_master_write_single_reg(WRITE_HREG_ADR, SLAVE_ADDRES_EXAMPLE_NODE, readed_hreg);
 static void update_modbus_data(void)
 {
     if (update_timer == 0)

@@ -37,10 +37,10 @@ PRIVATE modbus_slave_state_t slave_manager_state_machine = MODBUS_SLAVE_UNKNOWN;
 PRIVATE const modbus_RTU_driver_struct_t *slave_RTU_driver = NULL;
 PRIVATE modbus_msg_t slave_msg;
 PRIVATE modbus_msg_t *slave_msg_ptr = NULL;
-PRIVATE modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
-PRIVATE modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
-PRIVATE modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
-PRIVATE modbus_status_flag_t RESP_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE volatile modbus_status_flag_t TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE volatile modbus_status_flag_t TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE volatile modbus_status_flag_t FRAME_ERROR_FLAG = MODBUS_FLAG_UNKNOWN;
+PRIVATE volatile modbus_status_flag_t RESP_TRANSMITION_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE modbus_event_cb_t req_msg_recived_event_cb = NULL;
 PRIVATE modbus_event_cb_t resp_msg_send_event_cb = NULL;
 

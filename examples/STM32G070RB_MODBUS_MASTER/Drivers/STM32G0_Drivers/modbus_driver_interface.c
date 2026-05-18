@@ -38,7 +38,7 @@ static tx_buf_t tx_buf;
 #endif
 
 static void master_usart_init(baud_t baud, parity_t parity);
-static void master_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
+static void master_usart_send(volatile const modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
 static void master_enable_usart_rx_interrupt(modbus_req_resp_t *recv_buf);
 static void master_disable_usart_rx_interrupt(void);
 static void master_t_1_5_char_expired_callback_subscribe(driver_subscr_cb_t callback);
@@ -84,7 +84,7 @@ static void master_usart_init(uint32_t Baud, parity_t parity)
     FRAME_DETECTION_FLAG = WAITING_FOR_FRAME;
 }
 
-static void master_usart_send(modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
+static void master_usart_send(volatile const modbus_buf_t *tx_msg, modbus_buf_size_t msg_len)
 {
     if ((tx_msg != NULL) && (msg_len > 0))
     {

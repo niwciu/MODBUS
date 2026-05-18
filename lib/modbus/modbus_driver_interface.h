@@ -33,7 +33,7 @@ extern "C"
 #include <stdint.h>
 
     typedef void (*init_func_ptr_t)(baud_t baud, parity_t parity);
-    typedef void (*send_func_ptr_t)(volatile const modbus_buf_t *tx_msg, volatile modbus_buf_size_t msg_len);
+    typedef void (*send_func_ptr_t)(volatile const modbus_buf_t *tx_msg, modbus_buf_size_t msg_len);
     typedef void (*enable_rx_func_ptr_t)(modbus_req_resp_t *recv_buf);
     typedef void (*driver_func_ptr_t)(void);
 

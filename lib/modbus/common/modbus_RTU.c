@@ -75,7 +75,7 @@ modbus_ret_t modbus_RTU_send(volatile modbus_buf_t *buf, volatile modbus_buf_siz
  * @retval RET_ERROR_SLAVE_ID The received message contains an incorrect slave ID / slave address.
  * @retval RET_ERROR_CRC The calculated CRC from the received message is different from the CRC in the received message.
  */
-modbus_ret_t modbus_RTU_recv(volatile modbus_buf_t *buf,volatile modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID)
+modbus_ret_t modbus_RTU_recv(volatile modbus_buf_t *buf, modbus_buf_size_t msg_len, modbus_device_ID_t slave_ID)
 {
     if (slave_ID != buf[MODBUS_SLAVE_ADR_IDX])
     {
