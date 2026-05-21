@@ -90,5 +90,50 @@
   },
   "C_Cpp.errorSquiggles": "disabled",
   "cmake.sourceDirectory": "D:/EMBEDDED/LIBRARIES/C_libraries/MODBUS/test/hw_test/STM32G070RB_MODBUS_MASTER",
-  "cortex-debug.variableUseNaturalFormat": true
+  "cortex-debug.variableUseNaturalFormat": true,
+  "targetsManager.dashboards": [
+    {
+      "name": "Source Code Format",
+      "moduleRoots": [
+        "test",
+        "examples"
+      ],
+      "excludedModules": [
+        "unity",
+        "cmock",
+        "CMock",
+        "Cmock",
+        "Unity",
+        "template"
+      ],
+      "targets": [
+        "format",
+        "format_test"
+      ]
+    },
+    {
+      "name": "CI targets",
+      "moduleRoots": [
+        "test",
+        "examples"
+      ],
+      "excludedModules": [
+        "unity",
+        "cmock",
+        "CMock",
+        "Cmock",
+        "Unity",
+        "template"
+      ],
+      "targets": [
+        "format",
+        "format_test",
+        "all",
+        "run",
+        "cppcheck",
+        "ccm",
+        "ccc"
+      ]
+    }
+  ]
 }
