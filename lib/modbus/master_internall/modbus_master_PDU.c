@@ -775,7 +775,7 @@ static modbus_ret_t process_modbus_exception_code(modbus_msg_t *modbus_msg)
     modbus_ret_t status = RET_OK;
     modbus_read_data_t resp;
     resp.slave_ID = modbus_msg->resp.data[MODBUS_SLAVE_ADR_IDX];
-    resp.fun_conde = (modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
+    resp.fun_code = (modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
     resp.exception_code = modbus_msg->resp.data[MODBUS_RESP_EXCEPTION_CODE_IDX];
     resp.data_adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
     resp.data_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
@@ -800,7 +800,7 @@ static modbus_ret_t process_modbus_exception_code(modbus_msg_t *modbus_msg)
 static modbus_ret_t send_exception_code_report_data(modbus_read_data_t *ex_code_data)
 {
     modbus_ret_t status = RET_OK;
-    switch (ex_code_data->fun_conde)
+    switch (ex_code_data->fun_code)
     {
     case MODBUS_READ_COILS_FUNC_CODE:
     case MODBUS_WRITE_SINGLE_COIL_FUNC_CODE:

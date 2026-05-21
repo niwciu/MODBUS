@@ -356,7 +356,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhen
     TEST_ASSERT_EQUAL_HEX8(slave_ID, modbus_master_error_rep.slave_ID);
     TEST_ASSERT_EQUAL_HEX16(coil_adr, modbus_master_error_rep.data_adr);
     TEST_ASSERT_EQUAL_HEX16(coils_qty, modbus_master_error_rep.data_qty);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_code);
 }
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhenRespTimeOutTimerEqual1AndErrorReportedThenPushMsgBuferPtrToFreeQueue)
 {
@@ -436,7 +436,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     TEST_ASSERT_EQUAL_HEX8(slave_ID, modbus_master_error_rep.slave_ID);
     TEST_ASSERT_EQUAL_HEX16(coil_adr, modbus_master_error_rep.data_adr);
     TEST_ASSERT_EQUAL_HEX16(coils_qty, modbus_master_error_rep.data_qty);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_code);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRespWithWrongSlaveIdRecivedTwiceWhenTimeOutTimerExpiredThenTimeOutErrorReported)
@@ -468,7 +468,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     TEST_ASSERT_EQUAL_HEX8(slave_ID, modbus_master_error_rep.slave_ID);
     TEST_ASSERT_EQUAL_HEX16(coil_adr, modbus_master_error_rep.data_adr);
     TEST_ASSERT_EQUAL_HEX16(coils_qty, modbus_master_error_rep.data_qty);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_code);
 }
 
 //  MODBUS_MASTER_RESP_WAITING state tests
@@ -550,7 +550,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     generate_msg_T_3_5_char_brake_sequence();
 
     TEST_ASSERT_EQUAL(slave_ID, exception_data.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_code);
     TEST_ASSERT_EQUAL(MODBUS_ILLEGAL_DATA_ADDRESS_ERROR, exception_data.exception_code);
     TEST_ASSERT_EQUAL(coil_adr, exception_data.data_adr);
     TEST_ASSERT_EQUAL(coils_qty, exception_data.data_qty);
@@ -724,7 +724,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     generate_msg_T_3_5_char_brake_sequence();
 
     TEST_ASSERT_EQUAL(slave_ID, exception_data.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_code);
     TEST_ASSERT_EQUAL(MODBUS_ILLEGAL_DATA_ADDRESS_ERROR, exception_data.exception_code);
     TEST_ASSERT_EQUAL(coil_adr, exception_data.data_adr);
     TEST_ASSERT_EQUAL(coils_qty, exception_data.data_qty);
@@ -810,7 +810,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     generate_msg_T_3_5_char_brake_sequence();
 
     TEST_ASSERT_EQUAL(slave_ID, exception_data.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_code);
     TEST_ASSERT_EQUAL(MODBUS_ILLEGAL_DATA_ADDRESS_ERROR, exception_data.exception_code);
     TEST_ASSERT_EQUAL(coil_adr, exception_data.data_adr);
     TEST_ASSERT_EQUAL(coils_qty, exception_data.data_qty);
@@ -861,7 +861,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
 
     TEST_ASSERT_EQUAL(slave_ID, modbus_master_error_rep.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_code);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, modbus_master_error_rep.resp_read_error);
 }
 
@@ -1021,7 +1021,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     generate_msg_T_3_5_char_brake_sequence();
 
     TEST_ASSERT_EQUAL(slave_ID, exception_data.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_code);
     TEST_ASSERT_EQUAL(MODBUS_ILLEGAL_DATA_ADDRESS_ERROR, exception_data.exception_code);
     TEST_ASSERT_EQUAL(coil_adr, exception_data.data_adr);
     TEST_ASSERT_EQUAL(coils_qty, exception_data.data_qty);
@@ -1107,7 +1107,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     generate_msg_T_3_5_char_brake_sequence();
 
     TEST_ASSERT_EQUAL(slave_ID, exception_data.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, exception_data.fun_code);
     TEST_ASSERT_EQUAL(MODBUS_ILLEGAL_DATA_ADDRESS_ERROR, exception_data.exception_code);
     TEST_ASSERT_EQUAL(coil_adr, exception_data.data_adr);
     TEST_ASSERT_EQUAL(coils_qty, exception_data.data_qty);
@@ -1158,7 +1158,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWh
     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
 
     TEST_ASSERT_EQUAL(slave_ID, modbus_master_error_rep.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_code);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_RTU_CRC_ERR, modbus_master_error_rep.resp_read_error);
     // TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
 }
@@ -1223,7 +1223,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenR
     generate_read_frame_error_catch_sequance(slave_ID, 1);
 
     TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_code);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, test_error_rep.resp_read_error);
     // TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
 }
@@ -1257,7 +1257,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenR
     generate_read_rtu_crc_error_catch_sequance(slave_ID, 1);
 
     TEST_ASSERT_EQUAL(slave_ID, test_error_rep.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, test_error_rep.fun_code);
     TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, test_error_rep.resp_read_error);
     // TEST_ASSERT_EQUAL(0, test_error_rep.req_gen_error);
 }
@@ -1304,7 +1304,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenW
     }
 
     TEST_ASSERT_EQUAL(slave_ID, modbus_master_error_rep.slave_ID);
-    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_conde);
+    TEST_ASSERT_EQUAL(MODBUS_READ_COILS_FUNC_CODE, modbus_master_error_rep.fun_code);
     if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR % 2 == 0)
         TEST_ASSERT_EQUAL(MODBUS_MASTER_RESP_FRAME_ERR, modbus_master_error_rep.resp_read_error);
     else

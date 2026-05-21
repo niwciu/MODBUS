@@ -738,7 +738,7 @@ static void modbus_master_resp_waiting_state_handling(void)
  *   - `slave_ID`: Modbus slave address extracted from the request data.
  *   - `data_adr`: Address field from the Modbus request.
  *   - `data_qty`: Quantity field from the Modbus request.
- *   - `fun_conde`: Function code from the Modbus response (if available).
+ *   - `fun_code`: Function code from the Modbus response (if available).
  *   - `resp_read_error`: Indicates a timeout error (`MODBUS_MASTER_RESP_TIMEOUT_ERR`).
  * - Invokes `modbus_master_data_timeout_error` to handle and report the timeout error.
  */
@@ -748,7 +748,7 @@ static void modbus_master_resp_timeout_handle(void)
     timeout_error.slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
     timeout_error.data_adr = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_ADR_IDX]);
     timeout_error.data_qty = read_u16_from_buf(&msg_buf->req.data[MODBUS_REQUEST_QTY_IDX]);
-    timeout_error.fun_conde = msg_buf->req.data[MODBUS_FUNCTION_CODE_IDX];
+    timeout_error.fun_code = msg_buf->req.data[MODBUS_FUNCTION_CODE_IDX];
     timeout_error.resp_read_error = MODBUS_MASTER_RESP_TIMEOUT_ERR;
     modbus_master_data_timeout_error(&timeout_error);
 }
@@ -878,7 +878,7 @@ static void modbus_master_RTU_CRC_error_state_handling(void)
 
         modbus_master_error_report_t error_rep;
         error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
-        error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
+        error_rep.fun_code = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
         error_rep.resp_read_error = MODBUS_MASTER_RESP_RTU_CRC_ERR;
         modbus_master_communication_error(&error_rep);
         modbus_master_msg_process_end();
@@ -914,7 +914,7 @@ static void modbus_master_frame_error_state_handling(void)
 
         modbus_master_error_report_t error_rep;
         error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
-        error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
+        error_rep.fun_code = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
         error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
         modbus_master_communication_error(&error_rep);
         modbus_master_msg_process_end();
