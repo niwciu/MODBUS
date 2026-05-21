@@ -37,8 +37,6 @@ Drivers
 Drivers/CMSIS
 Drivers/CMSIS/Device
 Drivers/CMSIS/Include
-Drivers/CMSIS/STM32G0_Drivers
-Drivers/STM32G0_Drivers/core_init
 
 ../src
 ../../lib/modbus
@@ -55,8 +53,8 @@ set(C_SRCS
     Core/Src/syscalls.c
     Core/Src/sysmem.c
     Core/Src/modbus_master_data_interface.c
-    Drivers/STM32G0_Drivers/core_init/core_init.c
-    Drivers/STM32G0_Drivers/modbus_driver_interface.c
+    Core/Src/core_init.c
+    Core/Src/modbus_driver_interface.c
     ../src/main_app_master.c
 
     ../../lib/modbus/master_internall/modbus_master_PDU.c
