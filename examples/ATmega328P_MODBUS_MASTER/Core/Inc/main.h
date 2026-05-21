@@ -1,0 +1,11 @@
+#pragma once
+
+#include <avr/io.h>
+
+#define SLAVE_ADDRES_EXAMPLE_NODE 0x02
+#define READ_COIL_ADR             1
+#define READ_HREG_ADR             1
+#define WRITE_COIL_ADR            0
+#define WRITE_HREG_ADR            0
+
+#define UPDATE_INTERVAL_MS        500

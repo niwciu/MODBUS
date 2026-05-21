@@ -40,6 +40,7 @@ Drivers/CMSIS/Include
 # Drivers/CMSIS/STM32G0_Drivers
 # Drivers/STM32G0_Drivers/core_init
 
+../src
 ../../lib/modbus
 ../../lib/modbus/common
 ../../lib/modbus/slave_internall
@@ -54,6 +55,7 @@ set(C_SRCS
     Core/Src/core_init.c
     Core/Src/modbus_driver_interface.c
     Core/Src/LED_driver.c
+    ../src/main_app_slave.c
 
 	../../lib/modbus/slave_internall/modbus_slave_PDU.c
     ../../lib/modbus/slave_internall/modbus_slave_RTU.c
