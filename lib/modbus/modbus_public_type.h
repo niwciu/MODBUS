@@ -131,7 +131,7 @@ extern "C"
     typedef struct
     {
         modbus_device_ID_t slave_ID;                     /**< Modbus slave ID. */
-        modbus_fun_code_t fun_code;                     /**< Modbus function code. */
+        modbus_fun_code_t fun_code;                      /**< Modbus function code. */
         modbus_adr_t data_adr;                           /**< Address of the data that caused the error. */
         modbus_data_qty_t data_qty;                      /**< Quantity of data objects that caused the error. */
         modbus_master_resp_read_error_t resp_read_error; /**< Modbus master response read error. */
@@ -140,7 +140,7 @@ extern "C"
     typedef struct
     {
         modbus_device_ID_t slave_ID;            /**< Modbus slave ID. */
-        modbus_fun_code_t fun_code;            /**< Modbus function code. */
+        modbus_fun_code_t fun_code;             /**< Modbus function code. */
         modbus_exception_code_t exception_code; /**< Modbus exception code. */
         modbus_adr_t data_adr;                  /**< Modbus adress of processed object. */
         modbus_data_qty_t data_qty;             /**< Quantitt of processed object. First object located under data_adr position. */

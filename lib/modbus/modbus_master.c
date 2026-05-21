@@ -485,7 +485,7 @@ static void init_master_internall_data(void)
     MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_CLEARED;
     // set all internall variable to its default values
     modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
-    modbus_master_msg_repeat_counter = 0;        // ToDo init test for this var
+    modbus_master_msg_repeat_counter = 0;       // ToDo init test for this var
     modbus_master_disable_resp_timeout_timer(); // ToDo init test for this var
 }
 /**

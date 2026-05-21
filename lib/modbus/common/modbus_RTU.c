@@ -16,9 +16,10 @@
 #include "modbus_crc.h"
 #include "buf_rw.h"
 #include <stddef.h>
-#include <assert.h>
 
-static_assert(MODBUS_PDU_MAX_LEN + 2U <= 255U, "MODBUS_PDU_MAX_LEN too large: RTU frame length overflows modbus_buf_size_t (uint8_t)");
+#if (MODBUS_PDU_MAX_LEN + 2U) > 255U
+#error "MODBUS_PDU_MAX_LEN too large: RTU frame length overflows modbus_buf_size_t (uint8_t)"
+#endif
 
 /**
  * @brief Generates a Modbus RTU message ready to send.

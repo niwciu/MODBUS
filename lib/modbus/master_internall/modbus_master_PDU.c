@@ -594,11 +594,11 @@ static void update_master_coils_frmo_modbus_msg(modbus_data_qty_t data_qty, cons
     {
         if (0 != ((resp->data[MODBUS_RESP_READ_DATA_IDX + (i / 8)]) & (1 << (i % 8))))
         {
-            modbus_master_coil_read(slave_adr, data_adr + i, !!COIL_ON);
+            modbus_master_coil_read(slave_adr, data_adr + i, true);
         }
         else
         {
-            modbus_master_coil_read(slave_adr, data_adr + i, !!COIL_OFF);
+            modbus_master_coil_read(slave_adr, data_adr + i, false);
         }
     }
 }
@@ -622,11 +622,11 @@ static void update_master_dis_in_from_modbus_msg(modbus_data_qty_t data_qty, con
     {
         if (0 != ((resp->data[MODBUS_RESP_READ_DATA_IDX + (i / 8)]) & (1 << (i % 8))))
         {
-            modbus_master_disin_read(slave_adr, data_adr + i, !!COIL_ON);
+            modbus_master_disin_read(slave_adr, data_adr + i, true);
         }
         else
         {
-            modbus_master_disin_read(slave_adr, data_adr + i, !!COIL_OFF);
+            modbus_master_disin_read(slave_adr, data_adr + i, false);
         }
     }
 }
