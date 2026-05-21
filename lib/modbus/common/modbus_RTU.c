@@ -60,7 +60,6 @@ modbus_ret_t modbus_RTU_send(volatile modbus_buf_t *buf, volatile modbus_buf_siz
     {
         return RET_ERROR;
     }
-    return RET_OK;
 }
 
 /**
