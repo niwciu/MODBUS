@@ -70,7 +70,7 @@ static const modbus_function_mapper_t modbus_master_function_mapper[] = {
     {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_master_write_multiple_reg_resp},
 };
 
-#define MODBUS_MASTER_FUNCTION_MAPPER_SIZE (sizeof(modbus_master_function_mapper) / sizeof(modbus_master_function_mapper[0]));
+#define MODBUS_MASTER_FUNCTION_MAPPER_SIZE (sizeof(modbus_master_function_mapper) / sizeof(modbus_master_function_mapper[0]))
 
 /**
  * @brief Constructs a Modbus request to read holding registers.

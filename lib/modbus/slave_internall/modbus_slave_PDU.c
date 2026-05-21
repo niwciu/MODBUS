@@ -52,7 +52,7 @@ static const modbus_function_mapper_t modbus_slave_function_mapper[] = {
     {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, modbus_slave_write_multiple_reg},
 };
 
-#define MODBUS_SLAVE_FUNCTION_MAPPER_SIZE (sizeof(modbus_slave_function_mapper) / sizeof(modbus_slave_function_mapper[0]));
+#define MODBUS_SLAVE_FUNCTION_MAPPER_SIZE (sizeof(modbus_slave_function_mapper) / sizeof(modbus_slave_function_mapper[0]))
 
 /**
  * @brief Parses the Modbus master request and prepares the response.
