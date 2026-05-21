@@ -22,7 +22,6 @@ extern "C"
 #endif /* __cplusplus */
 
 #include "modbus_type.h"
-    // #include "modbus_public_type.h"
 
     /**
      * @struct modbus_queue_t
