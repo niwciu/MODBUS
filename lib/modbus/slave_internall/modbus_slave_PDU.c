@@ -534,7 +534,7 @@ static modbus_ret_t modbus_slave_write_single_reg(modbus_msg_t *modbus_msg)
 static modbus_ret_t handle_slave_write_single_reg_service(modbus_msg_t *modbus_msg)
 {
     modbus_adr_t adr = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_ADR_IDX]);
-    modbus_reg_t reg_val_to_save = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
+    modbus_reg_t reg_val_to_save = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_WRITE_SINGLE_DATA_IDX]);
     modbus_ret_t status = set_register_value(Slave_Holding_Registers, adr, reg_val_to_save);
     if (RET_OK == status)
     {
