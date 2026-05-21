@@ -741,7 +741,7 @@ static void modbus_master_resp_waiting_state_handling(void)
  *   - `resp_read_error`: Indicates a timeout error (`MODBUS_MASTER_RESP_TIMEOUT_ERR`).
  * - Invokes `modbus_master_data_timeout_error` to handle and report the timeout error.
  */
-void modbus_master_resp_timeout_handle(void)
+static void modbus_master_resp_timeout_handle(void)
 {
     modbus_master_error_report_t timeout_error;
     timeout_error.slave_ID = msg_buf->req.data[MODBUS_SLAVE_ADR_IDX];
