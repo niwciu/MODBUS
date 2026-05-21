@@ -97,7 +97,6 @@ if(CPPCHECK_EXECUTABLE)
 			--check-level=exhaustive
 			# --suppress=unusedFunction:../../../test/....
 			--suppress=unusedFunction:../../../test/modbus/master_PDU_read_test_runner.c:3
-			--suppress=unusedFunction:../../../lib/modbus/modbus_slave.c:122 # ToDo Verify this ? -> shuldnt be reported
 			--suppress=unusedFunction:../../../lib/modbus/modbus_slave.c:135 ## ToDo Verify this ? -> shuldnt be reported
 			--checkers-report=cppcheck_checkers_report.txt
 			--error-exitcode=1
