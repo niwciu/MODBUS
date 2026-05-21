@@ -20,6 +20,13 @@
  *       requirements of your Modbus master application. Handle errors and exceptions
  *       appropriately to ensure reliable communication with Modbus slave devices.
  */
+#ifndef _MODBUS_MASTER_DATA_INTERFACE_H_
+#define _MODBUS_MASTER_DATA_INTERFACE_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif /* __cplusplus */
 
 #include "modbus_public_type.h"
 
@@ -40,3 +47,8 @@ void modbus_master_inreg_exception(const modbus_read_data_t *resp_data);
 
 void modbus_master_data_timeout_error(const modbus_master_error_report_t *timeout_error_rep);
 void modbus_master_communication_error(const modbus_master_error_report_t *communication_error_rep);
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
+#endif /* _MODBUS_MASTER_DATA_INTERFACE_H_ */
