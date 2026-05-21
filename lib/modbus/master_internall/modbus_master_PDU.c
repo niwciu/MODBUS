@@ -23,7 +23,7 @@
 #include "modbus_PDU_common.h"
 #include "modbus_master_data_interface.h"
 #include "buf_rw.h"
-#include <stdio.h>
+#include <stddef.h>
 
 static modbus_ret_t modbus_master_read_coils_resp(modbus_msg_t *modbus_msg);
 static modbus_ret_t modbus_master_read_discrete_inputs_resp(modbus_msg_t *modbus_msg);

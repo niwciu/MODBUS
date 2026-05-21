@@ -9,7 +9,7 @@
  * @date 2024-05-07
  */
 #include "modbus_slave_data.h"
-#include <stdio.h>
+#include <stddef.h>
 
 modbus_reg_t readed_data = 0;
 modbus_reg_t *Slave_Holding_Registers[HOLDING_REG_QTY];        /**< Array of pointers to holding registers for the Modbus slave. */

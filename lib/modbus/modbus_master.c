@@ -36,7 +36,7 @@
 #include "modbus_master_data_interface.h"
 #include "buf_rw.h"
 
-#include <stdio.h>
+#include <stddef.h>
 
 #ifdef UNIT_TEST
 #define PRIVATE

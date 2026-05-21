@@ -15,7 +15,7 @@
 #include "modbus_RTU.h"
 #include "modbus_crc.h"
 #include "buf_rw.h"
-#include <stdio.h>
+#include <stddef.h>
 
 /**
  * @brief Generates a Modbus RTU message ready to send.

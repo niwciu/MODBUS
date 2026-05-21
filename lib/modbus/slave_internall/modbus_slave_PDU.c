@@ -11,7 +11,7 @@
 #include "modbus_slave_PDU.h"
 #include "modbus_PDU_common.h"
 #include "buf_rw.h"
-#include <stdio.h>
+#include <stddef.h>
 
 /* Static function declarations for Modbus slave PDU handling*/
 static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg);
