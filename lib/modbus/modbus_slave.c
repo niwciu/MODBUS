@@ -273,8 +273,11 @@ static void handle_modbus_slave_default_state(void)
     TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_CLEARED;
     FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
     RESP_TRANSMITION_FLAG = MODBUS_FLAG_CLEARED;
-    slave_msg_ptr->resp.len = 0;
-    slave_msg_ptr->req.len = 0;
+    if (NULL != slave_msg_ptr)
+    {
+        slave_msg_ptr->resp.len = 0;
+        slave_msg_ptr->req.len = 0;
+    }
 }
 
 static bool validate_init_arguments(modbus_mode_t mode, baud_t baud_rate, parity_t parity, modbus_device_ID_t slave_ID)
