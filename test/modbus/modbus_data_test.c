@@ -1,6 +1,7 @@
 #include "unity/fixture/unity_fixture.h"
 #include "modbus_master_PDU.h"
 #include "modbus_slave_PDU.h"
+#include "modbus_slave.h"
 #include "mock_slave_app_data.h"
 
 TEST_GROUP(Modbus_Data_test);
@@ -171,6 +172,47 @@ TEST(Modbus_Data_test, WriteUnregisteredHoldingRegister)
     modbus_reg_t hreg_val = 0x5a5a;
 
     TEST_ASSERT_EQUAL(RET_ERROR, set_register_value(Slave_Holding_Registers, hreg_adr, hreg_val));
+}
+
+// Out-of-bounds registration tests (via public slave API)
+TEST(Modbus_Data_test, GivenCoilAddressEqualToCoilsQtyWhenRegisterAppDataToModbusSlaveCoilsTableThenDataIsNotRegistered)
+{
+    modbus_coil_disin_t app_coil_data = 1;
+    modbus_adr_t oob_adr = COILS_QTY;
+
+    register_app_data_to_modbus_slave_coils_table(oob_adr, &app_coil_data);
+
+    TEST_ASSERT_NULL(Slave_Coils[COILS_QTY - 1]);
+}
+
+TEST(Modbus_Data_test, GivenDinAddressEqualToDiscretInputsQtyWhenRegisterAppDataToModbusSlaveDinTableThenDataIsNotRegistered)
+{
+    modbus_coil_disin_t app_din_data = 1;
+    modbus_adr_t oob_adr = DISCRET_INPUT_QTY;
+
+    register_app_data_to_modbus_slave_din_table(oob_adr, &app_din_data);
+
+    TEST_ASSERT_NULL(Slave_Discrete_Inputs[DISCRET_INPUT_QTY - 1]);
+}
+
+TEST(Modbus_Data_test, GivenInregAddressEqualToInputRegQtyWhenRegisterAppDataToModbusSlaveInregTableThenDataIsNotRegistered)
+{
+    modbus_reg_t app_inreg_data = 0x5A5A;
+    modbus_adr_t oob_adr = INPUT_REG_QTY;
+
+    register_app_data_to_modbus_slave_inreg_table(oob_adr, &app_inreg_data);
+
+    TEST_ASSERT_NULL(Slave_Input_Registers[INPUT_REG_QTY - 1]);
+}
+
+TEST(Modbus_Data_test, GivenHregAddressEqualToHoldingRegQtyWhenRegisterAppDataToModbusSlaveHregTableThenDataIsNotRegistered)
+{
+    modbus_reg_t app_hreg_data = 0xA5A5;
+    modbus_adr_t oob_adr = HOLDING_REG_QTY;
+
+    register_app_data_to_modbus_slave_hreg_table(oob_adr, &app_hreg_data);
+
+    TEST_ASSERT_NULL(Slave_Holding_Registers[HOLDING_REG_QTY - 1]);
 }
 
 //

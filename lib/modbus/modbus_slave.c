@@ -72,7 +72,10 @@ static void notify_resp_msg_send_event(void);
  */
 void register_app_data_to_modbus_slave_coils_table(modbus_adr_t coil_adr, modbus_coil_disin_t *app_data_ptr)
 {
-    register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, app_data_ptr);
+    if (coil_adr < COILS_QTY)
+    {
+        register_app_data_to_modbus_coils_din_table(Slave_Coils, coil_adr, app_data_ptr);
+    }
 }
 
 /**
@@ -85,7 +88,10 @@ void register_app_data_to_modbus_slave_coils_table(modbus_adr_t coil_adr, modbus
  */
 void register_app_data_to_modbus_slave_din_table(modbus_adr_t disin_adr, modbus_coil_disin_t *app_data_ptr)
 {
-    register_app_data_to_modbus_coils_din_table(Slave_Discrete_Inputs, disin_adr, app_data_ptr);
+    if (disin_adr < DISCRET_INPUT_QTY)
+    {
+        register_app_data_to_modbus_coils_din_table(Slave_Discrete_Inputs, disin_adr, app_data_ptr);
+    }
 }
 
 /**
@@ -98,7 +104,10 @@ void register_app_data_to_modbus_slave_din_table(modbus_adr_t disin_adr, modbus_
  */
 void register_app_data_to_modbus_slave_inreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
 {
-    register_app_data_to_modbus_reg_table(Slave_Input_Registers, reg_adr, app_data_ptr);
+    if (reg_adr < INPUT_REG_QTY)
+    {
+        register_app_data_to_modbus_reg_table(Slave_Input_Registers, reg_adr, app_data_ptr);
+    }
 }
 
 /**
@@ -111,7 +120,10 @@ void register_app_data_to_modbus_slave_inreg_table(modbus_adr_t reg_adr, modbus_
  */
 void register_app_data_to_modbus_slave_hreg_table(modbus_adr_t reg_adr, modbus_reg_t *app_data_ptr)
 {
-    register_app_data_to_modbus_reg_table(Slave_Holding_Registers, reg_adr, app_data_ptr);
+    if (reg_adr < HOLDING_REG_QTY)
+    {
+        register_app_data_to_modbus_reg_table(Slave_Holding_Registers, reg_adr, app_data_ptr);
+    }
 }
 
 /**

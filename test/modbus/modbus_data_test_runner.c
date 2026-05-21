@@ -23,5 +23,10 @@ TEST_GROUP_RUNNER(Modbus_Data_test)
     RUN_TEST_CASE(Modbus_Data_test, WriteRegisteredHoldingRegister);
     RUN_TEST_CASE(Modbus_Data_test, WriteUnregisteredHoldingRegister);
 
+    RUN_TEST_CASE(Modbus_Data_test, GivenCoilAddressEqualToCoilsQtyWhenRegisterAppDataToModbusSlaveCoilsTableThenDataIsNotRegistered);
+    RUN_TEST_CASE(Modbus_Data_test, GivenDinAddressEqualToDiscretInputsQtyWhenRegisterAppDataToModbusSlaveDinTableThenDataIsNotRegistered);
+    RUN_TEST_CASE(Modbus_Data_test, GivenInregAddressEqualToInputRegQtyWhenRegisterAppDataToModbusSlaveInregTableThenDataIsNotRegistered);
+    RUN_TEST_CASE(Modbus_Data_test, GivenHregAddressEqualToHoldingRegQtyWhenRegisterAppDataToModbusSlaveHregTableThenDataIsNotRegistered);
+
     // RUN_TEST_CASE(Modbus_Data_test, );
 }
