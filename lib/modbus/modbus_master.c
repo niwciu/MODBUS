@@ -557,6 +557,7 @@ static modbus_ret_t generate_request_PDU_data(modbus_msg_t *msg_buf, req_input_p
         if (master_functions_mapper[i].fun_code == req_param->fun_code)
         {
             PDU_ret_status = master_functions_mapper[i].fun_code_action(msg_buf, req_param);
+            break;
         }
     }
     return PDU_ret_status;
