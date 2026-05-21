@@ -39,7 +39,7 @@ static modbus_ret_t read_reg_request(modbus_req_resp_t *req, modbus_req_t req_co
 static modbus_data_t modbus_get_max_len_2_read(modbus_req_t req_code);
 
 static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *resp, const modbus_req_resp_t *req);
-static void update_master_coils_frmo_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
+static void update_master_coils_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
 static void update_master_dis_in_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
 static void update_input_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
 static void update_holding_reg_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr);
@@ -556,7 +556,7 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
     switch (resp_fun_code)
     {
     case MODBUS_READ_COILS_FUNC_CODE:
-        update_master_coils_frmo_modbus_msg(data_qty, resp, slave_adr, data_adr);
+        update_master_coils_from_modbus_msg(data_qty, resp, slave_adr, data_adr);
         break;
     case MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE:
 
@@ -588,7 +588,7 @@ static modbus_ret_t update_master_data_from_modbus_msg(const modbus_req_resp_t *
  * @param slave_adr The address of the Modbus slave device.
  * @param data_adr The starting address of the coils in the Modbus slave device.
  */
-static void update_master_coils_frmo_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
+static void update_master_coils_from_modbus_msg(modbus_data_qty_t data_qty, const modbus_req_resp_t *resp, modbus_device_ID_t slave_adr, modbus_adr_t data_adr)
 {
     for (modbus_data_qty_t i = 0; i < data_qty; i++)
     {

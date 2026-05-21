@@ -59,7 +59,7 @@ static void modbus_resp_send_callback(void);
 static void modbus_T_1_5_char_expired_callback(void);
 static void modbus_T_3_5_char_expired_callback(void);
 static void modbus_frame_error_callback(void);
-static void notify_req_msg_recivet_event(void);
+static void notify_req_msg_received_event(void);
 static void notify_resp_msg_send_event(void);
 
 /**
@@ -241,7 +241,7 @@ static void handle_modbus_slave_msg_recived_state(void)
     }
     else if ((MODBUS_FLAG_CLEARED == FRAME_ERROR_FLAG) && (MODBUS_FLAG_SET == TIMER_3_5_CHAR_FLAG))
     {
-        notify_req_msg_recivet_event();
+        notify_req_msg_received_event();
         parse_master_request_and_prepare_resp(slave_msg_ptr);
         modbus_RTU_send(slave_msg_ptr->resp.data, &slave_msg_ptr->resp.len, modbus_slave_ID);
         slave_RTU_driver->send(slave_msg_ptr->resp.data, slave_msg_ptr->resp.len);
@@ -452,7 +452,7 @@ static void modbus_frame_error_callback(void)
  * This function invokes the registered callback to notify that a Modbus request message
  * has been successfully received by the slave.
  */
-static void notify_req_msg_recivet_event(void)
+static void notify_req_msg_received_event(void)
 {
     if (req_msg_recived_event_cb != NULL)
     {

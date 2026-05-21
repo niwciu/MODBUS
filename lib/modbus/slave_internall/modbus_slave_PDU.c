@@ -35,8 +35,8 @@ static void set_exception_code_resp(modbus_msg_t *modbus_msg, modbus_exception_c
 static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modbus_ret_t last_ret_val, modbus_byte_count_t byte_cnt);
 static modbus_ret_t check_read_req_data_correctness(modbus_msg_t *modbus_msg, modbus_data_qty_t max_read_data_qty, modbus_data_qty_t app_data_qty);
 static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg, modbus_data_qty_t max_write_data_qty, modbus_data_qty_t app_data_qty);
-static modbus_ret_t check_write_req_byte_count_correctenss(modbus_msg_t *modbus_msg);
-static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *modbus_msg);
+static modbus_ret_t check_write_req_byte_count_correctness(modbus_msg_t *modbus_msg);
+static modbus_ret_t check_write_req_reg_byte_count_correctness(modbus_msg_t *modbus_msg);
 static modbus_ret_t check_write_single_coil_req_data_correctness(modbus_msg_t *modbus_msg, modbus_adr_t coil_adr, modbus_w_coil_t coil_state);
 static modbus_ret_t set_coil_din_value_from_modbus_msg(volatile const modbus_buf_t *data_state_ptr, modbus_adr_t start_adr, modbus_data_qty_t coil_din_qty, modbus_coil_disin_t **data_tab);
 
@@ -716,11 +716,11 @@ static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg, m
     {
         if (MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE == func_code)
         {
-            status = check_write_req_byte_count_correctenss(modbus_msg);
+            status = check_write_req_byte_count_correctness(modbus_msg);
         }
         else
         {
-            status = check_write_req_reg_byte_count_correctenss(modbus_msg);
+            status = check_write_req_reg_byte_count_correctness(modbus_msg);
         }
     }
     return status;
@@ -740,7 +740,7 @@ static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg, m
  *         - @retval - RET_ERROR If the byte count does not match the expected size,
  *           and an exception code is set in the response.
  */
-static modbus_ret_t check_write_req_byte_count_correctenss(modbus_msg_t *modbus_msg)
+static modbus_ret_t check_write_req_byte_count_correctness(modbus_msg_t *modbus_msg)
 {
     modbus_byte_count_t byte_count = modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX];
     modbus_data_qty_t coils_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
@@ -770,7 +770,7 @@ static modbus_ret_t check_write_req_byte_count_correctenss(modbus_msg_t *modbus_
  *         - @retval - RET_ERROR If the byte count does not match the expected size,
  *           and an exception code is set in the response.
  */
-static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *modbus_msg)
+static modbus_ret_t check_write_req_reg_byte_count_correctness(modbus_msg_t *modbus_msg)
 {
     modbus_byte_count_t byte_count = modbus_msg->req.data[MODBUS_REQUEST_BYTE_CNT_IDX];
     modbus_data_qty_t reg_qty = read_u16_from_buf(&modbus_msg->req.data[MODBUS_REQUEST_QTY_IDX]);
