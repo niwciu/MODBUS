@@ -232,18 +232,20 @@ extern "C"
      */
     typedef struct
     {
-        modbus_fun_code_t fun_code;         /**< Modbus function code. */
-        modbus_adr_t adr;                   /**< Address of the Modbus object to read/write. */
-        modbus_data_qty_t obj_qty;          /**< Quantity of Modbus data objects to read/write. */
-        modbus_device_ID_t slave_ID;        /**< ID of the Modbus slave device. */
-        modbus_coil_disin_t coil_2_write;   /**< Single coil value to write (used for single coil write function). */
-        modbus_coil_disin_t *coils_2_write; /**< Pointer to multiple coil values to write (used for multiple coil write function). */
-        modbus_reg_t reg_2_write;           /**< Single register value to write (used for single register write function). */
-        modbus_reg_t *regs_2_write;         /**< Pointer to multiple register values to write (used for multiple register write function). */
+        modbus_fun_code_t fun_code;     /**< Modbus function code. */
+        modbus_adr_t adr;               /**< Address of the Modbus object to read/write. */
+        modbus_data_qty_t obj_qty;      /**< Quantity of Modbus data objects to read/write. */
+        modbus_device_ID_t slave_ID;    /**< ID of the Modbus slave device. */
+        union {
+            modbus_coil_disin_t coil_2_write; /**< Single coil value to write. */
+            modbus_reg_t reg_2_write;         /**< Single register value to write. */
+        };
+        union {
+            modbus_coil_disin_t *coils_2_write; /**< Pointer to multiple coil values to write. */
+            modbus_reg_t *regs_2_write;         /**< Pointer to multiple register values to write. */
+        };
     } req_input_param_struct_t;
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
 #endif /* _MODBUS_TYPE_H_ */
-
-// typedef uint8_t modbus_buf_t;

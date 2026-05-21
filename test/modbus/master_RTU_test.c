@@ -20,7 +20,7 @@ extern modbus_master_error_cb_t modbus_error_callback;
 
 extern modbus_master_state_t modbus_master_manager_state_machine;
 extern modbus_timer_t modbus_master_resp_timeout_timer;
-extern uint8_t modbus_master_msg_repeat_couter;
+extern uint8_t modbus_master_msg_repeat_counter;
 
 extern modbus_status_flag_t MODBUS_MASTER_REQ_TRANSMITION_FLAG;
 extern modbus_status_flag_t MODBUS_MASTER_FRAME_ERROR_FLAG;
@@ -391,7 +391,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhen
     update_modbus_master_manager();
     modbus_master_resp_timeout_timer = 1;
     update_modbus_master_manager();
-    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_counter);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmittedWhenRespTimeOutTimerEqual1AndErrorReportedThenSetMasterIdleState)
@@ -693,7 +693,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     generate_send_req_read_resp_msg_sequance(slave_ID);
 
     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
-    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_counter);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhenAndAnyRequestTransmitedAndFrameErrorCatchedLessTimeThanRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedAndRespProcessedAndExceptionCodeRecivedThenReportExceptionCodeError)
@@ -844,7 +844,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
     generate_send_req_read_resp_msg_sequance(slave_ID);
-    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_counter);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhenAndAnyRequestTransmitedAndFrameErrorCatchedMoreTimeThanRepeatOnErrorParamThenReportError)
@@ -908,7 +908,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_frame_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
-    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_counter);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedWhenRespWithCrcErrorRecivedThenAfterT3_5CharIncMsgRepeatCounter)
@@ -923,7 +923,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedW
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_rtu_crc_error_catch_sequance(slave_ID, 1);
 
-    TEST_ASSERT_EQUAL(1, modbus_master_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(1, modbus_master_msg_repeat_counter);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedAndRtuCrcErrorCatchedAndMsgRepeatCounterUpdatedWhenMsgRepeatCounterLessThanMsgRepeatOnErrorParamAndT3_5CharTimeExpiredThenSetRepeatMsgRequestStateAndRtuCrcErrorFlagStatusToCleared)
@@ -990,7 +990,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     generate_send_req_read_resp_msg_sequance(slave_ID);
 
     TEST_ASSERT_EQUAL(0, modbus_master_resp_timeout_timer);
-    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_counter);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhenAndAnyRequestTransmitedAndRtuCrcErrorCatchedLessTimeThanRepeatOnErrorParamAndReqMsgRepeatedAndCorrectResponsRecivedAndRespProcessedAndExceptionCodeRecivedThenReportExceptionCodeError)
@@ -1141,7 +1141,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
 
     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR);
     generate_send_req_read_resp_msg_sequance(slave_ID);
-    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_counter);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndModbusErrorCbRegisteredWhenAndAnyRequestTransmitedAndRtuCrcErrorCatchedMoreTimeThanRepeatOnErrorParamThenReportError)
@@ -1206,7 +1206,7 @@ TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitWhenAndAnyRequestTransmitedA
     // register_modbus_master_error_cb(error_report_test_function);
     modbus_master_read_coils(coil_adr, coils_qty, slave_ID);
     generate_read_rtu_crc_error_catch_sequance(slave_ID, MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR + 1);
-    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_couter);
+    TEST_ASSERT_EQUAL(0, modbus_master_msg_repeat_counter);
 }
 
 TEST(Master_RTU_test, GivenModbusMasterInRTUmodeInitAndAnyRequestTransmitedWhenRespWithCorrectIDandCRCRecivedAndFrameErrorCatchedThenAfterT3_5CharReportError)

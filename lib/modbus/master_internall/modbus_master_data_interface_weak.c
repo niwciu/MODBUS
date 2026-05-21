@@ -23,7 +23,11 @@
 
 #include "modbus_master_data_interface.h"
 
+#if defined(__GNUC__) || defined(__clang__)
 #define MODBUS_WEAK __attribute__((weak))
+#else
+#define MODBUS_WEAK
+#endif
 
 MODBUS_WEAK void modbus_master_coil_read(modbus_device_ID_t slave_adr, modbus_adr_t data_adr, modbus_coil_disin_t coil_val)
 {

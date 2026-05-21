@@ -55,7 +55,7 @@ PRIVATE modbus_queue_t *tx_rx_q = &master_tx_rx_queue;
 PRIVATE modbus_msg_t modbus_msg[MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS];
 PRIVATE modbus_msg_t *msg_buf = NULL;
 PRIVATE volatile modbus_timer_t modbus_master_resp_timeout_timer = 0;
-PRIVATE uint8_t modbus_master_msg_repeat_couter = 0;
+PRIVATE uint8_t modbus_master_msg_repeat_counter = 0;
 
 PRIVATE volatile modbus_status_flag_t MODBUS_MASTER_TIMER_1_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
 PRIVATE volatile modbus_status_flag_t MODBUS_MASTER_TIMER_3_5_CHAR_FLAG = MODBUS_FLAG_UNKNOWN;
@@ -151,7 +151,7 @@ const struct modbus_master_functions_mapper master_functions_mapper[] = {
  */
 modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_COILS_FUNC_CODE, adr, coils_qty, slave_ID, 0, NULL, 0, NULL};
+    req_input_param_struct_t req_input_param = {.fun_code = MODBUS_READ_COILS_FUNC_CODE, .adr = adr, .obj_qty = coils_qty, .slave_ID = slave_ID};
     return generate_request(&req_input_param);
 }
 
@@ -171,7 +171,7 @@ modbus_master_req_ret_t modbus_master_read_coils(modbus_adr_t adr, modbus_data_q
  */
 modbus_master_req_ret_t modbus_master_read_discrete_inputs(modbus_adr_t adr, modbus_data_qty_t discrete_input_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, adr, discrete_input_qty, slave_ID, 0, NULL, 0, NULL};
+    req_input_param_struct_t req_input_param = {.fun_code = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE, .adr = adr, .obj_qty = discrete_input_qty, .slave_ID = slave_ID};
     return generate_request(&req_input_param);
 }
 
@@ -191,7 +191,7 @@ modbus_master_req_ret_t modbus_master_read_discrete_inputs(modbus_adr_t adr, mod
  */
 modbus_master_req_ret_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, adr, reg_qty, slave_ID, 0, NULL, 0, NULL};
+    req_input_param_struct_t req_input_param = {.fun_code = MODBUS_READ_INPUT_REGISTERS_FUNC_CODE, .adr = adr, .obj_qty = reg_qty, .slave_ID = slave_ID};
     return generate_request(&req_input_param);
 }
 
@@ -211,7 +211,7 @@ modbus_master_req_ret_t modbus_master_read_input_reg(modbus_adr_t adr, modbus_da
  */
 modbus_master_req_ret_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_data_qty_t hreg_qty, modbus_device_ID_t slave_ID)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, adr, hreg_qty, slave_ID, 0, NULL, 0, NULL};
+    req_input_param_struct_t req_input_param = {.fun_code = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE, .adr = adr, .obj_qty = hreg_qty, .slave_ID = slave_ID};
     return generate_request(&req_input_param);
 }
 
@@ -231,7 +231,7 @@ modbus_master_req_ret_t modbus_master_read_holding_reg(modbus_adr_t adr, modbus_
  */
 modbus_master_req_ret_t modbus_master_write_single_coil(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_coil_disin_t coil_2_write)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, adr, 0, slave_ID, coil_2_write, NULL, 0, NULL};
+    req_input_param_struct_t req_input_param = {.fun_code = MODBUS_WRITE_SINGLE_COIL_FUNC_CODE, .adr = adr, .slave_ID = slave_ID, .coil_2_write = coil_2_write};
     return generate_request(&req_input_param);
 }
 
@@ -251,7 +251,7 @@ modbus_master_req_ret_t modbus_master_write_single_coil(modbus_adr_t adr, modbus
  */
 modbus_master_req_ret_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_device_ID_t slave_ID, modbus_reg_t reg_2_write)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, adr, 0, slave_ID, 0, NULL, reg_2_write, NULL};
+    req_input_param_struct_t req_input_param = {.fun_code = MODBUS_WRITE_SINGLE_REGISTER_FUNC_CODE, .adr = adr, .slave_ID = slave_ID, .reg_2_write = reg_2_write};
     return generate_request(&req_input_param);
 }
 
@@ -272,7 +272,7 @@ modbus_master_req_ret_t modbus_master_write_single_reg(modbus_adr_t adr, modbus_
  */
 modbus_master_req_ret_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbus_data_qty_t reg_qty, modbus_device_ID_t slave_ID, modbus_reg_t *rw_data_ptr)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, adr, reg_qty, slave_ID, 0, NULL, 0, rw_data_ptr};
+    req_input_param_struct_t req_input_param = {.fun_code = MODBUS_WRITE_MULTIPLE_REGISTER_FUNC_CODE, .adr = adr, .obj_qty = reg_qty, .slave_ID = slave_ID, .regs_2_write = rw_data_ptr};
     return generate_request(&req_input_param);
 }
 
@@ -293,7 +293,7 @@ modbus_master_req_ret_t modbus_master_write_multiple_reg(modbus_adr_t adr, modbu
  */
 modbus_master_req_ret_t modbus_master_write_multiple_coils(modbus_adr_t adr, modbus_data_qty_t coils_qty, modbus_device_ID_t slave_ID, modbus_coil_disin_t *rw_data_ptr)
 {
-    req_input_param_struct_t req_input_param = {MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, adr, coils_qty, slave_ID, 0, rw_data_ptr, 0, NULL};
+    req_input_param_struct_t req_input_param = {.fun_code = MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE, .adr = adr, .obj_qty = coils_qty, .slave_ID = slave_ID, .coils_2_write = rw_data_ptr};
     return generate_request(&req_input_param);
 }
 
@@ -403,7 +403,7 @@ static void modbus_master_send_req_from_msg_buf(void)
 static bool init_arguments_are_valid(modbus_mode_t mode, baud_t baud_rate, parity_t parity)
 {
     return ((mode_is_correct(mode)) &&
-            (baud_rate_is_corret(baud_rate)) &&
+            (baud_rate_is_correct(baud_rate)) &&
             (parity_is_correct(parity)));
 }
 
@@ -485,7 +485,7 @@ static void init_master_internall_data(void)
     MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_CLEARED;
     // set all internall variable to its default values
     modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
-    modbus_master_msg_repeat_couter = 0;        // ToDo init test for this var
+    modbus_master_msg_repeat_counter = 0;        // ToDo init test for this var
     modbus_master_disable_resp_timeout_timer(); // ToDo init test for this var
 }
 /**
@@ -860,9 +860,9 @@ static void modbus_master_msg_recived_correctly_state_handle(void)
  */
 static void modbus_master_RTU_CRC_error_state_handling(void)
 {
-    modbus_master_msg_repeat_couter++;
+    modbus_master_msg_repeat_counter++;
     modbus_master_disable_resp_timeout_timer();
-    if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
+    if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_counter)
     {
         modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
         MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_CLEARED;
@@ -896,9 +896,9 @@ static void modbus_master_RTU_CRC_error_state_handling(void)
  */
 static void modbus_master_frame_error_state_handling(void)
 {
-    modbus_master_msg_repeat_couter++;
+    modbus_master_msg_repeat_counter++;
     modbus_master_disable_resp_timeout_timer();
-    if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_couter)
+    if (MODBUS_MASTER_REQ_REPEAT_ON_ANY_ERROR >= modbus_master_msg_repeat_counter)
     {
         modbus_master_manager_state_machine = MODBUS_MASTER_REPEAT_REQUEST;
         MODBUS_MASTER_FRAME_ERROR_FLAG = MODBUS_FLAG_CLEARED;
@@ -921,7 +921,7 @@ static void modbus_master_frame_error_state_handling(void)
  *
  * This function finalizes the processing of the Modbus master message by performing
  * the following actions:
- * 1. Resets the Modbus master message repeat counter (`modbus_master_msg_repeat_couter`) to zero.
+ * 1. Resets the Modbus master message repeat counter (`modbus_master_msg_repeat_counter`) to zero.
  * 2. Pushes the Modbus message buffer (`msg_buf`) back into the free queue (`free_q`).
  * 3. Transitions the Modbus master manager state machine (`modbus_master_manager_state_machine`)
  *    to the idle state (`MODBUS_MASTER_IDLE`), indicating that the Modbus master is ready
@@ -929,7 +929,7 @@ static void modbus_master_frame_error_state_handling(void)
  */
 static void modbus_master_msg_process_end(void)
 {
-    modbus_master_msg_repeat_couter = 0;
+    modbus_master_msg_repeat_counter = 0;
     modbus_queue_push(free_q, &msg_buf);
     modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
 }

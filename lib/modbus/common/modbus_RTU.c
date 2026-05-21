@@ -96,7 +96,7 @@ bool mode_is_correct(modbus_mode_t mode)
     return (mode == RTU);
 }
 
-bool baud_rate_is_corret(baud_t baud_rate)
+bool baud_rate_is_correct(baud_t baud_rate)
 {
     return (baud_rate != 0) ;
 }

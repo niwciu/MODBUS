@@ -33,7 +33,7 @@ static modbus_ret_t handle_slave_write_multiple_reg_service(modbus_msg_t *modbus
 
 static void set_exception_code_resp(modbus_msg_t *modbus_msg, modbus_exception_code_t exception_code);
 static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modbus_ret_t last_ret_val, modbus_byte_count_t byte_cnt);
-static modbus_ret_t check_read_req_data_correcntess(modbus_msg_t *modbus_msg, modbus_data_qty_t max_read_data_qty, modbus_data_qty_t app_data_qty);
+static modbus_ret_t check_read_req_data_correctness(modbus_msg_t *modbus_msg, modbus_data_qty_t max_read_data_qty, modbus_data_qty_t app_data_qty);
 static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg, modbus_data_qty_t max_write_data_qty, modbus_data_qty_t app_data_qty);
 static modbus_ret_t check_write_req_byte_count_correctenss(modbus_msg_t *modbus_msg);
 static modbus_ret_t check_write_req_reg_byte_count_correctenss(modbus_msg_t *modbus_msg);
@@ -125,7 +125,7 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
     modbus_ret_t status;
 
     modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
-    status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_COILS_QTY, MAIN_APP_COILS_QTY);
+    status = check_read_req_data_correctness(modbus_msg, MODBUS_MAX_READ_COILS_QTY, MAIN_APP_COILS_QTY);
     if (RET_OK == status)
     {
         status = handle_slave_read_coil_service(modbus_msg);
@@ -185,7 +185,7 @@ static modbus_ret_t modbus_slave_read_discrete_inputs(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
     modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_DISCRETE_INPUTS_FUNC_CODE;
-    status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_DISCRETE_INPUTS_QTY, MAIN_APP_DISCRET_INPUTS_QTY);
+    status = check_read_req_data_correctness(modbus_msg, MODBUS_MAX_READ_DISCRETE_INPUTS_QTY, MAIN_APP_DISCRET_INPUTS_QTY);
     if (RET_OK == status)
     {
         status = handle_slave_read_discrete_inputs_service(modbus_msg);
@@ -250,7 +250,7 @@ static modbus_ret_t modbus_slave_read_holding_reg(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
     modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_HOLDING_REGISTERS_FUNC_CODE;
-    status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_REG_QTY, MAIN_APP_HOLDING_REG_QTY);
+    status = check_read_req_data_correctness(modbus_msg, MODBUS_MAX_READ_REG_QTY, MAIN_APP_HOLDING_REG_QTY);
     if (RET_OK == status)
     {
         status = handle_slave_read_holding_reg_service(modbus_msg);
@@ -315,7 +315,7 @@ static modbus_ret_t modbus_slave_read_input_reg(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status;
     modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_INPUT_REGISTERS_FUNC_CODE;
-    status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_REG_QTY, MAIN_APP_INPUT_REG_QTY);
+    status = check_read_req_data_correctness(modbus_msg, MODBUS_MAX_READ_REG_QTY, MAIN_APP_INPUT_REG_QTY);
     if (RET_OK == status)
     {
         status = handle_slave_read_input_reg_service(modbus_msg);
@@ -670,7 +670,7 @@ static modbus_ret_t update_msg_len_and_ret_status(modbus_msg_t *modbus_msg, modb
  *         - @retval - RET_ERROR If the request data is invalid, with an appropriate exception
  *           code set in the response.
  */
-static modbus_ret_t check_read_req_data_correcntess(modbus_msg_t *modbus_msg, modbus_data_qty_t max_read_data_qty, modbus_data_qty_t app_data_qty)
+static modbus_ret_t check_read_req_data_correctness(modbus_msg_t *modbus_msg, modbus_data_qty_t max_read_data_qty, modbus_data_qty_t app_data_qty)
 {
     modbus_adr_t adr = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_ADR_IDX);
     modbus_data_qty_t data_qty = read_u16_from_buf(modbus_msg->req.data + MODBUS_REQUEST_QTY_IDX);
@@ -711,7 +711,7 @@ static modbus_ret_t check_read_req_data_correcntess(modbus_msg_t *modbus_msg, mo
 static modbus_ret_t check_write_req_data_correctness(modbus_msg_t *modbus_msg, modbus_data_qty_t max_write_data_qty, modbus_data_qty_t app_data_qty)
 {
     modbus_fun_code_t func_code = modbus_msg->req.data[MODBUS_FUNCTION_CODE_IDX];
-    modbus_ret_t status = check_read_req_data_correcntess(modbus_msg, max_write_data_qty, app_data_qty);
+    modbus_ret_t status = check_read_req_data_correctness(modbus_msg, max_write_data_qty, app_data_qty);
     if (RET_OK == status)
     {
         if (MODBUS_WRITE_MULTIPLE_COILS_FUNC_CODE == func_code)

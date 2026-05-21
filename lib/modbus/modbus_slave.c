@@ -295,7 +295,7 @@ static void handle_modbus_slave_default_state(void)
 static bool validate_init_arguments(modbus_mode_t mode, baud_t baud_rate, parity_t parity, modbus_device_ID_t slave_ID)
 {
     return (mode_is_correct(mode) &&
-            baud_rate_is_corret(baud_rate) &&
+            baud_rate_is_correct(baud_rate) &&
             parity_is_correct(parity) &&
             slave_ID_is_correct(slave_ID));
 }
