@@ -126,7 +126,7 @@ static modbus_ret_t modbus_slave_read_coils(modbus_msg_t *modbus_msg)
 
     modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] = MODBUS_READ_COILS_FUNC_CODE;
     status = check_read_req_data_correcntess(modbus_msg, MODBUS_MAX_READ_COILS_QTY, MAIN_APP_COILS_QTY);
-    if (RET_ERROR != status)
+    if (RET_OK == status)
     {
         status = handle_slave_read_coil_service(modbus_msg);
     }
