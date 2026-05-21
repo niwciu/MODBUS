@@ -13,6 +13,25 @@
  * is defined.
  *
  * @note Modify these constants according to your specific application requirements and testing needs.
+ *
+ * @warning RAM footprint estimate with default values on a 32-bit target:
+ *
+ *   Master-only build:
+ *     MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS * 2 * 256 = 10 * 2 * 256 = 5120 B  (RTU buffers)
+ *     Minimum recommended target RAM: 8 KB.
+ *     To reduce: lower MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS.
+ *
+ *   Slave-only build:
+ *     (COILS + DIN + INREG + HREG) * sizeof(void*) = 4 * 100 * 4 = 1600 B  (pointer tables)
+ *     2 * 256                                                      =  512 B  (RTU buffers)
+ *                                                                  --------
+ *                                                                  ~2.1 KB total static RAM
+ *     Minimum recommended target RAM: 4 KB.
+ *     To reduce: lower MAIN_APP_*_QTY values.
+ *
+ *   Smaller targets (e.g. ATmega328P with 2 KB RAM) are supported provided
+ *   MODBUS_MASTER_MAX_MSG_QUEUE_ITEMS and MAIN_APP_*_QTY are reduced accordingly.
+ *   With default values above, neither build fits in 2 KB RAM.
  */
 #ifndef _MODBUS_CONFIG_H_
 #define _MODBUS_CONFIG_H_
