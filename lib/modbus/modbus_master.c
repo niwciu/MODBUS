@@ -46,7 +46,6 @@
 
 PRIVATE modbus_master_state_t modbus_master_manager_state_machine = MODBUS_MASTER_IDLE;
 PRIVATE const modbus_RTU_driver_struct_t *master_RTU_driver = NULL;
-// PRIVATE modbus_master_error_cb_t modbus_error_callback = NULL;
 
 static modbus_queue_t master_free_queue;
 static modbus_queue_t master_tx_rx_queue;
@@ -528,7 +527,6 @@ static modbus_master_req_ret_t generate_request(req_input_param_struct_t *req_pa
     {
         return MODBUS_MASTER_LIB_RTU_SEND_ERROR;
     }
-    // req_msg_buf->resp.len=0; // it's allways done before sending every buffer to modbus driver
     modbus_queue_push(tx_rx_q, &req_msg_buf);
     return MODBUS_MASTER_REQUEST_SENDED_TO_QUEUE;
 }
@@ -778,7 +776,6 @@ static void modbus_master_RTU_recv_state_handle(void)
     RTU_status = modbus_RTU_recv(msg_buf->resp.data, msg_buf->resp.len, modbus_req_slave_ID);
     if (RET_ERROR_CRC == RTU_status)
     {
-        // modbus_master_disable_resp_timeout_timer();
         MODBUS_MASTER_RTU_CRC_ERROR_FLAG = MODBUS_FLAG_SET;
         modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
     }
@@ -788,7 +785,6 @@ static void modbus_master_RTU_recv_state_handle(void)
     }
     else // RET_OK
     {
-        // modbus_master_disable_resp_timeout_timer();
         modbus_master_manager_state_machine = MODBUS_MASTER_RESP_RECIVED;
     }
 }
