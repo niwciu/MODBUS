@@ -106,7 +106,7 @@ bool parity_is_correct(parity_t parity)
     return ((parity == NONE) || (parity == ODD) || (parity == EVEN));
 }
 
-bool slave_RTU_driver_is_valid(const modbus_RTU_driver_struct_t *slave_RTU_driver)
+bool RTU_driver_is_valid(const modbus_RTU_driver_struct_t *slave_RTU_driver)
 {
     return ((slave_RTU_driver != NULL) &&
             (slave_RTU_driver->disable_rcev != NULL) && 

@@ -28,7 +28,7 @@ extern "C"
     bool mode_is_correct(modbus_mode_t mode);
     bool baud_rate_is_corret(baud_t baud_rate);
     bool parity_is_correct(parity_t parity);
-    bool slave_RTU_driver_is_valid(const modbus_RTU_driver_struct_t *slave_RTU_driver);
+    bool RTU_driver_is_valid(const modbus_RTU_driver_struct_t *slave_RTU_driver);
 
 #ifdef __cplusplus
 }

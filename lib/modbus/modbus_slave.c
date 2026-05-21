@@ -364,7 +364,7 @@ static e_modbus_status_t init_modbus_driver(modbus_mode_t mode, baud_t baud_rate
     if (RTU == mode)
     {
         slave_RTU_driver = get_slave_RTU_driver_interface();
-        if (slave_RTU_driver_is_valid(slave_RTU_driver))
+        if (RTU_driver_is_valid(slave_RTU_driver))
         {
             slave_RTU_driver->init(baud_rate, parity);
             slave_RTU_driver->enable_rcev(&slave_msg_ptr->req);

@@ -464,7 +464,7 @@ static e_modbus_init_t init_master_RTU_driver(baud_t baud_rate, parity_t parity)
 {
     e_modbus_init_t status = MODBUS_INIT_DRIVER_INIT_ERR;
     master_RTU_driver = get_master_RTU_driver_interface();
-    if (slave_RTU_driver_is_valid(master_RTU_driver))
+    if (RTU_driver_is_valid(master_RTU_driver))
     {
         master_RTU_driver->init(baud_rate, parity);
         master_RTU_driver->subscribe_msg_tx_done_cb(modbus_master_req_sended_callback);
