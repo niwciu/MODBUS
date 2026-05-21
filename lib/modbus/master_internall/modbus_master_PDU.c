@@ -773,7 +773,7 @@ static bool modbus_response_contain_exception_code(const modbus_msg_t *modbus_ms
 static modbus_ret_t process_modbus_exception_code(modbus_msg_t *modbus_msg)
 {
     modbus_ret_t status = RET_OK;
-    static modbus_read_data_t resp;
+    modbus_read_data_t resp;
     resp.slave_ID = modbus_msg->resp.data[MODBUS_SLAVE_ADR_IDX];
     resp.fun_conde = (modbus_msg->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
     resp.exception_code = modbus_msg->resp.data[MODBUS_RESP_EXCEPTION_CODE_IDX];

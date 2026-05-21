@@ -876,7 +876,7 @@ static void modbus_master_RTU_CRC_error_state_handling(void)
     else
     {
 
-        static modbus_master_error_report_t error_rep;
+        modbus_master_error_report_t error_rep;
         error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
         error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
         error_rep.resp_read_error = MODBUS_MASTER_RESP_RTU_CRC_ERR;
@@ -912,7 +912,7 @@ static void modbus_master_frame_error_state_handling(void)
     else
     {
 
-        static modbus_master_error_report_t error_rep;
+        modbus_master_error_report_t error_rep;
         error_rep.slave_ID = msg_buf->resp.data[MODBUS_SLAVE_ADR_IDX];
         error_rep.fun_conde = (msg_buf->resp.data[MODBUS_FUNCTION_CODE_IDX] & (~MODBUS_EXCEPTION_CODE_MASK));
         error_rep.resp_read_error = MODBUS_MASTER_RESP_FRAME_ERR;
